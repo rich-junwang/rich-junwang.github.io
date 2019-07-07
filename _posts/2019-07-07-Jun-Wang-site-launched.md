@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Jun Wang"
+title: "My First Blog"
 date: 2019-07-07
 ---
 
