@@ -1,7 +1,7 @@
 ---
 layout: post
 title: History and Reputation
-date: 2015-07-15 15:09:00
+date: 2022-07-04
 description: random thoughts
 tags: history
 categories: essay
