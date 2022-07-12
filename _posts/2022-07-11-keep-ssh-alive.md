@@ -7,7 +7,7 @@ tags: Tricks and Tips
 categories: software
 ---
 
-There is always one issue that bothers me when using SSH to access server (e.g. EC2) which is that the ssh connection can disconnect very soon. I tried to make changes in the local ssh config: ~/.ssh/config
+There is always one issue that bothers me when using SSH to access server (e.g. EC2) which is that the ssh connection can disconnect very soon. I tried to make changes in the local ssh config: `~/.ssh/config`
 
 ```
 Host remotehost
