@@ -23,7 +23,7 @@ chmod 600 ~/.ssh/config
 However, this doesn't work for me on Mac, and I don't know why. :( 
 
 Then I tried to make changes on server side. 
-In `/etc/ssh/sshd_config`
+In `/etc/ssh/sshd_config`, add or uncomment the following lines:
 ```
 ClientAliveInterval 50
 ClientAliveCountMax 10
