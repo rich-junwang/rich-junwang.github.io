@@ -17,10 +17,14 @@ docker image ls
 ```
 # rm is to clean constainer after exit
 # it is interactive tty
-nvidia-docker run --entrypoint /bin/bash --rm -it image_name
+nvidia-docker run --entrypoint /bin/bash --rm -it --name my_container_name  image_name
 
-
+# mount a volume to docker
 nvidia-docker run --entrypoint /bin/bash -v $PWD/transforms_cache:/transforms_cache --rm -it image_name
+
+# add env to docker system
+nvidia-docker run --entrypoint /bin/bash -v $PWD/transforms_cache:/transforms_cache --rm --env SM_CHANNEL_TRAIN=/opt/ml/input/data/train -it image_name
+
 ```
 
 
