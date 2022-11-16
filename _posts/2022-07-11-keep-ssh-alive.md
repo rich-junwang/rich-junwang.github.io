@@ -1,11 +1,13 @@
 ---
 layout: post
-title: Keep SSH Connected
+title: SSH Connection
 date: 2022-07-11
 description: tricks and tips
 tags: Tricks and Tips
 categories: software
 ---
+
+## Keep SSH Connected
 
 There is always one issue that bothers me when using SSH to access server (e.g. EC2) which is that the ssh connection can disconnect very soon. I tried to make changes in the local ssh config: `~/.ssh/config`
 
@@ -40,3 +42,10 @@ logout
 ```
 
 This time it works! :)
+
+
+## Adding SSH Public Key to Server
+Adding ssh public key to server sometimes can make the connections eaiser. The command is simple:
+```
+cat ~/.ssh/id_ras.pub | ssh -i "my-keypair.pem"  ubuntu@myserver 'cat >> ~/.ssh/authorized_keys'
+```
