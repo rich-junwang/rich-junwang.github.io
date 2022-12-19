@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Large Language Model Pretraining
-date: 2022-12-20
+date: 2022-12-18
 description: tricks and tips
 tags: Research
 categories: research
