@@ -18,7 +18,7 @@ Using reinforcement learning to learn human feedback. For this purpose, they hav
 
 The following diagram from the paper demonstrated how these steps unfold during the training. 
 <p align="center">
-    <img alt="make it parse" src="/assets/instructgpt.png" width="800"/>
+    <img alt="make it parse" src="/assets/img/instructgpt.png" width="800"/>
     <br>
 <p>
 
