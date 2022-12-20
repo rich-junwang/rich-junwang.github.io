@@ -20,7 +20,7 @@ The following diagram from the paper demonstrated how these steps unfold during 
 <p align="center">
     <img alt="make it parse" src="/assets/img/instructgpt.png" width="800"/>
     <br>
-<p>
+</p>
 
 
 (To be continued)
