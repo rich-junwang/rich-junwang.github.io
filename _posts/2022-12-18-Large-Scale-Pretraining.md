@@ -27,6 +27,7 @@ As mentioned in GPT2 paper, BPE effectively interpolates between word level inpu
 
 
 
+
 ### Training Design
 Most of today's pretraining follow suits of a multi-stage and multi-task training. As is shown by Yao in [1], GPT series model is pretrained in such way as well. 
 <p align="center">
@@ -62,12 +63,15 @@ As is shown in this paper, `On Layer Normalization in the Transformer Architectu
 
 ## References
 [1] [How does GPT Obtain its Ability? Tracing Emergent Abilities of Language Models to their Sources](https://yaofu.notion.site/How-does-GPT-Obtain-its-Ability-Tracing-Emergent-Abilities-of-Language-Models-to-their-Sources-b9a57ac0fcf74f30a1ab9e3e36fa1dc1) <br>
-[2] [Scaling Language Models: Methods, Analysis & Insights from Training Gopher](https://arxiv.org/pdf/2112.11446.pdf) <br>
+[2] [Gopher: Scaling Language Models: Methods, Analysis & Insights from Training Gopher](https://arxiv.org/pdf/2112.11446.pdf) <br>
 [3] [UL2: Unifying Language Learning Paradigms](https://arxiv.org/pdf/2205.05131.pdf) <br>
-[4] [Estimating the Carbon Footprint of BLOOM, a 176B Parameter Language Model](https://arxiv.org/abs/2211.02001) <br>
+[4] [Bloom: Estimating the Carbon Footprint of BLOOM, a 176B Parameter Language Model](https://arxiv.org/abs/2211.02001) <br>
 [5] [Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361) <br>
 [6] [GPT: Improving Language Understanding by Generative Pre-Training](https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf) <br>
 [7] [GPT2: Language Models are Unsupervised Multitask Learners](https://d4mucfpksywv.cloudfront.net/better-language-models/language_models_are_unsupervised_multitask_learners.pdf) <br>
 [8] [GPT3: Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165) <br>
 [9] [InstructGPT: Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155) <br>
 [10] [WebGPT: Browser-assisted question-answering with human feedback](https://arxiv.org/abs/2112.09332) <br>
+[11] [OPT: Open Pre-trained Transformer Language Models](https://arxiv.org/abs/2205.01068)
+[12] [OPT2: OPT-IML Scaling Language Model Instruction Meta Learning through the Lens of Generalization](https://github.com/facebookresearch/metaseq/tree/main/projects/OPT-IML)
+[13] [Flan-PaLM: Scaling Instruction-Finetuned Language Models](https://arxiv.org/pdf/2210.11416.pdf)
