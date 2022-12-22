@@ -72,6 +72,7 @@ As is shown in this paper, `On Layer Normalization in the Transformer Architectu
 [8] [GPT3: Language Models are Few-Shot Learners](https://arxiv.org/abs/2005.14165) <br>
 [9] [InstructGPT: Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155) <br>
 [10] [WebGPT: Browser-assisted question-answering with human feedback](https://arxiv.org/abs/2112.09332) <br>
-[11] [OPT: Open Pre-trained Transformer Language Models](https://arxiv.org/abs/2205.01068)
-[12] [OPT2: OPT-IML Scaling Language Model Instruction Meta Learning through the Lens of Generalization](https://github.com/facebookresearch/metaseq/tree/main/projects/OPT-IML)
-[13] [Flan-PaLM: Scaling Instruction-Finetuned Language Models](https://arxiv.org/pdf/2210.11416.pdf)
+[11] [OPT: Open Pre-trained Transformer Language Models](https://arxiv.org/abs/2205.01068) <br>
+[12] [OPT2: OPT-IML Scaling Language Model Instruction Meta Learning through the Lens of Generalization](https://github.com/facebookresearch/metaseq/tree/main/projects/OPT-IML) <br>
+[13] [PaLM: Scaling Language Modeling with Pathways](https://arxiv.org/abs/2204.02311) <br>
+[13] [Flan-PaLM: Scaling Instruction-Finetuned Language Models](https://arxiv.org/pdf/2210.11416.pdf) <br>
