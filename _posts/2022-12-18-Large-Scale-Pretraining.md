@@ -14,6 +14,7 @@ Data is crucial in any ML system. This is true to pretraining as well. As is sho
 
 <p align="center">
     <img alt="gopher dataset" src="/assets/img/gopher_data.png" width="80%"/>
+    <br>
     <em>Datasets used in Gopher [2]</em>
     <br>
 </p>
