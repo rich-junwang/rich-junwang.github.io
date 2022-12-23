@@ -13,7 +13,7 @@ Large language model pretraining is a very challenging task which requires very 
 Data is crucial in any ML system. This is true to pretraining as well. As is shown in Gopher paper,  A large, diverse and high-quality dataset is needed to train a good model. In the following table, it shows the datasets used in [`Gopher` model](https://arxiv.org/pdf/2112.11446.pdf) training. Now we're looking at terabytes scale of training data. 
 
 <p align="center">
-    <img alt="gopher dataset" src="/assets/img/gopher_data.png" width="100%"/>
+    <img alt="gopher dataset" src="/assets/img/gopher_data.png" width="80%"/>
     <em>Datasets used in Gopher [2]</em>
     <br>
 </p>
@@ -24,6 +24,28 @@ Diversified datasets are necessary but can't guarantee training success as can b
 Language models compute probability of any string sequence. How to represent the string sequence is determined by tokenizer. Popular options are byte pair encoding (BPE) or wordpiece. As the majority of models are using BPE today, here we focus on BPE based tokenizer. 
 
 As mentioned in GPT2 paper, BPE effectively interpolates between word level inputs for frequent symbol sequences and character level inputs for infrequent symbol sequences. Directly using greedy method to build BPE merging rules can be problematic. For example, word `cat` can be used in a lot of places like `cat?`, `cat!`, `cat.`. One way to solve this issue is to prevent BPE from generating rules across different character categories (letters, digits, puncts etc).
+
+As people are pivoting in-context learing/instruction learning with large models, tokenization efficiency becomes more important. The following tables from Jurassic-1 paper shows the efficiency of tokenizer on several public dataset. 
+
+<p align="center">
+    <img alt="tokenization efficiency" src="/assets/img/tokenizer.png" width="100%"/>
+    <em>Tokenizer efficiency comparison from [16]</em>
+    <br>
+</p>
+
+### Model Architecture
+All pretrained models are variant of original transformer model. The differences are mainly about it's encoder-decoder architecture or decoder-only architecture. First of all, let's take a look at the choices of available large models. 
+
+| Models &nbsp; &nbsp;  | Model Size &nbsp; &nbsp;   | Token Size &nbsp; |  Architecture  | 
+|----|:----:| :----:|
+| GPT3 | 175B | 300B | Decoder | 
+| OPT | 175B| 300B | Decoder | 
+| PaLM | 540B| 300B | Decoder | 
+| Gopher | 280B| 300B | Decoder | 
+| Chinchilla | 70B| 1400B | Decoder | 
+| Jurassic-1 | 178B| - | Decoder | 
+| Megatron-Turing NLG | 530B| 270B | Decoder | 
+{:.mbtablestyle}
 
 
 
@@ -76,3 +98,5 @@ As is shown in this paper, `On Layer Normalization in the Transformer Architectu
 [12] [OPT2: OPT-IML Scaling Language Model Instruction Meta Learning through the Lens of Generalization](https://github.com/facebookresearch/metaseq/tree/main/projects/OPT-IML) <br>
 [13] [PaLM: Scaling Language Modeling with Pathways](https://arxiv.org/abs/2204.02311) <br>
 [14] [Flan-PaLM: Scaling Instruction-Finetuned Language Models](https://arxiv.org/pdf/2210.11416.pdf) <br>
+[15] [Chinchilla: Training Compute-Optimal Large Language Models](https://arxiv.org/abs/2203.15556) <br>
+[16] [Jurassic-1: Technical details and evaluation.](https://uploads-ssl.webflow.com/60fd4503684b466578c0d307/61138924626a6981ee09caf6_jurassic_tech_paper.pdf) <br>
