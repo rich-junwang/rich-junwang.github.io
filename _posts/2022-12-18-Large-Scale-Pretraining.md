@@ -47,8 +47,8 @@ All pretrained models are variant of original transformer model. The differences
 | Jurassic-1 | 178B| - | Decoder | 
 | Megatron-Turing NLG | 530B| 270B | Decoder | 
 {:.mbtablestyle}
-
-
+<br>
+Although all models listed here are autoregressive decoder only model, they actually differ a bit inside the decoder. 
 
 
 ### Training Design
@@ -65,6 +65,9 @@ From the lineage diagram, we can see that `ChatGPT` model comes from `Codex` mod
 #### Critical Batch Size
 Research [5] shows that there is a critical batch size in pretraining. When training batch size exceeds critical batch size, model performance starts to degrade. Critical batch size is independent of model size and is related to loss. 
 
+#### Optimizer
+When we select an optimizer, we have to take consideration of memory footprint and stability issues etc. Options are **Adafactor**, **Adam** etc. According to **Gopher** paper, adafactor optimizer has smaller memory footprint, and on smaller scale model (<7B) adafactor works well. However, when model size goes larger, performance suffers because of stability issue. 
+
 ### Evaluation Misconception
 A lot of large models come out every year and many claims that they could beat GPT3 model in a wide range of benchmarks like `SuperGlue`, `CLUE` etc. However, when you do benchmark these models in zero-shot setting or some less common tasks (but still very reasonable ones), these models tend to perform really bad. I personally tested `GPT3` model (175b) and `UL2` model (20b) on text2sql and sql2text task, GPT3 gives way better performance. You may argue that the model size differs a lot. However, we can think the other way around: maybe their model training is not easy/efficient to scale to such level. Essentially, what I want to say is that good performance on popular benchmark datasets doesn't mean much for large LM pretraining as this is highly related to source of training data, whether or not doing fine-tuning, proper prompting etc. 
 
@@ -72,12 +75,7 @@ A lot of large models come out every year and many claims that they could beat G
 ### Stability
 During the model training, the most commonly seen issue is gradient exploding, aka, gradient becomes `NaN`. As layers go deeper, this problem happens more often because the way backpropagation works. Over the years, people have proposed many different ways to solve the challenge. 
 As is shown in this paper, `On Layer Normalization in the Transformer Architecture`, the post-LN shows stability issue without carefully designed warming-up stage. As a result, they are proposing pre-LN to alleviate the problem. 
-
-
-
-
-
-
+<br>
 
 
 
