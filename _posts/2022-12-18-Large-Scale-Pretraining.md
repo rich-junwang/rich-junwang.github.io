@@ -41,11 +41,12 @@ All pretrained models are variant of original transformer model. The differences
 |----|:----:| :----:|
 | GPT3 | 175B | 300B | Decoder | 
 | OPT | 175B| 300B | Decoder | 
-| PaLM | 540B| 300B | Decoder | 
+| PaLM | 540B| 780B | Decoder | 
 | Gopher | 280B| 300B | Decoder | 
 | Chinchilla | 70B| 1400B | Decoder | 
 | Jurassic-1 | 178B| - | Decoder | 
 | Megatron-Turing NLG | 530B| 270B | Decoder | 
+| LaMDA | 137B| 2810B | Decoder | 
 {:.mbtablestyle}
 <br>
 Although all models listed here are autoregressive decoder only model, they actually differ a bit inside the decoder. 
@@ -99,3 +100,6 @@ As is shown in this paper, `On Layer Normalization in the Transformer Architectu
 [14] [Flan-PaLM: Scaling Instruction-Finetuned Language Models](https://arxiv.org/pdf/2210.11416.pdf) <br>
 [15] [Chinchilla: Training Compute-Optimal Large Language Models](https://arxiv.org/abs/2203.15556) <br>
 [16] [Jurassic-1: Technical details and evaluation.](https://uploads-ssl.webflow.com/60fd4503684b466578c0d307/61138924626a6981ee09caf6_jurassic_tech_paper.pdf) <br>
+[17] [Megatron-NLG: Using DeepSpeed and Megatron to Train Megatron-Turing NLG 530B, A Large-Scale Generative Language Model](https://arxiv.org/abs/2201.11990) <br>
+[18] [LaMDA: Language Models for Dialog Applications](https://arxiv.org/pdf/2201.08239.pdf) <br>
+[19] [Codex: Evaluating Large Language Models Trained on Code](https://arxiv.org/abs/2107.03374) <br>
