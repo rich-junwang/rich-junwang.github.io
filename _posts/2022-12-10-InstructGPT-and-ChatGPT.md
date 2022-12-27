@@ -22,5 +22,26 @@ The following diagram from the paper demonstrated how these steps unfold during 
     <br>
 </p>
 
+In summary, there are three steps: 
+- Use labeled data to fine-tune GPT3 model
+- Train a reward model
+- Use RL to optimize GPT3 parameters
+
+In the first step, we got data from annotators and use this data to fine-tune GPT3 model. In the second step, they prepare some questions and GPT3 model gives multiple predictions for each question and annotators are asked to rank the generated predictions. This data is used to train reward model. The reward model is used for prediction and predict which one is most close to human choice. Reward model gives a score and the closer to human choice, the higher of the score. 
+
+Finally, use policy-based RM algorithm to do further optimization. The whole process is shown in the diagram below. It uses reward mechanism to train model. The reward can be seen as the loss function in traditional ML training. Reward function is much more versatile than loss function (Think about DotaRL and AlphaGo). The consequence is that reward function is not differential, thus can't be used for back-propagation. People can sample rewards to proximate this loss function.
+
+<p align="center">
+    <img alt="make it parse" src="/assets/img/lm_rl.png" width="800"/>
+    <br>
+</p>
 
 (To be continued)
+
+
+
+
+### References
+[1] [Learning to summarize from human feedback](https://arxiv.org/pdf/2009.01325.pdf) <br>
+[2] [InstructGPT: Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155) <br>
+[3] https://zhuanlan.zhihu.com/p/590311003
