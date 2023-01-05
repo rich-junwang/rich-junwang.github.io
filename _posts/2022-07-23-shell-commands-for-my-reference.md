@@ -28,5 +28,8 @@ sudo update-alternatives --config python3
 sudo ln -sf /usr/bin/python3.9 /usr/bin/python3
 ```
 
-
+### find a python package related files
+```
+pip show -f package-name
+```
 

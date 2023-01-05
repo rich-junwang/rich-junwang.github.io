@@ -7,7 +7,7 @@ tags: Research
 categories: research
 ---
 
-Large language model pretraining is a very challenging task which requires very strong engineering and science skills. People tend to underestimate efforts needed to train a good large models like GPT3 etc. Most people imagine that they can get a good language model given enough computation resources. The fact is even today only OpenAI is providing LM APIs where people can freely play with and get good performances. In this blog, we'll talk about pretraining from the whole pipeline: data sourcing, collection and processing, tokenization, architecture engineering and evaluation. Hopefully, it would be helpful for foundational model training practioners. 
+Large language model pretraining is a very challenging task which requires very strong engineering and science skills. People tend to underestimate efforts needed to train a good large model like GPT3 etc. Most people imagine that they can get decent language models given enough computation resources. The fact is even today only OpenAI is providing LM APIs where people can freely play with and get good performances. In this blog, we'll talk about pretraining from the whole pipeline: data sourcing, collection and processing, tokenization, architecture engineering and evaluation. Hopefully, it would be helpful for foundational model training practioners. 
 
 ### Data
 Data is crucial in any ML system. This is true to pretraining as well. As is shown in Gopher paper,  A large, diverse and high-quality dataset is needed to train a good model. In the following table, it shows the datasets used in [`Gopher` model](https://arxiv.org/pdf/2112.11446.pdf) training. Now we're looking at terabytes scale of training data. 
@@ -66,6 +66,10 @@ From the lineage diagram, we can see that `ChatGPT` model comes from `Codex` mod
 #### Critical Batch Size
 Research [5] shows that there is a critical batch size in pretraining. When training batch size exceeds critical batch size, model performance starts to degrade. Critical batch size is independent of model size and is related to loss. 
 
+#### Learning Rate
+Usually as pointed out in [20], when we scale up batch size, we increase learning rate propotionally. However, when we increase model size (usually followed with batch size increase), the training tends to be more instable. Thus, in reality, we decrease maximum learning rate when we increase model size (batch size).
+
+
 #### Optimizer
 When we select an optimizer, we have to take consideration of memory footprint and stability issues etc. Options are **Adafactor**, **Adam** etc. According to **Gopher** paper, adafactor optimizer has smaller memory footprint, and on smaller scale model (<7B) adafactor works well. However, when model size goes larger, performance suffers because of stability issue. 
 
@@ -75,7 +79,9 @@ A lot of large models come out every year and many claims that they could beat G
 
 ### Stability
 During the model training, the most commonly seen issue is gradient exploding, aka, gradient becomes `NaN`. As layers go deeper, this problem happens more often because the way backpropagation works. Over the years, people have proposed many different ways to solve the challenge. 
-As is shown in this paper, `On Layer Normalization in the Transformer Architecture`, the post-LN shows stability issue without carefully designed warming-up stage. As a result, they are proposing pre-LN to alleviate the problem. 
+As is shown in paper [21], the post-LN shows stability issue without carefully designed warming-up stage. As a result, they are proposing pre-LN to alleviate the problem. 
+
+
 <br>
 
 
@@ -103,3 +109,5 @@ As is shown in this paper, `On Layer Normalization in the Transformer Architectu
 [17] [Megatron-NLG: Using DeepSpeed and Megatron to Train Megatron-Turing NLG 530B, A Large-Scale Generative Language Model](https://arxiv.org/abs/2201.11990) <br>
 [18] [LaMDA: Language Models for Dialog Applications](https://arxiv.org/pdf/2201.08239.pdf) <br>
 [19] [Codex: Evaluating Large Language Models Trained on Code](https://arxiv.org/abs/2107.03374) <br>
+[20] [Accurate, Large Minibatch SGD: Training ImageNet in 1 Hour](https://arxiv.org/abs/1706.02677) <br> 
+[21] [On Layer Normalization in the Transformer Architecture](https://arxiv.org/abs/2002.04745) <br>
