@@ -6,7 +6,8 @@ description: make vscode faster
 tags: Tricks and Tips
 categories: software
 ---
-VSCode Shortcuts on Ubuntu 
+
+### Remote Development
 
 I used to do development on my local machine, and use **fswatch** and **rsync** to sync changes to server in real time. It works perfectly when development dependencies are simple and easy to set up. Generally I refer this development mode as local development. However, as more and more development environments are containerized, it becomes non-trivial to set up environment everytime. Recently, I started using VSCode as it has better support to leverage remote server development environment. 
 
