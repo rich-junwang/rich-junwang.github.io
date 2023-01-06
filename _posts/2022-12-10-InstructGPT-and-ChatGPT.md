@@ -29,10 +29,12 @@ In summary, there are three steps:
 
 In the first step, we got data from annotators and use this data to fine-tune GPT3 model. In the second step, they prepare some questions and GPT3 model gives multiple predictions for each question and annotators are asked to rank the generated predictions. This data is used to train reward model. The reward model is used for prediction and predict which one is most close to human choice. Reward model gives a score and the closer to human choice, the higher of the score. 
 
-Finally, use policy-based RM algorithm to do further optimization. The whole process is shown in the diagram below. It uses reward mechanism to train model. The reward can be seen as the loss function in traditional ML training. Reward function is much more versatile than loss function (Think about DotaRL and AlphaGo). The consequence is that reward function is not differential, thus can't be used for back-propagation. People can sample rewards to proximate this loss function.
+Finally, use policy-based RM algorithm to do further optimization. The whole process is shown in the diagram below. It uses reward mechanism to train model. The reward can be seen as the loss function in traditional ML training. Reward function is much more versatile than loss function (Think about DotaRL and AlphaGo). The consequence is that reward function may not be differentiable, thus can't be used for back-propagation. People can sample rewards to proximate this loss function.
 
 <p align="center">
-    <img alt="make it parse" src="/assets/img/lm_rl.png" width="800"/>
+    <img alt="rl" src="/assets/img/lm_rl.png" width="800"/>
+    <br>
+    <em>RL algorithm. Image from [1]</em>
     <br>
 </p>
 
@@ -44,4 +46,6 @@ Finally, use policy-based RM algorithm to do further optimization. The whole pro
 ### References
 [1] [Learning to summarize from human feedback](https://arxiv.org/pdf/2009.01325.pdf) <br>
 [2] [InstructGPT: Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155) <br>
-[3] https://zhuanlan.zhihu.com/p/590311003
+[3] [Fine-Tuning Language Models from Human Preferences](https://arxiv.org/pdf/1909.08593.pdf) <br>
+[4] https://github.com/lvwerra/trl  <br>
+[5] https://zhuanlan.zhihu.com/p/590311003  <br>
