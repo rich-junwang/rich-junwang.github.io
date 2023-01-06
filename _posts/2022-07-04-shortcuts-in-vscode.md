@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Shortcuts in VSCode
+title: Remote development with VSCode
 date: 2022-07-04
 description: make vscode faster
 tags: Tricks and Tips
@@ -8,7 +8,18 @@ categories: software
 ---
 VSCode Shortcuts on Ubuntu 
 
-https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf
+I used to do development on my local machine, and use **fswatch** and **rsync** to sync changes to server in real time. It works perfectly when development dependencies are simple and easy to set up. Generally I refer this development mode as local development. However, as more and more development environments are containerized, it becomes non-trivial to set up environment everytime. Recently, I started using VSCode as it has better support to leverage remote server development environment. 
+
+
+One great feature of VScode is that it works well with docker and kubernetes, i.e. we can attach VSCode to docker or kubernetes pods easily. In vscode terminal, we can execute commands like we're doing on the server. I call this kind of development as remote development. 
+
+One problem with remote development is that we can't save our changes locally. Once server dies, all our changes are gone. The solution is to use git. Since docker doesn't come with an editor, when we use git, we have to set vscode as the editor:
+```
+git config --global core.editor "code --wait"
+```
+
+
+### VScode Shortcuts
 
 (1) CTRL + X : cut a line \
 (2) duplicate a line: duplicate can be achieved by CTRL+C and CTRL+V with cursor in the line (without selection)
@@ -46,3 +57,8 @@ https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf
 (10) split screen
 vertical split: CTRL + \
 
+
+
+
+## References
+[1] https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf
