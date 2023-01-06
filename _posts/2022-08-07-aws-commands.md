@@ -33,10 +33,22 @@ docker pull <image_name>
 ### GitLab
 Gitlab  changes its authentication methods and the way it works is almost identical to Github. The easist way to use it is through personal token.
 
+
 ```
+# For gitlab usage
 # clone a repo using personal token
 git clone https://oauth2:personal_token@gitlab.com/username/project.git
 
-
 git remote set-url origin https://oauth2:personal_token@gitlab.com/username/project.git
+
+git push https://personal_token@gitlab.com/username/project.git
+```
+
+```
+## For github usage
+git clone https://username:personal_token@github.com/username/project.git .
+
+git remote set-url origin https://username:personal_token@github.com/username/project.git
+
+git push https://personal_token@github.com/username/project.git
 ```
