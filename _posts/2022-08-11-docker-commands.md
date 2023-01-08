@@ -41,6 +41,13 @@ sudo docker system prune
 ```
 
 
+### Install package
+Install packages inside a running docker. Usually we're able to install package based on distributeion of linux system running in the docker. For example, if it's ubuntu, then the command is 
+```
+apt-get -y update
+apt-get -u tmux  # package name
+```
+
 
 
 

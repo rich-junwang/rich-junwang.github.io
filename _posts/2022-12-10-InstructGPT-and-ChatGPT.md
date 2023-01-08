@@ -49,3 +49,4 @@ Finally, use policy-based RM algorithm to do further optimization. The whole pro
 [3] [Fine-Tuning Language Models from Human Preferences](https://arxiv.org/pdf/1909.08593.pdf) <br>
 [4] https://github.com/lvwerra/trl  <br>
 [5] https://zhuanlan.zhihu.com/p/590311003  <br>
+[6] [Super-natural instructions: generalization via declarative instructions on 1600+ NLP tasks](https://arxiv.org/abs/2204.07705)
