@@ -33,3 +33,69 @@ sudo ln -sf /usr/bin/python3.9 /usr/bin/python3
 pip show -f package-name
 ```
 
+
+
+### Git 
+
+#### Git merge
+Suppose we're on **master** branch, if we want to override the changes in the master branch with feature branch, we can use the following command
+```
+git merge -X theirs feature
+```
+
+to keep the master branch changes:
+```
+git merge -X ours feature
+```
+
+If we want to rebase of current branch onto the master, and want to keep feature branch
+```
+git rebase master -X theirs
+```
+
+if we want to keep master branch changes over our feature branch, the
+```
+git rebase master -X theirs
+```
+
+To summarize, we can have the following table:
+
+<table>
+<thead>
+<tr>
+<th>&nbsp; Currently on</th>
+<th>Command &nbsp; &nbsp;</th>
+<th>Strategy &nbsp; &nbsp;</th>
+<th>Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&nbsp;master</td>
+<td>git merge feature &nbsp;</td>
+<td>
+<strong>-Xtheirs</strong> &nbsp; &nbsp;</td>
+<td>Keep changes from feature branch</td>
+</tr>
+<tr>
+<td>master</td>
+<td>git merge feature</td>
+<td><strong>-Xours</strong></td>
+<td>keep changes from master branch</td>
+</tr>
+<tr>
+<td>&nbsp;feature</td>
+<td>git rebase master &nbsp;</td>
+<td>
+<strong>-Xtheirs</strong> &nbsp; &nbsp;</td>
+<td>Keep changes from feature branch</td>
+</tr>
+<tr>
+<td>feature</td>
+<td>git rebase master</td>
+<td><strong>-Xours</strong></td>
+<td>keep changes from master branch</td>
+</tr>
+</tbody>
+</table>
+{:.mbtablestyle}

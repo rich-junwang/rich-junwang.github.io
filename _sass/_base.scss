@@ -53,11 +53,23 @@ table.table a {
   boarder-collapse: collapse;
   color: var(--global-theme-color);
 
-  >table,
-  td,
+  table-layout: fixed;
+
+
+  >table {
+    table-layout: fixed;
+    // width: 100%;
+  }
+
+  width: 100%;
+
+  td {
+    // width: 25%;
+    border: 1px solid black;
+  }
+
   th {
     border: 1px solid black;
-    width: 80%;
   }
 }
 
