@@ -12,6 +12,8 @@ Large language model pretraining is a very challenging task which requires very 
 ### Data
 Data is crucial in any ML system. This is true to pretraining as well. As is shown in Gopher paper,  A large, diverse and high-quality dataset is needed to train a good model. In the following table, it shows the datasets used in [`Gopher` model](https://arxiv.org/pdf/2112.11446.pdf) training. Now we're looking at terabytes scale of training data. 
 
+
+
 <p align="center">
     <img alt="gopher dataset" src="/assets/img/gopher_data.png" width="80%"/>
     <br>
