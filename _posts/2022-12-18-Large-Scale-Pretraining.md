@@ -69,6 +69,8 @@ Research [5] shows that there is a critical batch size in pretraining. When trai
 #### Learning Rate
 Usually as pointed out in [20], when we scale up batch size, we increase learning rate propotionally. However, when we increase model size (usually followed with batch size increase), the training tends to be more instable. Thus, in reality, we decrease maximum learning rate when we increase model size (batch size).
 
+#### Length Extrapolation
+As in-context learning becomes popular, people are asking a question, Can an LLM maintain equally good, if not better, perplexities when longer sequences are used during inference time? This is the so-called length extrapolation [25].  
 
 #### Optimizer
 When we select an optimizer, we have to take consideration of memory footprint and stability issues etc. Options are **Adafactor**, **Adam** etc. According to **Gopher** paper, adafactor optimizer has smaller memory footprint, and on smaller scale model (<7B) adafactor works well. However, when model size goes larger, performance suffers because of stability issue. 
@@ -114,4 +116,5 @@ As is shown in paper [21], the post-LN shows stability issue without carefully d
 [22] [GLM-130B: An Open Bilingual Pre-trained Model](https://arxiv.org/abs/2210.02414) <br>
 [23] [T0: Multitask Prompted Training Enables Zero-Shot Task Generalization](https://arxiv.org/abs/2110.08207) <br>
 [24] https://zhuanlan.zhihu.com/p/590240010 <br>
-
+[25] [RoFormer: Enhanced Transformer with Rotary Position Embedding](https://arxiv.org/abs/2104.09864) <br>
+[26] [Receptive Field Alignment Enables Transformer Length Extrapolation](https://arxiv.org/abs/2212.10356) <br>
