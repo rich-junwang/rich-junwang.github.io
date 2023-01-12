@@ -55,7 +55,7 @@ git rebase master -X theirs
 
 if we want to keep master branch changes over our feature branch, the
 ```
-git rebase master -X theirs
+git rebase master -X ours
 ```
 
 To summarize, we can have the following table:
@@ -99,3 +99,11 @@ To summarize, we can have the following table:
 </tbody>
 </table>
 {:.mbtablestyle}
+
+<br>
+#### Git Diff
+
+To check two branch difference, suppose we're on branch1, then we can do,
+```
+git diff HEAD..master
+```
