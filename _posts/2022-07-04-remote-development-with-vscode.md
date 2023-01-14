@@ -68,7 +68,17 @@ CTRL + SHIFT + N
 
 
 (12) Open terminal
-CTRL + ` to toggle terminal panel.
+CTRL + ` to toggle terminal panel. Note one mac here it's CTRL as well.
+
+(3) Close search window after global search
+In `keybindings.json` add the following lines
+```
+{
+  "key": "Escape",
+  "command": "workbench.view.explorer",
+  "when": "searchViewletVisible"
+}
+```
 
 
 
