@@ -65,11 +65,20 @@ Most of today's pretraining follow suits of a multi-stage and multi-task trainin
 
 From the lineage diagram, we can see that `ChatGPT` model comes from `Codex` model which can be seen as a different stage of training. The way of scheduling tasks and data during training can have great impact on the final model performance. 
 
-#### Critical Batch Size
+#### Batch Size
 Research [5] shows that there is a critical batch size in pretraining. When training batch size exceeds critical batch size, model performance starts to degrade. Critical batch size is independent of model size and is related to loss. 
 
+Generally small batch size leads to better validation loss when training with the same number of tokens as more random movement of gradient explores more of loss landscape. Often times, small batch size gives better genelization performance as well as pointed out in [27]. The reason given from the paper is that smaller batch size usually converges to flat minimum as oppose to sharp minimum. Intuitively, this is related to graident update in each step is small for large batch size training. 
+<p align="center">
+    <img alt="flat sharp minimum" src="/assets/img/flat_sharp_minimum.png" width="80%" height=auto/> 
+    <br>
+    <em>Flat and Sharp Minima [27]</em>
+    <br>
+</p>
+
+
 #### Learning Rate
-Usually as pointed out in [20], when we scale up batch size, we increase learning rate propotionally. However, when we increase model size (usually followed with batch size increase), the training tends to be more instable. Thus, in reality, we decrease maximum learning rate when we increase model size (batch size).
+Usually as pointed out in [20], when we scale up batch size, we increase learning rate propotionally. However, when we increase model size (usually followed with batch size increase), the training tends to be more unstable. Thus, in reality, we decrease maximum learning rate when we increase model size (batch size).
 
 #### Length Extrapolation
 As in-context learning becomes popular, people are asking a question, Can an LLM maintain equally good, if not better, perplexities when longer sequences are used during inference time? This is the so-called length extrapolation [25].  
@@ -120,3 +129,4 @@ As is shown in paper [21], the post-LN shows stability issue without carefully d
 [24] https://zhuanlan.zhihu.com/p/590240010 <br>
 [25] [RoFormer: Enhanced Transformer with Rotary Position Embedding](https://arxiv.org/abs/2104.09864) <br>
 [26] [Receptive Field Alignment Enables Transformer Length Extrapolation](https://arxiv.org/abs/2212.10356) <br>
+[27] [On Large-Batch Training for Deep Learning: Generalization Gap and Sharp Minima](https://arxiv.org/abs/1609.04836) <br>
