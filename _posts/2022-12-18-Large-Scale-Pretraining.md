@@ -77,8 +77,17 @@ Generally small batch size leads to better validation loss when training with th
 </p>
 
 
-#### Learning Rate
+#### Learning Rate Scheduling
 Usually as pointed out in [20], when we scale up batch size, we increase learning rate propotionally. However, when we increase model size (usually followed with batch size increase), the training tends to be more unstable. Thus, in reality, we decrease maximum learning rate when we increase model size (batch size).
+
+Learning rate scheduling usually involves a (linear) warm-up step to maximum learning rate and followed by a decaying step to 0 or a minimum learning rate. Currently, there are several methods in literature for the decaying step:
+- Linear scheduler
+- Plateau-linear schedule 
+- Cosine scheduler
+
+#### Regularization
+One of the most used regularization method is L2 regularization, aka, weight decay [28]. For instance, GPT 3 training uses a weight decay of 0.1. 
+
 
 #### Length Extrapolation
 As in-context learning becomes popular, people are asking a question, Can an LLM maintain equally good, if not better, perplexities when longer sequences are used during inference time? This is the so-called length extrapolation [25].  
@@ -130,3 +139,4 @@ As is shown in paper [21], the post-LN shows stability issue without carefully d
 [25] [RoFormer: Enhanced Transformer with Rotary Position Embedding](https://arxiv.org/abs/2104.09864) <br>
 [26] [Receptive Field Alignment Enables Transformer Length Extrapolation](https://arxiv.org/abs/2212.10356) <br>
 [27] [On Large-Batch Training for Deep Learning: Generalization Gap and Sharp Minima](https://arxiv.org/abs/1609.04836) <br>
+[28] [Decoupled Weight Decay Regularization](https://arxiv.org/pdf/1711.05101.pdf) <br>
