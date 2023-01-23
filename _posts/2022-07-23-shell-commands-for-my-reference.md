@@ -87,3 +87,15 @@ Delete a remote branch
 ```
 git push origin -d remote_branch_name 
 ```
+
+
+#### Git rebase
+To fixup, squash, edit, drop, reword and many other operations on the previous N commit:
+```
+git rebase -i HAED~N
+```
+
+#### Git commit
+```
+git commit --amend --no-edit
+```
