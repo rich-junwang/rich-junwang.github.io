@@ -70,7 +70,7 @@ CTRL + SHIFT + N
 (12) Open terminal
 CTRL + ` to toggle terminal panel. Note one mac here it's CTRL as well.
 
-(3) Close search window after global search
+(13) Close search window after global search
 In `keybindings.json` add the following lines
 ```
 {
@@ -80,6 +80,11 @@ In `keybindings.json` add the following lines
 }
 ```
 
+(14) How to open unlimited number of tabs
+In `settings.json` add the following key-value pair:
+```
+"workbench.editor.enablePreview": false
+```
 
 
 
