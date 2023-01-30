@@ -13,8 +13,6 @@ A lot of contents of here are from OpenAI, Nvidia, Deepspeed and bigscience blog
 
 <p align="center">
     <img alt="gopher dataset" src="/assets/img/speedup.jpg" width="60%"/>
-    <br>W
-    <em>kubernetes architecture, image from [1]</em>
     <br>
 </p>
 
@@ -29,6 +27,8 @@ To solve the problem, we can reuse the data parallelism idea. Instead of feeding
 
 <p align="center">
     <img alt="gopher dataset" src="/assets/img/pipeline.png" width="100%"/>
+    <br>
+    <em>Pipeline parallelism. image from [4]</em>
     <br>
 </p>
 
