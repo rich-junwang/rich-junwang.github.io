@@ -28,6 +28,11 @@ kubectl get pods
 kubectl get pods | grep username 
 ```
 
+To get all the containers running the pod, using the following command
+```
+kubectl get pods pod_name -o custom-columns='NAME:.metadata.name,CONTAINERS:.spec.containers[*].name'
+```
+
 We can use `kubectl` to copy files to/from the pod. Be careful that your container may not support `~` this kind of path expansion.
 ```
 kubectl cp src_file_path pod:dest_file_path
