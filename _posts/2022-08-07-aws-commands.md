@@ -52,3 +52,12 @@ git remote set-url origin https://username:personal_token@github.com/username/pr
 
 git push https://personal_token@github.com/username/project.git
 ```
+
+
+### Common AWS CLI
+To get the current region,
+```
+aws configure get region
+# if using the profile
+aws configure get region --profile $PROFILE_NAME
+```
