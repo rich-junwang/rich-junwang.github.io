@@ -51,7 +51,7 @@ All pretrained models are variant of original transformer model. The differences
 | LaMDA | 137B| 2810B | Decoder | 
 {:.mbtablestyle}
 <br>
-Although all models listed here are autoregressive decoder only model, they actually differ a bit inside the decoder. For instance, to speed up inference time, PaLM is using multi-query attention. Normally, in mutlhead attention, there will be h heads each with a linear project layer. With multiquery attention, instead of using h linear project layer for K and V, we can use a single linear project layer for K and a single linear projection layer for V. Then, for different head layers, K and V will be the same. In this way, we can save memory IO and get better latency performance in incremental inference. 
+Although all models listed here are autoregressive decoder only model, they actually differ a bit inside the decoder. For instance, to speed up inference time, PaLM is using multi-query attention. Normally, in mutlhead attention, there will be h heads each with a linear project layer for Q, K, V. With multiquery attention, instead of using h different linear project layers for K and V, we can share a single smaller linear project layer for K and a single linear projection layer for V for each head. Then, for different head layers, K and V will be the same. In this way, we can save memory IO and get better latency performance in incremental inference. 
 
 
 ### Training Design
