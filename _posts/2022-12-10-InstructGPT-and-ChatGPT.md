@@ -34,9 +34,17 @@ Finally, use policy-based RM algorithm to do further optimization. The whole pro
 <p align="center">
     <img alt="rl" src="/assets/img/lm_rl.png" width="800"/>
     <br>
-    <em>RL algorithm. Image from [1]</em>
+    <em>RL algorithm. Image from [4]</em>
     <br>
 </p>
+
+### PPO 
+
+From the repo in [4], the three steps of PPO are as follows:
+
+- Rollout: The language model generates a response or continuation based on query which could be the start of a sentence.
+- Evaluation: The query and response are evaluated with a function, model, human feedback or some combination of them. The important thing is that this process should yield a scalar value for each query/response pair.
+- Optimization: In the optimisation step the query/response pairs are used to calculate the log-probabilities of the tokens in the sequences. This is done with the model that is trained and and a reference model, which is usually the pre-trained model before fine-tuning. The KL-divergence between the two outputs is used as an additional reward signal to make sure the generated responses don't deviate to far from the reference language model. The active language model is then trained with PPO.
 
 (To be continued)
 
