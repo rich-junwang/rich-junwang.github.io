@@ -61,3 +61,13 @@ aws configure get region
 # if using the profile
 aws configure get region --profile $PROFILE_NAME
 ```
+
+
+### CloudWatch
+To use cloudwatch insight, we can use the following query
+```
+fields @timestamp, @message, @logStream
+| filter @logStream like /xxxxx/
+| sort @timestamp desc
+| limit 1000
+```
