@@ -36,7 +36,7 @@ docker ps -a
 
 ### Clean space
 ```
-docker rmi -f $(docker image -a -q)
+docker rmi -f $(docker images -a -q)
 sudo docker system prune
 ```
 

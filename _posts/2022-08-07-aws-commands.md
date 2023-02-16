@@ -69,5 +69,5 @@ To use cloudwatch insight, we can use the following query
 fields @timestamp, @message, @logStream
 | filter @logStream like /xxxxx/
 | sort @timestamp desc
-| limit 1000
+| limit 10000 
 ```

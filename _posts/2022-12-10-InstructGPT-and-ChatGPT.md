@@ -58,3 +58,5 @@ From the repo in [4], the three steps of PPO are as follows:
 [4] https://github.com/lvwerra/trl  <br>
 [5] https://zhuanlan.zhihu.com/p/590311003  <br>
 [6] [Super-natural instructions: generalization via declarative instructions on 1600+ NLP tasks](https://arxiv.org/abs/2204.07705)
+[7] [Training a Helpful and Harmless Assistant with Reinforcement Learning from Human Feedback](https://arxiv.org/abs/2204.05862)
+
