@@ -17,6 +17,9 @@ docker image ls
 ```
 # rm is to clean constainer after exit
 # it is interactive tty
+# for normal docker image
+docker run --entrypoint /bin/bash -it <image_name> 
+# for nvidia docker image
 nvidia-docker run --entrypoint /bin/bash --rm -it --name my_container_name  image_name
 
 # mount a volume to docker

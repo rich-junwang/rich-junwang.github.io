@@ -26,6 +26,8 @@ aws ecr get-login-password --region <region> | docker login --username AWS --pas
 # pull the image
 docker pull <image_name>
 
+# If we pushed the image using sudo, then pull also add sudo
+sudo docker pull <image_name>
 ```
 
 
