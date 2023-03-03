@@ -53,6 +53,7 @@ All pretrained models are variant of original transformer model. The differences
 <br>
 Although all models listed here are autoregressive decoder only model, they actually differ a bit inside the decoder. For instance, to speed up inference time, PaLM is using multi-query attention. Normally, in mutlhead attention, there will be h heads each with a linear project layer for Q, K, V. With multiquery attention, instead of using h different linear project layers for K and V, we can share a single smaller linear project layer for K and a single linear projection layer for V for each head. Then, for different head layers, K and V will be the same. In this way, we can save memory IO and get better latency performance in incremental inference. 
 
+A systematic study of transformer architecture is done in Ref [29]. Most of recent LLM architecture are following design from this paper. 
 
 ### Training Design
 Most of today's pretraining follow suits of a multi-stage and multi-task training. As is shown by Yao in [1], GPT series model is pretrained in such way as well. 
@@ -140,3 +141,4 @@ As is shown in paper [21], the post-LN shows stability issue without carefully d
 [26] [Receptive Field Alignment Enables Transformer Length Extrapolation](https://arxiv.org/abs/2212.10356) <br>
 [27] [On Large-Batch Training for Deep Learning: Generalization Gap and Sharp Minima](https://arxiv.org/abs/1609.04836) <br>
 [28] [Decoupled Weight Decay Regularization](https://arxiv.org/pdf/1711.05101.pdf) <br>
+[29] [Do Transformer Modifications Transfer Across Implementations and Applications?](https://arxiv.org/abs/2102.11972) <br>
