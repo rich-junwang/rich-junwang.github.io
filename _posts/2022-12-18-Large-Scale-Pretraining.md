@@ -105,6 +105,8 @@ During the model training, the most commonly seen issue is gradient exploding, a
 As is shown in paper [21], the post-LN shows stability issue without carefully designed warming-up stage. As a result, they are proposing pre-LN to alleviate the problem. 
 
 
+### Efficient Inference
+Inference speed determines product cost. Over the years, people have proposed various ways to improve inference speed. The multiquery attention mentioned above is one of these approaches. 
 <br>
 
 
@@ -142,3 +144,4 @@ As is shown in paper [21], the post-LN shows stability issue without carefully d
 [27] [On Large-Batch Training for Deep Learning: Generalization Gap and Sharp Minima](https://arxiv.org/abs/1609.04836) <br>
 [28] [Decoupled Weight Decay Regularization](https://arxiv.org/pdf/1711.05101.pdf) <br>
 [29] [Do Transformer Modifications Transfer Across Implementations and Applications?](https://arxiv.org/abs/2102.11972) <br>
+[30] [xFormers: A modular and hackable Transformer modelling library](https://github.com/facebookresearch/xformers) <br>
