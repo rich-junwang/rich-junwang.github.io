@@ -105,3 +105,11 @@ The simplest way to undo a git add is to use git reset. It removes staged file, 
 ```
 git reset file_path
 ```
+
+
+#### Git check difference
+Use the following command to checkout **COMMIT** (commit hash) ancestor and COMMIT difference
+```
+git diff COMMIT~ COMMIT
+git diff HEAD~ HEAD
+```
