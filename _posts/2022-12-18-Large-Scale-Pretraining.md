@@ -86,7 +86,7 @@ Learning rate scheduling usually involves a (linear) warm-up step to maximum lea
 - Cosine scheduler
 
 #### Regularization
-One of the most used regularization method is L2 regularization, aka, weight decay [28]. For instance, GPT 3 training uses a weight decay of 0.1. 
+One of the most used regularization method is L2 regularization, aka, weight decay [28]. For instance, GPT 3 training uses a weight decay of 0.1. Note that comparing with traditional neural network tuning weight decay number (such as 0.01) GPT3 weight decay is pretty large. 
 
 
 #### Length Extrapolation
