@@ -20,8 +20,7 @@ Data is crucial in any ML system. This is true to pretraining as well. As is sho
     <em>Datasets used in Gopher [2]</em>
     <br>
 </p>
-An ensuing problem with large amount of data is that data quality is hard to control. In practice, we have to at least make sure the content should be intelligible. 
-Diversified datasets are necessary but can't guarantee training success as can be seen from `Gopher` paper, model performs well on QA related tasks but suffers on reasoning task. What else is needed? We'll come back to this later. 
+An ensuing problem with large amount of data is that data quality is hard to control. In practice, we have to at least make sure the content should be intelligible. We might want to give more training on high-quality datasets such as books and wikipedia [31]. Diversified datasets are necessary but can't guarantee training success as can be seen from `Gopher` paper, model performs well on QA related tasks but suffers on reasoning task. What else is needed? We'll come back to this later. 
 
 ### Tokenizer
 Language models compute probability of any string sequence. How to represent the string sequence is determined by tokenizer. Popular options are byte pair encoding (BPE) or wordpiece. As the majority of models are using BPE today, here we focus on BPE based tokenizer. 
@@ -104,6 +103,7 @@ A lot of large models come out every year and many claims that they could beat G
 During the model training, the most commonly seen issue is gradient exploding, aka, gradient becomes `NaN`. As layers go deeper, this problem happens more often because the way backpropagation works. Over the years, people have proposed many different ways to solve the challenge. 
 As is shown in paper [21], the post-LN shows stability issue without carefully designed warming-up stage. As a result, they are proposing pre-LN to alleviate the problem. 
 
+It's important to monitor stability during training. Common practice is to plot activation norm and gradient norm for each step. When these values spike, we know there is something wrong. It's better than looking at loss curve only as loss explosion generally lags behind these two indicators. For instance, when there is bad data, we could have better gauge of when that happens and restart training from that point.
 
 ### Efficient Inference
 Inference speed determines product cost. Over the years, people have proposed various ways to improve inference speed. The multiquery attention mentioned above is one of these approaches. 
@@ -145,3 +145,5 @@ Inference speed determines product cost. Over the years, people have proposed va
 [28] [Decoupled Weight Decay Regularization](https://arxiv.org/pdf/1711.05101.pdf) <br>
 [29] [Do Transformer Modifications Transfer Across Implementations and Applications?](https://arxiv.org/abs/2102.11972) <br>
 [30] [xFormers: A modular and hackable Transformer modelling library](https://github.com/facebookresearch/xformers) <br>
+[31] [LLaMA: Open and Efficient Foundation Language Models](https://scontent-sea1-1.xx.fbcdn.net/v/t39.8562-6/333078981_693988129081760_4712707815225756708_n.pdf?_nc_cat=108&ccb=1-7&_nc_sid=ad8a9d&_nc_ohc=4srK2r5szdYAX8pFEBs&_nc_ht=scontent-sea1-1.xx&oh=00_AfBU6VS0w7YtW_0wD4YO2NbJg-fXXaFGrRh6jEr8Z73xDg&oe=6407B8A2) <br>
+[32] [What Language Model to Train if You Have One Million GPU Hours?](https://arxiv.org/abs/2210.15424) <br>
