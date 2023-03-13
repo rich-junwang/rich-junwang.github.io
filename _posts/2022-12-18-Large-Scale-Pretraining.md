@@ -103,7 +103,11 @@ A lot of large models come out every year and many claims that they could beat G
 During the model training, the most commonly seen issue is gradient exploding, aka, gradient becomes `NaN`. As layers go deeper, this problem happens more often because the way backpropagation works. Over the years, people have proposed many different ways to solve the challenge. 
 As is shown in paper [21], the post-LN shows stability issue without carefully designed warming-up stage. As a result, they are proposing pre-LN to alleviate the problem. 
 
+The objective function for highly nonlinear deep neural networks often contains sharp nonlinearities in parameter space resulting from the multiplication of several parameters. These nonlinearities give rise to very high derivatives in some places. When the parameters get close to such a cliff region, a gradient descent update can catapult the parameters very far, possibly losing most of the optimization work that had been done [33].
+
 It's important to monitor stability during training. Common practice is to plot activation norm and gradient norm for each step. When these values spike, we know there is something wrong. It's better than looking at loss curve only as loss explosion generally lags behind these two indicators. For instance, when there is bad data, we could have better gauge of when that happens and restart training from that point.
+
+
 
 ### Efficient Inference
 Inference speed determines product cost. Over the years, people have proposed various ways to improve inference speed. The multiquery attention mentioned above is one of these approaches. 
@@ -147,3 +151,4 @@ Inference speed determines product cost. Over the years, people have proposed va
 [30] [xFormers: A modular and hackable Transformer modelling library](https://github.com/facebookresearch/xformers) <br>
 [31] [LLaMA: Open and Efficient Foundation Language Models](https://scontent-sea1-1.xx.fbcdn.net/v/t39.8562-6/333078981_693988129081760_4712707815225756708_n.pdf?_nc_cat=108&ccb=1-7&_nc_sid=ad8a9d&_nc_ohc=4srK2r5szdYAX8pFEBs&_nc_ht=scontent-sea1-1.xx&oh=00_AfBU6VS0w7YtW_0wD4YO2NbJg-fXXaFGrRh6jEr8Z73xDg&oe=6407B8A2) <br>
 [32] [What Language Model to Train if You Have One Million GPU Hours?](https://arxiv.org/abs/2210.15424) <br>
+[33] [On the difficulty of training Recurrent Neural Networks](https://arxiv.org/pdf/1211.5063.pdf) <br>
