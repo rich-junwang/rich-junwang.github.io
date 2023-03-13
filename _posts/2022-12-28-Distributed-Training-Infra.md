@@ -34,14 +34,14 @@ Reduce is a collections of ops. Specifically, the operator will process an array
 <p align="center">
     <img alt="flat sharp minimum" src="/assets/img/distributed_infra/reduce1.png" width="60%" height=auto/> 
     <br>
-    <em>MPI broadcast and scatter</em>
+    <em>MPI reduce</em>
     <br>
 </p>
 
 <p align="center">
     <img alt="flat sharp minimum" src="/assets/img/distributed_infra/reduce2.png" width="60%" height=auto/> 
     <br>
-    <em>MPI broadcast and scatter</em>
+    <em>MPI reduce</em>
     <br>
 </p>
 
@@ -49,6 +49,6 @@ Allreduce means that the reduce operation will be conducted throughout all nodes
 <p align="center">
     <img alt="flat sharp minimum" src="/assets/img/distributed_infra/allreduce.png" width="60%" height=auto/> 
     <br>
-    <em>MPI broadcast and scatter</em>
+    <em>MPI Allreduce</em>
     <br>
 </p>
