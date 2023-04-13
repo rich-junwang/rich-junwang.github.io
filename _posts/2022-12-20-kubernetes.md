@@ -40,7 +40,7 @@ kubectl cp src_file_path pod:dest_file_path
 
 To use rsync is not that straightforward, I'm using the tool from [here](https://serverfault.com/questions/741670/rsync-files-to-a-kubernetes-pod).
 ```
-# save the file as krsync
+# save the file as krsync, and put it to /usr/bin, and chmod +x to the file
 
 #!/bin/bash
 
@@ -73,6 +73,13 @@ krsync -av --progress --stats src-dir/ pod:/dest-dir
 krsync -av --progress --stats src-dir/ pod@namespace:/dest-dir
 
 ```
+To make it easier to use, we can add the following to the .zshrc file
+```
+function krsync_watch_and_sync_to {
+        fswatch -o . | xargs -n1 -I{} krsync -av --progress --stats *(D)  $1
+}
+```
+
 Sometimes we have to change file ownership. Check out more [here](https://vhs.codeberg.page/post/recover-files-kubernetes-persistent-volume/)
 
 ```
