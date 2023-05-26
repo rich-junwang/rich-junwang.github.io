@@ -143,7 +143,7 @@ git branch -D temp
 
 More details is here: https://github.com/capslocky/git-rebase-via-merge. Thanks to the original author!
 
-## Find Command
+### Find Command
 The original post is here: https://www.baeldung.com/linux/find-exec-command
 
 #### 1. Basics
@@ -252,3 +252,27 @@ One of the commands I use often with is
 ```
 find my_directory/  -type f -exec lfs hsm_restore {} \; 
 ```
+
+
+### Xargs Command
+There are commands that only take input as arguments like `cp`, `rm`, `echo` etc. We can use xargs to convert input coming from standard input to arguements.
+
+```
+$find . -type f -name "*.log" | xargs -n 1 echo rm
+rm ./log/file5.log
+rm ./log/file6.log
+```
+-n 1 argument, xargs turns each line into a command of its own.
+
+-I option takes a string that gets replaced with the supplied input before the command executes. Commond choices are {} and %.
+```
+find ./log -type f -name "*.log" | xargs -I % mv % backup/
+aws s3 ls --recursive s3://my-bucket/ | grep "my_test" | cut -d' ' -f4 | xargs -I{} aws s3 rm s3://my-bucket/{}
+```
+
+-P option specify the number of parallel processes used in executing the commands over the input argument list.
+
+The command below parallelly encodes a series of wav files to mp3 format:
+$find . -type f -name '*.wav' -print0 |xargs -0 -P 3 -n 1 mp3 -V8
+
+When combining find with xargs, it's usually faster than using `exec` mentioned above.
