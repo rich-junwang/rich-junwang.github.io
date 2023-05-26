@@ -73,3 +73,9 @@ fields @timestamp, @message, @logStream
 | sort @timestamp desc
 | limit 10000 
 ```
+
+
+### VPC and Security Group
+Security group controls how we login the instance (like through ssh etc)
+VPC determines what kind of resource we can visit from the instance. For instance if we are able to access specific EFS and FSx.
+Private VPC subnet will require a bastion to connect to instance.
