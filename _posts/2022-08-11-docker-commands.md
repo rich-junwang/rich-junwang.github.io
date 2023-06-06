@@ -28,6 +28,8 @@ nvidia-docker run --entrypoint /bin/bash -v $PWD/transforms_cache:/transforms_ca
 # add env to docker system
 nvidia-docker run --entrypoint /bin/bash -v $PWD/transforms_cache:/transforms_cache --rm --env SM_CHANNEL_TRAIN=/opt/ml/input/data/train -it image_name
 
+# docker run to use GPU, we can use another command
+docker run --entrypoint /bin/bash --gpus all -it xxxx_image_name
 ```
 
 
