@@ -56,6 +56,13 @@ Zero Redundancy Optimizer (ZeRO) is an optimizied data parallelism proposed by D
 </p>
 
 
+### Parallelism in Megatron
+Megatron-LM and NeMo are the open source libraries from Nvidia for the distributed training. In these two libs, there are two constraints for the parallelism settings.
+```
+- world_size = TP * PP * DP
+- global_batch_size % (PP * DP) == 0
+```  
+
 ## References
 [1] https://huggingface.co/blog/bloom-megatron-deepspeed <br>
 [2] https://github.com/NVIDIA/NeMo <br>
