@@ -22,6 +22,7 @@ git config --global core.editor "code --wait"
 
 Another issue is we have to install extensions on remote server. For instance, we have to install python extension in order to use python interpreter in remote mode. 
 
+VScode also have a [nice extension tool](https://marketplace.visualstudio.com/items?itemName=Natizyskunk.sftp) to sync code to remote server.
 
 ### VScode Shortcuts
 If it's on Mac, replace CTRL key with CMD key
