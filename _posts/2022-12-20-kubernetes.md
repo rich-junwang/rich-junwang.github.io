@@ -26,12 +26,26 @@ To find out all the pods, using the following command
 ```
 kubectl get pods 
 kubectl get pods | grep username 
+kubectl get pods -n my_namespace_name  # get pod understand a namespace
 ```
 
 To get all the containers running the pod, using the following command
 ```
-kubectl get pods pod_name -o custom-columns='NAME:.metadata.name,CONTAINERS:.spec.containers[*].name'
+kubectl get pods my_pod_name -o custom-columns='NAME:.metadata.name,CONTAINERS:.spec.containers[*].name'
+kubectl describe pod my_pod_name  -n my_namespace_name
 ```
+
+View logs of job running in the pod
+```
+kubectl logs my_pod_name
+kubectl attach my_pod_name  # works with tqdm 
+```
+
+Log into the pod
+```
+kubectl exec -it my_pod_name -- /bin/bash
+```
+
 
 We can use `kubectl` to copy files to/from the pod. Be careful that your container may not support `~` this kind of path expansion.
 ```
@@ -91,4 +105,5 @@ chown -R 33:33 /data/uploads
 
 ## References
 [1] [Setting up a Kubernetes cluster using Docker in Docker](https://callistaenterprise.se/blogg/teknik/2017/12/20/kubernetes-on-docker-in-docker/) <br>
+[2] https://kubernetes.io/docs/reference/kubectl/cheatsheet/ <br>
 
