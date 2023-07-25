@@ -30,7 +30,26 @@ docker pull <image_name>
 sudo docker pull <image_name>
 ```
 
+Sometimes we need one image in one region, but it's pushed to another region. We can do the dollowing steps to push the image to target region.
+```
+# login to the region where the image current is. Here assume it's in us-east-1
+REGION=us-east-1 ; aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.${REGION}.amazonaws.com
 
+# Then pull the image from ECR
+docker pull image_name
+
+# Find out the image id
+docker image ls | grep image_name | cut -f3 
+
+# tag
+docker tag  image_id new_image_tag_with_new_region
+
+# login to the new region
+REGION=us-west-2 ; aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.${REGION}.amazonaws.com
+
+# push
+docker push new_image_tag_with_new_region
+```
 
 ### GitLab
 Gitlab  changes its authentication methods and the way it works is almost identical to Github. The easist way to use it is through personal token.
