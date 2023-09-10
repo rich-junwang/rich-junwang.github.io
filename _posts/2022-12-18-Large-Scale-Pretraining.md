@@ -23,7 +23,7 @@ Data is crucial in any ML system. This is true to pretraining as well. As is sho
 An ensuing problem with large amount of data is that data quality is hard to control. In practice, we have to at least make sure the content should be intelligible. We might want to give more training on high-quality datasets such as books and wikipedia [31]. Diversified datasets are necessary but can't guarantee training success as can be seen from `Gopher` paper, model performs well on QA related tasks but suffers on reasoning task. What else is needed? We'll come back to this later. 
 
 ### Tokenizer
-Language models compute probability of any string sequence. How to represent the string sequence is determined by tokenizer. Popular options are byte pair encoding (BPE) or wordpiece. As the majority of models are using BPE today, here we focus on BPE based tokenizer. 
+Language models compute probability of any string sequence. How to represent the string sequence is determined by tokenizer. Popular options are byte pair encoding (BPE) or wordpiece. As the majority of models are using BPE today, here we focus on BPE based tokenizer. Tokenizer can impact several things in LLM training: (1) a high compression rate (tokenized token numer vs raw token number, the lower the better). Compression rate affects input context length and inference speed. (2) Vocab size. An appropriately sized vocabulary to ensure adequate training of each word embedding.
 
 As mentioned in GPT2 paper, BPE effectively interpolates between word level inputs for frequent symbol sequences and character level inputs for infrequent symbol sequences. Directly using greedy method to build BPE merging rules can be problematic. For example, word `cat` can be used in a lot of places like `cat?`, `cat!`, `cat.`. One way to solve this issue is to prevent BPE from generating rules across different character categories (letters, digits, puncts etc).
 
@@ -34,6 +34,8 @@ As people are pivoting in-context learing/instruction learning with large models
     <em>Tokenizer efficiency comparison from [16]</em>
     <br>
 </p>
+
+Tokenizer determines the size of vocab. Usually when we support multilinguality and code data, the vocab size will be much larger. However, this is not always the case. CodeLLaMa shows very good performance (onpar with GPT4) with a vocab size of 32k. 
 
 ### Model Architecture
 All pretrained models are variant of original transformer model. The differences are mainly about it's encoder-decoder architecture or decoder-only architecture. First of all, let's take a look at the choices of available large models. 
@@ -53,6 +55,10 @@ All pretrained models are variant of original transformer model. The differences
 Although all models listed here are autoregressive decoder only model, they actually differ a bit inside the decoder. For instance, to speed up inference time, PaLM is using multi-query attention. Normally, in mutlhead attention, there will be h heads each with a linear project layer for Q, K, V. With multiquery attention, instead of using h different linear project layers for K and V, we can share a single smaller linear project layer for K and a single linear projection layer for V for each head. Then, for different head layers, K and V will be the same. In this way, we can save memory IO and get better latency performance in incremental inference. 
 
 A systematic study of transformer architecture is done in Ref [29]. Most of recent LLM architecture are following design from this paper. 
+
+People usually call the embedding dim as the width of transformer and number of layers as the depth. There is a optimal depth-to-width
+allocation for a given self-attention network size as is shown in [34].
+
 
 ### Training Design
 Most of today's pretraining follow suits of a multi-stage and multi-task training. As is shown by Yao in [1], GPT series model is pretrained in such way as well. 
@@ -152,3 +158,4 @@ Inference speed determines product cost. Over the years, people have proposed va
 [31] [LLaMA: Open and Efficient Foundation Language Models](https://scontent-sea1-1.xx.fbcdn.net/v/t39.8562-6/333078981_693988129081760_4712707815225756708_n.pdf?_nc_cat=108&ccb=1-7&_nc_sid=ad8a9d&_nc_ohc=4srK2r5szdYAX8pFEBs&_nc_ht=scontent-sea1-1.xx&oh=00_AfBU6VS0w7YtW_0wD4YO2NbJg-fXXaFGrRh6jEr8Z73xDg&oe=6407B8A2) <br>
 [32] [What Language Model to Train if You Have One Million GPU Hours?](https://arxiv.org/abs/2210.15424) <br>
 [33] [On the difficulty of training Recurrent Neural Networks](https://arxiv.org/pdf/1211.5063.pdf) <br>
+[34] [Limits to Depth-Efficiencies of Self-Attention](https://papers.nips.cc/paper/2020/file/ff4dfdf5904e920ce52b48c1cef97829-Paper.pdf) <br>
