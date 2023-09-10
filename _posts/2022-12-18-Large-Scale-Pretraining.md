@@ -37,6 +37,8 @@ As people are pivoting in-context learing/instruction learning with large models
 
 Tokenizer determines the size of vocab. Usually when we support multilinguality and code data, the vocab size will be much larger. However, this is not always the case. CodeLLaMa shows very good performance (onpar with GPT4) with a vocab size of 32k. 
 
+Open tokenizer implementations are: [tiktoken](https://github.com/openai/tiktoken). 
+
 ### Model Architecture
 All pretrained models are variant of original transformer model. The differences are mainly about it's encoder-decoder architecture or decoder-only architecture. First of all, let's take a look at the choices of available large models. 
 
@@ -121,9 +123,6 @@ Inference speed determines product cost. Over the years, people have proposed va
 
 
 
-
-
-
 ## References
 [1] [How does GPT Obtain its Ability? Tracing Emergent Abilities of Language Models to their Sources](https://yaofu.notion.site/How-does-GPT-Obtain-its-Ability-Tracing-Emergent-Abilities-of-Language-Models-to-their-Sources-b9a57ac0fcf74f30a1ab9e3e36fa1dc1) <br>
 [2] [Gopher: Scaling Language Models: Methods, Analysis & Insights from Training Gopher](https://arxiv.org/pdf/2112.11446.pdf) <br>
@@ -159,3 +158,5 @@ Inference speed determines product cost. Over the years, people have proposed va
 [32] [What Language Model to Train if You Have One Million GPU Hours?](https://arxiv.org/abs/2210.15424) <br>
 [33] [On the difficulty of training Recurrent Neural Networks](https://arxiv.org/pdf/1211.5063.pdf) <br>
 [34] [Limits to Depth-Efficiencies of Self-Attention](https://papers.nips.cc/paper/2020/file/ff4dfdf5904e920ce52b48c1cef97829-Paper.pdf) <br>
+[35] [Baichuan LLM](https://cdn.baichuan-ai.com/paper/Baichuan2-technical-report.pdf)
+[36] [Qwen LLM](https://github.com/QwenLM/Qwen-7B/blob/main/tech_memo.md)
