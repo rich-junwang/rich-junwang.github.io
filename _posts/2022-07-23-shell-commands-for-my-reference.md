@@ -276,3 +276,11 @@ The command below parallelly encodes a series of wav files to mp3 format:
 $find . -type f -name '*.wav' -print0 |xargs -0 -P 3 -n 1 mp3 -V8
 
 When combining find with xargs, it's usually faster than using `exec` mentioned above.
+
+
+### rsync command
+When use the following command, be careful about the relative path. In this command, we're using 16 processes. 
+```
+ls /my_model/checkpoints/source_dir | xargs -n16 -P -I% rsync -aP % target_dir
+```
+
