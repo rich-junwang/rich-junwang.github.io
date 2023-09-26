@@ -115,6 +115,10 @@ The objective function for highly nonlinear deep neural networks often contains 
 
 It's important to monitor stability during training. Common practice is to plot activation norm and gradient norm for each step. When these values spike, we know there is something wrong. It's better than looking at loss curve only as loss explosion generally lags behind these two indicators. For instance, when there is bad data, we could have better gauge of when that happens and restart training from that point.
 
+Adept AI has a lengthy [blog post](https://www.adept.ai/blog/sherlock-sdc) talking about hardware error induced stability issue. The blog mentioned two ways to identify erroneous node(s):
+- Grid search: partition nodes into groups and train model on each group in a deterministic way. Find the one that has different training loss curve. 
+- Parameter checksum check: for each data parallel run, check parameter checksum to see if they are the same to determine which stage might be wrong.
+
 
 
 ### Efficient Inference

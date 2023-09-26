@@ -18,7 +18,19 @@ A lot of contents of here are from OpenAI, Nvidia, Deepspeed and bigscience blog
 
 
 ### Data Parallelism
-Data parallelism (DP) is the most straightforward way of parallel training. With data parallelism, model parameters and optimzer states are replicated across different workers. Data is partitioned into the same number of shards and each replicate of model is fed with one shard of data. Forward and backward computation is in parallel (simutaneously) and then there is a synchronization step where gradients are averaged across workers to update parameters.
+Data parallelism (DP) is the most straightforward way of parallel training. With data parallelism, model parameters and optimzer states are replicated across different workers. Data is partitioned into the same number of shards and each replicate of model is fed with one shard of data. Forward and backward computation is in parallel (simutaneously) and then there is a synchronization step where gradients are averaged across workers to update parameters. The DP computation can be summarized as the following [three steps](https://www.adept.ai/blog/sherlock-sdc):
+
+```
+Each machine computes local gradients given local inputs and a consistent global view of the parameters.
+LocalGrad_i = f(Inputs_i, Targets_i, Params)
+
+Sum up all the local gradients and distribute that sum to each machine, so there is a consistent global view of the gradients.
+GlobalGrad = all_reduce(LocalGrad_i)
+
+Each machine can now locally update the parameters and optimizer state under the assumption that the exact same calculation will happen on all machines.
+NewParams, NewOptimState = g(Params, OldOptimState, GlobalGrad)
+```
+
 
 ### Pipeline Parallelism
 Pipeline parallelism (PP) is from model parallelism. Model parallelism is initially proposed to solve that challenge that one model can't fit into one GPU. The idea is we can vertically slice model into different layers (e.g. one or more layers in transformer models) and put different layers in different GPUs. The issue with this method is that because sequential computation order of layers, if we feed single large batch data into one of the workers, all other workers are idle. This is the so-called `bubble` waiting time.  
