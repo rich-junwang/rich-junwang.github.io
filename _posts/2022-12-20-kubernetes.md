@@ -38,6 +38,7 @@ kubectl describe pod my_pod_name  -n my_namespace_name
 View logs of job running in the pod
 ```
 kubectl logs my_pod_name
+kubectl logs -f my_pod_name # similar to attach
 kubectl attach my_pod_name  # works with tqdm 
 ```
 
