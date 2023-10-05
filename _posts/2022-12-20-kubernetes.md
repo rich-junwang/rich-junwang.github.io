@@ -21,12 +21,23 @@ Kubernetes, also known as “k8s”, is an open source platform solution provide
 </p>
 
 
+Pod is a type of abstraction on top of container. Deployment defines the pod. Deployment is used for stateless apps and StatefulSet is used for stateful apps or database. KubeCTL talks with API server to create components or delete components, in other words configuring the cluster. More about this basics is [here](https://www.youtube.com/watch?v=X48VuDVv0do&t=2749s)
+
 ### Basic Operations
 To find out all the pods, using the following command
 ```
 kubectl get pods 
 kubectl get pods | grep username 
-kubectl get pods -n my_namespace_name  # get pod understand a namespace
+kubectl get pods -n my_namespace_name  # get pod understand a 
+
+# get all the nodes
+kubectl get nodes
+
+# get services
+kubectl get services
+
+# create deployment. 
+kubectl create deployment my_pod_name --image=my_image
 ```
 
 To get all the containers running the pod, using the following command
