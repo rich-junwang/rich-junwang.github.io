@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="">
+
+<!-- Head -->
+
+<head>    <!-- Metadata, OpenGraph and Schema.org -->
+    
+
+    <!-- Standard metadata -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Shell command for my reference | Jun's webpage</title>
+    <meta name="author" content="Jun  Wang" />
+    <meta name="description" content="tricks and tips" />
+
+
+    <!-- Bootstrap & MDB -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+
+    <!-- Code Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/.css" media="none" id="highlight_theme_light" />
+
+    <!-- Styles -->
+    
+    <link rel="shortcut icon" href="/assets/img/favicon.png">
+    
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="canonical" href="https://rich-junwang.github.io//blog/2022/shell-commands-for-my-reference/">
+    
+    <!-- Dark Mode -->
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/.css" media="none" id="highlight_theme_dark" />
+
+    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/dark_mode.js"></script>
+    
+
+</head>
+
+<!-- Body -->
+
+<body
+  class="fixed-top-nav ">
+
+  <!-- Header --><header>
+  <!-- Nav Bar -->
+  <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      <a class="navbar-brand title font-weight-lighter" href="https://rich-junwang.github.io//">Jun's webpage</a>
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/"></a>
+          </li>
+          
+          <!-- Blog -->
+          <li class="nav-item active">
+            <a class="nav-link" href="/blog/">blog<span class="sr-only">(current)</span></a>
+          </li>
+
+          <!-- Other pages -->
+
+          <!-- Toogle theme mode -->
+          <li class="toggle-container">
+            <button id="light-toggle" title="Change theme">
+              <i class="fas fa-moon"></i>
+              <i class="fas fa-sun"></i>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+  <!-- Content -->
+  <div class="container mt-5">
+    <!-- _layouts/post.html -->
+
+<div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Shell command for my reference</h1>
+    <p class="post-meta">July 11, 2022</p>
+    <!-- <p class="post-tags">
+      <a href="/blog/2022"> <i class="fas fa-calendar fa-sm"></i> 2022 </a>
+      &nbsp; &middot; &nbsp;
+        <a href="/blog/tag/Tricks">
+          <i class="fas fa-hashtag fa-sm"></i> Tricks</a> &nbsp;
+          <a href="/blog/tag/and">
+          <i class="fas fa-hashtag fa-sm"></i> and</a> &nbsp;
+          <a href="/blog/tag/Tips">
+          <i class="fas fa-hashtag fa-sm"></i> Tips</a> &nbsp;
+          
+      &nbsp; &middot; &nbsp;
+        <a href="/blog/category/software">
+          <i class="fas fa-tag fa-sm"></i> software</a> &nbsp;
+          
+    </p> -->
+  </header>
+
+  <article class="post-content">
+    <h3 id="git">Git</h3>
+
+<h4 id="git-merge">Git merge</h4>
+<p>Suppose we’re on <strong>master</strong> branch, if we want to override the changes in the master branch with feature branch, we can use the following command</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git merge -X theirs feature
+</code></pre></div></div>
+
+<p>to keep the master branch changes:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git merge -X ours feature
+</code></pre></div></div>
+
+<p>If we want to rebase of current branch onto the master, and want to keep feature branch</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git rebase master -X theirs
+</code></pre></div></div>
+
+<p>if we want to keep master branch changes over our feature branch, the</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git rebase master -X ours
+</code></pre></div></div>
+
+<p>To summarize, we can have the following table:</p>
+
+<table class="mbtablestyle">
+<thead>
+<tr>
+<th>  Currently on</th>
+<th>Command    </th>
+<th>Strategy    </th>
+<th>Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> master</td>
+<td>git merge feature  </td>
+<td>
+<strong>-Xtheirs</strong>    </td>
+<td>Keep changes from feature branch</td>
+</tr>
+<tr>
+<td>master</td>
+<td>git merge feature</td>
+<td><strong>-Xours</strong></td>
+<td>keep changes from master branch</td>
+</tr>
+<tr>
+<td> feature</td>
+<td>git rebase master  </td>
+<td>
+<strong>-Xtheirs</strong>    </td>
+<td>Keep changes from feature branch</td>
+</tr>
+<tr>
+<td>feature</td>
+<td>git rebase master</td>
+<td><strong>-Xours</strong></td>
+<td>keep changes from master branch</td>
+</tr>
+</tbody>
+</table>
+
+<p><br></p>
+<h4 id="git-diff">Git Diff</h4>
+
+<p>To check two branch difference, suppose we’re on branch1, then we can do,</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git diff HEAD..master
+</code></pre></div></div>
+
+<h4 id="delete-a-remote-branch">Delete a remote branch</h4>
+
+<p>Delete a remote branch</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git push origin -d remote_branch_name 
+</code></pre></div></div>
+
+<h4 id="git-rebase">Git rebase</h4>
+<p>To fixup, squash, edit, drop, reword and many other operations on the previous N commit:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git rebase -i HAED~N
+</code></pre></div></div>
+
+<h4 id="git-commit">Git commit</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git commit --amend --no-edit
+</code></pre></div></div>
+
+<h4 id="undo-git-add">Undo git add</h4>
+<p>The simplest way to undo a git add is to use git reset. It removes staged file, but will keeop the local changes there.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git reset file_path
+</code></pre></div></div>
+
+<h4 id="git-check-difference">Git check difference</h4>
+<p>Use the following command to checkout <strong>COMMIT</strong> (commit hash) ancestor and COMMIT difference</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git diff COMMIT~ COMMIT
+git diff HEAD~ HEAD
+</code></pre></div></div>
+
+<h4 id="git-rebase-resolve-conflicts">Git rebase resolve conflicts</h4>
+<p>Sometimes when we do git rebase and we have many commits, we have to resolve a lot of conflicts, which can be really frustrating. One quick way might be to squash commits first to have a single commit, then do rebase. Another way is what we describe below.</p>
+
+<p>First, checkout temp branch from feature branch and start a standard merge</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout -b temp
+git merge origin/master
+git commit -m "Merge branch 'origin/master' into 'temp'"
+</code></pre></div></div>
+
+<p>You will have to resolve conflicts, but only once and only real ones. Then stage all files and finish merge.
+Then return to your feature branch and start rebase, but with automatically resolving any conflicts.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git checkout feature
+git rebase origin/master -X theirs
+</code></pre></div></div>
+
+<p>Branch has been rebased, but project is probably in invalid state. We just need to restore project state, so it will be exact as on branch ‘temp’. Technically we just need to copy its tree (folder state) via low-level command git commit-tree. Plus merging into current branch just created commit.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git merge --ff $(git commit-tree temp^{tree} -m "Fix after rebase" -p HEAD)
+git branch -D temp
+</code></pre></div></div>
+
+<p>More details is here: https://github.com/capslocky/git-rebase-via-merge. Thanks to the original author!</p>
+
+<h3 id="find-command">Find Command</h3>
+<p>The original post is here: https://www.baeldung.com/linux/find-exec-command</p>
+
+<h4 id="1-basics">1. Basics</h4>
+<p>The find command is comprised of two main parts, the expression and the action.
+When we initially use find, we usually start with the expression part. This is the part that allows us to specify a filter that defines which files to select.</p>
+
+<p>A classic example would be:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ find Music/ -name *.mp3 -type f
+Music/Gustav Mahler/01 - Das Trinklied vom Jammer der Erde.mp3
+Music/Gustav Mahler/02 - Der Einsame im Herbst.mp3
+</code></pre></div></div>
+
+<p>The action part in this example is the default action, -print. This action prints the resulting paths with newline characters in between. It’ll run if no other action is specified.</p>
+
+<p>In contrast, the -exec action allows us to execute commands on the resulting paths.
+Let’s say we want to run the file command on the list of mp3 files we just found to determine their filetype. We can achieve this by running the following command:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ find Music/ -name *.mp3 -exec file {} \;
+Music/Gustav Mahler/01 - Das Trinklied vom Jammer der Erde.mp3:
+  Audio file with ID3 version 2.4.0, contains:MPEG ADTS, layer III, v1, 128 kbps, 44.1 kHz, Stereo
+</code></pre></div></div>
+
+<p>Let’s dissect the arguments passed to the -exec flag, which include:
+A command: file <br>
+A placeholder: {} <br>
+A command delimiter: \; <br>
+Now we’ll walk through each of these three parts in-depth.</p>
+
+<h4 id="2-the-command">2. The Command</h4>
+<p>Any command that can be executed by our shell is acceptable here. We should note that this isn’t our shell executing the command, rather we’re using Linux’s exec directly to execute the command. This means that any shell expansion won’t work here, as we don’t have a shell. Another effect is the unavailability of shell functions or aliases.</p>
+
+<p>As a workaround for our missing shell functions, we can export them and call bash -c with our requested function on our file. To see this in action, we’ll continue with our directory of Mahler’s mp3 files. Let’s create a shell function that shows the track name and some details about the quality:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function mp3info() {
+    TRACK_NAME=$(basename "$1")
+    FILE_DATA=$(file "$1" | awk -F, '{$1=$2=$3=$4=""; print $0 }')
+    echo "${TRACK_NAME%.mp3} : $FILE_DATA"
+}
+</code></pre></div></div>
+
+<p>If we try to run the mp3info command on all of our files, -exec will complain that it doesn’t know about mp3info:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -name "*.mp3" -exec mp3info {} \;
+find: ‘mp3info’: No such file or directory
+</code></pre></div></div>
+<p>As mentioned earlier, to fix this, we’ll need to export our shell function and run it as part of a spawned shell:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ export -f mp3info
+$ find . -name "*.mp3" -exec bash -c "mp3info \"{}\"" \;
+01 - Das Trinklied vom Jammer der Erde :      128 kbps  44.1 kHz  Stereo
+02 - Der Einsame im Herbst :      128 kbps  44.1 kHz  Stereo
+03 - Von der Jugend :      128 kbps  44.1 kHz  Stereo
+</code></pre></div></div>
+<p>Note that because some of our file names hold spaces, we need to quote the results placeholder.</p>
+
+<h4 id="3-the-results-placeholder">3. The Results Placeholder</h4>
+<p>The results placeholder is denoted by two curly braces {}.</p>
+
+<p>We can use the placeholder multiple times if necessary:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find . -name "*.mp3" -exec bash -c "basename \"{}\" &amp;&amp; file \"{}\" | awk -F: '{\$1=\"\"; print \$0 }'" \;
+01 - Das Trinklied vom Jammer der Erde.mp3
+  Audio file with ID3 version 2.4.0, contains MPEG ADTS, layer III, v1, 128 kbps, 44.1 kHz, Stereo
+02 - Der Einsame im Herbst.mp3
+  Audio file with ID3 version 2.4.0, contains MPEG ADTS, layer III, v1, 128 kbps, 44.1 kHz, Stereo
+03 - Von der Jugend.mp3
+  Audio file with ID3 version 2.4.0, contains MPEG ADTS, layer III, v1, 128 kbps, 44.1 kHz, Stereo
+</code></pre></div></div>
+
+<p>In the above example, we ran both the basename, as well as the file commands. To allow us to concatenate the commands, we spawned a separate shell, as explained above.</p>
+
+<h4 id="4-the-delimiter">4. The Delimiter</h4>
+<p>We need to provide the find command with a delimiter so it’ll know where our -exec arguments stop. Two types of delimiters can be provided to the -exec argument: the semi-colon(;) or the plus sign (+). As we don’t want our shell to interpret the semi-colon, we need to escape it (\;).</p>
+
+<p>The delimiter determines the way find handles the expression results. If we use the semi-colon (;), the -exec command will be repeated for each result separately. On the other hand, if we use the plus sign (+), all of the expressions’ results will be concatenated and passed as a whole to the -exec command, which will run only once.</p>
+
+<p>Let’s see the use of the plus sign with another example:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ find . -name "*.mp3" -exec echo {} +
+./Gustav Mahler/01 - Das Trinklied vom Jammer der Erde.mp3 ./Gustav Mahler/02 -
+  Der Einsame im Herbst.mp3 ./Gustav Mahler/03 - Von der Jugend.mp3 ./Gustav Mahler/04 -
+  Von der Schönheit.mp3 ./Gustav Mahler/05 - Der Trunkene im Frühling.mp3
+  ./Gustav Mahler/06 - Der Abschied.mp3
+</code></pre></div></div>
+
+<p>When running echo, a newline is generated for every echo call, but since we used the plus-delimiter, only a single echo call was made. Let’s compare this result to the semi-colon version:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ find . -name "*.mp3" -exec echo {} \;
+./Gustav Mahler/01 - Das Trinklied vom Jammer der Erde.mp3
+./Gustav Mahler/02 - Der Einsame im Herbst.mp3
+</code></pre></div></div>
+<p>From a performance point of view, we usually prefer to use the plus-sign delimiter, as running separate processes for each file can incur a serious penalty in both RAM and processing time.</p>
+
+<p>However, we may prefer using the semi-colon delimiter in one of the following cases:</p>
+
+<ul>
+  <li>The tool run by -exec doesn’t accept multiple files as an argument.</li>
+  <li>Running the tool on so many files at once might use up too much memory.</li>
+  <li>We want to start getting some results as soon as possible, even though it’ll take more time to get all the results.</li>
+</ul>
+
+<p>One of the commands I use often with is</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find my_directory/  -type f -exec lfs hsm_restore {} \; 
+</code></pre></div></div>
+
+<h3 id="xargs-command">Xargs Command</h3>
+<p>There are commands that only take input as arguments like <code class="language-plaintext highlighter-rouge">cp</code>, <code class="language-plaintext highlighter-rouge">rm</code>, <code class="language-plaintext highlighter-rouge">echo</code> etc. We can use xargs to convert input coming from standard input to arguements.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$find . -type f -name "*.log" | xargs -n 1 echo rm
+rm ./log/file5.log
+rm ./log/file6.log
+</code></pre></div></div>
+<p>-n 1 argument, xargs turns each line into a command of its own.</p>
+
+<p>-I option takes a string that gets replaced with the supplied input before the command executes. Commond choices are {} and %.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find ./log -type f -name "*.log" | xargs -I % mv % backup/
+aws s3 ls --recursive s3://my-bucket/ | grep "my_test" | cut -d' ' -f4 | xargs -I{} aws s3 rm s3://my-bucket/{}
+</code></pre></div></div>
+
+<p>-P option specify the number of parallel processes used in executing the commands over the input argument list.</p>
+
+<p>The command below parallelly encodes a series of wav files to mp3 format:
+$find . -type f -name ‘*.wav’ -print0 |xargs -0 -P 3 -n 1 mp3 -V8</p>
+
+<p>When combining find with xargs, it’s usually faster than using <code class="language-plaintext highlighter-rouge">exec</code> mentioned above.</p>
+
+<h3 id="rsync-command">rsync command</h3>
+<p>When use the following command, be careful about the relative path. In this command, we’re using 16 processes.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ls /my_model/checkpoints/source_dir | xargs -n16 -P -I% rsync -aP % target_dir
+</code></pre></div></div>
+
+
+  </article>
+
+</div>
+
+    <div class="space"></div>
+  </div>
+
+  <!-- Footer -->    
+    <footer class="fixed-bottom">
+      <div class="container mt-0">
+        © Copyright 2023 Jun  Wang. Powered by <a href="http://jekyllrb.com/" target="_blank" rel="noopener noreferrer">Jekyll</a> with <a href="https://github.com/rich-junwang" target="_blank" rel="noopener noreferrer">junwang</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="noopener noreferrer">GitHub Pages</a>.
+
+      </div>
+    </footer>
+
+  <!-- JavaScripts -->
+  <!-- jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+  <!-- Bootsrap & MDB scripts -->
+  <script async src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.4.4/dist/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+  <script async src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+  <script async src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+  
+  <!-- Medium Zoom JS -->
+  <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js" integrity="sha256-EdPgYcPk/IIrw7FYeuJQexva49pVRZNmt3LculEr7zM=" crossorigin="anonymous"></script>
+  <script defer src="/assets/js/zoom.js"></script><!-- Load Common JS -->
+  <script defer src="/assets/js/common.js"></script>
+
+  <!-- MathJax -->
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        tags: 'ams'
+      }
+    };
+  </script>
+  <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script>
+  <script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+  
+</body>
+
+</html>

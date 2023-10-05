@@ -10,10 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>About me | Jun's webpage</title>
+    <title>Database | Jun's webpage</title>
     <meta name="author" content="Jun  Wang" />
-    <meta name="description" content="怕什么真理无穷，进一寸有一寸的欢喜
-" />
+    <meta name="description" content="tricks and tips" />
 
 
     <!-- Bootstrap & MDB -->
@@ -33,7 +32,7 @@
     <link rel="shortcut icon" href="/assets/img/favicon.png">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://rich-junwang.github.io//about/">
+    <link rel="canonical" href="https://rich-junwang.github.io//blog/2022/Database/">
     
     <!-- Dark Mode -->
     
@@ -72,8 +71,8 @@
           </li>
           
           <!-- Blog -->
-          <li class="nav-item ">
-            <a class="nav-link" href="/blog/">blog</a>
+          <li class="nav-item active">
+            <a class="nav-link" href="/blog/">blog<span class="sr-only">(current)</span></a>
           </li>
 
           <!-- Other pages -->
@@ -98,21 +97,104 @@
 <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">About me</h1>
-    <p class="post-meta"></p>
+    <h1 class="post-title">Database</h1>
+    <p class="post-meta">August 16, 2022</p>
     <!-- <p class="post-tags">
-      <a href="/blog/"> <i class="fas fa-calendar fa-sm"></i>  </a>
+      <a href="/blog/2022"> <i class="fas fa-calendar fa-sm"></i> 2022 </a>
+      &nbsp; &middot; &nbsp;
+        <a href="/blog/tag/Tricks">
+          <i class="fas fa-hashtag fa-sm"></i> Tricks</a> &nbsp;
+          <a href="/blog/tag/and">
+          <i class="fas fa-hashtag fa-sm"></i> and</a> &nbsp;
+          <a href="/blog/tag/Tips">
+          <i class="fas fa-hashtag fa-sm"></i> Tips</a> &nbsp;
+          
+      &nbsp; &middot; &nbsp;
+        <a href="/blog/category/software">
+          <i class="fas fa-tag fa-sm"></i> software</a> &nbsp;
+          
     </p> -->
   </header>
 
   <article class="post-content">
-    <p>Hi there, this is Jun Wang. Welcome to my website. I'm a programmer. I love programming. I want to use technology to
-    make the world better.
-    I'm a strong believer that it's easier to invent the future than to predict it.</p>
+    <p>A database object is any defined object in a database that is used to store or reference data.Anything which we make from create command is known as Database Object.It can be used to hold and manipulate the data.Some of the examples of database objects are : view, sequence, indexes, etc.</p>
+
+<ul>
+  <li>
+    <p>Table – Basic unit of storage; composed rows and columns</p>
+  </li>
+  <li>
+    <p>View – Logically represents subsets of data from one or more tables</p>
+  </li>
+  <li>
+    <p>Sequence – Generates primary key values</p>
+  </li>
+  <li>
+    <p>Index – Improves the performance of some queries</p>
+  </li>
+  <li>
+    <p>Synonym – Alternative name for an object</p>
+  </li>
+</ul>
+
+<h2 id="db-objects">DB Objects</h2>
+
+<ul>
+  <li>Macros
+    <ul>
+      <li>a bunch of SQL statements ideal for commit or complete rollback</li>
+      <li>return rows of table</li>
+    </ul>
+  </li>
+  <li>Stored Procedures
+    <ul>
+      <li>Procedural operations</li>
+      <li>return one or more value as parameter</li>
+    </ul>
+  </li>
+  <li>User defined function
+    <ul>
+      <li>only return scalar value</li>
+    </ul>
+  </li>
+  <li>Cursor
+    <ul>
+      <li>Definition: A cursor in SQL is a temporary work area created in system memory when a SQL statement is executed. A SQL cursor is a set of rows together with a pointer that identifies a current row. It is a database object to retrieve data from a result set one row at a time. One reason for doing this is to avoid memory overrun when the result contains a large number of rows. Another reason is to return a reference to a cursor that a stored procedure has created, which allows the caller to read the rows. This approach provides an efficient way to return large row sets from stored procedures.</li>
+      <li>Usage
+        <ul>
+          <li>Declare a cursor that defines a result set.</li>
+          <li>Open the cursor to establish the result set.</li>
+          <li>Fetch the data into local variables as needed from the cursor, one row at a time.</li>
+          <li>Close the cursor when done</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="redshift">Redshift</h2>
+
+<ul>
+  <li>UDF: SQL UDF and Python UDF</li>
+  <li>Stored Procedure: Based on PostgreSQL PL/pgSQL</li>
+  <li>CLI/Batch processing: Redshift RSQL</li>
+</ul>
+
+<h2 id="teradata">Teradata:</h2>
+<ul>
+  <li>UDF:
+    <ul>
+      <li>UDF: user defined function</li>
+      <li>UDT: user defined type</li>
+    </ul>
+  </li>
+  <li>Stored procedure:</li>
+  <li>SQL stored procedure</li>
+  <li>Extended stored procedure: could be any programming language</li>
+  <li>CLI/Batch processing: BTEQ scripts</li>
+</ul>
 
 
-<p>In my life, I like hiking a lot. I'm also very much into reading books of history, biography etc. Drop me a line if
-    you want to chat more! </p>
   </article>
 
 </div>

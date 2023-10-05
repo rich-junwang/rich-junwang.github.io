@@ -10,10 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>About me | Jun's webpage</title>
+    <title>AWS Commands | Jun's webpage</title>
     <meta name="author" content="Jun  Wang" />
-    <meta name="description" content="怕什么真理无穷，进一寸有一寸的欢喜
-" />
+    <meta name="description" content="tricks and tips" />
 
 
     <!-- Bootstrap & MDB -->
@@ -33,7 +32,7 @@
     <link rel="shortcut icon" href="/assets/img/favicon.png">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://rich-junwang.github.io//about/">
+    <link rel="canonical" href="https://rich-junwang.github.io//blog/2022/aws-commands/">
     
     <!-- Dark Mode -->
     
@@ -72,8 +71,8 @@
           </li>
           
           <!-- Blog -->
-          <li class="nav-item ">
-            <a class="nav-link" href="/blog/">blog</a>
+          <li class="nav-item active">
+            <a class="nav-link" href="/blog/">blog<span class="sr-only">(current)</span></a>
           </li>
 
           <!-- Other pages -->
@@ -98,21 +97,109 @@
 <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">About me</h1>
-    <p class="post-meta"></p>
+    <h1 class="post-title">AWS Commands</h1>
+    <p class="post-meta">August 7, 2022</p>
     <!-- <p class="post-tags">
-      <a href="/blog/"> <i class="fas fa-calendar fa-sm"></i>  </a>
+      <a href="/blog/2022"> <i class="fas fa-calendar fa-sm"></i> 2022 </a>
+      &nbsp; &middot; &nbsp;
+        <a href="/blog/tag/Tricks">
+          <i class="fas fa-hashtag fa-sm"></i> Tricks</a> &nbsp;
+          <a href="/blog/tag/and">
+          <i class="fas fa-hashtag fa-sm"></i> and</a> &nbsp;
+          <a href="/blog/tag/Tips">
+          <i class="fas fa-hashtag fa-sm"></i> Tips</a> &nbsp;
+          
+      &nbsp; &middot; &nbsp;
+        <a href="/blog/category/software">
+          <i class="fas fa-tag fa-sm"></i> software</a> &nbsp;
+          
     </p> -->
   </header>
 
   <article class="post-content">
-    <p>Hi there, this is Jun Wang. Welcome to my website. I'm a programmer. I love programming. I want to use technology to
-    make the world better.
-    I'm a strong believer that it's easier to invent the future than to predict it.</p>
+    <p>In this doc, I keep record of some commonly used aws related commands for my quick reference. I’ll be very glad if this could be somewhat helpful to you.</p>
+
+<h3 id="ecr">ECR</h3>
+<p>ECR login</p>
+
+<p>For aws-cli 2.7 or above version, use the command below:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># check all images
+aws ecr describe-repositories
+
+# login the docker
+aws ecr get-login-password --region &lt;region&gt; | docker login --username AWS --password-stdin &lt;aws_account_id&gt;.dkr.ecr.&lt;region&gt;.amazonaws.com
+
+# we can get the aws account id using the following command
+aws ecr get-login-password --region &lt;region&gt; | docker login --username AWS --password-stdin "$(aws sts get-caller-identity --query Account --output text).dkr.ecr.&lt;region&gt;.amazonaws.com"
 
 
-<p>In my life, I like hiking a lot. I'm also very much into reading books of history, biography etc. Drop me a line if
-    you want to chat more! </p>
+# pull the image
+docker pull &lt;image_name&gt;
+
+# If we pushed the image using sudo, then pull also add sudo
+sudo docker pull &lt;image_name&gt;
+</code></pre></div></div>
+
+<p>Sometimes we need one image in one region, but it’s pushed to another region. We can do the dollowing steps to push the image to target region.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># login to the region where the image current is. Here assume it's in us-east-1
+REGION=us-east-1 ; aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin &lt;aws_account_id&gt;.dkr.ecr.${REGION}.amazonaws.com
+
+# Then pull the image from ECR
+docker pull image_name
+
+# Find out the image id
+docker image ls | grep image_name | cut -f3 
+
+# tag
+docker tag  image_id new_image_tag_with_new_region
+
+# login to the new region
+REGION=us-west-2 ; aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin &lt;aws_account_id&gt;.dkr.ecr.${REGION}.amazonaws.com
+
+# push
+docker push new_image_tag_with_new_region
+</code></pre></div></div>
+
+<h3 id="gitlab">GitLab</h3>
+<p>Gitlab  changes its authentication methods and the way it works is almost identical to Github. The easist way to use it is through personal token.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># For gitlab usage
+# clone a repo using personal token
+git clone https://oauth2:personal_token@gitlab.com/username/project.git
+
+git remote set-url origin https://oauth2:personal_token@gitlab.com/username/project.git
+
+git push https://personal_token@gitlab.com/username/project.git
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## For github usage
+git clone https://username:personal_token@github.com/username/project.git .
+
+git remote set-url origin https://username:personal_token@github.com/username/project.git
+
+git push https://personal_token@github.com/username/project.git
+</code></pre></div></div>
+
+<h3 id="common-aws-cli">Common AWS CLI</h3>
+<p>To get the current region,</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws configure get region
+# if using the profile
+aws configure get region --profile $PROFILE_NAME
+</code></pre></div></div>
+
+<h3 id="cloudwatch">CloudWatch</h3>
+<p>To use cloudwatch insight, we can use the following query</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fields @timestamp, @message, @logStream
+| filter @logStream like /xxxxx/
+| sort @timestamp desc
+| limit 10000 
+</code></pre></div></div>
+
+<h3 id="vpc-and-security-group">VPC and Security Group</h3>
+<p>Security group controls how we login the instance (like through ssh etc)
+VPC determines what kind of resource we can visit from the instance. For instance if we are able to access specific EFS and FSx.
+Private VPC subnet will require a bastion to connect to instance.</p>
+
   </article>
 
 </div>

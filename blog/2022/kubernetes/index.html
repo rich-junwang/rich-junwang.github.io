@@ -10,10 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>About me | Jun's webpage</title>
+    <title>Kubernetes | Jun's webpage</title>
     <meta name="author" content="Jun  Wang" />
-    <meta name="description" content="怕什么真理无穷，进一寸有一寸的欢喜
-" />
+    <meta name="description" content="tricks and tips" />
 
 
     <!-- Bootstrap & MDB -->
@@ -33,7 +32,7 @@
     <link rel="shortcut icon" href="/assets/img/favicon.png">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://rich-junwang.github.io//about/">
+    <link rel="canonical" href="https://rich-junwang.github.io//blog/2022/kubernetes/">
     
     <!-- Dark Mode -->
     
@@ -72,8 +71,8 @@
           </li>
           
           <!-- Blog -->
-          <li class="nav-item ">
-            <a class="nav-link" href="/blog/">blog</a>
+          <li class="nav-item active">
+            <a class="nav-link" href="/blog/">blog<span class="sr-only">(current)</span></a>
           </li>
 
           <!-- Other pages -->
@@ -98,21 +97,119 @@
 <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">About me</h1>
-    <p class="post-meta"></p>
+    <h1 class="post-title">Kubernetes</h1>
+    <p class="post-meta">December 20, 2022</p>
     <!-- <p class="post-tags">
-      <a href="/blog/"> <i class="fas fa-calendar fa-sm"></i>  </a>
+      <a href="/blog/2022"> <i class="fas fa-calendar fa-sm"></i> 2022 </a>
+      &nbsp; &middot; &nbsp;
+        <a href="/blog/tag/Software">
+          <i class="fas fa-hashtag fa-sm"></i> Software</a> &nbsp;
+          
+      &nbsp; &middot; &nbsp;
+        <a href="/blog/category/Software">
+          <i class="fas fa-tag fa-sm"></i> Software</a> &nbsp;
+          
     </p> -->
   </header>
 
   <article class="post-content">
-    <p>Hi there, this is Jun Wang. Welcome to my website. I'm a programmer. I love programming. I want to use technology to
-    make the world better.
-    I'm a strong believer that it's easier to invent the future than to predict it.</p>
+    <h3 id="basics">Basics</h3>
+
+<p>Kubernetes, also known as “k8s”, is an open source platform solution provided by Google for scheduling and automating the deployment, management, and scaling of containerized applications. Kubernetes has the ability of scheduling and running application containers on a cluster of physical or virtual machines. In managing the applications, the concepts of ‘labels’ and ‘pods’ are used to group the containers which make up an application. Currently, it supports Docker for containers.</p>
+
+<p align="center">
+    <img alt="gopher dataset" src="/assets/img/kubernetes.png" width="80%">
+    <br>
+    <em>kubernetes architecture, image from [1]</em>
+    <br>
+</p>
+
+<p>Pod is a type of abstraction on top of container. Deployment defines the pod. Deployment is used for stateless apps and StatefulSet is used for stateful apps or database. KubeCTL talks with API server to create components or delete components, in other words configuring the cluster. More about this basics is <a href="https://www.youtube.com/watch?v=X48VuDVv0do&amp;t=2749s" target="_blank" rel="noopener noreferrer">here</a></p>
+
+<h3 id="basic-operations">Basic Operations</h3>
+<p>To find out all the pods, using the following command</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl get pods 
+kubectl get pods | grep username 
+kubectl get pods -n my_namespace_name  # get pod understand a 
+
+# get all the nodes
+kubectl get nodes
+
+# get services
+kubectl get services
+
+# create deployment. 
+kubectl create deployment my_pod_name --image=my_image
+</code></pre></div></div>
+
+<p>To get all the containers running the pod, using the following command</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl get pods my_pod_name -o custom-columns='NAME:.metadata.name,CONTAINERS:.spec.containers[*].name'
+kubectl describe pod my_pod_name  -n my_namespace_name
+</code></pre></div></div>
+
+<p>View logs of job running in the pod</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl logs my_pod_name
+kubectl logs -f my_pod_name # similar to attach
+kubectl attach my_pod_name  # works with tqdm 
+</code></pre></div></div>
+
+<p>Log into the pod</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl exec -it my_pod_name -- /bin/bash
+</code></pre></div></div>
+
+<p>We can use <code class="language-plaintext highlighter-rouge">kubectl</code> to copy files to/from the pod. Be careful that your container may not support <code class="language-plaintext highlighter-rouge">~</code> this kind of path expansion.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl cp src_file_path pod:dest_file_path
+</code></pre></div></div>
+
+<p>To use rsync is not that straightforward, I’m using the tool from <a href="https://serverfault.com/questions/741670/rsync-files-to-a-kubernetes-pod" target="_blank" rel="noopener noreferrer">here</a>.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># save the file as krsync, and put it to /usr/bin, and chmod +x to the file
+
+#!/bin/bash
+
+if [ -z "$KRSYNC_STARTED" ]; then
+    export KRSYNC_STARTED=true
+    exec rsync --blocking-io --rsh "$0" $@
+fi
+
+# Running as --rsh
+namespace=''
+pod=$1
+shift
+
+# If use uses pod@namespace rsync passes as: {us} -l pod namespace ...
+if [ "X$pod" = "X-l" ]; then
+    pod=$1
+    shift
+    namespace="-n $1"
+    shift
+fi
+
+exec kubectl $namespace exec -i $pod -- "$@"
+</code></pre></div></div>
+
+<p>Then use the following command to sync files. Note that you have to install <code class="language-plaintext highlighter-rouge">rsync</code> on the pod.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>krsync -av --progress --stats src-dir/ pod:/dest-dir
+
+# with namespace
+krsync -av --progress --stats src-dir/ pod@namespace:/dest-dir
+
+</code></pre></div></div>
+<p>To make it easier to use, we can add the following to the .zshrc file</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function krsync_watch_and_sync_to {
+        fswatch -o . | xargs -n1 -I{} krsync -av --progress --stats *(D)  $1
+}
+</code></pre></div></div>
+
+<p>Sometimes we have to change file ownership. Check out more <a href="https://vhs.codeberg.page/post/recover-files-kubernetes-persistent-volume/" target="_blank" rel="noopener noreferrer">here</a></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chown -R 33:33 /data/uploads
+</code></pre></div></div>
+
+<h2 id="references">References</h2>
+<p>[1] <a href="https://callistaenterprise.se/blogg/teknik/2017/12/20/kubernetes-on-docker-in-docker/" target="_blank" rel="noopener noreferrer">Setting up a Kubernetes cluster using Docker in Docker</a> <br>
+[2] https://kubernetes.io/docs/reference/kubectl/cheatsheet/ <br></p>
 
 
-<p>In my life, I like hiking a lot. I'm also very much into reading books of history, biography etc. Drop me a line if
-    you want to chat more! </p>
   </article>
 
 </div>

@@ -10,10 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>About me | Jun's webpage</title>
+    <title>Docker Commands | Jun's webpage</title>
     <meta name="author" content="Jun  Wang" />
-    <meta name="description" content="怕什么真理无穷，进一寸有一寸的欢喜
-" />
+    <meta name="description" content="tricks and tips" />
 
 
     <!-- Bootstrap & MDB -->
@@ -33,7 +32,7 @@
     <link rel="shortcut icon" href="/assets/img/favicon.png">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://rich-junwang.github.io//about/">
+    <link rel="canonical" href="https://rich-junwang.github.io//blog/2022/docker-commands/">
     
     <!-- Dark Mode -->
     
@@ -72,8 +71,8 @@
           </li>
           
           <!-- Blog -->
-          <li class="nav-item ">
-            <a class="nav-link" href="/blog/">blog</a>
+          <li class="nav-item active">
+            <a class="nav-link" href="/blog/">blog<span class="sr-only">(current)</span></a>
           </li>
 
           <!-- Other pages -->
@@ -98,21 +97,66 @@
 <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">About me</h1>
-    <p class="post-meta"></p>
+    <h1 class="post-title">Docker Commands</h1>
+    <p class="post-meta">August 11, 2022</p>
     <!-- <p class="post-tags">
-      <a href="/blog/"> <i class="fas fa-calendar fa-sm"></i>  </a>
+      <a href="/blog/2022"> <i class="fas fa-calendar fa-sm"></i> 2022 </a>
+      &nbsp; &middot; &nbsp;
+        <a href="/blog/tag/Tricks">
+          <i class="fas fa-hashtag fa-sm"></i> Tricks</a> &nbsp;
+          <a href="/blog/tag/and">
+          <i class="fas fa-hashtag fa-sm"></i> and</a> &nbsp;
+          <a href="/blog/tag/Tips">
+          <i class="fas fa-hashtag fa-sm"></i> Tips</a> &nbsp;
+          
+      &nbsp; &middot; &nbsp;
+        <a href="/blog/category/software">
+          <i class="fas fa-tag fa-sm"></i> software</a> &nbsp;
+          
     </p> -->
   </header>
 
   <article class="post-content">
-    <p>Hi there, this is Jun Wang. Welcome to my website. I'm a programmer. I love programming. I want to use technology to
-    make the world better.
-    I'm a strong believer that it's easier to invent the future than to predict it.</p>
+    <p>In the last blog, we talked about commonly used AWS commands. In this blog, I’ll document some commonly used docker commands to save some time when I need them.</p>
+
+<h3 id="image">Image</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker image ls
+</code></pre></div></div>
+
+<h3 id="run-docker-container">Run docker container</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># rm is to clean constainer after exit
+# it is interactive tty
+# for normal docker image
+docker run --entrypoint /bin/bash -it &lt;image_name&gt; 
+# for nvidia docker image
+nvidia-docker run --entrypoint /bin/bash --rm -it --name my_container_name  image_name
+
+# mount a volume to docker
+nvidia-docker run --entrypoint /bin/bash -v $PWD/transforms_cache:/transforms_cache --rm -it image_name
+
+# add env to docker system
+nvidia-docker run --entrypoint /bin/bash -v $PWD/transforms_cache:/transforms_cache --rm --env SM_CHANNEL_TRAIN=/opt/ml/input/data/train -it image_name
+
+# docker run to use GPU, we can use another command
+docker run --entrypoint /bin/bash --gpus all -it xxxx_image_name
+</code></pre></div></div>
+
+<h3 id="check-all-containers">Check all containers</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker ps -a
+</code></pre></div></div>
+
+<h3 id="clean-space">Clean space</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker rmi -f $(docker images -a -q)
+sudo docker system prune
+</code></pre></div></div>
+
+<h3 id="install-package">Install package</h3>
+<p>Install packages inside a running docker. Usually we’re able to install package based on distributeion of linux system running in the docker. For example, if it’s ubuntu, then the command is</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>apt-get -y update
+apt-get -y install tmux  # package name
+</code></pre></div></div>
 
 
-<p>In my life, I like hiking a lot. I'm also very much into reading books of history, biography etc. Drop me a line if
-    you want to chat more! </p>
   </article>
 
 </div>

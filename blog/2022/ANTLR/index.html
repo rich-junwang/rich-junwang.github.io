@@ -10,10 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>About me | Jun's webpage</title>
+    <title>ANTLR Parser | Jun's webpage</title>
     <meta name="author" content="Jun  Wang" />
-    <meta name="description" content="怕什么真理无穷，进一寸有一寸的欢喜
-" />
+    <meta name="description" content="tricks and tips" />
 
 
     <!-- Bootstrap & MDB -->
@@ -33,7 +32,7 @@
     <link rel="shortcut icon" href="/assets/img/favicon.png">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://rich-junwang.github.io//about/">
+    <link rel="canonical" href="https://rich-junwang.github.io//blog/2022/ANTLR/">
     
     <!-- Dark Mode -->
     
@@ -72,8 +71,8 @@
           </li>
           
           <!-- Blog -->
-          <li class="nav-item ">
-            <a class="nav-link" href="/blog/">blog</a>
+          <li class="nav-item active">
+            <a class="nav-link" href="/blog/">blog<span class="sr-only">(current)</span></a>
           </li>
 
           <!-- Other pages -->
@@ -98,21 +97,80 @@
 <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">About me</h1>
-    <p class="post-meta"></p>
+    <h1 class="post-title">ANTLR Parser</h1>
+    <p class="post-meta">September 22, 2022</p>
     <!-- <p class="post-tags">
-      <a href="/blog/"> <i class="fas fa-calendar fa-sm"></i>  </a>
+      <a href="/blog/2022"> <i class="fas fa-calendar fa-sm"></i> 2022 </a>
+      &nbsp; &middot; &nbsp;
+        <a href="/blog/tag/Tricks">
+          <i class="fas fa-hashtag fa-sm"></i> Tricks</a> &nbsp;
+          <a href="/blog/tag/and">
+          <i class="fas fa-hashtag fa-sm"></i> and</a> &nbsp;
+          <a href="/blog/tag/Tips">
+          <i class="fas fa-hashtag fa-sm"></i> Tips</a> &nbsp;
+          
+      &nbsp; &middot; &nbsp;
+        <a href="/blog/category/software">
+          <i class="fas fa-tag fa-sm"></i> software</a> &nbsp;
+          
     </p> -->
   </header>
 
   <article class="post-content">
-    <p>Hi there, this is Jun Wang. Welcome to my website. I'm a programmer. I love programming. I want to use technology to
-    make the world better.
-    I'm a strong believer that it's easier to invent the future than to predict it.</p>
+    <p>Parsing as the very first step of compiling is important for language analysis. ANTLR is a powerful tool to generate parsers. In this blog, we’re trying to understand more about ANTLR and its usage.</p>
+
+<h2 id="antlr-grammar">ANTLR Grammar</h2>
+
+<p>(1) ANTLR has two kinds of labels: <em>alternative labels</em> and <em>rule elements labels</em>; both can be useful. We assume you are familiar with these two kinds of labels, but here it is an example.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>expression  : left=expression '*' right=expression #multiplication
+
+​           | expression '+' expression            #addition      
+
+​           | NUMBER                               #atom
+
+​           ;
+</code></pre></div></div>
+
+<p>Alternative labels are the one that follows an <code class="language-plaintext highlighter-rouge">#</code>, the rule element labels are the one preceding the = sign. They serve two different purposes. The first ones facilitate act differently for each alternative while the second ones facilitate accessing the different parts of the rules.</p>
+
+<p>For alternative labels, if you label one alternative, you have to label all alternatives, because there will be no base node. Rule element labels instead provides an alternative way to access the content parsed by the sub-rule to which the label is assigned.</p>
+
+<p>(2) For the following grammar, both <code class="language-plaintext highlighter-rouge">item</code> nad <code class="language-plaintext highlighter-rouge">clause</code> will be parsed as a list in the parsing tree. They can be visited using <code class="language-plaintext highlighter-rouge">ctx.items()</code> and <code class="language-plaintext highlighter-rouge">ctx.clause()</code></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>expression : items* 
+
+​          | clause+
+</code></pre></div></div>
+
+<p>(3) Parsing nested rule sometimes can be very challenging, the solution is we move the nested on into a new rule, or using labels mentioned above.</p>
+
+<h2 id="antlr-lexer">ANTLR Lexer</h2>
+
+<p>(1) In a lexer rule, the characters inside square brackets define a character set. So <code class="language-plaintext highlighter-rouge">["]</code> is the set with the single character <code class="language-plaintext highlighter-rouge">"</code>. Being a set, every character is either in the set or not, so defining a character twice, as in <code class="language-plaintext highlighter-rouge">[""]</code> makes no difference, it’s the same as <code class="language-plaintext highlighter-rouge">["]</code>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">~</code> negates the set, so <code class="language-plaintext highlighter-rouge">~["]</code> means <em>any character except <code class="language-plaintext highlighter-rouge">"</code></em>.</p>
+
+<p>(2) In lexer or grammar, literals are marked out by quote. In the following example, <code class="language-plaintext highlighter-rouge">namedChars</code> will be single-quote quoted char list and ended with <code class="language-plaintext highlighter-rouge">X</code> or <code class="language-plaintext highlighter-rouge">x</code></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>namedChars : '\'' Chars '\''[Xx]
+</code></pre></div></div>
+
+<p>Note that the grammar doesn’t count any spaces in the char.</p>
+
+<h2 id="antlr-parser-visitor-and-listener-mode">ANTLR Parser Visitor and Listener Mode</h2>
+
+<p>ANTLR parser provides two kinds of mechanisms to access the parsing nodes. First is listener mode: we can enter a node to perform actions based on our needs. Second is visitor mode: we can visit all parsing tree nodes top-down, left-right sequentially. <a href="https://github.com/AlanHohn/antlr4-python" target="_blank" rel="noopener noreferrer">This repo</a> provides simple but useful tutorials about how this works.</p>
+
+<h2 id="reference">Reference</h2>
+
+<p>[1] <a href="https://tomassetti.me/best-practices-for-antlr-parsers/" target="_blank" rel="noopener noreferrer">This blog</a> is very useful for to me when I wrote this summary doc.</p>
+
+<p>[2] StackOverflow</p>
+
+<p>[3] The definitive ANTLR Guide book</p>
 
 
-<p>In my life, I like hiking a lot. I'm also very much into reading books of history, biography etc. Drop me a line if
-    you want to chat more! </p>
   </article>
 
 </div>

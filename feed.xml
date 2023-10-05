@@ -1,0 +1,596 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator><link href="https://rich-junwang.github.io//feed.xml" rel="self" type="application/atom+xml" /><link href="https://rich-junwang.github.io//" rel="alternate" type="text/html" /><updated>2023-10-05T08:00:21-07:00</updated><id>https://rich-junwang.github.io//feed.xml</id><title type="html">Jun’s webpage</title><subtitle>怕什么真理无穷，进一寸有一寸的欢喜
+</subtitle><entry><title type="html">Parallelism and Optimization in Language Model Training</title><link href="https://rich-junwang.github.io//blog/2022/parallelism/" rel="alternate" type="text/html" title="Parallelism and Optimization in Language Model Training" /><published>2022-12-26T00:00:00-08:00</published><updated>2022-12-26T00:00:00-08:00</updated><id>https://rich-junwang.github.io//blog/2022/parallelism</id><content type="html" xml:base="https://rich-junwang.github.io//blog/2022/parallelism/"><![CDATA[<p>Modern large language model usually is trained with billions number of parameters and trillions number of tokens. With model size and training data at such scale, computation resource and memory footprint requirement is huge. How to effectively leverage GPU resources to speed up training is an important topic in language model pretraining. In this blog, we’ll dive deep into parallel training in recent distributed training paradigms.</p>
+
+<p>A lot of contents of here are from OpenAI, Nvidia, Deepspeed and bigscience blogs. We’ll first go through different parallelism techniques and then talk about how to combine them to maximize training efficiency.</p>
+
+<p align="center">
+    <img alt="gopher dataset" src="/assets/img/speedup.jpg" width="60%" />
+    <br />
+</p>
+
+<h3 id="data-parallelism">Data Parallelism</h3>
+<p>Data parallelism (DP) is the most straightforward way of parallel training. With data parallelism, model parameters and optimzer states are replicated across different workers. Data is partitioned into the same number of shards and each replicate of model is fed with one shard of data. Forward and backward computation is in parallel (simutaneously) and then there is a synchronization step where gradients are averaged across workers to update parameters. The DP computation can be summarized as the following <a href="https://www.adept.ai/blog/sherlock-sdc">three steps</a>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Each machine computes local gradients given local inputs and a consistent global view of the parameters.
+LocalGrad_i = f(Inputs_i, Targets_i, Params)
+
+Sum up all the local gradients and distribute that sum to each machine, so there is a consistent global view of the gradients.
+GlobalGrad = all_reduce(LocalGrad_i)
+
+Each machine can now locally update the parameters and optimizer state under the assumption that the exact same calculation will happen on all machines.
+NewParams, NewOptimState = g(Params, OldOptimState, GlobalGrad)
+</code></pre></div></div>
+
+<h3 id="pipeline-parallelism">Pipeline Parallelism</h3>
+<p>Pipeline parallelism (PP) is from model parallelism. Model parallelism is initially proposed to solve that challenge that one model can’t fit into one GPU. The idea is we can vertically slice model into different layers (e.g. one or more layers in transformer models) and put different layers in different GPUs. The issue with this method is that because sequential computation order of layers, if we feed single large batch data into one of the workers, all other workers are idle. This is the so-called <code class="language-plaintext highlighter-rouge">bubble</code> waiting time.</p>
+
+<p>To solve the problem, we can reuse the data parallelism idea. Instead of feeding a single large batch into a model shard, we can partition data into small chunks. Each chunk of data goes through different model shards (workers) in a pipeline way. The following figure illustrates how this works.</p>
+
+<p align="center">
+    <img alt="gopher dataset" src="/assets/img/pipeline.png" width="100%" />
+    <br />
+    <em>Pipeline parallelism. image from [4]</em>
+    <br />
+</p>
+
+<h3 id="tensor-parallelism">Tensor Parallelism</h3>
+<p>The bottleneck of neural network training is compute. Among all the computation parts, the general matrix multiplication (GEMM) consumes the most of time. One way to parallize the matrix multiplication is to use matrix decomposition. Specifically, we can split a matrix into two or multiple parts based on row or column. Then we can aggregate results after the computation of each parts in the end. This is the core idea of tensor parallelism (TP).</p>
+
+<p>As these three parallelism is orthogonal to each other, it’s easy to combine them together. The following diagram shows how to combine pipeline parallelism with data parallelism.</p>
+<p align="center">
+    <img alt="dp with pp" src="/assets/img/parallelism-zero-dp-pp.png" width="100%" />
+    <br />
+    <em>Combination of pipeline parallelism and data parallelism. Image from Deepspeed tutorial</em>
+    <br />
+</p>
+
+<h3 id="zero-dp">ZeRO DP</h3>
+<p>Zero Redundancy Optimizer (ZeRO) is an optimizied data parallelism proposed by Deepspeed team. The idea is instead of replicating the whole model, optimizer on each of workers, we can only store needed part.</p>
+
+<p align="center">
+    <img alt="zero dp" src="/assets/img/zero.png" width="100%" />
+    <br />
+    <em>Zero DP. Image from Deepspeed</em>
+    <br />
+</p>
+
+<h3 id="parallelism-in-megatron">Parallelism in Megatron</h3>
+<p>Megatron-LM and NeMo are the open source libraries from Nvidia for the distributed training. In these two libs, there are two constraints for the parallelism settings.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- world_size = TP * PP * DP
+- global_batch_size % (PP * DP) == 0
+</code></pre></div></div>
+
+<h2 id="references">References</h2>
+<p>[1] https://huggingface.co/blog/bloom-megatron-deepspeed <br />
+[2] https://github.com/NVIDIA/NeMo <br />
+[3] https://openai.com/blog/techniques-for-training-large-neural-networks/ <br />
+[4] <a href="https://arxiv.org/abs/1811.06965">GPipe: Efficient Training of Giant Neural Networks using Pipeline Parallelism</a> <br />
+[5] <a href="https://arxiv.org/abs/1909.08053">Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism</a> <br />
+[6] https://www.deepspeed.ai/tutorials/pipeline/</p>]]></content><author><name></name></author><category term="Software" /><category term="Software" /><summary type="html"><![CDATA[tricks and tips]]></summary></entry><entry><title type="html">Ally – 论朋党</title><link href="https://rich-junwang.github.io//blog/2022/talents/" rel="alternate" type="text/html" title="Ally – 论朋党" /><published>2022-12-26T00:00:00-08:00</published><updated>2022-12-26T00:00:00-08:00</updated><id>https://rich-junwang.github.io//blog/2022/talents</id><content type="html" xml:base="https://rich-junwang.github.io//blog/2022/talents/"><![CDATA[<p>在美国看新闻，经常可以看到讲某个政治人物是其他人的Ally。中文对应的应该就是朋党。说起朋党，中文世界基本都是贬义。通常与呼朋引伴，结党营私，朋比为奸用在一起。然而美国的政治却对ally直言不讳，甚至职场上都经常有人说allies。</p>
+
+<p>我们的文化常讲君子之交淡如水，小人之交甘若醴。认为与人结为朋党，皆是有所企图。其实这更多是皇权社会给人们灌输的信条。在皇权社会，天子一人为大，余者各自为政是最有利于统治的了。西方国家不论是内阁制还是总统制，都是一朝天子一朝臣。总统要推行自己的政策方案，当然要选择跟自己有相同信念和理想的人。</p>
+
+<p>其实不论中西方还是政治，职场，想要做成事，总是要有allies。通常因为制度的惯性，要做成一件事阻力是很大的。单枪匹马的战斗，会被折腾的遍体鳞伤，最后改革者或挑战者自己的信念都丧失了，因此也常常导致失败。</p>
+
+<p>我们看中国古代成功的政治变革，都是通过新的联盟不断对抗旧的团体。商鞅变法扶植了军功集团来打击旧贵族，隋唐科举扶植寒门对抗士族，雍正利用汉人集团打击旗人势力，借助田文静等监生官员打击士林清流。</p>
+
+<p>改革者, 挑战者通常都是少数派，想要做成事情，更是要找到惺惺相惜的ally。有相同的信念和理想，并愿意一起为之奋斗付出才能把事情做成。</p>]]></content><author><name></name></author><category term="Software" /><category term="Software" /><summary type="html"><![CDATA[tricks and tips]]></summary></entry><entry><title type="html">Distributed Training Infrastructure</title><link href="https://rich-junwang.github.io//blog/2022/Distributed-Training-Infra/" rel="alternate" type="text/html" title="Distributed Training Infrastructure" /><published>2022-12-26T00:00:00-08:00</published><updated>2022-12-26T00:00:00-08:00</updated><id>https://rich-junwang.github.io//blog/2022/Distributed-Training-Infra</id><content type="html" xml:base="https://rich-junwang.github.io//blog/2022/Distributed-Training-Infra/"><![CDATA[<p>Distributed infrastructure is a big and interesting topic. I don’t work on infrastructure side, but I run into the concepts a lot, so I create this blog to help me understand more about infrastructure.</p>
+
+<p>Most of today’s distributed framework involves three parts, collective communication, data loading and preprocessing and distributed scheduler. We’ll look into these three parts resepectively.</p>
+
+<h2 id="collective-communication">Collective Communication</h2>
+<p>We can start with point to point communication. Normally point to point communication refers to two processes communication and it’s one to one communication. Accordingly, collective communication refers to 1 to many or many to many communication. In distributed system, there are large amount of communications among the nodes.</p>
+
+<p>There are some common communication ops, such as Broadcast, Reduce, Allreduce, Scatter, Gather, Allgather etc.</p>
+
+<h3 id="broadcast-and-scatter">Broadcast and Scatter</h3>
+<p>Broadcast is to distribute data from one node to other nodes. Scatter is to distribute a portion of data to different nodes.</p>
+<p align="center">
+    <img alt="flat sharp minimum" src="/assets/img/distributed_infra/broadcast_and_scatter.png" width="60%" height="auto" /> 
+    <br />
+    <em>MPI broadcast and scatter</em>
+    <br />
+</p>
+
+<h3 id="reduce-and-allreduce">Reduce and Allreduce</h3>
+<p>Reduce is a collections of ops. Specifically, the operator will process an array from each process and get reduced number of elements.</p>
+<p align="center">
+    <img alt="flat sharp minimum" src="/assets/img/distributed_infra/reduce1.png" width="60%" height="auto" /> 
+    <br />
+    <em>MPI reduce</em>
+    <br />
+</p>
+
+<p align="center">
+    <img alt="flat sharp minimum" src="/assets/img/distributed_infra/reduce2.png" width="60%" height="auto" /> 
+    <br />
+    <em>MPI reduce</em>
+    <br />
+</p>
+
+<p>Allreduce means that the reduce operation will be conducted throughout all nodes.</p>
+<p align="center">
+    <img alt="flat sharp minimum" src="/assets/img/distributed_infra/allreduce.png" width="60%" height="auto" /> 
+    <br />
+    <em>MPI Allreduce</em>
+    <br />
+</p>]]></content><author><name></name></author><category term="Software" /><category term="Software" /><summary type="html"><![CDATA[tricks and tips]]></summary></entry><entry><title type="html">Kubernetes</title><link href="https://rich-junwang.github.io//blog/2022/kubernetes/" rel="alternate" type="text/html" title="Kubernetes" /><published>2022-12-20T00:00:00-08:00</published><updated>2022-12-20T00:00:00-08:00</updated><id>https://rich-junwang.github.io//blog/2022/kubernetes</id><content type="html" xml:base="https://rich-junwang.github.io//blog/2022/kubernetes/"><![CDATA[<h3 id="basics">Basics</h3>
+
+<p>Kubernetes, also known as “k8s”, is an open source platform solution provided by Google for scheduling and automating the deployment, management, and scaling of containerized applications. Kubernetes has the ability of scheduling and running application containers on a cluster of physical or virtual machines. In managing the applications, the concepts of ‘labels’ and ‘pods’ are used to group the containers which make up an application. Currently, it supports Docker for containers.</p>
+
+<p align="center">
+    <img alt="gopher dataset" src="/assets/img/kubernetes.png" width="80%" />
+    <br />
+    <em>kubernetes architecture, image from [1]</em>
+    <br />
+</p>
+
+<p>Pod is a type of abstraction on top of container. Deployment defines the pod. Deployment is used for stateless apps and StatefulSet is used for stateful apps or database. KubeCTL talks with API server to create components or delete components, in other words configuring the cluster. More about this basics is <a href="https://www.youtube.com/watch?v=X48VuDVv0do&amp;t=2749s">here</a></p>
+
+<h3 id="basic-operations">Basic Operations</h3>
+<p>To find out all the pods, using the following command</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl get pods 
+kubectl get pods | grep username 
+kubectl get pods -n my_namespace_name  # get pod understand a 
+
+# get all the nodes
+kubectl get nodes
+
+# get services
+kubectl get services
+
+# create deployment. 
+kubectl create deployment my_pod_name --image=my_image
+</code></pre></div></div>
+
+<p>To get all the containers running the pod, using the following command</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl get pods my_pod_name -o custom-columns='NAME:.metadata.name,CONTAINERS:.spec.containers[*].name'
+kubectl describe pod my_pod_name  -n my_namespace_name
+</code></pre></div></div>
+
+<p>View logs of job running in the pod</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl logs my_pod_name
+kubectl logs -f my_pod_name # similar to attach
+kubectl attach my_pod_name  # works with tqdm 
+</code></pre></div></div>
+
+<p>Log into the pod</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl exec -it my_pod_name -- /bin/bash
+</code></pre></div></div>
+
+<p>We can use <code class="language-plaintext highlighter-rouge">kubectl</code> to copy files to/from the pod. Be careful that your container may not support <code class="language-plaintext highlighter-rouge">~</code> this kind of path expansion.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl cp src_file_path pod:dest_file_path
+</code></pre></div></div>
+
+<p>To use rsync is not that straightforward, I’m using the tool from <a href="https://serverfault.com/questions/741670/rsync-files-to-a-kubernetes-pod">here</a>.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># save the file as krsync, and put it to /usr/bin, and chmod +x to the file
+
+#!/bin/bash
+
+if [ -z "$KRSYNC_STARTED" ]; then
+    export KRSYNC_STARTED=true
+    exec rsync --blocking-io --rsh "$0" $@
+fi
+
+# Running as --rsh
+namespace=''
+pod=$1
+shift
+
+# If use uses pod@namespace rsync passes as: {us} -l pod namespace ...
+if [ "X$pod" = "X-l" ]; then
+    pod=$1
+    shift
+    namespace="-n $1"
+    shift
+fi
+
+exec kubectl $namespace exec -i $pod -- "$@"
+</code></pre></div></div>
+
+<p>Then use the following command to sync files. Note that you have to install <code class="language-plaintext highlighter-rouge">rsync</code> on the pod.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>krsync -av --progress --stats src-dir/ pod:/dest-dir
+
+# with namespace
+krsync -av --progress --stats src-dir/ pod@namespace:/dest-dir
+
+</code></pre></div></div>
+<p>To make it easier to use, we can add the following to the .zshrc file</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>function krsync_watch_and_sync_to {
+        fswatch -o . | xargs -n1 -I{} krsync -av --progress --stats *(D)  $1
+}
+</code></pre></div></div>
+
+<p>Sometimes we have to change file ownership. Check out more <a href="https://vhs.codeberg.page/post/recover-files-kubernetes-persistent-volume/">here</a></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chown -R 33:33 /data/uploads
+</code></pre></div></div>
+
+<h2 id="references">References</h2>
+<p>[1] <a href="https://callistaenterprise.se/blogg/teknik/2017/12/20/kubernetes-on-docker-in-docker/">Setting up a Kubernetes cluster using Docker in Docker</a> <br />
+[2] https://kubernetes.io/docs/reference/kubectl/cheatsheet/ <br /></p>]]></content><author><name></name></author><category term="Software" /><category term="Software" /><summary type="html"><![CDATA[tricks and tips]]></summary></entry><entry><title type="html">Large Language Model Pretraining</title><link href="https://rich-junwang.github.io//blog/2022/Large-Scale-Pretraining/" rel="alternate" type="text/html" title="Large Language Model Pretraining" /><published>2022-12-18T00:00:00-08:00</published><updated>2022-12-18T00:00:00-08:00</updated><id>https://rich-junwang.github.io//blog/2022/Large-Scale-Pretraining</id><content type="html" xml:base="https://rich-junwang.github.io//blog/2022/Large-Scale-Pretraining/"><![CDATA[<p>Large language model pretraining is a very challenging task which requires very strong engineering and science skills. People tend to underestimate efforts needed to train a good large model like GPT3 etc. Most people imagine that they can get decent language models given enough computation resources. The fact is even today only OpenAI is providing LM APIs where people can freely play with and get good performances. In this blog, we’ll talk about pretraining from the whole pipeline: data sourcing, collection and processing, tokenization, architecture engineering and evaluation. Hopefully, it would be helpful for foundational model training practioners.</p>
+
+<h3 id="data">Data</h3>
+<p>Data is crucial in any ML system. This is true to pretraining as well. As is shown in Gopher paper,  a large, diverse and high-quality dataset is needed to train a good model. In the following table, it shows the datasets used in <a href="https://arxiv.org/pdf/2112.11446.pdf"><code class="language-plaintext highlighter-rouge">Gopher</code> model</a> training. Now we’re looking at terabytes scale of training data.</p>
+
+<p align="center">
+    <img alt="gopher dataset" src="/assets/img/gopher_data.png" width="80%" />
+    <br />
+    <em>Datasets used in Gopher [2]</em>
+    <br />
+</p>
+<p>An ensuing problem with large amount of data is that data quality is hard to control. In practice, we have to at least make sure the content should be intelligible. We might want to give more training on high-quality datasets such as books and wikipedia [31]. Diversified datasets are necessary but can’t guarantee training success as can be seen from <code class="language-plaintext highlighter-rouge">Gopher</code> paper, model performs well on QA related tasks but suffers on reasoning task. What else is needed? We’ll come back to this later.</p>
+
+<h3 id="tokenizer">Tokenizer</h3>
+<p>Language models compute probability of any string sequence. How to represent the string sequence is determined by tokenizer. Popular options are byte pair encoding (BPE) or wordpiece. As the majority of models are using BPE today, here we focus on BPE based tokenizer. Tokenizer can impact several things in LLM training: (1) a high compression rate (tokenized token numer vs raw token number, the lower the better). Compression rate affects input context length and inference speed. (2) Vocab size. An appropriately sized vocabulary to ensure adequate training of each word embedding.</p>
+
+<p>As mentioned in GPT2 paper, BPE effectively interpolates between word level inputs for frequent symbol sequences and character level inputs for infrequent symbol sequences. Directly using greedy method to build BPE merging rules can be problematic. For example, word <code class="language-plaintext highlighter-rouge">cat</code> can be used in a lot of places like <code class="language-plaintext highlighter-rouge">cat?</code>, <code class="language-plaintext highlighter-rouge">cat!</code>, <code class="language-plaintext highlighter-rouge">cat.</code>. One way to solve this issue is to prevent BPE from generating rules across different character categories (letters, digits, puncts etc).</p>
+
+<p>As people are pivoting in-context learing/instruction learning with large models, tokenization efficiency becomes more important. The following tables from Jurassic-1 paper shows the efficiency of tokenizer on several public dataset.</p>
+
+<p align="center">
+    <img alt="tokenization efficiency" src="/assets/img/tokenizer.png" width="100%" />
+    <em>Tokenizer efficiency comparison from [16]</em>
+    <br />
+</p>
+
+<p>Tokenizer determines the size of vocab. Usually when we support multilinguality and code data, the vocab size will be much larger. However, this is not always the case. CodeLLaMa shows very good performance (onpar with GPT4) with a vocab size of 32k.</p>
+
+<p>Compression rate determines the input sequence length to the model. With high compression rate, the input length is shorter. Short sequence length might be able to mitigate exposure bias to some extent.</p>
+
+<p>Open tokenizer implementations are: <a href="https://github.com/openai/tiktoken">tiktoken</a>.</p>
+
+<h3 id="model-architecture">Model Architecture</h3>
+<p>All pretrained models are variant of original transformer model. The differences are mainly about it’s encoder-decoder architecture or decoder-only architecture. First of all, let’s take a look at the choices of available large models.</p>
+
+<table class="mbtablestyle">
+  <thead>
+    <tr>
+      <th>Models    </th>
+      <th style="text-align: center">Model Size    </th>
+      <th style="text-align: center">Token Size  </th>
+      <th>Architecture</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GPT3</td>
+      <td style="text-align: center">175B</td>
+      <td style="text-align: center">300B</td>
+      <td>Decoder</td>
+    </tr>
+    <tr>
+      <td>OPT</td>
+      <td style="text-align: center">175B</td>
+      <td style="text-align: center">300B</td>
+      <td>Decoder</td>
+    </tr>
+    <tr>
+      <td>PaLM</td>
+      <td style="text-align: center">540B</td>
+      <td style="text-align: center">780B</td>
+      <td>Decoder</td>
+    </tr>
+    <tr>
+      <td>Gopher</td>
+      <td style="text-align: center">280B</td>
+      <td style="text-align: center">300B</td>
+      <td>Decoder</td>
+    </tr>
+    <tr>
+      <td>Chinchilla</td>
+      <td style="text-align: center">70B</td>
+      <td style="text-align: center">1400B</td>
+      <td>Decoder</td>
+    </tr>
+    <tr>
+      <td>Jurassic-1</td>
+      <td style="text-align: center">178B</td>
+      <td style="text-align: center">-</td>
+      <td>Decoder</td>
+    </tr>
+    <tr>
+      <td>Megatron-Turing NLG</td>
+      <td style="text-align: center">530B</td>
+      <td style="text-align: center">270B</td>
+      <td>Decoder</td>
+    </tr>
+    <tr>
+      <td>LaMDA</td>
+      <td style="text-align: center">137B</td>
+      <td style="text-align: center">2810B</td>
+      <td>Decoder</td>
+    </tr>
+  </tbody>
+</table>
+<p><br />
+Although all models listed here are autoregressive decoder only model, they actually differ a bit inside the decoder. For instance, to speed up inference time, PaLM is using multi-query attention. Normally, in mutlhead attention, there will be h heads each with a linear project layer for Q, K, V. With multiquery attention, instead of using h different linear project layers for K and V, we can share a single smaller linear project layer for K and a single linear projection layer for V for each head. Then, for different head layers, K and V will be the same. In this way, we can save memory IO and get better latency performance in incremental inference.</p>
+
+<p>A systematic study of transformer architecture is done in Ref [29]. Most of recent LLM architecture are following design from this paper.</p>
+
+<p>People usually call the embedding dim as the width of transformer and number of layers as the depth. There is a optimal depth-to-width
+allocation for a given self-attention network size as is shown in [34].</p>
+
+<h3 id="training-design">Training Design</h3>
+<p>Most of today’s pretraining follow suits of a multi-stage and multi-task training. As is shown by Yao in [1], GPT series model is pretrained in such way as well.</p>
+<p align="center">
+    <img alt="gopher dataset" src="/assets/img/gpt-lineage.png" width="80%" height="auto" /> 
+    <br />
+    <em>GPT Model Lineage. Image from [1]</em>
+    <br />
+</p>
+
+<p>From the lineage diagram, we can see that <code class="language-plaintext highlighter-rouge">ChatGPT</code> model comes from <code class="language-plaintext highlighter-rouge">Codex</code> model which can be seen as a different stage of training. The way of scheduling tasks and data during training can have great impact on the final model performance.</p>
+
+<h4 id="batch-size">Batch Size</h4>
+<p>Research [5] shows that there is a critical batch size in pretraining. When training batch size exceeds critical batch size, model performance starts to degrade. Critical batch size is independent of model size and is related to loss.</p>
+
+<p>Generally small batch size leads to better validation loss when training with the same number of tokens as more random movement of gradient explores more of loss landscape. Often times, small batch size gives better genelization performance as well as pointed out in [27]. The reason given from the paper is that smaller batch size usually converges to flat minimum as oppose to sharp minimum. Intuitively, this is related to graident update in each step is small for large batch size training.</p>
+<p align="center">
+    <img alt="flat sharp minimum" src="/assets/img/flat_sharp_minimum.png" width="80%" height="auto" /> 
+    <br />
+    <em>Flat and Sharp Minima [27]</em>
+    <br />
+</p>
+
+<h4 id="learning-rate-scheduling">Learning Rate Scheduling</h4>
+<p>Usually as pointed out in [20], when we scale up batch size, we increase learning rate propotionally. However, when we increase model size (usually followed with batch size increase), the training tends to be more unstable. Thus, in reality, we decrease maximum learning rate when we increase model size (batch size).</p>
+
+<p>Learning rate scheduling usually involves a (linear) warm-up step to maximum learning rate and followed by a decaying step to 0 or a minimum learning rate. Currently, there are several methods in literature for the decaying step:</p>
+<ul>
+  <li>Linear scheduler</li>
+  <li>Plateau-linear schedule</li>
+  <li>Cosine scheduler</li>
+</ul>
+
+<h4 id="regularization">Regularization</h4>
+<p>One of the most used regularization method is L2 regularization, aka, weight decay [28]. For instance, GPT 3 training uses a weight decay of 0.1. Note that comparing with traditional neural network tuning weight decay number (such as 0.01) GPT3 weight decay is pretty large.</p>
+
+<h4 id="length-extrapolation">Length Extrapolation</h4>
+<p>As in-context learning becomes popular, people are asking a question, Can an LLM maintain equally good, if not better, perplexities when longer sequences are used during inference time? This is the so-called length extrapolation [25].</p>
+
+<h4 id="optimizer">Optimizer</h4>
+<p>When we select an optimizer, we have to take consideration of memory footprint and stability issues etc. Options are <strong>Adafactor</strong>, <strong>Adam</strong> etc. According to <strong>Gopher</strong> paper, adafactor optimizer has smaller memory footprint, and on smaller scale model (&lt;7B) adafactor works well. However, when model size goes larger, performance suffers because of stability issue.</p>
+
+<h3 id="evaluation">Evaluation</h3>
+<p>A lot of large models come out every year and many claims that they could beat GPT3 model in a wide range of benchmarks like <code class="language-plaintext highlighter-rouge">SuperGlue</code>, <code class="language-plaintext highlighter-rouge">CLUE</code>, <code class="language-plaintext highlighter-rouge">MMLU</code> etc. However, when you do benchmark these models in zero-shot setting or some less common tasks (but still very reasonable ones), these models tend to perform really bad. I personally tested <code class="language-plaintext highlighter-rouge">GPT3</code> model (175b) and <code class="language-plaintext highlighter-rouge">UL2</code> model (20b) on text2sql and sql2text task, GPT3 gives way better performance to the extent that you’ll believe UL2 is like garbage. The similar thing happened in evaluation in [24]. You may argue that the model size differs a lot. However, we can think the other way around: the results they claim better than GPT3 is also got from a smaller model and maybe their model training is not easy/efficient to scale to such level. Essentially, what I want to say is that good performance on popular benchmark datasets doesn’t mean much for large LM pretraining as this is highly related to source of training data, whether or not doing fine-tuning, proper prompting etc. Human evaluation is what really matters.</p>
+
+<h3 id="stability">Stability</h3>
+<p>During the model training, the most commonly seen issue is gradient exploding, aka, gradient becomes <code class="language-plaintext highlighter-rouge">NaN</code>. As layers go deeper, this problem happens more often because the way backpropagation works. Over the years, people have proposed many different ways to solve the challenge. 
+As is shown in paper [21], the post-LN shows stability issue without carefully designed warming-up stage. As a result, they are proposing pre-LN to alleviate the problem.</p>
+
+<p>The objective function for highly nonlinear deep neural networks often contains sharp nonlinearities in parameter space resulting from the multiplication of several parameters. These nonlinearities give rise to very high derivatives in some places. When the parameters get close to such a cliff region, a gradient descent update can catapult the parameters very far, possibly losing most of the optimization work that had been done [33].</p>
+
+<p>It’s important to monitor stability during training. Common practice is to plot activation norm and gradient norm for each step. When these values spike, we know there is something wrong. It’s better than looking at loss curve only as loss explosion generally lags behind these two indicators. For instance, when there is bad data, we could have better gauge of when that happens and restart training from that point.</p>
+
+<p>Adept AI has a lengthy <a href="https://www.adept.ai/blog/sherlock-sdc">blog post</a> talking about hardware error induced stability issue. The blog mentioned two ways to identify erroneous node(s):</p>
+<ul>
+  <li>Grid search: partition nodes into groups and train model on each group in a deterministic way. Find the one that has different training loss curve.</li>
+  <li>Parameter checksum check: for each data parallel run, check parameter checksum to see if they are the same to determine which stage might be wrong.</li>
+</ul>
+
+<h3 id="efficient-inference">Efficient Inference</h3>
+<p>Inference speed determines product cost. Over the years, people have proposed various ways to improve inference speed. The multiquery attention mentioned above is one of these approaches. 
+<br /></p>
+
+<h2 id="references">References</h2>
+<p>[1] <a href="https://yaofu.notion.site/How-does-GPT-Obtain-its-Ability-Tracing-Emergent-Abilities-of-Language-Models-to-their-Sources-b9a57ac0fcf74f30a1ab9e3e36fa1dc1">How does GPT Obtain its Ability? Tracing Emergent Abilities of Language Models to their Sources</a> <br />
+[2] <a href="https://arxiv.org/pdf/2112.11446.pdf">Gopher: Scaling Language Models: Methods, Analysis &amp; Insights from Training Gopher</a> <br />
+[3] <a href="https://arxiv.org/pdf/2205.05131.pdf">UL2: Unifying Language Learning Paradigms</a> <br />
+[4] <a href="https://arxiv.org/abs/2211.02001">Bloom: Estimating the Carbon Footprint of BLOOM, a 176B Parameter Language Model</a> <br />
+[5] <a href="https://arxiv.org/abs/2001.08361">Scaling Laws for Neural Language Models</a> <br />
+[6] <a href="https://s3-us-west-2.amazonaws.com/openai-assets/research-covers/language-unsupervised/language_understanding_paper.pdf">GPT: Improving Language Understanding by Generative Pre-Training</a> <br />
+[7] <a href="https://d4mucfpksywv.cloudfront.net/better-language-models/language_models_are_unsupervised_multitask_learners.pdf">GPT2: Language Models are Unsupervised Multitask Learners</a> <br />
+[8] <a href="https://arxiv.org/abs/2005.14165">GPT3: Language Models are Few-Shot Learners</a> <br />
+[9] <a href="https://arxiv.org/abs/2203.02155">InstructGPT: Training language models to follow instructions with human feedback</a> <br />
+[10] <a href="https://arxiv.org/abs/2112.09332">WebGPT: Browser-assisted question-answering with human feedback</a> <br />
+[11] <a href="https://arxiv.org/abs/2205.01068">OPT: Open Pre-trained Transformer Language Models</a> <br />
+[12] <a href="https://github.com/facebookresearch/metaseq/tree/main/projects/OPT-IML">OPT2: OPT-IML Scaling Language Model Instruction Meta Learning through the Lens of Generalization</a> <br />
+[13] <a href="https://arxiv.org/abs/2204.02311">PaLM: Scaling Language Modeling with Pathways</a> <br />
+[14] <a href="https://arxiv.org/pdf/2210.11416.pdf">Flan-PaLM: Scaling Instruction-Finetuned Language Models</a> <br />
+[15] <a href="https://arxiv.org/abs/2203.15556">Chinchilla: Training Compute-Optimal Large Language Models</a> <br />
+[16] <a href="https://uploads-ssl.webflow.com/60fd4503684b466578c0d307/61138924626a6981ee09caf6_jurassic_tech_paper.pdf">Jurassic-1: Technical details and evaluation.</a> <br />
+[17] <a href="https://arxiv.org/abs/2201.11990">Megatron-NLG: Using DeepSpeed and Megatron to Train Megatron-Turing NLG 530B, A Large-Scale Generative Language Model</a> <br />
+[18] <a href="https://arxiv.org/pdf/2201.08239.pdf">LaMDA: Language Models for Dialog Applications</a> <br />
+[19] <a href="https://arxiv.org/abs/2107.03374">Codex: Evaluating Large Language Models Trained on Code</a> <br />
+[20] <a href="https://arxiv.org/abs/1706.02677">Accurate, Large Minibatch SGD: Training ImageNet in 1 Hour</a> <br /> 
+[21] <a href="https://arxiv.org/abs/2002.04745">On Layer Normalization in the Transformer Architecture</a> <br />
+[22] <a href="https://arxiv.org/abs/2210.02414">GLM-130B: An Open Bilingual Pre-trained Model</a> <br />
+[23] <a href="https://arxiv.org/abs/2110.08207">T0: Multitask Prompted Training Enables Zero-Shot Task Generalization</a> <br />
+[24] https://zhuanlan.zhihu.com/p/590240010 <br />
+[25] <a href="https://arxiv.org/abs/2104.09864">RoFormer: Enhanced Transformer with Rotary Position Embedding</a> <br />
+[26] <a href="https://arxiv.org/abs/2212.10356">Receptive Field Alignment Enables Transformer Length Extrapolation</a> <br />
+[27] <a href="https://arxiv.org/abs/1609.04836">On Large-Batch Training for Deep Learning: Generalization Gap and Sharp Minima</a> <br />
+[28] <a href="https://arxiv.org/pdf/1711.05101.pdf">Decoupled Weight Decay Regularization</a> <br />
+[29] <a href="https://arxiv.org/abs/2102.11972">Do Transformer Modifications Transfer Across Implementations and Applications?</a> <br />
+[30] <a href="https://github.com/facebookresearch/xformers">xFormers: A modular and hackable Transformer modelling library</a> <br />
+[31] <a href="https://scontent-sea1-1.xx.fbcdn.net/v/t39.8562-6/333078981_693988129081760_4712707815225756708_n.pdf?_nc_cat=108&amp;ccb=1-7&amp;_nc_sid=ad8a9d&amp;_nc_ohc=4srK2r5szdYAX8pFEBs&amp;_nc_ht=scontent-sea1-1.xx&amp;oh=00_AfBU6VS0w7YtW_0wD4YO2NbJg-fXXaFGrRh6jEr8Z73xDg&amp;oe=6407B8A2">LLaMA: Open and Efficient Foundation Language Models</a> <br />
+[32] <a href="https://arxiv.org/abs/2210.15424">What Language Model to Train if You Have One Million GPU Hours?</a> <br />
+[33] <a href="https://arxiv.org/pdf/1211.5063.pdf">On the difficulty of training Recurrent Neural Networks</a> <br />
+[34] <a href="https://papers.nips.cc/paper/2020/file/ff4dfdf5904e920ce52b48c1cef97829-Paper.pdf">Limits to Depth-Efficiencies of Self-Attention</a> <br />
+[35] <a href="https://cdn.baichuan-ai.com/paper/Baichuan2-technical-report.pdf">Baichuan LLM</a>
+[36] <a href="https://github.com/QwenLM/Qwen-7B/blob/main/tech_memo.md">Qwen LLM</a></p>]]></content><author><name></name></author><category term="research" /><category term="Research" /><summary type="html"><![CDATA[tricks and tips]]></summary></entry><entry><title type="html">Microservices</title><link href="https://rich-junwang.github.io//blog/2022/Microservices/" rel="alternate" type="text/html" title="Microservices" /><published>2022-11-25T00:00:00-08:00</published><updated>2022-11-25T00:00:00-08:00</updated><id>https://rich-junwang.github.io//blog/2022/Microservices</id><content type="html" xml:base="https://rich-junwang.github.io//blog/2022/Microservices/"><![CDATA[<p>I’m learning setting up microservices on Udemy. In this blog, I’m documenting what I’ve learnt along the way. I’ll keep updating this doc with progress of my study.</p>
+
+<h2 id="data-management">Data Management</h2>
+
+<p>The biggest challenge in microservices design is data management. To remove interdependency between services, in microservice system each service has its own database. This introduces the problem when we have a service C where its data is from service A database and service B database. Understanding of this problem will help us understand why we need message queue and redis in today’s services design.</p>]]></content><author><name></name></author><category term="software" /><category term="Tricks" /><category term="and" /><category term="Tips" /><summary type="html"><![CDATA[tricks and tips]]></summary></entry><entry><title type="html">InstructGPT and ChatGPT</title><link href="https://rich-junwang.github.io//blog/2022/InstructGPT-and-ChatGPT/" rel="alternate" type="text/html" title="InstructGPT and ChatGPT" /><published>2022-11-25T00:00:00-08:00</published><updated>2022-11-25T00:00:00-08:00</updated><id>https://rich-junwang.github.io//blog/2022/InstructGPT-and-ChatGPT</id><content type="html" xml:base="https://rich-junwang.github.io//blog/2022/InstructGPT-and-ChatGPT/"><![CDATA[<p>Recently ChatGPT model has demonstrated remarkable success of large pretrained language model being able to generate coherent, logical and meaningful conversations. While as of this writing, the corresponding paper is still not available yet. In this blog, I’ll dive deep into InstructGPT model to see what’s under the hood of this model.</p>
+<h3 id="issues-with-traditional-lm">Issues with Traditional LM</h3>
+<p>Language modeling objective is trying to predict next token given all previous tokens. However, when we’re prompting LM in inference time, we hope LM can generate things based on our instructions/intent instead of merely predicting the most likely tokens. This is the so-called <code class="language-plaintext highlighter-rouge">misalignment</code> between training and inference.</p>
+
+<h3 id="solution">Solution</h3>
+<p>Using reinforcement learning to learn human feedback. For this purpose, they have to collect a dataset. The way to collect the dataset is as follows:</p>
+<ul>
+  <li>select some contract labeler</li>
+  <li>collect human written prompt-answer pairs. Prompts are either from GPT3 API or from human annotation.</li>
+  <li>collect a dataset of human-labeled comparisons between outputs from our models on a larger set of API prompts.</li>
+</ul>
+
+<p>The following diagram from the paper demonstrated how these steps unfold during the training.</p>
+<p align="center">
+    <img alt="make it parse" src="/assets/img/instructgpt.png" width="800" />
+    <br />
+</p>
+
+<p>In summary, there are three steps:</p>
+<ul>
+  <li>Use labeled data to fine-tune GPT3 model</li>
+  <li>Train a reward model</li>
+  <li>Use RL to optimize GPT3 parameters</li>
+</ul>
+
+<p>In the first step, we got data from annotators and use this data to fine-tune GPT3 model. In the second step, they prepare some questions and GPT3 model gives multiple predictions for each question and annotators are asked to rank the generated predictions. This data is used to train reward model. The reward model is used for prediction and predict which one is most close to human choice. Reward model gives a score and the closer to human choice, the higher of the score.</p>
+
+<p>Finally, use policy-based RM algorithm to do further optimization. The whole process is shown in the diagram below. It uses reward mechanism to train model. The reward can be seen as the loss function in traditional ML training. Reward function is much more versatile than loss function (Think about DotaRL and AlphaGo). The consequence is that reward function may not be differentiable, thus can’t be used for back-propagation. People can sample rewards to proximate this loss function.</p>
+
+<p align="center">
+    <img alt="rl" src="/assets/img/lm_rl.png" width="800" />
+    <br />
+    <em>RL algorithm. Image from [4]</em>
+    <br />
+</p>
+
+<h3 id="ppo">PPO</h3>
+
+<p>From the repo in [4], the three steps of PPO are as follows:</p>
+
+<ul>
+  <li>Rollout: The language model generates a response or continuation based on query which could be the start of a sentence.</li>
+  <li>Evaluation: The query and response are evaluated with a function, model, human feedback or some combination of them. The important thing is that this process should yield a scalar value for each query/response pair.</li>
+  <li>Optimization: In the optimisation step the query/response pairs are used to calculate the log-probabilities of the tokens in the sequences. This is done with the model that is trained and and a reference model, which is usually the pre-trained model before fine-tuning. The KL-divergence between the two outputs is used as an additional reward signal to make sure the generated responses don’t deviate to far from the reference language model. The active language model is then trained with PPO.</li>
+</ul>
+
+<p>(To be continued)</p>
+
+<h3 id="references">References</h3>
+<p>[1] <a href="https://arxiv.org/pdf/2009.01325.pdf">Learning to summarize from human feedback</a> <br />
+[2] <a href="https://arxiv.org/abs/2203.02155">InstructGPT: Training language models to follow instructions with human feedback</a> <br />
+[3] <a href="https://arxiv.org/pdf/1909.08593.pdf">Fine-Tuning Language Models from Human Preferences</a> <br />
+[4] https://github.com/lvwerra/trl  <br />
+[5] https://zhuanlan.zhihu.com/p/590311003  <br />
+[6] <a href="https://arxiv.org/abs/2204.07705">Super-natural instructions: generalization via declarative instructions on 1600+ NLP tasks</a>
+[7] <a href="https://arxiv.org/abs/2204.05862">Training a Helpful and Harmless Assistant with Reinforcement Learning from Human Feedback</a></p>]]></content><author><name></name></author><category term="research" /><category term="Research" /><summary type="html"><![CDATA[tricks and tips]]></summary></entry><entry><title type="html">Leetcode and How to Find Talents</title><link href="https://rich-junwang.github.io//blog/2022/%E8%AE%BA%E5%88%B7%E9%A2%98/" rel="alternate" type="text/html" title="Leetcode and How to Find Talents" /><published>2022-10-10T00:00:00-07:00</published><updated>2022-10-10T00:00:00-07:00</updated><id>https://rich-junwang.github.io//blog/2022/%E8%AE%BA%E5%88%B7%E9%A2%98</id><content type="html" xml:base="https://rich-junwang.github.io//blog/2022/%E8%AE%BA%E5%88%B7%E9%A2%98/"><![CDATA[<p>A lot of people are talking about leetcode problem solving these days. If you go to the popular Chinese oversea BBS website, you can find literally under every post there are people talking about solving leetcode problems. In this blog, I want to share my two cents on this issue.</p>
+
+<p>I personally don’t like solving leetcode problems which I guess most people share with my feelings. I don’t take any pride in being ranked as the top K problem solver. My opinion is that it’s huge waste of time. There are definitely some good parts in doing this. If you’re not familiar with a programming langauge, you can learn a bit from good solutions in the disucssion section. Through solving the problem, you’ll get familiar with the specific programming language you use. Through the thinking process, you’ll learn how to convert logics into codes.</p>
+
+<p>However, focusing on these <code class="language-plaintext highlighter-rouge">Fake</code> problems will cost a person gigantic amount of time. There are more important things to learn. In my opinion, a pragmatic engineer should focus on the following four quadrants to improve himself:</p>
+<ul>
+  <li>Technical skills. A good understanding of a wide range of topics such as ML, system design etc.</li>
+  <li>Real problem solving skills. When tasked with a real problem, which is the best route to solve the challenge.</li>
+  <li>Communication skills. How to use concise and precise words to convey your ideas and onboard others with your thoughts.</li>
+  <li>Business acumen. How customers can get benefits from our product, what’s our moat, and is our solution going to bring revenue to company.</li>
+</ul>
+
+<p>At the end of the day, we want to ask ourselves what kind of innovations/changes we have brought to this world. In my view, that’s what defines our value. In the meanwhile, I feel it’s a lot more fun in solving the real world problem and tackle the real issues.</p>
+
+<p>All big techs today are relying on leetcode to select best talents which, in my opinion, is quite unfortunate.(To be continued)</p>]]></content><author><name></name></author><category term="Thoughts" /><category term="Thoughts" /><summary type="html"><![CDATA[tricks and tips]]></summary></entry><entry><title type="html">ANTLR Parser</title><link href="https://rich-junwang.github.io//blog/2022/ANTLR/" rel="alternate" type="text/html" title="ANTLR Parser" /><published>2022-09-22T00:00:00-07:00</published><updated>2022-09-22T00:00:00-07:00</updated><id>https://rich-junwang.github.io//blog/2022/ANTLR</id><content type="html" xml:base="https://rich-junwang.github.io//blog/2022/ANTLR/"><![CDATA[<p>Parsing as the very first step of compiling is important for language analysis. ANTLR is a powerful tool to generate parsers. In this blog, we’re trying to understand more about ANTLR and its usage.</p>
+
+<h2 id="antlr-grammar">ANTLR Grammar</h2>
+
+<p>(1) ANTLR has two kinds of labels: <em>alternative labels</em> and <em>rule elements labels</em>; both can be useful. We assume you are familiar with these two kinds of labels, but here it is an example.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>expression  : left=expression '*' right=expression #multiplication
+
+​           | expression '+' expression            #addition      
+
+​           | NUMBER                               #atom
+
+​           ;
+</code></pre></div></div>
+
+<p>Alternative labels are the one that follows an <code class="language-plaintext highlighter-rouge">#</code>, the rule element labels are the one preceding the = sign. They serve two different purposes. The first ones facilitate act differently for each alternative while the second ones facilitate accessing the different parts of the rules.</p>
+
+<p>For alternative labels, if you label one alternative, you have to label all alternatives, because there will be no base node. Rule element labels instead provides an alternative way to access the content parsed by the sub-rule to which the label is assigned.</p>
+
+<p>(2) For the following grammar, both <code class="language-plaintext highlighter-rouge">item</code> nad <code class="language-plaintext highlighter-rouge">clause</code> will be parsed as a list in the parsing tree. They can be visited using <code class="language-plaintext highlighter-rouge">ctx.items()</code> and <code class="language-plaintext highlighter-rouge">ctx.clause()</code></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>expression : items* 
+
+​          | clause+
+</code></pre></div></div>
+
+<p>(3) Parsing nested rule sometimes can be very challenging, the solution is we move the nested on into a new rule, or using labels mentioned above.</p>
+
+<h2 id="antlr-lexer">ANTLR Lexer</h2>
+
+<p>(1) In a lexer rule, the characters inside square brackets define a character set. So <code class="language-plaintext highlighter-rouge">["]</code> is the set with the single character <code class="language-plaintext highlighter-rouge">"</code>. Being a set, every character is either in the set or not, so defining a character twice, as in <code class="language-plaintext highlighter-rouge">[""]</code> makes no difference, it’s the same as <code class="language-plaintext highlighter-rouge">["]</code>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">~</code> negates the set, so <code class="language-plaintext highlighter-rouge">~["]</code> means <em>any character except <code class="language-plaintext highlighter-rouge">"</code></em>.</p>
+
+<p>(2) In lexer or grammar, literals are marked out by quote. In the following example, <code class="language-plaintext highlighter-rouge">namedChars</code> will be single-quote quoted char list and ended with <code class="language-plaintext highlighter-rouge">X</code> or <code class="language-plaintext highlighter-rouge">x</code></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>namedChars : '\'' Chars '\''[Xx]
+</code></pre></div></div>
+
+<p>Note that the grammar doesn’t count any spaces in the char.</p>
+
+<h2 id="antlr-parser-visitor-and-listener-mode">ANTLR Parser Visitor and Listener Mode</h2>
+
+<p>ANTLR parser provides two kinds of mechanisms to access the parsing nodes. First is listener mode: we can enter a node to perform actions based on our needs. Second is visitor mode: we can visit all parsing tree nodes top-down, left-right sequentially. <a href="https://github.com/AlanHohn/antlr4-python">This repo</a> provides simple but useful tutorials about how this works.</p>
+
+<h2 id="reference">Reference</h2>
+
+<p>[1] <a href="https://tomassetti.me/best-practices-for-antlr-parsers/">This blog</a> is very useful for to me when I wrote this summary doc.</p>
+
+<p>[2] StackOverflow</p>
+
+<p>[3] The definitive ANTLR Guide book</p>]]></content><author><name></name></author><category term="software" /><category term="Tricks" /><category term="and" /><category term="Tips" /><summary type="html"><![CDATA[tricks and tips]]></summary></entry><entry><title type="html">Pytorch Multiple-GPU Training</title><link href="https://rich-junwang.github.io//blog/2022/pytorch/" rel="alternate" type="text/html" title="Pytorch Multiple-GPU Training" /><published>2022-08-16T00:00:00-07:00</published><updated>2022-08-16T00:00:00-07:00</updated><id>https://rich-junwang.github.io//blog/2022/pytorch</id><content type="html" xml:base="https://rich-junwang.github.io//blog/2022/pytorch/"><![CDATA[<p>Using PyTorch for NN model training on single GPU is simple and easy. However, when it comes to multiple GPU training, there could be various of issues. In this blog, I’ll summarize all kinds of issues I ran into during model training/evaluation.</p>
+
+<h3 id="loading-a-pretrained-checkpoint">Loading a pretrained checkpoint</h3>
+<p>A lot of times when we save a checkpoint of a pretrained model, we also save the trainer (or model state) information. This means when we load model checkpoint again, model will already have a preallocated device. When we use the same number of GPU to continue training, it will work as expected. However, the issue will arise when we have different number of GPUs for two runs. Let’s say, we first trained model on a single GPU, then we want to use multiple GPU to continue the training. When we move model to multiple GPU, there will be something weird. For instance, on GPU 0, you might see multiple process (normally one process per GPU). Or in other cases, you can see GPU 0 has much higher memory usage than other GPUs.</p>
+
+<p>Solution: when we load model, we only load parameters and strip all state information. This might be tricky sometimes. The simplest way to solve this issue is to wrap the command with with PyTorch distributed data parallel.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python3 -m torch.distributed.launch --nnodes=1 --nproc_per_node=8 my_script.py my_config_file 
+</code></pre></div></div>
+
+<h3 id="install-apex">Install Apex</h3>
+<p>Sometimes to use the latest distributed training feature, we have to install Apex. As Apex is closely coupled with Cuda, we need to follow the next few steps to correctlly install apex.</p>
+<ul>
+  <li>Find out the Cuda version used in the system.
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python -c "import torch; print(torch.version.cuda)"
+</code></pre></div>    </div>
+  </li>
+  <li>Install from source
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git clone https://github.com/NVIDIA/apex
+cd apex
+CUDA_HOME=/usr/local/cuda-{your-version-here}/ pip install -v --disable-pip-version-check --no-cache-dir --global-option="--cpp_ext" --global-option="--cuda_ext" ./
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="commonly-used-pytorch-tricks">Commonly Used Pytorch Tricks</h3>
+<p>Distributed training is error-prone, so effective ways of debugging is needed. Here I document some of these commands</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># print the whole tensor
+torch.set_printoptions(profile="full")
+torch.set_printoptions(linewidth=16000)
+</code></pre></div></div>
+
+<p>Dataloader sometimes can be buggy, when there are errors related to dataloader, a good practice is to disable the worker number and disable prefetching.</p>
+
+<h3 id="pytorch-and-numpy-advanced-indexing">Pytorch and Numpy Advanced Indexing</h3>
+<p>When selection object is sequence object, ndarray/tensor, it will trigger advanced indexing. To understand how it works, we start from simple.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">12</span><span class="p">).</span><span class="n">reshape</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1">#output
+</span><span class="p">[[</span> <span class="mi">0</span>  <span class="mi">1</span>  <span class="mi">2</span><span class="p">]</span>
+ <span class="p">[</span> <span class="mi">3</span>  <span class="mi">4</span>  <span class="mi">5</span><span class="p">]</span>
+ <span class="p">[</span> <span class="mi">6</span>  <span class="mi">7</span>  <span class="mi">8</span><span class="p">]</span>
+ <span class="p">[</span> <span class="mi">9</span> <span class="mi">10</span> <span class="mi">11</span><span class="p">]]</span>
+</code></pre></div></div>
+
+<p>(1) Specify integer arrays in each dimension where every element in the array represents a number of indices into that dimension. In the example below, we select (0, 0), (1, 1), (2, 0) elements from the above array. <code class="language-plaintext highlighter-rouge">x</code> has two dimensions so we have two arrays to specify the indices in each dimension.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>y = x[[0,1,2],  [0,1,0]]
+print(y) 
+#[0 4 6]
+</code></pre></div></div>
+
+<p>(2) The above way of indexing only renders single dimension result. We can use multi-dimension array to get multi-dimension output. Below is one of these examples. This is to select [(0, 0), (0, 2)], [(3, 0), (3, 2)] elements. Note that in each dimension we still only select one index, like 0 from row-dim, and 0 from col-dim.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rows = np.array([[0,0],[3,3]]) 
+cols = np.array([[0,2],[0,2]])
+y = x[rows,cols]  
+print (y)
+
+# output
+[[ 0  2]
+ [ 9 11]]
+</code></pre></div></div>]]></content><author><name></name></author><category term="software" /><category term="Tricks" /><category term="and" /><category term="Tips" /><summary type="html"><![CDATA[tricks and tips]]></summary></entry></feed>
