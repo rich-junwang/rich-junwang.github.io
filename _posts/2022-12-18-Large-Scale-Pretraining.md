@@ -37,6 +37,8 @@ As people are pivoting in-context learing/instruction learning with large models
 
 Tokenizer determines the size of vocab. Usually when we support multilinguality and code data, the vocab size will be much larger. However, this is not always the case. CodeLLaMa shows very good performance (onpar with GPT4) with a vocab size of 32k. 
 
+Compression rate determines the input sequence length to the model. With high compression rate, the input length is shorter. Short sequence length might be able to mitigate exposure bias to some extent.
+
 Open tokenizer implementations are: [tiktoken](https://github.com/openai/tiktoken). 
 
 ### Model Architecture

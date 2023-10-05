@@ -28,7 +28,6 @@ Broadcast is to distribute data from one node to other nodes. Scatter is to dist
 
 
 
-
 ### Reduce and Allreduce
 Reduce is a collections of ops. Specifically, the operator will process an array from each process and get reduced number of elements. 
 <p align="center">
