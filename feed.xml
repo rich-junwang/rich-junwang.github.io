@@ -4,7 +4,7 @@
 <p>A lot of contents of here are from OpenAI, Nvidia, Deepspeed and bigscience blogs. We’ll first go through different parallelism techniques and then talk about how to combine them to maximize training efficiency.</p>
 
 <p align="center">
-    <img alt="gopher dataset" src="/assets/img/speedup.jpg" width="60%" />
+    <img alt="gopher dataset" src="images/speedup.jpg" width="60%" />
     <br />
 </p>
 
@@ -27,7 +27,7 @@ NewParams, NewOptimState = g(Params, OldOptimState, GlobalGrad)
 <p>To solve the problem, we can reuse the data parallelism idea. Instead of feeding a single large batch into a model shard, we can partition data into small chunks. Each chunk of data goes through different model shards (workers) in a pipeline way. The following figure illustrates how this works.</p>
 
 <p align="center">
-    <img alt="gopher dataset" src="/assets/img/pipeline.png" width="100%" />
+    <img alt="gopher dataset" src="images/pipeline.png" width="100%" />
     <br />
     <em>Pipeline parallelism. image from [4]</em>
     <br />
@@ -38,7 +38,7 @@ NewParams, NewOptimState = g(Params, OldOptimState, GlobalGrad)
 
 <p>As these three parallelism is orthogonal to each other, it’s easy to combine them together. The following diagram shows how to combine pipeline parallelism with data parallelism.</p>
 <p align="center">
-    <img alt="dp with pp" src="/assets/img/parallelism-zero-dp-pp.png" width="100%" />
+    <img alt="dp with pp" src="images/parallelism-zero-dp-pp.png" width="100%" />
     <br />
     <em>Combination of pipeline parallelism and data parallelism. Image from Deepspeed tutorial</em>
     <br />
@@ -48,7 +48,7 @@ NewParams, NewOptimState = g(Params, OldOptimState, GlobalGrad)
 <p>Zero Redundancy Optimizer (ZeRO) is an optimizied data parallelism proposed by Deepspeed team. The idea is instead of replicating the whole model, optimizer on each of workers, we can only store needed part.</p>
 
 <p align="center">
-    <img alt="zero dp" src="/assets/img/zero.png" width="100%" />
+    <img alt="zero dp" src="images/zero.png" width="100%" />
     <br />
     <em>Zero DP. Image from Deepspeed</em>
     <br />
@@ -86,7 +86,7 @@ NewParams, NewOptimState = g(Params, OldOptimState, GlobalGrad)
 <h3 id="broadcast-and-scatter">Broadcast and Scatter</h3>
 <p>Broadcast is to distribute data from one node to other nodes. Scatter is to distribute a portion of data to different nodes.</p>
 <p align="center">
-    <img alt="flat sharp minimum" src="/assets/img/distributed_infra/broadcast_and_scatter.png" width="60%" height="auto" /> 
+    <img alt="flat sharp minimum" src="images/distributed_infra/broadcast_and_scatter.png" width="60%" height="auto" /> 
     <br />
     <em>MPI broadcast and scatter</em>
     <br />
@@ -95,14 +95,14 @@ NewParams, NewOptimState = g(Params, OldOptimState, GlobalGrad)
 <h3 id="reduce-and-allreduce">Reduce and Allreduce</h3>
 <p>Reduce is a collections of ops. Specifically, the operator will process an array from each process and get reduced number of elements.</p>
 <p align="center">
-    <img alt="flat sharp minimum" src="/assets/img/distributed_infra/reduce1.png" width="60%" height="auto" /> 
+    <img alt="flat sharp minimum" src="images/distributed_infra/reduce1.png" width="60%" height="auto" /> 
     <br />
     <em>MPI reduce</em>
     <br />
 </p>
 
 <p align="center">
-    <img alt="flat sharp minimum" src="/assets/img/distributed_infra/reduce2.png" width="60%" height="auto" /> 
+    <img alt="flat sharp minimum" src="images/distributed_infra/reduce2.png" width="60%" height="auto" /> 
     <br />
     <em>MPI reduce</em>
     <br />
@@ -110,7 +110,7 @@ NewParams, NewOptimState = g(Params, OldOptimState, GlobalGrad)
 
 <p>Allreduce means that the reduce operation will be conducted throughout all nodes.</p>
 <p align="center">
-    <img alt="flat sharp minimum" src="/assets/img/distributed_infra/allreduce.png" width="60%" height="auto" /> 
+    <img alt="flat sharp minimum" src="images/distributed_infra/allreduce.png" width="60%" height="auto" /> 
     <br />
     <em>MPI Allreduce</em>
     <br />
@@ -119,7 +119,7 @@ NewParams, NewOptimState = g(Params, OldOptimState, GlobalGrad)
 <p>Kubernetes, also known as “k8s”, is an open source platform solution provided by Google for scheduling and automating the deployment, management, and scaling of containerized applications. Kubernetes has the ability of scheduling and running application containers on a cluster of physical or virtual machines. In managing the applications, the concepts of ‘labels’ and ‘pods’ are used to group the containers which make up an application. Currently, it supports Docker for containers.</p>
 
 <p align="center">
-    <img alt="gopher dataset" src="/assets/img/kubernetes.png" width="80%" />
+    <img alt="gopher dataset" src="images/kubernetes.png" width="80%" />
     <br />
     <em>kubernetes architecture, image from [1]</em>
     <br />
@@ -214,7 +214,7 @@ krsync -av --progress --stats src-dir/ pod@namespace:/dest-dir
 <p>Data is crucial in any ML system. This is true to pretraining as well. As is shown in Gopher paper,  a large, diverse and high-quality dataset is needed to train a good model. In the following table, it shows the datasets used in <a href="https://arxiv.org/pdf/2112.11446.pdf"><code class="language-plaintext highlighter-rouge">Gopher</code> model</a> training. Now we’re looking at terabytes scale of training data.</p>
 
 <p align="center">
-    <img alt="gopher dataset" src="/assets/img/gopher_data.png" width="80%" />
+    <img alt="gopher dataset" src="images/gopher_data.png" width="80%" />
     <br />
     <em>Datasets used in Gopher [2]</em>
     <br />
@@ -229,7 +229,7 @@ krsync -av --progress --stats src-dir/ pod@namespace:/dest-dir
 <p>As people are pivoting in-context learing/instruction learning with large models, tokenization efficiency becomes more important. The following tables from Jurassic-1 paper shows the efficiency of tokenizer on several public dataset.</p>
 
 <p align="center">
-    <img alt="tokenization efficiency" src="/assets/img/tokenizer.png" width="100%" />
+    <img alt="tokenization efficiency" src="images/tokenizer.png" width="100%" />
     <em>Tokenizer efficiency comparison from [16]</em>
     <br />
 </p>
@@ -314,7 +314,7 @@ allocation for a given self-attention network size as is shown in [34].</p>
 <h3 id="training-design">Training Design</h3>
 <p>Most of today’s pretraining follow suits of a multi-stage and multi-task training. As is shown by Yao in [1], GPT series model is pretrained in such way as well.</p>
 <p align="center">
-    <img alt="gopher dataset" src="/assets/img/gpt-lineage.png" width="80%" height="auto" /> 
+    <img alt="gopher dataset" src="images/gpt-lineage.png" width="80%" height="auto" /> 
     <br />
     <em>GPT Model Lineage. Image from [1]</em>
     <br />
@@ -327,7 +327,7 @@ allocation for a given self-attention network size as is shown in [34].</p>
 
 <p>Generally small batch size leads to better validation loss when training with the same number of tokens as more random movement of gradient explores more of loss landscape. Often times, small batch size gives better genelization performance as well as pointed out in [27]. The reason given from the paper is that smaller batch size usually converges to flat minimum as oppose to sharp minimum. Intuitively, this is related to graident update in each step is small for large batch size training.</p>
 <p align="center">
-    <img alt="flat sharp minimum" src="/assets/img/flat_sharp_minimum.png" width="80%" height="auto" /> 
+    <img alt="flat sharp minimum" src="images/flat_sharp_minimum.png" width="80%" height="auto" /> 
     <br />
     <em>Flat and Sharp Minima [27]</em>
     <br />
@@ -427,7 +427,7 @@ As is shown in paper [21], the post-LN shows stability issue without carefully d
 
 <p>The following diagram from the paper demonstrated how these steps unfold during the training.</p>
 <p align="center">
-    <img alt="make it parse" src="/assets/img/instructgpt.png" width="800" />
+    <img alt="make it parse" src="images/instructgpt.png" width="800" />
     <br />
 </p>
 
@@ -443,7 +443,7 @@ As is shown in paper [21], the post-LN shows stability issue without carefully d
 <p>Finally, use policy-based RM algorithm to do further optimization. The whole process is shown in the diagram below. It uses reward mechanism to train model. The reward can be seen as the loss function in traditional ML training. Reward function is much more versatile than loss function (Think about DotaRL and AlphaGo). The consequence is that reward function may not be differentiable, thus can’t be used for back-propagation. People can sample rewards to proximate this loss function.</p>
 
 <p align="center">
-    <img alt="rl" src="/assets/img/lm_rl.png" width="800" />
+    <img alt="rl" src="images/lm_rl.png" width="800" />
     <br />
     <em>RL algorithm. Image from [4]</em>
     <br />
