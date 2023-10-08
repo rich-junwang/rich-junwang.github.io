@@ -6,7 +6,16 @@
     <description>Recent content on Jun&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 18 Dec 2022 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 08 Oct 2023 12:01:14 -0700</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Parallelism</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/parallelism/</link>
+      <pubDate>Sun, 08 Oct 2023 12:01:14 -0700</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/parallelism/</guid>
+      <description>Modern large language model usually is trained with billions number of parameters and trillions number of tokens. With model size and training data at such scale, computation resource and memory footprint requirement is huge. How to effectively leverage GPU resources to speed up training is an important topic in language model pretraining. In this blog, we&amp;rsquo;ll dive deep into parallel training in recent distributed training paradigms. A lot of contents of here are from OpenAI, Nvidia, Deepspeed and bigscience blogs. We&amp;rsquo;ll first go through different parallelism techniques and then talk about how to combine them to maximize training efficiency. Data Parallelism Data parallelism (DP) is the most straightforward way of parallel training. With data parallelism, model parameters and optimzer states are replicated across different workers. Data is partitioned into the same number of shards and each replicate of model is</description>
+    </item>
+    
     <item>
       <title>Large Scale Pretraining</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/large_scale_pretraining/</link>
