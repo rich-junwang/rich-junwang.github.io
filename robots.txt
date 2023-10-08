@@ -1,7 +1,3 @@
----
-permalink: /robots.txt
----
 User-agent: *
 Disallow:
-
-Sitemap: {{ site.baseurl | prepend: site.url }}/sitemap.xml
+Sitemap: https://rich-junwang.github.io/sitemap.xml
