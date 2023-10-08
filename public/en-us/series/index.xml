@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Series on Jun&#39;s Blog</title>
+    <link>https://rich-junwang.github.io/en-us/series/</link>
+    <description>Recent content in Series on Jun&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://rich-junwang.github.io/en-us/series/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>
