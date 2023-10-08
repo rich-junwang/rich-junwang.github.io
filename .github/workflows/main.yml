@@ -19,17 +19,17 @@ run: |
   git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
 - name: Setup Hugo
-uses: peaceiris/actions-hugo@v2
-with:
-hugo-version: 'latest'
-extended: true
+  uses: peaceiris/actions-hugo@v2
+  with:
+  hugo-version: 'latest'
+  extended: true
 
 - name: Build
-run: hugo --gc --minify --cleanDestinationDir
+  run: hugo --gc --minify --cleanDestinationDir
 
 - name: Deploy
-uses: peaceiris/actions-gh-pages@v3
-with:
-deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-publish_dir: ./public
-publish_branch: master
+  uses: peaceiris/actions-gh-pages@v3
+  with:
+  deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+  publish_dir: ./public
+  publish_branch: master
