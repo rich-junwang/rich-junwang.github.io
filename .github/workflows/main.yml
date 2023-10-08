@@ -28,7 +28,7 @@ jobs:
       run: hugo --gc --minify --cleanDestinationDir
 
     - name: Deploy
-      uses: peaceiris/actions-master@v3
+      uses: peaceiris/actions-gh-pages@v3
       with:
         deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
         publish_dir: ./public
