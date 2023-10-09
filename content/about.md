@@ -20,8 +20,6 @@ cover:
     relative: false
 ---
 
-
-
 <p style="font-size: 25px;">About Me</p>
 <style>
  .wrap {
@@ -55,6 +53,11 @@ paper reading. Feel free to reach out to me if you have any comments/suggestions
     you want to chat more! </p>
 
 
+
+<p style="font-size: 25px;">Publications</p>
+All my publications can be found on <a href="https://scholar.google.com/citations?user=ct92MO4AAAAJ&hl=en" target="_blank" title="Google Scholar">google scholar</a>
+
+
 <style>
 .well {
     background-image: -webkit-linear-gradient(top,#e8e8e8 0,#f5f5f5 100%);
@@ -74,4 +77,6 @@ paper reading. Feel free to reach out to me if you have any comments/suggestions
 <li>Reviewer for NeurIPs 2023</li>
 <li>Reviewer for AMLC 2020, 2021</li>
 <li>Reviewer for ICLR 2022</li>
+<li>Reviewer for AAAI 2021</li>
 </div>
+

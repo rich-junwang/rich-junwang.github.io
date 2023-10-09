@@ -8,7 +8,8 @@ keywords:
 categories: 
 - 
 tags: 
-- blog
+- LLM
+- ML
 description: "Large language model pretraining"
 weight:
 slug: ""
