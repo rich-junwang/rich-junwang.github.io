@@ -3,25 +3,37 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/</loc>
-    <lastmod>2022-12-18T00:18:23+08:00</lastmod>
+    <lastmod>2023-07-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/</loc>
-    <lastmod>2022-12-18T00:18:23+08:00</lastmod>
+    <lastmod>2023-07-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/tags/blog/</loc>
-    <lastmod>2022-12-18T00:18:23+08:00</lastmod>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/flash_attn/</loc>
+    <lastmod>2023-07-18T00:18:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/instructgpt/</loc>
+    <lastmod>2023-07-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/</loc>
-    <lastmod>2022-12-18T00:18:23+08:00</lastmod>
+    <lastmod>2023-07-18T00:18:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/tags/llm/</loc>
+    <lastmod>2023-07-18T00:18:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/tags/ml/</loc>
+    <lastmod>2023-07-18T00:18:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/tags/</loc>
+    <lastmod>2023-07-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/large_scale_pretraining/</loc>
     <lastmod>2022-12-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/tags/</loc>
-    <lastmod>2022-12-18T00:18:23+08:00</lastmod>
-  </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/kubenetes/</loc>
     <lastmod>2022-12-08T12:01:14-07:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/tags/blog/</loc>
+    <lastmod>2022-05-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/blog/blog/</loc>
     <lastmod>2022-05-05T00:18:23+08:00</lastmod>
@@ -74,11 +86,17 @@
     <loc>https://rich-junwang.github.io/en-us/categories/redis/</loc>
     <lastmod>2021-11-30T15:55:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/tech1/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/redis/</loc>
     <lastmod>2021-11-30T15:55:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/about/</loc>
     <lastmod>2021-11-06T14:57:28+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/tags/docker/</loc>
+    <lastmod>2021-07-18T00:18:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/docker-commands/</loc>
+    <lastmod>2021-07-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/archives/</loc>
   </url><url>

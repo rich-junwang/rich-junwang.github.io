@@ -6,7 +6,25 @@
     <description>Recent content on Jun&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 18 Dec 2022 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 18 Jun 2023 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Flash Attention</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/flash_attn/</link>
+      <pubDate>Sun, 18 Jun 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/flash_attn/</guid>
+      <description>Large language model pretraining</description>
+    </item>
+    
+    <item>
+      <title>InstructGPT and ChatGPT</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/instructgpt/</link>
+      <pubDate>Sun, 18 Jun 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/instructgpt/</guid>
+      <description>RLHF</description>
+    </item>
+    
     <item>
       <title>Large Scale Pretraining</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/large_scale_pretraining/</link>
@@ -62,12 +80,12 @@
     </item>
     
     <item>
-      <title>Tech</title>
+      <title>Tech &amp; Talents</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/tech/</link>
       <pubDate>Thu, 05 May 2022 00:17:58 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/tech/</guid>
-      <description>ML/Coding/AI</description>
+      <description>Tech and talents</description>
     </item>
     
     <item>
@@ -99,10 +117,10 @@
     
     <item>
       <title>Redis scan命令学习</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/tech1/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/redis/</link>
       <pubDate>Tue, 30 Nov 2021 15:55:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/tech1/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/redis/</guid>
       <description>scan命令详解</description>
     </item>
     
@@ -113,6 +131,15 @@
       
       <guid>https://rich-junwang.github.io/en-us/about/</guid>
       <description>About Me Hi there, this is Jun Wang. Welcome to my website. I&#39;m a programmer. I love programming. Currently, I&amp;rsquo;m an Applied Scientist at Amazon. My research focuses on LLMs, foundational model training, machine learning and its applications in natural language processing. I aim to design systems that understand natural language in a way that makes sense to humans. Generally, I’m interested in areas such as semantic parsing, question answering and knowledge representation learning and reasoning, language grounding, and methods insipred by cognitive science. Opinions are my own and I do not speak for my employer or my team. On this webpage, I&#39;d like to share my study and my paper reading. Feel free to reach out to me if you have any comments/suggestions In my spare time, I like hiking a lot. I&#39;m also very much into</description>
+    </item>
+    
+    <item>
+      <title>Docker Commands</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/docker-commands/</link>
+      <pubDate>Fri, 18 Jun 2021 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/docker-commands/</guid>
+      <description>Docker</description>
     </item>
     
     

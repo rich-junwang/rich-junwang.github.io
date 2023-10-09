@@ -6,7 +6,25 @@
     <description>Recent content in 👨🏻‍💻 Tech on Jun&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 18 Dec 2022 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/posts/tech/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 18 Jun 2023 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/posts/tech/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Flash Attention</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/flash_attn/</link>
+      <pubDate>Sun, 18 Jun 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/flash_attn/</guid>
+      <description>Large language model pretraining</description>
+    </item>
+    
+    <item>
+      <title>InstructGPT and ChatGPT</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/instructgpt/</link>
+      <pubDate>Sun, 18 Jun 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/instructgpt/</guid>
+      <description>RLHF</description>
+    </item>
+    
     <item>
       <title>Large Scale Pretraining</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/large_scale_pretraining/</link>
@@ -35,12 +53,12 @@
     </item>
     
     <item>
-      <title>Tech</title>
+      <title>Tech &amp; Talents</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/tech/</link>
       <pubDate>Thu, 05 May 2022 00:17:58 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/tech/</guid>
-      <description>ML/Coding/AI</description>
+      <description>Tech and talents</description>
     </item>
     
     <item>
@@ -72,11 +90,20 @@
     
     <item>
       <title>Redis scan命令学习</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/tech1/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/redis/</link>
       <pubDate>Tue, 30 Nov 2021 15:55:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/tech1/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/redis/</guid>
       <description>scan命令详解</description>
+    </item>
+    
+    <item>
+      <title>Docker Commands</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/docker-commands/</link>
+      <pubDate>Fri, 18 Jun 2021 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/docker-commands/</guid>
+      <description>Docker</description>
     </item>
     
   </channel>

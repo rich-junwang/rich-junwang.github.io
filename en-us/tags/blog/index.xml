@@ -6,16 +6,7 @@
     <description>Recent content in blog on Jun&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 18 Dec 2022 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/blog/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Large Scale Pretraining</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/large_scale_pretraining/</link>
-      <pubDate>Sun, 18 Dec 2022 00:18:23 +0800</pubDate>
-      
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/large_scale_pretraining/</guid>
-      <description>Large language model pretraining</description>
-    </item>
-    
+    <lastBuildDate>Thu, 05 May 2022 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Blog</title>
       <link>https://rich-junwang.github.io/en-us/posts/blog/blog/</link>
