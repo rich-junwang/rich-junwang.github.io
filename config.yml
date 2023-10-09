@@ -31,31 +31,30 @@ defaultContentLanguageInSubdir: true
 
 menu:
   main:
-    - identifier: search
-      name: 🔍 Search
-      url: search
-      weight: 1
     - identifier: home
       name: 🏠 Home
       url: /
+      weight: 1
+    - identifier: about
+      name: 🙋🏻‍♂️ About
+      url: about
       weight: 2
     - identifier: posts
       name: 📚 Posts
       url: posts
       weight: 3
-    - identifier: tags
-      name: 🧩 Tags
-      url: tags
-      weight: 15
     - identifier: archives
       name: ⏱️ Archives
       url: archives/
       weight: 20
-    - identifier: about
-      name: 🙋🏻‍♂️ About
-      url: about
+    - identifier: search
+      name: 🔍 Search
+      url: search
       weight: 50
-
+    - identifier: tags
+      name: 🧩 Tags
+      url: tags
+      weight: 15
 outputs:
   home:
     - HTML

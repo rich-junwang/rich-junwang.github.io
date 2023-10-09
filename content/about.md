@@ -40,8 +40,7 @@ cover:
 <img class="img-fluid z-depth-1 rounded" id="mypic" src="/img/junwang.jpeg">
 </div>
 
-<p>Hi there, this is Jun Wang. Welcome to my website. I'm a programmer. I love programming. I want to use technology to
-    make the world better. I'm a strong believer that it's easier to invent the future than to predict it.
+<p>Hi there, this is Jun Wang. Welcome to my website. I'm a programmer. I love programming. 
     
 Currently, I'm an Applied Scientist at Amazon. My research focuses on LLMs, foundational model training, machine learning and its applications in
 natural language processing. I aim to design systems that understand natural language in a way that makes
@@ -54,3 +53,25 @@ paper reading. Feel free to reach out to me if you have any comments/suggestions
 
 <p>In my spare time, I like hiking a lot. I'm also very much into reading books of history, biography etc. Drop me a line if
     you want to chat more! </p>
+
+
+<style>
+.well {
+    background-image: -webkit-linear-gradient(top,#e8e8e8 0,#f5f5f5 100%);
+    background-image: -o-linear-gradient(top,#e8e8e8 0,#f5f5f5 100%);
+    background-image: -webkit-gradient(linear,left top,left bottom,from(#e8e8e8),to(#f5f5f5));
+    background-image: linear-gradient(to bottom,#e8e8e8 0,#f5f5f5 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffe8e8e8', endColorstr='#fff5f5f5', GradientType=0);
+    background-repeat: repeat-x;
+    border-color: #dcdcdc;
+    -webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,.05), 0 1px 0 rgba(255,255,255,.1);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.05), 0 1px 0 rgba(255,255,255,.1);
+}
+</style>
+
+<p style="font-size: 25px;">Professional Services</p>
+<div class="style">
+<li>Reviewer for NeurIPs 2023</li>
+<li>Reviewer for AMLC 2020, 2021</li>
+<li>Reviewer for ICLR 2022</li>
+</div>
