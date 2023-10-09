@@ -20,20 +20,8 @@
     <loc>https://rich-junwang.github.io/en-us/tags/</loc>
     <lastmod>2022-12-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/categories/</loc>
-    <lastmod>2022-11-30T15:55:23+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/tags/redis/</loc>
-    <lastmod>2022-11-30T15:55:23+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/categories/redis/</loc>
-    <lastmod>2022-11-30T15:55:23+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/tech1/</loc>
-    <lastmod>2022-11-30T15:55:23+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/tags/tech/</loc>
-    <lastmod>2022-11-30T15:55:23+08:00</lastmod>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/kubenetes/</loc>
+    <lastmod>2022-12-08T12:01:14-07:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/blog/blog/</loc>
     <lastmod>2022-05-05T00:18:23+08:00</lastmod>
@@ -62,6 +50,9 @@
     <loc>https://rich-junwang.github.io/en-us/posts/read/read/</loc>
     <lastmod>2022-05-05T00:18:06+08:00</lastmod>
   </url><url>
+    <loc>https://rich-junwang.github.io/en-us/tags/tech/</loc>
+    <lastmod>2022-05-05T00:17:58+08:00</lastmod>
+  </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/tech/</loc>
     <lastmod>2022-05-05T00:17:58+08:00</lastmod>
   </url><url>
@@ -73,6 +64,18 @@
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ssh/</loc>
     <lastmod>2022-01-11T00:18:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/categories/</loc>
+    <lastmod>2021-11-30T15:55:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/tags/redis/</loc>
+    <lastmod>2021-11-30T15:55:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/categories/redis/</loc>
+    <lastmod>2021-11-30T15:55:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/tech1/</loc>
+    <lastmod>2021-11-30T15:55:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/about/</loc>
     <lastmod>2021-11-06T14:57:28+08:00</lastmod>

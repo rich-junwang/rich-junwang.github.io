@@ -6,16 +6,7 @@
     <description>Recent content in tech on Jun&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 30 Nov 2022 15:55:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/tech/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Redis scan命令学习</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/tech1/</link>
-      <pubDate>Wed, 30 Nov 2022 15:55:23 +0800</pubDate>
-      
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/tech1/</guid>
-      <description>scan命令详解</description>
-    </item>
-    
+    <lastBuildDate>Thu, 05 May 2022 00:17:58 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/tech/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Tech</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/tech/</link>
@@ -23,6 +14,15 @@
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/tech/</guid>
       <description>ML/Coding/AI</description>
+    </item>
+    
+    <item>
+      <title>Redis scan命令学习</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/tech1/</link>
+      <pubDate>Tue, 30 Nov 2021 15:55:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/tech1/</guid>
+      <description>scan命令详解</description>
     </item>
     
   </channel>
