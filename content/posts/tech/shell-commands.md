@@ -306,3 +306,10 @@ When use the following command, be careful about the relative path. In this comm
 ls /my_model/checkpoints/source_dir | xargs -n16 -P -I% rsync -aP % target_dir
 ```
 
+
+### Tips and Tricks
+1. Sometimes we need to copy multiple files from a directory. In order to copy multiple ones without explicitly listing all the absolute paths, we can use the following way. However, to use the autocomplete, we need to type left `{` first without the right one. 
+```bash
+cp /root/local/libs/{a.py, b.py} target_dir
+```
+
