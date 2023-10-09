@@ -1,7 +1,7 @@
 ---
-title: "Parallelism"
-date: 2023-10-08T12:01:14-07:00
-lastmod: 2023-10-08T12:01:14-07:00
+title: "Parallelism in LLM Training"
+date: 2022-02-08T12:01:14-07:00
+lastmod: 2022-02-08T12:01:14-07:00
 author: ["Jun"]
 keywords: 
 - 
@@ -32,12 +32,6 @@ cover:
 Modern large language model usually is trained with billions number of parameters and trillions number of tokens. With model size and training data at such scale, computation resource and memory footprint requirement is huge. How to effectively leverage GPU resources to speed up training is an important topic in language model pretraining. In this blog, we'll dive deep into parallel training in recent distributed training paradigms. 
 
 A lot of contents of here are from OpenAI, Nvidia, Deepspeed and bigscience blogs. We'll first go through different parallelism techniques and then talk about how to combine them to maximize training efficiency. 
-
-<p align="center">
-    <img alt="gopher dataset" src="images/speedup.jpg" width="60%"/>
-    <br>
-</p>
-
 
 ### Data Parallelism
 Data parallelism (DP) is the most straightforward way of parallel training. With data parallelism, model parameters and optimzer states are replicated across different workers. Data is partitioned into the same number of shards and each replicate of model is fed with one shard of data. Forward and backward computation is in parallel (simutaneously) and then there is a synchronization step where gradients are averaged across workers to update parameters. The DP computation can be summarized as the following [three steps](https://www.adept.ai/blog/sherlock-sdc):
@@ -95,7 +89,16 @@ Megatron-LM and NeMo are the open source libraries from Nvidia for the distribut
 ```
 - world_size = TP * PP * DP
 - global_batch_size % (PP * DP) == 0
-```  
+```
+
+### [Sequence Parallel](https://browse.arxiv.org/pdf/2205.05198.pdf)
+For operations such as layer normation, the operation can be paralleized on the sequence dimension. Remember that layernorm is normalization over the feature dimenstion, ie. a token representation of 2048 will be normalized over 2048 numbers. In light of this, sequence parallel is proposed to reduce GPU memory consumption. 
+<p align="center">
+    <img alt="zero dp" src="images/seq_parallel.png" width="100%"/>
+    <br>
+    <em>Sequence parallelism</em>
+    <br>
+</p>
 
 ## References
 [1] https://huggingface.co/blog/bloom-megatron-deepspeed <br>
