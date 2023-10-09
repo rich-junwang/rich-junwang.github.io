@@ -41,7 +41,7 @@ There are some common communication ops, such as Broadcast, Reduce, Allreduce, S
 ### Broadcast and Scatter
 Broadcast is to distribute data from one node to other nodes. Scatter is to distribute a portion of data to different nodes. 
 <p align="center">
-    <img alt="flat sharp minimum" src="images/broadcast_and_scatter.png" width="60%" height=auto/> 
+    <img alt="flat sharp minimum" src="images/broadcast_and_scatter.png" width="40%" height=auto/> 
     <br>
     <em>MPI broadcast and scatter</em>
     <br>
