@@ -1,5 +1,5 @@
 ---
-title: "Shell command for my reference"
+title: "Shell Commands"
 date: 2022-02-11T00:18:23+08:00
 lastmod: 2022-02-11T00:18:23+08:00
 author: ["Jun"]
@@ -302,7 +302,7 @@ When combining find with xargs, it's usually faster than using `exec` mentioned 
 
 ### rsync command
 When use the following command, be careful about the relative path. In this command, we're using 16 processes. 
-```
+```bash
 ls /my_model/checkpoints/source_dir | xargs -n16 -P -I% rsync -aP % target_dir
 ```
 

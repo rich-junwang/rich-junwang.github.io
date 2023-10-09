@@ -9,7 +9,7 @@ categories: # 没有分类界面可以不填写
 - 
 tags: # 标签
 - 
-description: ""
+description: "Parallelism in LLM training"
 weight:
 slug: ""
 draft: false # 是否为草稿
