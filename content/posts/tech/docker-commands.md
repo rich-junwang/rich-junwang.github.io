@@ -78,5 +78,9 @@ apt-get -y install tmux  # package name
 ```
 
 
-
+### Docker build
+We can use the following command to build docker image. Notice that the path is . (current directory). The path (a set of files) is called context and files inside can be used in `COPY` command in dockerfile. The in building process, context will be packed into a tar file. So it's good to put unnecessary files into `.dockerignore` file and select a reasonable path as context.
+```
+docker build -f Dockerfile_my_docker -t ${TAG} . --build-arg REGION=${region}
+```
 
