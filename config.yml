@@ -154,8 +154,8 @@ params:
   # 打赏微信图片地址，
   # 可用绝对和相对地址，相对地址的图片需放在static/img下，
   # 填写格式为img/wechat_pay.png
-  WechatPay: img/wechat_pay.png
-  Alipay: img/alipay.png #打赏支付宝图片地址
+  WechatPay: 
+  Alipay:  #打赏支付宝图片地址
 
   # twikoo评论
   twikoo:
@@ -211,4 +211,3 @@ services:
     disableInlineCSS: true
   twitter:
     disableInlineCSS: true
-        
