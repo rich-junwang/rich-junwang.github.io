@@ -27,7 +27,7 @@ cover:
     alt: ""
     relative: false
 ---
-A lot of people are talking about leetcode problem solving these days. If you go to the popular Chinese oversea BBS website, you can find literally under every post there are people talking about solving leetcode problems. In this blog, I want to share my two cents on this issue.
+A lot of people are talking about leetcode problem solving these days. If you go to the popular Chinese overseas BBS website, you can find literally under every post there are people talking about solving leetcode problems. In this blog, I want to share my two cents on this issue.
 
 I personally don't like solving leetcode problems which I guess most people share with my feelings. I don't take any pride in being ranked as the top K problem solver. My opinion is that it's huge waste of time. There are definitely some good parts in doing this. If you're not familiar with a programming langauge, you can learn a bit from good solutions in the disucssion section. Through solving the problem, you'll get familiar with the specific programming language you use. Through the thinking process, you'll learn how to convert logics into codes.
 
