@@ -98,6 +98,15 @@
     </item>
     
     <item>
+      <title>How to Serve Your Model</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/serve_model/</link>
+      <pubDate>Tue, 08 Feb 2022 12:01:14 -0700</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/serve_model/</guid>
+      <description>How to serve your model locally for a demo</description>
+    </item>
+    
+    <item>
       <title>Parallelism in LLM Training</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/parallelism/</link>
       <pubDate>Tue, 08 Feb 2022 12:01:14 -0700</pubDate>
@@ -149,6 +158,33 @@
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/docker-commands/</guid>
       <description>Docker</description>
+    </item>
+    
+    <item>
+      <title>Remote development with VSCode</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/programming_language/remote-development-with-vscode/</link>
+      <pubDate>Sat, 08 Feb 2020 12:01:14 -0700</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/programming_language/remote-development-with-vscode/</guid>
+      <description>How to use vscode for remote development</description>
+    </item>
+    
+    <item>
+      <title>Basics of Web</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/web/forward_reverse_proxy/</link>
+      <pubDate>Thu, 05 May 2016 00:17:58 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/web/forward_reverse_proxy/</guid>
+      <description>Web tech</description>
+    </item>
+    
+    <item>
+      <title>Python</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/</link>
+      <pubDate>Thu, 09 Apr 2015 12:01:14 -0700</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/</guid>
+      <description>Python Master</description>
     </item>
     
     

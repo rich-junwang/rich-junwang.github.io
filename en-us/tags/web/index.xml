@@ -16,5 +16,14 @@
       <description>Docker</description>
     </item>
     
+    <item>
+      <title>Basics of Web</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/web/forward_reverse_proxy/</link>
+      <pubDate>Thu, 05 May 2016 00:17:58 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/web/forward_reverse_proxy/</guid>
+      <description>Web tech</description>
+    </item>
+    
   </channel>
 </rss>
