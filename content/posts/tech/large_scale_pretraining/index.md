@@ -66,8 +66,9 @@ Open tokenizer implementations are: [tiktoken](https://github.com/openai/tiktoke
 ### Model Architecture
 All pretrained models are variant of original transformer model. The differences are mainly about it's encoder-decoder architecture or decoder-only architecture. First of all, let's take a look at the choices of available large models. 
 
-| Models &nbsp; &nbsp;  | Model Size &nbsp; &nbsp;   | Token Size &nbsp; |  Architecture  | 
-|----|:----:| :----:|
+
+| Models  | Model Size   | Token Size|  Architecture  | 
+--------|------ | ------ | ------ | ------ |
 | GPT3 | 175B | 300B | Decoder | 
 | OPT | 175B| 300B | Decoder | 
 | PaLM | 540B| 780B | Decoder | 
@@ -76,8 +77,9 @@ All pretrained models are variant of original transformer model. The differences
 | Jurassic-1 | 178B| - | Decoder | 
 | Megatron-Turing NLG | 530B| 270B | Decoder | 
 | LaMDA | 137B| 2810B | Decoder | 
-{:.mbtablestyle}
 <br>
+
+
 Although all models listed here are autoregressive decoder only model, they actually differ a bit inside the decoder. For instance, to speed up inference time, PaLM is using multi-query attention. Normally, in mutlhead attention, there will be h heads each with a linear project layer for Q, K, V. With multiquery attention, instead of using h different linear project layers for K and V, we can share a single smaller linear project layer for K and a single linear projection layer for V for each head. Then, for different head layers, K and V will be the same. In this way, we can save memory IO and get better latency performance in incremental inference. 
 
 A systematic study of transformer architecture is done in Ref [29]. Most of recent LLM architecture are following design from this paper. 
@@ -186,5 +188,5 @@ Inference speed determines product cost. Over the years, people have proposed va
 [32] [What Language Model to Train if You Have One Million GPU Hours?](https://arxiv.org/abs/2210.15424) <br>
 [33] [On the difficulty of training Recurrent Neural Networks](https://arxiv.org/pdf/1211.5063.pdf) <br>
 [34] [Limits to Depth-Efficiencies of Self-Attention](https://papers.nips.cc/paper/2020/file/ff4dfdf5904e920ce52b48c1cef97829-Paper.pdf) <br>
-[35] [Baichuan LLM](https://cdn.baichuan-ai.com/paper/Baichuan2-technical-report.pdf)
+[35] [Baichuan LLM](https://cdn.baichuan-ai.com/paper/Baichuan2-technical-report.pdf) <br>
 [36] [Qwen LLM](https://github.com/QwenLM/Qwen-7B/blob/main/tech_memo.md)
