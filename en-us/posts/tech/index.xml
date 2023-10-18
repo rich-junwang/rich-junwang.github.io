@@ -44,6 +44,15 @@
     </item>
     
     <item>
+      <title>ANTLR Parser Generator</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/antlr/</link>
+      <pubDate>Mon, 08 Aug 2022 12:01:14 -0700</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/antlr/</guid>
+      <description>How to use vscode for remote development</description>
+    </item>
+    
+    <item>
       <title>Distributed Training Infra</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/</link>
       <pubDate>Thu, 05 May 2022 00:18:23 +0800</pubDate>
@@ -125,7 +134,7 @@
     </item>
     
     <item>
-      <title>Remote development with VSCode</title>
+      <title>Remote Development with VSCode</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/programming_language/remote-development-with-vscode/</link>
       <pubDate>Sat, 08 Feb 2020 12:01:14 -0700</pubDate>
       
