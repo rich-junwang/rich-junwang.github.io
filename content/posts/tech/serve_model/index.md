@@ -29,14 +29,24 @@ cover:
     relative: false
 ---
 ### LLM Serving
+Working on LLMs often entails us to conduct a demo for real-time test. Sometimes we have to set things up so that co-worker can play with our model to find out the issues there. 
+An eassy way is to use Flask. 
+```python3
+import flask
 
+app = flask.Flask(__name__)
+
+@app.route('/')
+def index():
+ return "<h3>My LLM Playground</h3>"
+```
 
 ### Start the Server
 Start the server, we can run 
 ```bash
-ApiServicePort=8083 python3 serve.py
+ApiServicePort=xxxx python3 serve.py
 ```
-### Visualize
+### Front-End
 If we use flask `render_template` to provide the front end, then we can use the following to ways to launch the app,
 ```bash
 # method 1
@@ -46,6 +56,7 @@ flask run
 python3 app.py
 ```
 
+Another way is to use `streamlit`. Streamlit is an open-source Python library that allows developers to create web applications for data science and machine learning projects with minimal effort. It is designed to simplify the process of turning data scripts into shareable web apps, enabling users to interact with data and models through a web browser. 
 If we use `streamlit`, we can run with
 ```bash
 streamlit run app.py
@@ -64,5 +75,5 @@ The page will be like the following, simple and easy!!
 
 
 ### References
-[1] [LiteLLM](https://github.com/BerriAI/litellm/) <br>
-[2] [Openplayground](https://github.com/nat/openplayground) <br>
+<!-- [1] [LiteLLM](https://github.com/BerriAI/litellm/) <br> -->
+[1] [Openplayground](https://github.com/nat/openplayground) <br>

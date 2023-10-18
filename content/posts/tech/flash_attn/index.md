@@ -70,6 +70,8 @@ The breakdown of these computation is as follows. Apparently, all these ops in t
     <img alt="Vallina attention algorithm" src="images/vallina_attn_break_down.png" width="80%" height=auto/> 
     <em>Figure 4. Vallina attention computation break down</em>
 </p>
+
+
 However, it's hard to save giant attention matrix of size `[N x N]` in the cache. The idea to solve this challenge is to use tiling. Concretely, we slice the matrices into smaller blocks and in each of **Q** **K** computation, we do it in a small block scale. The output of the small block thus can be saved on the cache. This sounds perfectly except that softmax op is not possible with small block computation. Lucklily there are already some studies dealing with this [1-2]. Before talking about this, we first revisit stable softmax computation.
 
 
