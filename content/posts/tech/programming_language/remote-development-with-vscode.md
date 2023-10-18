@@ -1,5 +1,5 @@
 ---
-title: "Remote development with VSCode"
+title: "Remote Development with VSCode"
 date: 2020-02-08T12:01:14-07:00
 lastmod: 2020-02-08T12:01:14-07:00
 author: ["Jun"]
@@ -109,6 +109,37 @@ In `settings.json` add the following key-value pair:
 "workbench.editor.enablePreview": false
 ```
 
+### Config
+Here is the config settings I used.
+```json
+{
+    "editor.fontSize": 16,
+    "editor.fontFamily": "Monaco, 'Courier New', monospace",
+    "editor.wordWrap": "on",
+    "editor.tabCompletion": "on",
+    "editor.tabSize": 4,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "gitlens.codeLens.authors.enabled": false,
+    "git.timeline.showAuthor": false,
+    "gitlens.codeLens.recentChange.enabled": false,
+    "gitlens.codeLens.enabled": false,
+    "gitlens.currentLine.enabled": false,
+    "gitlens.currentLine.pullRequests.enabled": false,
+    "redhat.telemetry.enabled": false,
+    "terminal.integrated.fontSize": 16,
+    "editor.minimap.enabled": false,
+    "python.terminal.activateEnvironment": false,
+    "workbench.editor.enablePreview": false,
+    "[python]": {
+        "editor.formatOnType": true
+    },
+    "settingsSync.ignoredSettings": [],
+    "settingsSync.ignoredExtensions": [],
+      //失去焦点后自动保存
+    "files.autoSave": "onFocusChange",
+    "terminal.integrated.inheritEnv": false,
+}
+```
 
 
 ## References
