@@ -179,6 +179,15 @@
     </item>
     
     <item>
+      <title>Pytorch Multiple-GPU Training</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/pytorch/</link>
+      <pubDate>Mon, 11 Jan 2021 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/pytorch/</guid>
+      <description>PyTorch..</description>
+    </item>
+    
+    <item>
       <title>Remote Development with VSCode</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/programming_language/remote-development-with-vscode/</link>
       <pubDate>Sat, 08 Feb 2020 12:01:14 -0700</pubDate>
