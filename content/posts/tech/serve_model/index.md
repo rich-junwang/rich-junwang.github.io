@@ -77,3 +77,4 @@ The page will be like the following, simple and easy!!
 ### References
 <!-- [1] [LiteLLM](https://github.com/BerriAI/litellm/) <br> -->
 [1] [Openplayground](https://github.com/nat/openplayground) <br>
+<!-- [2] https://www.youtube.com/watch?v=bluclMxiUkA <br> -->

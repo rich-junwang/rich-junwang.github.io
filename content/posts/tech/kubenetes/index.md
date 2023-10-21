@@ -67,6 +67,8 @@ To get all the containers running the pod, using the following command
 ```bash
 kubectl get pods my_pod_name -o custom-columns='NAME:.metadata.name,CONTAINERS:.spec.containers[*].name'
 kubectl describe pod my_pod_name  -n my_namespace_name
+# To get ip. The ip can be used to launch distributed runs.
+kubectl get pod my_pod_name --template '{{.status.podIP}}'
 ```
 
 View logs of job running in the pod
