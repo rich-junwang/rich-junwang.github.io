@@ -34,5 +34,14 @@
       <description>Large language model pretraining</description>
     </item>
     
+    <item>
+      <title>Transformer</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/transformer/</link>
+      <pubDate>Fri, 18 Jun 2021 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/transformer/</guid>
+      <description>Transformer details</description>
+    </item>
+    
   </channel>
 </rss>
