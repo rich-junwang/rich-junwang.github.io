@@ -47,6 +47,7 @@ docker run --entrypoint /bin/bash -it <image_name>
 nvidia-docker run --entrypoint /bin/bash --rm -it --name my_container_name  image_name
 
 # mount a volume to docker
+# --rm delete docker on exit
 nvidia-docker run --entrypoint /bin/bash -v $PWD/transforms_cache:/transforms_cache --rm -it image_name
 
 # add env to docker system
