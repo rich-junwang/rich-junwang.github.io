@@ -73,3 +73,17 @@ Once in a while, I found my python process got killed without any errors. Most o
 ```
 dmesg | grep "oom-kill" | less
 ```
+
+
+### Virtual Env
+python3 -m pip install --upgrade pip
+python3 -m pip install --user virtualenv
+python3 -m venv .venv
+source .venv/bin/activate
+
+
+### Debug
+```
+# using pdb
+import pdb; pdb.set_trace()
+```

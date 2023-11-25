@@ -52,7 +52,7 @@ Figure 2 shows a more detailed hierarchy of GPU memory in A100. Notice that cach
 <!-- First let's take a look at the vallina attention computation. ![](images/vallina_attn.png)*Figure 3. Vallina attention computation* -->
 
 ### IO-aware Computation
-First let's take a look at the vallina attention computation. 
+First let's take a look at the vallina attention computation which is shown below
 <p align="center">
     <img alt="Vallina attention algorithm" src="images/vallina_attn.png" width="100%" height=auto/> 
     <em>Figure 3. Vallina attention computation</em>
@@ -65,18 +65,18 @@ Essentially, each of the operation follows the three steps of operation below.
 - Compute op - Perform compute intensive task on SRAM
 - write op - move tensor back from SRAM to HBM
 
-The breakdown of these computation is as follows. Apparently, all these ops in the vallina attention can be saved. 
+The breakdown of these computation is as follows. Apparently, all these green ops in the vallina attention can be saved. 
 <p align="center">
     <img alt="Vallina attention algorithm" src="images/vallina_attn_break_down.png" width="80%" height=auto/> 
     <em>Figure 4. Vallina attention computation break down</em>
 </p>
 
 
-However, it's hard to save giant attention matrix of size `[N x N]` in the cache. The idea to solve this challenge is to use tiling. Concretely, we slice the matrices into smaller blocks and in each of **Q** **K** computation, we do it in a small block scale. The output of the small block thus can be saved on the cache. This sounds perfectly except that softmax op is not possible with small block computation. Lucklily there are already some studies dealing with this [1-2]. Before talking about this, we first revisit stable softmax computation.
+However, it's hard to put giant attention matrix of size `[N x N]` in the cache. The idea to solve this challenge is to use tiling. Concretely, we slice the matrices into smaller blocks and in each of **Q** **K** computation, we do it in a small block scale. The output of the small block thus can be saved on the cache. This sounds perfectly except that softmax op is not possible with small block computation. Lucklily there are already some studies dealing with this [1-2]. Before talking about this, let's first revisit stable softmax computation.
 
 
 ### Blockwise Softmax
-Underflow in numerica computation can cause precision issue. Overflow can be more problematic because it usually leads to divergence of training job (some may argue silent error is more detrimental :)). Softmax operation involves exponential computation which without careful handling can easily lead to overflow (such as `exp(2000)`).
+Underflow in numerical computation can cause precision issue. Overflow can be more problematic because it usually leads to divergence of training job (some may argue silent error is more detrimental :)). Softmax operation involves exponential computation which without careful handling can easily lead to overflow (such as `exp(2000)`).
 
 $$ \text{softmax}(x)_i = \frac{e^{x_i - \max(x)}}{\sum_j e^{x_j - \max(x)}} $$
 
