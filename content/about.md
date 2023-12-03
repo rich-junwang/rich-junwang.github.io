@@ -40,7 +40,7 @@ cover:
 
 <p>Hi there, this is Jun Wang. Welcome to my website. I'm a programmer. I love programming. 
     
-Currently, I'm an Applied Scientist at Amazon. My research focuses on LLMs, foundational model training, machine learning and its applications in
+Currently, I'm a Senior Applied Scientist at Amazon. My research focuses on LLMs, foundational model training, machine learning and its applications in
 natural language processing. I aim to design systems that understand natural language in a way that makes
 sense to humans. Generally, I’m interested in areas such as semantic parsing, question answering and
 knowledge representation learning and reasoning, language grounding, and methods insipred by cognitive
