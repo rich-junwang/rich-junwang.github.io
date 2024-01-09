@@ -71,15 +71,6 @@
     </item>
     
     <item>
-      <title>Shell Commands</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/shell-commands/</link>
-      <pubDate>Fri, 11 Feb 2022 00:18:23 +0800</pubDate>
-      
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/shell-commands/</guid>
-      <description>Some of my frequently used commands</description>
-    </item>
-    
-    <item>
       <title>LLM Playground</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/serve_model/</link>
       <pubDate>Tue, 08 Feb 2022 12:01:14 -0700</pubDate>
