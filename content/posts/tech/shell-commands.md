@@ -12,7 +12,7 @@ tags:
 description: "Some of my frequently used commands"
 weight:
 slug: ""
-draft: false # 是否为草稿
+draft: true # 是否为草稿
 comments: true
 reward: true # 打赏
 mermaid: true #是否开启mermaid
@@ -317,3 +317,10 @@ ls /my_model/checkpoints/source_dir | xargs -n16 -P -I% rsync -aP % target_dir
 cp /root/local/libs/{a.py, b.py} target_dir
 ```
 
+### Sort and Cut
+Sometimes we want to sort based on a specific field in string. We can use the following command
+```
+# cut 2nd field, from 2nd field split based on equal sign and sort based on the 3rd field
+# cut field delimiter is -d, and sort field delimiter is -t
+echo xxx | grep yyy | cut -d " " -f2 |  | sort -t = -k 3 -n | uniq | less
+```
