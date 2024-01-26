@@ -87,3 +87,35 @@ source .venv/bin/activate
 # using pdb
 import pdb; pdb.set_trace()
 ```
+
+### Exception
+How to catch generic exception type
+```python
+try:
+    someFunction()
+except Exception as ex:
+    template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+    message = template.format(type(ex).__name__, ex.args)
+    print(message)
+```
+
+The difference between the above and using just `except` without any argument is twofold: (1) A bare except doesn't give you the exception object to inspect (2) The exceptions SystemExit, KeyboardInterrupt and GeneratorExit aren't caught by the above code, which is generally what you want.
+
+If you also want the same stacktrace you get if you do not catch the exception, you can get that like this (still inside the except clause):
+```python
+import traceback
+print(traceback.format_exc())
+```
+
+If you use the logging module, you can print the exception to the log (along with a message) like this:
+```python
+import logging
+log = logging.getLogger()
+log.exception("Message for you, sir!")
+```
+
+To dig deeper and examine the stack, look at variables etc., use the post_mortem function of the pdb module inside the except block:
+```python
+import pdb
+pdb.post_mortem()
+```
