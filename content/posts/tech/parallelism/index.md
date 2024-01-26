@@ -100,6 +100,12 @@ For operations such as layer normation, the operation can be paralleized on the 
     <br>
 </p>
 
+
+### Implementation
+A few key points in 3D parallelism implementation. 
+- TP is communication heavy, thus TP blocks should be put on different GPUs within the same node to leverage fast NVLink communication. On the contrary, PP communication is light, and it is usually put across nodes. 
+- Within a data parallel group, all GPUs hold the same model parameters. After each update, there will be gradient all-reduce operation.  
+
 ## References
 [1] https://huggingface.co/blog/bloom-megatron-deepspeed <br>
 [2] https://github.com/NVIDIA/NeMo <br>
