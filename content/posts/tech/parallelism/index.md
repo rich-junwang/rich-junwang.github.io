@@ -21,6 +21,8 @@ TocOpen: true # 自动展开目录
 hidemeta: false # 是否隐藏文章的元信息，如发布日期、作者等
 disableShare: true # 底部不显示分享栏
 showbreadcrumbs: true #顶部显示路径
+# katex: true
+math: true
 cover:
     image: "images/speedup.jpg" #图片路径例如：posts/tech/123/123.png
     zoom: # 图片大小，例如填写 50% 表示原图像的一半大小
@@ -57,19 +59,40 @@ To solve the problem, we can reuse the data parallelism idea. Instead of feeding
     <img alt="gopher dataset" src="images/pipeline.png" width="100%"/>
     <br>
     <em>Pipeline parallelism. image from [4]</em>
-    <br>
 </p>
 
 ### Tensor Parallelism
 The bottleneck of neural network training is compute. Among all the computation parts, the general matrix multiplication (GEMM) consumes the most of time. One way to parallize the matrix multiplication is to use matrix decomposition. Specifically, we can split a matrix into two or multiple parts based on row or column. Then we can aggregate results after the computation of each parts in the end. This is the core idea of tensor parallelism (TP).
 
+In it's essence, tensor parallelism is block matrix mutiplication. Based on how we partition the parameter matrix, there is row parallel partition and column parallel partition. 
+For row parallel partition, there is
+
+$$
+Y = XW = \begin{bmatrix} X_1, & X_2\end{bmatrix} \begin{bmatrix} W_1 \\\ W_2\end{bmatrix} = X_1W_1 + X_2W_2
+$$
+
+For column parallel partition, there is
+$$
+Y = XW = X\begin{bmatrix} W_1 \\\ W_2\end{bmatrix} = XW_1 + XW_2
+$$
+Note that for row parallel, we need to partition the input into two parts as well.
+In original transformer MLP layer, there are two projection steps: `hidden.size -> 4 * hidden.size -> hidden.size`. In this case, in Megatron-LM MLP implementation, it first does column parallel partition, generating two matrices, then a row parallel partition. This is shown in the following figure:
+<p align="center">
+    <img alt="dp with pp" src="images/megatron-mlp.png" width="60%"/>
+    <em>Tensor Parallelism in Megatron-LM</em>
+    <br>
+</p>
+
+<!-- $$\begin{bmatrix} 
+a & b \\\
+d & e 
+\end{bmatrix}
+$$ -->
 
 As these three parallelism is orthogonal to each other, it's easy to combine them together. The following diagram shows how to combine pipeline parallelism with data parallelism. 
 <p align="center">
     <img alt="dp with pp" src="images/parallelism-zero-dp-pp.png" width="100%"/>
-    <br>
     <em>Combination of pipeline parallelism and data parallelism. Image from Deepspeed tutorial</em>
-    <br>
 </p>
 
 
@@ -78,7 +101,6 @@ Zero Redundancy Optimizer (ZeRO) is an optimizied data parallelism proposed by D
 
 <p align="center">
     <img alt="zero dp" src="images/zero.png" width="100%"/>
-    <br>
     <em>Zero DP. Image from Deepspeed</em>
     <br>
 </p>
@@ -95,7 +117,6 @@ Megatron-LM and NeMo are the open source libraries from Nvidia for the distribut
 For operations such as layer normation, the operation can be paralleized on the sequence dimension. Remember that layernorm is normalization over the feature dimenstion, ie. a token representation of 2048 will be normalized over 2048 numbers. In light of this, sequence parallel is proposed to reduce GPU memory consumption. 
 <p align="center">
     <img alt="zero dp" src="images/seq_parallel.png" width="100%"/>
-    <br>
     <em>Sequence parallelism</em>
     <br>
 </p>
@@ -105,6 +126,9 @@ For operations such as layer normation, the operation can be paralleized on the 
 A few key points in 3D parallelism implementation. 
 - TP is communication heavy, thus TP blocks should be put on different GPUs within the same node to leverage fast NVLink communication. On the contrary, PP communication is light, and it is usually put across nodes. 
 - Within a data parallel group, all GPUs hold the same model parameters. After each update, there will be gradient all-reduce operation.  
+
+How to achieve this, in Megatron-LM, this is achieved by first partition all GPUs by pipeline parallelism. Then withnin the same pipeline block, partition GPUs based on tensor parallelism. After that, the number of copies within the pipeline block will be the data parallelism number. 
+
 
 ## References
 [1] https://huggingface.co/blog/bloom-megatron-deepspeed <br>
