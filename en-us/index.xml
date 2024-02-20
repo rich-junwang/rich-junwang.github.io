@@ -26,6 +26,15 @@
     </item>
     
     <item>
+      <title>PPO and Its Implementation</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ppo/</link>
+      <pubDate>Fri, 05 May 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ppo/</guid>
+      <description>Proximal Policy Optimization</description>
+    </item>
+    
+    <item>
       <title>Large Scale Pretraining</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/large_scale_pretraining/</link>
       <pubDate>Sun, 18 Dec 2022 00:18:23 +0800</pubDate>
