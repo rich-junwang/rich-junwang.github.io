@@ -115,9 +115,14 @@ The last step assumes that $\frac{\partial{\log\pi (A|s; \theta)}}{\partial{\the
 The above equation is the vanilla policy gradient method. More policy gradient algorithms are proposed later to reduce high variance of the vanilla version. John Schulman's [GAE paper](https://arxiv.org/pdf/1506.02438.pdf) summarized all the improvement methods. 
 
 #### Actor-Critic Algorithm
-There we give a recap of how actor-critic method works:
+There we give a recap of how actor-critic method works. In Actor-Critic algorithm, we use one neural network $\pi(a|s; \theta)$ to approximate $\pi(a|s)$ and use another neural network $q(s, a; w)$ to approximate $Q_{\pi}(s, a)$
 - Observe state $s_t$, and randomly sample action from policy  $a_t \sim \pi(\cdot | s_t; \Theta_t)$
 - Let agent perform action $a_t$, and get new state $s_{t+1}$ and reward $r_t$ from environment
 - Randomly sample $\tilde{a}_{t+1} \sim \pi(\cdot | s_t; \Theta_t)$ without performing the action
 - Evaluate value network: $q_t = q(s_t, a_t; W_t)$ and $q_{t+1} = q(s_{t+1}, \tilde{a}_{t+1}; W_t)$
 - Compute TD error: $\delta_t = q_t - (r_t + \gamma \cdot q_{t+1})$
+- Differentiate value network: $d_{w,t} = \frac{\partial{q(s_t, a_t, w)}}{\partial{w}}$ (autograd will do this for us)
+- Update value network: $ w_{t+1} = w_t -  \alpha \cdot \delta_t  \cdot d_{w, t}$
+- Differentiate policy network: $ d_{\theta, t} = \frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} $ (again autograd will do this for us)
+- Update policy network: $\theta_{t+1} = \theta_t + \beta \cdot q_t \cdot d_{\theta, t}$.
+    - We can also use: $\theta_{t+1} = \theta_t + \beta \cdot \delta_t \cdot d_{\theta, t}$ to update policy network. This is called policy gradient with baseline.
