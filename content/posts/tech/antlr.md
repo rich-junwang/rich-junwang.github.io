@@ -9,12 +9,12 @@ categories: # 没有分类界面可以不填写
 - 
 tags: # 标签
 - Parsing
-description: "How to use vscode for remote development"
+description: "How to use antlr framework to generate code parser"
 weight:
 slug: ""
 draft: false # 是否为草稿
 comments: true # 本页面是否显示评论
-reward: true # 打赏
+reward: false # 打赏
 mermaid: true #是否开启mermaid
 showToc: true # 显示目录
 TocOpen: true # 自动展开目录

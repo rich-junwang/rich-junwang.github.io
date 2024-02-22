@@ -14,7 +14,7 @@ weight:
 slug: ""
 draft: false # 是否为草稿
 comments: true
-reward: true # 打赏
+reward: false # 打赏
 mermaid: true #是否开启mermaid
 showToc: true # 显示目录
 TocOpen: true # 自动展开目录
@@ -90,7 +90,7 @@ $$
 V_{\pi}(s_t) = \mathbb{E_A}[Q_{\pi}(s_t, A)] = \sum_a \pi(a|s_t) \cdot Q_{\pi}(s_t, a)
 $$
 
-In policy gradient algorithm, the policy function $\pi(a|s_t)$ is approximated by policy network $\pi(a|s_t; \theta)$. $\theta$ here is the neural network model parameters. Then the policy-based learning is to maximize the object function 
+In policy gradient algorithm, the policy function $\pi(a|s_t)$ is approximated by policy network $\pi(a|s_t; \theta)$. $\theta$ here is the neural network model parameters. Then the policy-based learning is to maximize the objective function 
 $$
 \begin{aligned}
 J(\theta) &= \mathbb{E_S}[V(S; \theta)] \\\
@@ -100,16 +100,24 @@ J(\theta) &= \mathbb{E_S}[V(S; \theta)] \\\
 $$
 
 where $d_{\pi}(s)$ is the stationary distribution of Markov chain for $\pi_{\theta}$, namely the state distribution under policy $\pi$.
-Now we know the object function of the policy-based algorithm, we can learn the parameters $\theta$ through policy gradiet ascent. 
+Now we know the objective function of the policy-based algorithm, we can learn the parameters $\theta$ through policy gradiet ascent. 
 
 Now we can look at how to get the policy gradient. Since the first summation of the last step in the above equation has nothing to do with $\theta$, so we can focus on getting the derivatives of the value function $V_{\pi}(s; \theta)$. Using chain rule, it's easy to get:
 $$
 \begin{aligned}
-\frac{\partial{V(s; \theta)}}{\partial{\theta}} &= \sum_a \frac{\partial{\pi (a|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, a)
+\frac{\partial{V(s; \theta)}}{\partial{\theta}} &= \sum_a \frac{\partial{\pi (a|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, a) \\\
+&= \sum_a \pi(a|s_t; \theta) \frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, a) \\\
+&= \mathbb{E_A}\left[  \frac{\partial{\log\pi (A|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, A) \right]
 \end{aligned}
 $$
+The last step assumes that $\frac{\partial{\log\pi (A|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, A)$ follows a distribution of $\pi(a|s_t; \theta)$ with respect to the random variable $A$.
 
+The above equation is the vanilla policy gradient method. More policy gradient algorithms are proposed later to reduce high variance of the vanilla version. John Schulman's [GAE paper](https://arxiv.org/pdf/1506.02438.pdf) summarized all the improvement methods. 
 
 #### Actor-Critic Algorithm
 There we give a recap of how actor-critic method works:
-- Observe state $s_t$, and randomly sample action from policy  $a_t \sim \pi(\cdot | s_t; \theta_t)$
+- Observe state $s_t$, and randomly sample action from policy  $a_t \sim \pi(\cdot | s_t; \Theta_t)$
+- Let agent perform action $a_t$, and get new state $s_{t+1}$ and reward $r_t$ from environment
+- Randomly sample $\tilde{a}_{t+1} \sim \pi(\cdot | s_t; \Theta_t)$ without performing the action
+- Evaluate value network: $q_t = q(s_t, a_t; W_t)$ and $q_{t+1} = q(s_{t+1}, \tilde{a}_{t+1}; W_t)$
+- Compute TD error: $\delta_t = q_t - (r_t + \gamma \cdot q_{t+1})$

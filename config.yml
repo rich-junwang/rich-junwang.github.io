@@ -150,7 +150,7 @@ params:
   PublicSecurityIconLink: # 填自己的公安图标链接,可用绝对路径，相对路径如 img/beian.png
   PublicNetworkSecurity: # 底部公网安备号
 
-  Reward: true #打赏是否开启
+  Reward: false #打赏是否开启
   # 打赏微信图片地址，
   # 可用绝对和相对地址，相对地址的图片需放在static/img下，
   # 填写格式为img/wechat_pay.png
