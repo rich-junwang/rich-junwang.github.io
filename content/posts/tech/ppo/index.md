@@ -53,7 +53,7 @@ assuming that the $x_i$ here is the i.i.d samples from the distribution $p(x)$.
 #### Importance Sampling
 In reality, it could be very challenging to sample data according to the distribution $p(x)$ as it is usually unknown to us. A workaround is to have another known distribution $q(x)$, and define the expectation as:
 $$
-\mathbb{E}[f] = \int{q(x)\frac{p(x)}{q(x)}f(x)} dx
+\mathbb{E_{x\sim p(x)}}[f] = \int{q(x)\frac{p(x)}{q(x)}f(x)} dx
 $$
 This can be seen as the expectation of function $\frac{p(x)}{q(x)}f(x)$ according to the distribution of $q(x)$. The distribution is sometimes called the **proposal distribution**. Then the expectation can be estimated as
 $$
@@ -107,15 +107,23 @@ $$
 \begin{aligned}
 \frac{\partial{V(s; \theta)}}{\partial{\theta}} &= \sum_a \frac{\partial{\pi (a|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, a) \\\
 &= \sum_a \pi(a|s_t; \theta) \frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, a) \\\
-&= \mathbb{E_A}\left[  \frac{\partial{\log\pi (A|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, A) \right]
+&= \mathbb{E_A}\left[  \frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, a) \right]
 \end{aligned}
 $$
-The last step assumes that $\frac{\partial{\log\pi (A|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, A)$ follows a distribution of $\pi(a|s_t; \theta)$ with respect to the random variable $A$.
+The last step assumes that $\frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, a)$ follows a distribution of $\pi(a|s_t; \theta)$ with respect to the random variable $A$.
 
-The above equation is the vanilla policy gradient method. More policy gradient algorithms are proposed later to reduce high variance of the vanilla version. John Schulman's [GAE paper](https://arxiv.org/pdf/1506.02438.pdf) summarized all the improvement methods. 
+The above equation is the vanilla policy gradient method. More policy gradient algorithms are proposed later to reduce high variance of the vanilla version. John Schulman's [GAE paper](https://arxiv.org/pdf/1506.02438.pdf) summarized all the improvement methods. In the derivation, the policy gradient is represented as
+$$
+\frac{\partial{V(s; \theta)}}{\partial{\theta}} = \mathbb{E_A}\left[  \frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} \cdot  \hat{A_t}(s, a) \right]
+$$
+where $\hat{A_t}(s, a)$ is the advantage function. In implementation, we construct loss function in a way such that the policy gradient $g$ equals to the above result
+$$
+L(\theta) = \mathbb{E_t}\left[ \log\pi (a|s; \theta) \hat{A_t}(s, a)  \right]
+$$
+
 
 #### Actor-Critic Algorithm
-There we give a recap of how actor-critic method works. In Actor-Critic algorithm, we use one neural network $\pi(a|s; \theta)$ to approximate $\pi(a|s)$ and use another neural network $q(s, a; w)$ to approximate $Q_{\pi}(s, a)$
+There we give a recap of how actor-critic method works. In Actor-Critic algorithm, we use one neural network $\pi(a|s; \theta)$ to approximate policy function $\pi(a|s)$ and use another neural network $q(s, a; w)$ to approximate value function $Q_{\pi}(s, a)$.
 - Observe state $s_t$, and randomly sample action from policy  $a_t \sim \pi(\cdot | s_t; \Theta_t)$
 - Let agent perform action $a_t$, and get new state $s_{t+1}$ and reward $r_t$ from environment
 - Randomly sample $\tilde{a}_{t+1} \sim \pi(\cdot | s_t; \Theta_t)$ without performing the action
@@ -126,3 +134,29 @@ There we give a recap of how actor-critic method works. In Actor-Critic algorith
 - Differentiate policy network: $ d_{\theta, t} = \frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} $ (again autograd will do this for us)
 - Update policy network: $\theta_{t+1} = \theta_t + \beta \cdot q_t \cdot d_{\theta, t}$.
     - We can also use: $\theta_{t+1} = \theta_t + \beta \cdot \delta_t \cdot d_{\theta, t}$ to update policy network. This is called policy gradient with baseline.
+Essentially, the algorithm alternates between sampling and optimization. The expectation in the above equation indicates that we need to average over a finite batch of empirical samples. 
+
+
+#### Proximal Policy Optimization
+Vanilla policy gradient method uses on-policy update. Concretely, the algorithm samples empirical data from a policy network $\pi_{\theta}$ parameterized with $\theta$. After updating the network itself, the new policy network is $\pi_{\theta_{new}}$ and the old policy $\pi_{\theta}$ is out of use and future sampling will be from $\pi_{\theta_{new}}$. This whole process is not efficient enough. The solution to this is to reuse the old samples to achieve off-policy training. From above importance sampling section, we know that:
+
+$$
+\mathbb{E_{x\sim p(x)}}\left[f \right] = \mathbb{E_{x\sim q(x)}} \left[ \frac{p(x_i)}{q(x_i)}f(x_i) \right]
+$$
+
+Similarly, we can make a change to the objective function of our policy gradient, and the resulting policy gradient will become
+$$
+\begin{aligned}
+g &= \mathbb{E_{{(s_t, a_t)} \sim \pi_{\theta}}}\left[  \frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} \cdot  \hat{A_t}(s, a) \right] \\\
+&= \mathbb{E_{{(s_t, a_t)} \sim \pi_{\theta_{old}}}}\left[ \frac{\pi_{\theta}(s_t, a_t)}{\pi_{\theta_{old}}(s_t, a_t)} \frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} \cdot  \hat{A_t}(s, a) \right]
+\end{aligned}
+$$
+Consequently, the loss becomes
+
+$$
+L(\theta) = \mathbb{E_{{(s_t, a_t)} \sim \pi_{\theta_{old}}}}\left[ \frac{\pi_{\theta}(s_t, a_t)}{\pi_{\theta_{old}}(s_t, a_t)} \hat{A_t}(s, a)  \right]
+$$
+This is so-called surrogate objective function. In the above section, we mentioned how to use chain rule to get the expectation format of gradient, here we just to reverse the process to get the above loss function. 
+
+
+
