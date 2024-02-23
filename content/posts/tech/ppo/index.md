@@ -147,14 +147,14 @@ $$
 Similarly, we can make a change to the objective function of our policy gradient, and the resulting policy gradient will become
 $$
 \begin{aligned}
-g &= \mathbb{E_{{(s_t, a_t)} \sim \pi_{\theta}}}\left[  \frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} \cdot  \hat{A_t}(s, a) \right] \\\
-&= \mathbb{E_{{(s_t, a_t)} \sim \pi_{\theta_{old}}}}\left[ \frac{\pi_{\theta}(s_t, a_t)}{\pi_{\theta_{old}}(s_t, a_t)} \frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} \cdot  \hat{A_t}(s, a) \right]
+g &= \mathbb{E_{{(s_t, a_t)} \sim \pi_{\theta}}}\left[  \frac{\partial{\log\pi (a_t|s_t; \theta)}}{\partial{\theta}} \cdot  \hat{A_t}(s, a) \right] \\\
+&= \mathbb{E_{{(s_t, a_t)} \sim \pi_{\theta_{old}}}}\left[ \frac{\pi_{\theta}(a_t|s_t; \theta)}{\pi_{\theta_{old}}(a_t|s_t)} \frac{\partial{\log\pi (a_t|s_t; \theta)}}{\partial{\theta}} \cdot  \hat{A_t}(s, a) \right]
 \end{aligned}
 $$
 Consequently, the loss becomes
 
 $$
-L(\theta) = \mathbb{E_{{(s_t, a_t)} \sim \pi_{\theta_{old}}}}\left[ \frac{\pi_{\theta}(s_t, a_t)}{\pi_{\theta_{old}}(s_t, a_t)} \hat{A_t}(s, a)  \right]
+L(\theta) = \mathbb{E_{{(s_t, a_t)} \sim \pi_{\theta_{old}}}}\left[ \frac{\pi_{\theta}(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t)} \hat{A_t}(s, a)  \right]
 $$
 This is so-called surrogate objective function. In the above section, we mentioned how to use chain rule to get the expectation format of gradient, here we just to reverse the process to get the above loss function. 
 
@@ -162,5 +162,15 @@ This is so-called surrogate objective function. In the above section, we mention
 In the importance sampling section, we saw that the variance of new distribution could be large when the proposal distribution is not so close to the original distribution. Thus, to deal with this, people add KL diveragence to the loss function to limit the old and new policy difference. Using Largrangian dual method, we can add this constraint to the objective function:
 
 $$
-L(\theta) = \mathbb{E_{{(s_t, a_t)} \sim \pi_{\theta_{old}}}}\left[ \frac{\pi_{\theta}(s_t, a_t)}{\pi_{\theta_{old}}(s_t, a_t)} \hat{A_t}(s, a)   - \beta KL[\pi_{\theta_{old}}(a_t|s_t), \pi_{\theta}(a_t|s_t)]\right]
+L(\theta) = \mathbb{E_{{(s_t, a_t)} \sim \pi_{\theta_{old}}}}\left[ \frac{\pi_{\theta}(a_t|s_t)}{\pi_{\theta_{old}}(a_t|s_t)} \hat{A_t}(s, a)   - \beta KL[\pi_{\theta_{old}}(a_t|s_t), \pi_{\theta}(a_t|s_t)]\right]
 $$
+
+
+### References
+[1] [High-Dimensional Continuous Control Using Generalized Advantage Estimation](https://arxiv.org/pdf/1506.02438.pdf) <br>
+[2] [Proximal Policy Optimization Algorithms](https://arxiv.org/pdf/1707.06347.pdf) <br>
+[3] [Policy Gradient Methods for Reinforcement Learning with Function Approximation](https://papers.nips.cc/paper_files/paper/1999/file/464d828b85b0bed98e80ade0a5c43b0f-Paper.pdf) <br>
+[4] [Dueling Network Architectures for Deep Reinforcement Learning](https://arxiv.org/abs/1511.06581) <br>
+[5] https://cs.uwaterloo.ca/~ppoupart/teaching/cs885-spring18/schedule.html <br>
+[6] https://github.com/wangshusen/DRL <br> 
+[7] https://www.davidsilver.uk/teaching/ <br>
