@@ -159,4 +159,8 @@ $$
 This is so-called surrogate objective function. In the above section, we mentioned how to use chain rule to get the expectation format of gradient, here we just to reverse the process to get the above loss function. 
 
 
+In the importance sampling section, we saw that the variance of new distribution could be large when the proposal distribution is not so close to the original distribution. Thus, to deal with this, people add KL diveragence to the loss function to limit the old and new policy difference. Using Largrangian dual method, we can add this constraint to the objective function:
 
+$$
+L(\theta) = \mathbb{E_{{(s_t, a_t)} \sim \pi_{\theta_{old}}}}\left[ \frac{\pi_{\theta}(s_t, a_t)}{\pi_{\theta_{old}}(s_t, a_t)} \hat{A_t}(s, a)   - \beta KL[\pi_{\theta_{old}}(a_t|s_t), \pi_{\theta}(a_t|s_t)]\right]
+$$
