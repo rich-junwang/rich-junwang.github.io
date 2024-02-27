@@ -103,7 +103,7 @@ In the above section, we talked about softmax cross entropy loss, here we talk a
 
 We apply sigmoid function to the output logits before BCE. Notice that here we apply the function to each element in the tensor, all the elements are not related to each other, this is why BCE is widely used for **multi-label** classification task. 
 
-For each label, we can calculate the loss based on the 
+For each label, we can calculate the loss in the same way as the logistic regression loss. 
 
 ```python
 import torch
