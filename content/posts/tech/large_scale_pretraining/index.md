@@ -190,6 +190,6 @@ Inference speed determines product cost. Over the years, people have proposed va
 [33] [On the difficulty of training Recurrent Neural Networks](https://arxiv.org/pdf/1211.5063.pdf) <br>
 [34] [Limits to Depth-Efficiencies of Self-Attention](https://papers.nips.cc/paper/2020/file/ff4dfdf5904e920ce52b48c1cef97829-Paper.pdf) <br>
 [35] [Baichuan LLM](https://cdn.baichuan-ai.com/paper/Baichuan2-technical-report.pdf) <br>
-[36] [Qwen LLM](https://github.com/QwenLM/Qwen-7B/blob/main/tech_memo.md)
-[37] [A Pretrainer's Guide to Training Data: Measuring the Effects of Data Age, Domain Coverage, Quality, & Toxicity](https://arxiv.org/abs/2305.13169)
-[38] [GLaM: Efficient Scaling of Language Models with Mixture-of-Experts](https://arxiv.org/pdf/2112.06905.pdf)
+[36] [Qwen LLM](https://github.com/QwenLM/Qwen-7B/blob/main/tech_memo.md) <br>
+[37] [A Pretrainer's Guide to Training Data: Measuring the Effects of Data Age, Domain Coverage, Quality, & Toxicity](https://arxiv.org/abs/2305.13169) <br>
+[38] [GLaM: Efficient Scaling of Language Models with Mixture-of-Experts](https://arxiv.org/pdf/2112.06905.pdf) <br>
