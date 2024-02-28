@@ -174,3 +174,4 @@ $$
 [5] https://cs.uwaterloo.ca/~ppoupart/teaching/cs885-spring18/schedule.html <br>
 [6] https://github.com/wangshusen/DRL <br> 
 [7] https://www.davidsilver.uk/teaching/ <br>
+[8] [Fine-Tuning Language Models from Human Preferences](https://arxiv.org/pdf/1909.08593.pdf) <br>
