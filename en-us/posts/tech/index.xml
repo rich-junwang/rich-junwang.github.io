@@ -152,15 +152,6 @@
     </item>
     
     <item>
-      <title>Loss in ML</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/loss/</link>
-      <pubDate>Fri, 18 Jun 2021 00:18:23 +0800</pubDate>
-      
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/loss/</guid>
-      <description>Losses in ML</description>
-    </item>
-    
-    <item>
       <title>Transformer</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/transformer/</link>
       <pubDate>Fri, 18 Jun 2021 00:18:23 +0800</pubDate>
@@ -185,6 +176,15 @@
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/programming_language/remote-development-with-vscode/</guid>
       <description>How to use vscode for remote development</description>
+    </item>
+    
+    <item>
+      <title>Loss in ML</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/loss/</link>
+      <pubDate>Tue, 18 Jun 2019 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/loss/</guid>
+      <description>Losses in ML</description>
     </item>
     
     <item>
