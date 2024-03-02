@@ -1,7 +1,7 @@
 ---
 title: "Loss in ML"
-date: 2021-06-18T00:18:23+08:00
-lastmod: 2021-07-18T00:18:23+08:00
+date: 2019-06-18T00:18:23+08:00
+lastmod: 2019-07-18T00:18:23+08:00
 author: ["Jun"]
 keywords: 
 - 
