@@ -30,8 +30,6 @@ math: true
 ---
 
 ### RL Basics
-There are two fundamental problems in the sequential decision making process: reinforcement learning and planning.
-In reinforcement learning, the environment is unknown and agent interacts with environment to improve its policy. Within reinforcement learning there are two kinds of operation: prediction and control. Prediction is given policy, evaluate the future. Control is optimize the future to find the optimal policy. In RL, we alternatively do predition and control to get the best policy. 
-
+Silent data corruption (gemini paper)
 
 
