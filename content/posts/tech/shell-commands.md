@@ -1,7 +1,7 @@
 ---
 title: "Shell Commands"
-date: 2022-02-11T00:18:23+08:00
-lastmod: 2022-02-11T00:18:23+08:00
+date: 2018-02-11T00:18:23+08:00
+lastmod: 2018-02-11T00:18:23+08:00
 author: ["Jun"]
 keywords: 
 - 
@@ -12,7 +12,7 @@ tags:
 description: "Some of my frequently used commands"
 weight:
 slug: ""
-draft: true # 是否为草稿
+draft: false # 是否为草稿
 comments: true
 reward: false # 打赏
 mermaid: true #是否开启mermaid
@@ -323,4 +323,43 @@ Sometimes we want to sort based on a specific field in string. We can use the fo
 # cut 2nd field, from 2nd field split based on equal sign and sort based on the 3rd field
 # cut field delimiter is -d, and sort field delimiter is -t
 echo xxx | grep yyy | cut -d " " -f2 |  | sort -t = -k 3 -n | uniq | less
+```
+
+### How to Split Large PR
+Sometimes, we have a giant PR which we want to merge. Often times, it gives reviewer a lot of headache. Now we learn how to split large PR into smaller ones. Suppose our feature branch is `my_feature_branch`, then we can get the diff file using:
+#### Step 1
+```shell
+git diff master my_feature_branch > ../huge_pr_file
+```
+#### Step 2
+We switch back to master and create a new feature branch for the first small pr.
+```shell
+git checkout master
+git checkout -b first_small_feature_pr
+```
+
+#### Step 3
+Whilst on the first small feature branch, we apply all the code changes.
+```shell
+git apply ../huge_pr_file
+```
+After running this command, we'll see all the unstaged changes on the `first_small_feature_pr` branch. Now we can stage any files we want, commit and push them. 
+
+
+#### Step 4
+After pushing/committing the first feature pr, we can stash all the remaining changes (so that we won't commit in this branch).
+```shell
+git stash --include-untracked --keep-index
+```
+
+#### Step 5
+Repeat this process from above to create a second PR. Based on the dependency or references, we might have to create a new branch based on the other small PR branch.
+```shell
+git checkout master
+git checkout -b second_small_feature_pr
+
+#OR
+
+git checkout first_small_feature_pr
+git checkout -b second_small_feature_pr
 ```

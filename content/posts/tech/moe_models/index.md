@@ -1,5 +1,5 @@
 ---
-title: "RL Basics"
+title: "MoE Models"
 date: 2020-07-18T00:18:23+08:00
 lastmod: 2020-07-18T00:18:23+08:00
 author: ["Jun"]
@@ -9,10 +9,10 @@ categories:
 - 
 tags: 
     - ML
-description: "RL basics"
+description: "MoE Models"
 weight:
 slug: ""
-draft: false # 是否为草稿
+draft: true # 是否为草稿
 comments: true
 reward: false # 打赏
 mermaid: true #是否开启mermaid
