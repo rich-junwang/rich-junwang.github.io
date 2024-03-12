@@ -216,15 +216,6 @@
     
     <item>
       <title>RL Basics</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/moe_models/</link>
-      <pubDate>Sat, 18 Jul 2020 00:18:23 +0800</pubDate>
-      
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/moe_models/</guid>
-      <description>RL basics</description>
-    </item>
-    
-    <item>
-      <title>RL Basics</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/rl/</link>
       <pubDate>Sat, 18 Jul 2020 00:18:23 +0800</pubDate>
       
@@ -248,6 +239,15 @@
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/loss/</guid>
       <description>Losses in ML</description>
+    </item>
+    
+    <item>
+      <title>Shell Commands</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/shell-commands/</link>
+      <pubDate>Sun, 11 Feb 2018 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/shell-commands/</guid>
+      <description>Some of my frequently used commands</description>
     </item>
     
     <item>
