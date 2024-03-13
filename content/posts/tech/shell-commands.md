@@ -363,3 +363,8 @@ git checkout -b second_small_feature_pr
 git checkout first_small_feature_pr
 git checkout -b second_small_feature_pr
 ```
+
+
+
+### References
+[1] https://itsnotbugitsfeature.com/2019/10/22/splitting-a-big-pull-request-into-smaller-review-able-ones/
