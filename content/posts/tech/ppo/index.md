@@ -175,3 +175,4 @@ $$
 [6] https://github.com/wangshusen/DRL <br> 
 [7] https://www.davidsilver.uk/teaching/ <br>
 [8] [Fine-Tuning Language Models from Human Preferences](https://arxiv.org/pdf/1909.08593.pdf) <br>
+[9] https://zhuanlan.zhihu.com/p/677607581 <br>
