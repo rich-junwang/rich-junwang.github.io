@@ -166,6 +166,14 @@ L(\theta) = \mathbb{E_{{(s_t, a_t)} \sim \pi_{\theta_{old}}}}\left[ \frac{\pi_{\
 $$
 
 
+### Implementation
+For language generation task, generating a token is an action. Agent is the target language model we want to train.
+
+Here we first look at the implementation from Deepspeed-chat model. The actor-critic algorithm requires to load four model in training: actor model, critic model, reference model and reward mdoel. Actor model is the poliy network and critice model is the value network. Reference model and reward model are frozen in training. Reference model is used to contrain the actor model predictions so that they won't divege too much. Reward model gives the current step reward.
+
+
+
+
 ### References
 [1] [High-Dimensional Continuous Control Using Generalized Advantage Estimation](https://arxiv.org/pdf/1506.02438.pdf) <br>
 [2] [Proximal Policy Optimization Algorithms](https://arxiv.org/pdf/1707.06347.pdf) <br>
@@ -176,3 +184,5 @@ $$
 [7] https://www.davidsilver.uk/teaching/ <br>
 [8] [Fine-Tuning Language Models from Human Preferences](https://arxiv.org/pdf/1909.08593.pdf) <br>
 [9] https://zhuanlan.zhihu.com/p/677607581 <br>
+[10] [DeepSpeed-Chat: Easy, Fast and Affordable RLHF Training of ChatGPT-like Models at All Scales
+](https://arxiv.org/abs/2308.01320)
