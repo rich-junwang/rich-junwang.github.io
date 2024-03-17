@@ -137,7 +137,10 @@ Sometimes we have to change file ownership. Check out more [here](https://vhs.co
 chown -R 33:33 /data/uploads
 ```
 
-
+When we want to log into multiple pods, we can use the following command:
+```shell
+xpanes -c "kubectl exec -p {}" $(kubectl get pods | grep my_pod_prefixes | cut -d" " -f1 | tr '\n' ' ')
+```
 
 
 ## References
