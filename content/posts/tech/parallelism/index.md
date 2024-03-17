@@ -1,7 +1,7 @@
 ---
 title: "Parallelism in LLM Training"
-date: 2022-02-08T12:01:14-07:00
-lastmod: 2022-02-08T12:01:14-07:00
+date: 2022-07-08T12:01:14-07:00
+lastmod: 2022-07-08T12:01:14-07:00
 author: ["Jun"]
 keywords: 
 - 
@@ -130,14 +130,22 @@ A few key points in 3D parallelism implementation.
 How to achieve this, in Megatron-LM, this is achieved by first partition all GPUs by pipeline parallelism. Then withnin the same pipeline block, partition GPUs based on tensor parallelism. After that, the number of copies within the pipeline block will be the data parallelism number. 
 
 
+### Training Efficiency Metric
+A simpler metric for evaluation of training efficiency is model FLOPs utilization (MFU) which is defined as the ratio of the observed throughput to the theoretical maximum throughput with peak FLOPs.
+As can be seen in the definition, it's very hardware dependent metric. For A100 GPUs, the metric can be calculated as
+$$
+
+\frac{num\_of\_parameters * 6 * total\_training\_token\_count}{num\_of\_gpus * 312e^{12} * training\_days * 24 * 3600 }
+
+$$ 
+
+Generally a good MFU should be above 40%. 
+
 ## References
 [1] https://huggingface.co/blog/bloom-megatron-deepspeed <br>
 [2] https://github.com/NVIDIA/NeMo <br>
 [3] https://openai.com/blog/techniques-for-training-large-neural-networks/ <br>
 [4] [GPipe: Efficient Training of Giant Neural Networks using Pipeline Parallelism](https://arxiv.org/abs/1811.06965) <br>
 [5] [Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism](https://arxiv.org/abs/1909.08053) <br>
-[6] https://www.deepspeed.ai/tutorials/pipeline/
-
-
-
-
+[6] https://www.deepspeed.ai/tutorials/pipeline/ <br>
+[7] [MegaScale: Scaling Large Language Model Training to More Than 10,000 GPUs](https://arxiv.org/pdf/2402.15627.pdf)
