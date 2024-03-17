@@ -134,9 +134,7 @@ How to achieve this, in Megatron-LM, this is achieved by first partition all GPU
 A simpler metric for evaluation of training efficiency is model FLOPs utilization (MFU) which is defined as the ratio of the observed throughput to the theoretical maximum throughput with peak FLOPs.
 As can be seen in the definition, it's very hardware dependent metric. For A100 GPUs, the metric can be calculated as
 $$
-
-\frac{num\_of\_parameters * 6 * total\_training\_token\_count}{num\_of\_gpus * 312e^{12} * training\_days * 24 * 3600 }
-
+\frac{{num\\_of\\_parameters} * 6 * {total\\_training\\_token\\_count}}{{num\\_of\\_gpus} * 312e^{12} * {training\\_days} * 24 * 3600 }
 $$ 
 
 Generally a good MFU should be above 40%. 
