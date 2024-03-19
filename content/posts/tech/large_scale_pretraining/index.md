@@ -27,9 +27,10 @@ cover:
     caption: "" #图片底部描述
     alt: ""
     relative: false
+math: true
 ---
 
-Large language model pretraining is a very challenging task which requires very strong engineering and science skills. People tend to underestimate efforts needed to train a good large model like GPT3 etc. Most people imagine that they can get decent language models given enough computation resources. The fact is even today only OpenAI is providing LM APIs where people can freely play with and get good performances. In this blog, we'll talk about pretraining from the whole pipeline: data sourcing, collection and processing, tokenization, architecture engineering and evaluation. Hopefully, it would be helpful for foundational model training practioners. 
+Large language model pretraining is a very challenging task which requires very strong engineering and science skills. People tend to underestimate efforts needed to train a good large model like GPT3 etc. Most people imagine that they can get decent language models given enough computation resources. The fact is even today only OpenAI is providing LM APIs where people can freely play with and get good performances. In this blog, we'll talk about pretraining from the whole pipeline: data sourcing, collection and processing, tokenization, architecture engineering and evaluation. Hopefully, it would be helpful for foundational model training practitioners. 
 
 ### Data
 Data is crucial in any ML system. This is true to pretraining as well. As is shown in Gopher paper,  a large, diverse and high-quality dataset is needed to train a good model. In the following table, it shows the datasets used in [`Gopher` model](https://arxiv.org/pdf/2112.11446.pdf) training. Now we're looking at terabytes scale of training data. 
@@ -48,11 +49,11 @@ An ensuing problem with large amount of data is that data quality is hard to con
 There is experiment shows that toxicity filter could have a big impact on model performance. In [37], the authors proposed that instead of using a toxicity filter, inverse toxicity filtering is more helpful. Inverse toxicity filter removes the LEAST toxicity data from training data. 
 
 ### Tokenizer
-Language models compute probability of any string sequence. How to represent the string sequence is determined by tokenizer. Popular options are byte pair encoding (BPE) or wordpiece. As the majority of models are using BPE today, here we focus on BPE based tokenizer. Tokenizer can impact several things in LLM training: (1) a high compression rate (tokenized token numer vs raw token number, the lower the better). Compression rate affects input context length and inference speed. (2) Vocab size. An appropriately sized vocabulary to ensure adequate training of each word embedding.
+Language models compute probability of any string sequence. How to represent the string sequence is determined by tokenizer. Popular options are byte pair encoding (BPE) or wordpiece. As the majority of models are using BPE today, here we focus on BPE based tokenizer. Tokenizer can impact several things in LLM training: (1) a high compression rate (tokenized token number vs raw token number, the lower the better). Compression rate affects input context length and inference speed. (2) Vocab size. An appropriately sized vocabulary to ensure adequate training of each word embedding.
 
 As mentioned in GPT2 paper, BPE effectively interpolates between word level inputs for frequent symbol sequences and character level inputs for infrequent symbol sequences. Directly using greedy method to build BPE merging rules can be problematic. For example, word `cat` can be used in a lot of places like `cat?`, `cat!`, `cat.`. One way to solve this issue is to prevent BPE from generating rules across different character categories (letters, digits, puncts etc).
 
-As people are pivoting in-context learing/instruction learning with large models, tokenization efficiency becomes more important. The following tables from Jurassic-1 paper shows the efficiency of tokenizer on several public dataset. 
+As people are pivoting in-context learning/instruction learning with large models, tokenization efficiency becomes more important. The following tables from Jurassic-1 paper shows the efficiency of tokenizer on several public dataset. 
 
 <p align="center">
     <img alt="tokenization efficiency" src="images/tokenizer.png" width="100%"/>
@@ -81,7 +82,7 @@ All pretrained models are variant of original transformer model. The differences
 | Megatron-Turing NLG | 530B| 270B | Decoder | 
 | LaMDA | 137B| 2810B | Decoder | 
 
-Although all models listed here are autoregressive decoder only model, they actually differ a bit inside the decoder. For instance, to speed up inference time, PaLM is using multi-query attention. Normally, in mutlhead attention, there will be h heads each with a linear project layer for Q, K, V. With multiquery attention, instead of using h different linear project layers for K and V, we can share a single smaller linear project layer for K and a single linear projection layer for V for each head. Then, for different head layers, K and V will be the same. In this way, we can save memory IO and get better latency performance in incremental inference. 
+Although all models listed here are auto-regressive decoder only model, they actually differ a bit inside the decoder. For instance, to speed up inference time, PaLM is using multi-query attention. Normally, in multi-head attention, there will be h heads each with a linear project layer for Q, K, V. With multiquery attention, instead of using h different linear project layers for K and V, we can share a single smaller linear project layer for K and a single linear projection layer for V for each head. Then, for different head layers, K and V will be the same. In this way, we can save memory IO and get better latency performance in incremental inference. 
 
 A systematic study of transformer architecture is done in Ref [29]. Most of recent LLM architecture are following design from this paper. 
 
@@ -103,7 +104,7 @@ From the lineage diagram, we can see that `ChatGPT` model comes from `Codex` mod
 #### Batch Size
 Research [5] shows that there is a critical batch size in pretraining. When training batch size exceeds critical batch size, model performance starts to degrade. Critical batch size is independent of model size and is related to loss. 
 
-Generally small batch size leads to better validation loss when training with the same number of tokens as more random movement of gradient explores more of loss landscape. Often times, small batch size gives better genelization performance as well as pointed out in [27]. The reason given from the paper is that smaller batch size usually converges to flat minimum as oppose to sharp minimum. Intuitively, this is related to graident update in each step is small for large batch size training. 
+Generally small batch size leads to better validation loss when training with the same number of tokens as more random movement of gradient explores more of loss landscape. Often times, small batch size gives better generalization performance as well as pointed out in [27]. The reason given from the paper is that smaller batch size usually converges to flat minimum as oppose to sharp minimum. Intuitively, this is related to graident update in each step is small for large batch size training. 
 <p align="center">
     <img alt="flat sharp minimum" src="images/flat_sharp_minimum.png" width="80%" height=auto/> 
     <br>
@@ -146,6 +147,11 @@ Adept AI has a lengthy [blog post](https://www.adept.ai/blog/sherlock-sdc) talki
 - Grid search: partition nodes into groups and train model on each group in a deterministic way. Find the one that has different training loss curve. 
 - Parameter checksum check: for each data parallel run, check parameter checksum to see if they are the same to determine which stage might be wrong.
 
+PaLM paper proposed adding z-loss to increase the stability of training. The method is to encourage the logits to stay close to zero. For example, we could add a max-z loss to normalize the logits:
+$$
+L_{max\\_z} = 2e^{-4} * z^2
+$$
+where $z$ is the maximum logit value [39]. 
 
 
 ### Efficient Inference
@@ -193,3 +199,6 @@ Inference speed determines product cost. Over the years, people have proposed va
 [36] [Qwen LLM](https://github.com/QwenLM/Qwen-7B/blob/main/tech_memo.md) <br>
 [37] [A Pretrainer's Guide to Training Data: Measuring the Effects of Data Age, Domain Coverage, Quality, & Toxicity](https://arxiv.org/abs/2305.13169) <br>
 [38] [GLaM: Efficient Scaling of Language Models with Mixture-of-Experts](https://arxiv.org/pdf/2112.06905.pdf) <br>
+[39] [Baichuan 2: Open Large-scale Language Models](https://arxiv.org/pdf/2309.10305.pdf) <br>
+[40] [The Falcon Series of Open Language Models](https://arxiv.org/abs/2311.16867) <br>
+
