@@ -27,11 +27,17 @@ cover:
     alt: ""
     relative: false
 ---
-In the last blog, we talked about commonly used AWS commands. In this blog, I'll document some commonly used docker commands to save some time when I need them.
+In the last blog, we talked about commonly used AWS commands. In this blog, I'll document some commonly used docker commands to save some time when I need them. Images defines what the container is. Container is the actually running virtual machine.
 
 ### Image
 ```bash
+# list all images
 docker image ls
+# list all containers
+docker container ls
+# stop/remove a container
+docker container stop container_id
+docker container rm container_id
 
 # pull an image
 docker pull iamge_name
