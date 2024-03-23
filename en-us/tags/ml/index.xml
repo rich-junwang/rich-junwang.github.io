@@ -17,6 +17,15 @@
     </item>
     
     <item>
+      <title>Retrieval Augmented Generation</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/rag/</link>
+      <pubDate>Wed, 18 Oct 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/rag/</guid>
+      <description>RAG system</description>
+    </item>
+    
+    <item>
       <title>Flash Attention</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/flash_attn/</link>
       <pubDate>Sun, 18 Jun 2023 00:18:23 +0800</pubDate>
