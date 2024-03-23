@@ -59,7 +59,7 @@ Hit@k sometimes is also called Top-k accuracy. It is the percentage of search qu
 
 
 
-[x] Effective reformulation of query for code search using crowdsourced knowledge and extra-large data analystics.
+<!-- [x] Effective reformulation of query for code search using crowdsourced knowledge and extra-large data analystics. -->
 
 
 
