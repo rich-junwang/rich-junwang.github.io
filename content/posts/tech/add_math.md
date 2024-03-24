@@ -9,7 +9,7 @@ categories:
 - 
 tags: 
     - Web
-description: "Docker"
+description: "Add math equation in my blog"
 weight:
 slug: ""
 draft: false # 是否为草稿
