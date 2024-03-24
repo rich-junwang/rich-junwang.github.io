@@ -53,6 +53,15 @@
     </item>
     
     <item>
+      <title>Makefile</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/makefile/</link>
+      <pubDate>Sat, 11 Jan 2020 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/makefile/</guid>
+      <description>make sense of makefile</description>
+    </item>
+    
+    <item>
       <title>Shell Commands</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/shell-commands/</link>
       <pubDate>Sun, 11 Feb 2018 00:18:23 +0800</pubDate>

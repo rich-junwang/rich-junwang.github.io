@@ -193,7 +193,7 @@
       <pubDate>Fri, 18 Jun 2021 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/add_math/</guid>
-      <description>Docker</description>
+      <description>Add math equation in my blog</description>
     </item>
     
     <item>
@@ -248,6 +248,15 @@
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/programming_language/remote-development-with-vscode/</guid>
       <description>How to use vscode for remote development</description>
+    </item>
+    
+    <item>
+      <title>Makefile</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/makefile/</link>
+      <pubDate>Sat, 11 Jan 2020 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/makefile/</guid>
+      <description>make sense of makefile</description>
     </item>
     
     <item>
