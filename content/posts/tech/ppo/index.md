@@ -186,7 +186,8 @@ Here we first look at the implementation from Deepspeed-chat model. The actor-cr
 [9] https://zhuanlan.zhihu.com/p/677607581 <br>
 [10] [DeepSpeed-Chat: Easy, Fast and Affordable RLHF Training of ChatGPT-like Models at All Scales
 ](https://arxiv.org/abs/2308.01320) <br>
-
+[11] [Secrets of RLHF in Large Language Models Part I: PPO](https://arxiv.org/pdf/2307.04964.pdf) <br>
+[12] [Secrets of RLHF in Large Language Models Part II: Reward Modeling](https://arxiv.org/pdf/2401.06080.pdf) <br>
 
 <!-- [11] [The 37 Implementation Details of Proximal Policy Optimization](https://iclr-blog-track.github.io/2022/03/25/ppo-implementation-details/) -->
 <!-- [12] [PPO for beginners](https://github.com/ericyangyu/PPO-for-Beginners) -->
