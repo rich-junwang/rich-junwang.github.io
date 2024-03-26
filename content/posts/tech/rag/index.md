@@ -31,7 +31,8 @@ math: true
 
 LLMs has made remarkable progress these days, however, they still exhibit notable limitations. Among these, hallucination is one of the most seen issues. In other words, the generations from LLMs are not grounded. To this end, people are turning to retrieval augmented generation to tackle the issue. In this blog, let’s roll up our sleeves and dive deep into the retrieval augmented system. 
 
-RAG system contains three parts: indexing, querying and generation. Indexing is the offline process which is the crucial data modeling phase. 
+RAG system contains: chunking, indexing, querying and generation. Chunking and indexing both are the offline processes which is the crucial data modeling phase. Querying and generation are online processes.
+
 <p align="center">
     <img alt="mrr" src="images/rag.png" width="80%"/>
     RAG system for QA, image from [1]
@@ -105,6 +106,7 @@ MRR measures “Where is the first relevant item?”. Given a query and a list o
     MRR
     <br>
 </p>
+
 MRR Pros
 
 - This method is simple to compute and is easy to interpret.
@@ -122,10 +124,22 @@ The P@N decision support metric calculates the fraction of n recommendations tha
 
  Average Precision (AP) is a metric about how a single sorted prediction compares with the ground truth. i.e., AP tells how correct a single ranking of documents is, with respect to a single query. Thus, MAP is meaningful when there are multiple test cases.
 
-AP is calculated as the precision@k over the list. 
+AP is calculated as the average of precision@k over the list. 
 <p align="center">
     <img alt="map" src="images/map.png" width="60%"/>
     MAP
+    <br>
+</p>
+
+#### Retrieval Fusion
+The straightforward idea in the era is dense retrieval is that we could combine sparse retrieval and dense retrieval together. A common approach is to use reciprocal rank fusion. The RRF score of document $d$ is:
+$$
+RRF_d = \sum_r^R{\frac{1}{c + r(d)}}
+$$
+assuming there are $R$ ranking items and $r(d)$ is the rank of document $d$. Here $c$ is a constant.
+<p align="center">
+    <img alt="rrf" src="images/rrf.png" width="80%"/>
+    RRF, image from [4]
     <br>
 </p>
 
@@ -136,7 +150,8 @@ AP is calculated as the precision@k over the list.
 ### References
 [1] [Retrieval-Augmented Generation for Large Language Models: A Survey](https://arxiv.org/abs/2312.10997) <br>
 [2] [Evaluation Metrics for Ranking problems: Introduction and Examples](https://queirozf.com/entries/evaluation-metrics-for-ranking-problems-introduction-and-examples) <br>
-
+[3] [Reciprocal Rank Fusion outperforms Condorcet and individual Rank Learning Methods](https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf) <br>
+[4] [Advanced RAG Techniques: an Illustrated Overview](https://pub.towardsai.net/advanced-rag-techniques-an-illustrated-overview-04d193d8fec6)
 
 
 <!-- [x] Effective reformulation of query for code search using crowdsourced knowledge and extra-large data analystics. -->
