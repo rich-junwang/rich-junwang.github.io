@@ -154,9 +154,6 @@ assuming there are $R$ ranking items and $r(d)$ is the rank of document $d$. Her
 [4] [Advanced RAG Techniques: an Illustrated Overview](https://pub.towardsai.net/advanced-rag-techniques-an-illustrated-overview-04d193d8fec6)
 
 
-<!-- [x] Effective reformulation of query for code search using crowdsourced knowledge and extra-large data analystics. -->
-<!-- https://towardsdatascience.com/comprehensive-guide-to-ranking-evaluation-metrics-7d10382c1025 -->
-
-
-
-
+<!-- [x] Effective reformulation of query for code search using crowdsourced knowledge and extra-large data analystics.
+https://towardsdatascience.com/comprehensive-guide-to-ranking-evaluation-metrics-7d10382c1025
+[Comprehensive Guide to Ranking Evaluation Metrics](https://towardsdatascience.com/comprehensive-guide-to-ranking-evaluation-metrics-7d10382c1025) -->

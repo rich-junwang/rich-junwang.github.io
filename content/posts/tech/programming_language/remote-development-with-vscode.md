@@ -142,5 +142,71 @@ Here is the config settings I used.
 ```
 
 
+
+### Remote SSH config
+Install the plugin from [here](https://github.com/Natizyskunk/vscode-sftp?tab=readme-ov-file)
+Connecting to a single serve the `sftp.json` is like this:
+```json
+{
+    "name": "Profile1",
+    "host": "42-32-123-45.mycompute.com",
+    "protocol": "sftp",
+    "port": 22,
+    "secure": true,
+    "username": "ubuntu",
+    "remotePath": "/home/ubuntu/myproject", // <--- This is the path which will be downloaded if you "Download Project"
+    "password": "password",
+    "openSsh": false,
+    "context": "my_local_directory_on_mac", // source dir
+    "privateKeyPath": "/Users/xxx/.ssh/id_rsa",  // needed when use passwordless ssh
+    "uploadOnSave": true,
+    "useTempFile": false,
+    "ignore": [
+      "**/.vscode/**",
+      "**/.git/**",
+      "**/.DS_Store"
+    ]
+}
+```
+
+Connecting to multiple servers, the "sftp.json" is like this:
+```json
+{
+    "protocol": "sftp",
+    "port": 22,
+    "secure": true,
+    "remotePath": "/home/ubuntu/myproject", // <--- This is the path which will be downloaded if you "Download Project"
+    "openSsh": false,
+    "context": "my_local_directory_on_mac", // source dir
+    "privateKeyPath": "/Users/xxx/.ssh/id_rsa",  // needed when use passwordless ssh
+    "uploadOnSave": false,
+    "useTempFile": false,
+    "ignore": [
+      "**/.vscode/**",
+      "**/.git/**",
+      "**/.DS_Store"
+    ],
+    "profiles": {
+      "my_server1":{
+        "name": "Profile1",
+        "host": "42-32-123-45.mycompute.com",
+        "username": "ubuntu",
+        "password": "password"
+      },
+      "my_server2":{
+        "name": "Profile2",
+        "host": "42-32-123-46.mycompute.com",
+        "username": "ubuntu",
+        "password": "password"
+      },
+      "my_server3":{
+        "name": "Profile3",
+        "host": "42-32-123-47.mycompute.com",
+        "username": "ubuntu",
+        "password": "password"
+      }
+    }
+}
+```
 ## References
 [1] https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf
