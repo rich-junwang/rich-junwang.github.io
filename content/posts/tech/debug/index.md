@@ -44,3 +44,16 @@ gdb python process-id
 # python code
 import pdb; pdb.set_trace()
 ```
+
+
+### Tools
+
+#### Shortcuts
+These shortcuts can be redefined in the keymap(Pycharm) or Keyboard shortcuts (VScode), but we need to know the meaning of these keys. 
+Pycharm
+- reformatting: CMD + ALT + L -> convert json line format to json format
+- join lines: CTRL + SHIFT + J -> convert json format to json line format. When in use, we can select the parts we want to join.
+
+VSCode
+- reformatting: SHIFT + ALT + F -> convert json line format to json format
+- join lines: CTRL + J -> convert json format to json line format

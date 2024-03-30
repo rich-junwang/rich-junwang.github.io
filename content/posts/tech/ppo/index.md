@@ -192,3 +192,4 @@ Here we first look at the implementation from Deepspeed-chat model. The actor-cr
 
 <!-- [11] [The 37 Implementation Details of Proximal Policy Optimization](https://iclr-blog-track.github.io/2022/03/25/ppo-implementation-details/) -->
 <!-- [12] [PPO for beginners](https://github.com/ericyangyu/PPO-for-Beginners) -->
+<!-- [13] [A Survey of Reinforcement Learning from Human Feedback](https://arxiv.org/abs/2312.14925) -->
