@@ -82,9 +82,14 @@ All pretrained models are variant of original transformer model. The differences
 | Megatron-Turing NLG | 530B| 270B | Decoder | 
 | LaMDA | 137B| 2810B | Decoder | 
 
-Although all models listed here are auto-regressive decoder only model, they actually differ a bit inside the decoder. For instance, to speed up inference time, PaLM is using multi-query attention. Normally, in multi-head attention, there will be h heads each with a linear project layer for Q, K, V. With multiquery attention, instead of using h different linear project layers for K and V, we can share a single smaller linear project layer for K and a single linear projection layer for V for each head. Then, for different head layers, K and V will be the same. In this way, we can save memory IO and get better latency performance in incremental inference. 
-
+Although all models listed here are auto-regressive decoder only model, they actually differ a bit inside the decoder. For instance, to speed up inference time, PaLM is using multi-query attention. Normally, in multi-head attention, there will be h heads each with a linear project layer for Q, K, V. With multiquery attention, instead of using h different linear project layers for K and V, we can share a single smaller linear project layer for K and a single linear projection layer for V for each head. Then, for different head layers, K and V will be the same. In this way, we can save memory IO and get better latency performance in incremental inference. To speed up training, people also proposed parallel layer architecture as shown below.
+<p align="center">
+    <img alt="transformer" src="images/transformer.png" width="80%" height=auto/> 
+    <em>Model Architecture</em>
+    <br>
+</p>
 A systematic study of transformer architecture is done in Ref [29]. Most of recent LLM architecture are following design from this paper. 
+
 
 People usually call the embedding dim as the width of transformer and number of layers as the depth. There is a optimal depth-to-width
 allocation for a given self-attention network size as is shown in [34].
@@ -201,4 +206,4 @@ Inference speed determines product cost. Over the years, people have proposed va
 [38] [GLaM: Efficient Scaling of Language Models with Mixture-of-Experts](https://arxiv.org/pdf/2112.06905.pdf) <br>
 [39] [Baichuan 2: Open Large-scale Language Models](https://arxiv.org/pdf/2309.10305.pdf) <br>
 [40] [The Falcon Series of Open Language Models](https://arxiv.org/abs/2311.16867) <br>
-
+[41] [Simplifying Transformer Blocks](https://arxiv.org/abs/2311.01906) <br>
