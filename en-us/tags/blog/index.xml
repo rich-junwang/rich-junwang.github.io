@@ -6,7 +6,16 @@
     <description>Recent content in Blog on Jun&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 05 Jul 2023 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/blog/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 05 Mar 2024 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ML System</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_system/</link>
+      <pubDate>Tue, 05 Mar 2024 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_system/</guid>
+      <description>ML System</description>
+    </item>
+    
     <item>
       <title>PPO and Its Implementation</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/ppo/</link>
