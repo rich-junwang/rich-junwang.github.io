@@ -208,5 +208,26 @@ Connecting to multiple servers, the "sftp.json" is like this:
     }
 }
 ```
+
+### Paste and Indentation
+Install `Paste and Indent` from g3rry
+Adding the following to keybindings json
+```
+{
+    "key": "ctrl+v",
+    "command": "pasteAndIndent.action",
+    "when": "editorTextFocus && !editorReadonly"
+},
+{
+    "key": "ctrl+v",
+    "command": "editor.action.clipboardPasteAction",
+    "when": "!editorTextFocus"
+},
+{
+    "key": "ctrl+shift+v",
+    "command": "editor.action.clipboardPasteAction",
+    "when": "editorTextFocus && !editorReadonly"
+}
+```
 ## References
 [1] https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf

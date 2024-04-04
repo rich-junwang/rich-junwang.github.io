@@ -28,3 +28,9 @@ cover:
     relative: false
 ---
 
+
+
+<!-- ## References
+[1] [Characterization of Large Language Model Development in the Datacenter](https://arxiv.org/pdf/2403.07648.pdf%EF%BC%8C)
+[2] https://github.com/intelligent-machine-learning/dlrover
+[3] [MegaScale: Scaling Large Language Model Training to More Than 10,000 GPUs](https://arxiv.org/abs/2402.15627) -->
