@@ -78,13 +78,20 @@ Allreduce means that the reduce operation will be conducted throughout all nodes
 
 
 ### Mixed Precision Training
-Noramlly, during training we use single precision (32-bit floats). However, for LLM pretraining, this requires high-bandwidth computing platform. To address this challenge, people proposed mixed precision training. As the name suggested, mixed precision training is to leverage mixed different data type during training process, e.g. fp32 and fp16 or fp32 and bf16. We train model mostly in 
-half precisionn and leave some critical ops in fp32. ss
+Normally, during training we use single precision (32-bit floats). However, for LLM pretraining, this requires high-bandwidth computing platform. To address this challenge, people proposed mixed precision training. As the name suggested, mixed precision training is to leverage mixed different data type during training process, e.g. fp32 and fp16 or fp32 and bf16. We train model mostly in 
+half precision and leave some critical ops in fp32. ss
 <p align="center">
     <img alt="mixed precision training" src="images/mixed_precision.png" width="60%" height=auto/> 
     <br>
     <em>Mixed precision training (image from fastai)</em>
     <br>
 </p>
+
 Since it has same range as FP32, BF16 mixed precision training skips the scaling steps. All other Mixed Precision steps remain the same as FP16 Mixed Precision.
 We leave the batchnorm layers in single precision (they don’t have many weights so it’s not a big memory challenge) and compute the loss in single precision (which means converting the last output of the model in single precision before passing it to the loss).
+The training loop is as follows:
+- compute the output with the FP16 model, then the loss
+- back-propagate the gradients in half-precision.
+- copy the gradients in FP32 precision
+- do the update on the master model (in FP32 precision)
+- copy the master model in the FP16 model.

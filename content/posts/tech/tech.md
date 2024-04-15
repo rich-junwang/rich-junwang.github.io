@@ -41,13 +41,3 @@ At the end of the day, we want to ask ourselves what kind of innovations/changes
 
 
 All big techs today are relying on leetcode to select best talents which, in my opinion, is quite unfortunate.(To be continued)
-
-
-```html
-<div>
-    科技代码科技代码科技代码科技代码科技代码科技代码科技代码科技代码科技代码科技代码科技代码科技代码科技代码科技代码科技代码科技代码科技代码科技代码科技代码科技代码科技代码
-    科技代码
-    科技代码
-</div>
-```
-

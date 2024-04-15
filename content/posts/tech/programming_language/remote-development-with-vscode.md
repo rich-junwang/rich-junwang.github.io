@@ -138,6 +138,16 @@ Here is the config settings I used.
       //失去焦点后自动保存
     "files.autoSave": "onFocusChange",
     "terminal.integrated.inheritEnv": false,
+    "gitlens.codeLens.recentChange.enabled": false,
+    "gitlens.blame.avatars": false,
+    "gitlens.blame.format": "${message|20?} ${agoOrDate|14-}",
+    "gitlens.hovers.avatars": false,
+    "json.format.enable": true,
+    "files.associations": {
+        "*.jsonl": "json"
+    },
+    "update.showReleaseNotes": false,
+    "workbench.editor.revealIfOpen": true
 }
 ```
 

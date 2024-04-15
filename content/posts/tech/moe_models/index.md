@@ -57,13 +57,6 @@ For dynamic routing, which token is routed to which expert is unknown upfront, s
 
 
 
-
-
-
-
-
-
-
 ### Training
 
 Directly training MoE could be challenging due to low efficiency. One popular approach is called sparse upcycling to use pretrained dense model to initialize the sparse model and continue to train for certain steps.
@@ -105,4 +98,5 @@ Directly training MoE could be challenging due to low efficiency. One popular ap
 [3] [BASE Layers: Simplifying Training of Large, Sparse Models](https://arxiv.org/pdf/2103.16716.pdf) <br>
 [4] [Mixtral of Experts](https://arxiv.org/pdf/2401.04088.pdf) <br>
 [5] [Sparse Upcycling: Training Mixture-of-Experts from Dense Checkpoints](https://arxiv.org/abs/2212.05055) <br>
+[6] [Beyond Distillation: Task-level Mixture-of-Experts for Efficient Inference](https://arxiv.org/pdf/2110.03742.pdf)
 <!-- [6] https://zhuanlan.zhihu.com/p/674751021 -->
