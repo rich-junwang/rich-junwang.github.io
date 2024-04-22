@@ -6,7 +6,25 @@
     <description>Recent content in ML on Jun&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 18 Oct 2023 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/ml/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 18 Dec 2023 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/ml/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Coder Training</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/coder_training/</link>
+      <pubDate>Mon, 18 Dec 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/coder_training/</guid>
+      <description>Large coder model pretraining</description>
+    </item>
+    
+    <item>
+      <title>Model Evaluation</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/model_eval/</link>
+      <pubDate>Wed, 18 Oct 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/model_eval/</guid>
+      <description>Model Evaluation</description>
+    </item>
+    
     <item>
       <title>MoE Models</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/moe_models/</link>
