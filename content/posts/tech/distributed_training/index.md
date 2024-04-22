@@ -42,26 +42,30 @@ There are some common communication ops, such as Broadcast, Reduce, Allreduce, S
 Broadcast is to distribute data from one node to other nodes. Scatter is to distribute a portion of data to different nodes. 
 <p align="center">
     <img alt="flat sharp minimum" src="images/broadcast_and_scatter.png" width="40%" height=auto/> 
-    <br>
     <em>MPI broadcast and scatter</em>
     <br>
 </p>
 
 
+### Gather
+Gather is an inverse operation of scatter.
+<p align="center">
+    <img alt="flat sharp minimum" src="images/gather.png" width="40%" height=auto/> 
+    <em>MPI gather</em>
+    <br>
+</p>
 
 ### Reduce and Allreduce
 Reduce is a collections of ops. Specifically, the operator will process an array from each process and get reduced number of elements.
 <!-- ![](images/reduce1.png) -->
 <p align="center">
     <img alt="flat sharp minimum" src="images/reduce1.png" width="60%" height=auto/> 
-    <br>
     <em>MPI reduce</em>
     <br>
 </p>
 
 <p align="center">
     <img alt="flat sharp minimum" src="images/reduce2.png" width="60%" height=auto/> 
-    <br>
     <em>MPI reduce</em>
     <br>
 </p>
@@ -69,12 +73,20 @@ Reduce is a collections of ops. Specifically, the operator will process an array
 Allreduce means that the reduce operation will be conducted throughout all nodes. An all_reduce takes in a local array on each machine and returns the sum of all the arrays on every machine. Here we show flat all reduce operation below. However, the most common algorithm for doing this is a variant of the “ring allreduce”,
 <p align="center">
     <img alt="flat sharp minimum" src="images/allreduce.png" width="60%" height=auto/> 
-    <br>
     <em>MPI Allreduce</em>
     <br>
 </p>
 
 
+The ReduceScatter operation performs the same operation as Reduce, except that the result is scattered in equal-sized blocks between ranks, each rank getting a chunk of data based on its rank index. In the figure below, each rank provides an array in of N (also called N element buffer, 4 here) values, 
+
+<p align="center">
+    <img alt="flat sharp minimum" src="images/reduce_scatter.png" width="60%" height=auto/> 
+    <em>MPI ReduceScatter</em>
+    <br>
+</p>
+
+Note: Executing ReduceScatter, followed by AllGather, is equivalent to the AllReduce operation.
 
 
 ### Mixed Precision Training
@@ -95,3 +107,7 @@ The training loop is as follows:
 - copy the gradients in FP32 precision
 - do the update on the master model (in FP32 precision)
 - copy the master model in the FP16 model.
+
+
+### References
+1. https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/collectives.html
