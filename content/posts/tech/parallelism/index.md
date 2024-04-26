@@ -73,7 +73,7 @@ $$
 
 For column parallel partition, there is
 $$
-Y = XW = X\begin{bmatrix} W_1 \\\ W_2\end{bmatrix} = XW_1 + XW_2
+Y = XW = X\begin{bmatrix} W_1, W_2\end{bmatrix} = XW_1 + XW_2
 $$
 Note that for row parallel, we need to partition the input into two parts as well.
 In original transformer MLP layer, there are two projection steps: `hidden.size -> 4 * hidden.size -> hidden.size`. In this case, in Megatron-LM MLP implementation, it first does column parallel partition, generating two matrices, then a row parallel partition. This is shown in the following figure:
