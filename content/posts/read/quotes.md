@@ -63,6 +63,7 @@ better...
 12. Winners worry about winning; losers worry about winners
 13. Slow is smooth and smooth is fast
 14. Success is not final, failure is not fatal, it is the courage to continue that counts.
+15. Doublethink, to deliberately believe in lies, while knowing they're false. Examples of this in everyday life: "Oh, I need to be pretty to be happy. I need surgery to be pretty. I need to be thin, famous, fashionable." Our young men today are being told that women are whores, bitches, things to be screwed, beaten, shit on, and shamed. This is a marketing holocaust. Twenty-four hours a day for the rest of our lives, the powers that be are hard at work dumbing us to death. So to defend ourselves, and fight against assimilating this dullness into our thought processes, we must learn to read. To stimulate our own imagination, to cultivate our own consciousness, our own belief systems. We all need skills to defend, to preserve our own minds. (Detachment)
 
 
 ### Part II

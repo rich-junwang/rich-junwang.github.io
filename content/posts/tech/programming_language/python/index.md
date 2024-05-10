@@ -105,6 +105,8 @@ If you also want the same stacktrace you get if you do not catch the exception, 
 ```python
 import traceback
 print(traceback.format_exc())
+# or
+traceback.print_exc()
 ```
 
 If you use the logging module, you can print the exception to the log (along with a message) like this:
