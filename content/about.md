@@ -79,5 +79,7 @@ All my publications can be found on <a href="https://scholar.google.com/citation
 <li>Reviewer for AMLC 2020, 2021</li>
 <li>Reviewer for ICLR 2022</li>
 <li>Reviewer for AAAI 2021</li>
+
+I served as the Amazon Research Award reviewer and was an AC for AMLC conference at Amazon.
 </div>
 
