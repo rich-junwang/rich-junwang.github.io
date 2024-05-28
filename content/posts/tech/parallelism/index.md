@@ -147,4 +147,5 @@ Generally a good MFU should be above 40%.
 [5] [Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism](https://arxiv.org/abs/1909.08053) <br>
 [6] https://www.deepspeed.ai/tutorials/pipeline/ <br>
 [7] [MegaScale: Scaling Large Language Model Training to More Than 10,000 GPUs](https://arxiv.org/pdf/2402.15627.pdf) <br>
-[8] [AMSP: Reducing Communication Overhead of ZeRO for Efficient LLM Training](https://arxiv.org/abs/2311.00257) 
+[8] [AMSP: Reducing Communication Overhead of ZeRO for Efficient LLM Training](https://arxiv.org/abs/2311.00257) <br>
+[9] [Reducing Activation Recomputation in Large Transformer Models](https://browse.arxiv.org/pdf/2205.05198)

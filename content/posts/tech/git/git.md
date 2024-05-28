@@ -207,5 +207,14 @@ git checkout -b second_small_feature_pr
 
 
 
+### How to show difference of commits without checkout to the branch
+```bash
+# If we know the git commit
+git diff xxxx~ xxxx
+
+# if we know the branch name
+git diff my_branch~ my_branch
+```
+
 ### References
 [1] https://itsnotbugitsfeature.com/2019/10/22/splitting-a-big-pull-request-into-smaller-review-able-ones/
