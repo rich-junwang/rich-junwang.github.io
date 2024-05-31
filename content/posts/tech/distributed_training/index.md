@@ -30,8 +30,16 @@ cover:
 
 Distributed infrastructure is a big and interesting topic. I don't work on infrastructure side, but I run into the concepts a lot, so I create this blog to help me understand more about infrastructure.
 
-Most of today's distributed framework involves three parts, collective communication, data loading and preprocessing and distributed scheduler. We'll look into these three parts resepectively.
+Most of today's distributed framework involves three parts, collective communication, data loading and preprocessing and distributed scheduler. We'll look into these three parts respectively.
 
+
+## Distributed System Overview
+In the diagram below, I'm showing the modern distributed network communication implementation stack, from the bottom hardware to top level application.
+<p align="center">
+    <img alt="flat sharp minimum" src="images/system.png" width="100%" height=auto/> 
+    <em>Training system architecture</em>
+    <br>
+</p>
 
 ## Collective Communication
 We can start with point to point communication. Normally point to point communication refers to two processes communication and it's one to one communication. Accordingly, collective communication refers to 1 to many or many to many communication. In distributed system, there are large amount of communications among the nodes. 
