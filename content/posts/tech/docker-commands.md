@@ -29,6 +29,17 @@ cover:
 ---
 In the last blog, we talked about commonly used AWS commands. In this blog, I'll document some commonly used docker commands to save some time when I need them. Images defines what the container is. Container is the actually running virtual machine.
 
+
+### Docker setup
+```bash
+# check docker status
+systemctl show --property ActiveState docker
+
+# if it's inactive, then start the docker daemon
+sudo systemctl start docker
+```
+
+
 ### Image
 ```bash
 # list all images
@@ -91,3 +102,13 @@ We can use the following command to build docker image. Notice that the path is 
 docker build -f Dockerfile_my_docker -t ${TAG} . --build-arg REGION=${region}
 ```
 
+
+### Login AWS ECR
+```
+REGION=us-east-1 ; aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT}.dkr.ecr.${REGION}.amazonaws.com/ 
+
+# sometimes we can get errors like `no basic auth credentials`, simple method is to remove docker config file
+rm .docker/config.json
+
+# Due to some reason, the docker is not able to update the config file.
+```
