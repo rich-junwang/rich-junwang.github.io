@@ -125,6 +125,15 @@
     </item>
     
     <item>
+      <title>Pytorch Multiple-GPU Training</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/pytorch/</link>
+      <pubDate>Sat, 11 Jun 2022 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/pytorch/</guid>
+      <description>PyTorch..</description>
+    </item>
+    
+    <item>
       <title>Blog</title>
       <link>https://rich-junwang.github.io/en-us/posts/blog/blog/</link>
       <pubDate>Thu, 05 May 2022 00:18:23 +0800</pubDate>
@@ -248,15 +257,6 @@
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/transformer/</guid>
       <description>Transformer details</description>
-    </item>
-    
-    <item>
-      <title>Pytorch Multiple-GPU Training</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/pytorch/</link>
-      <pubDate>Mon, 11 Jan 2021 00:18:23 +0800</pubDate>
-      
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/pytorch/</guid>
-      <description>PyTorch..</description>
     </item>
     
     <item>
