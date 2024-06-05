@@ -1,7 +1,7 @@
 ---
 title: "Pytorch Multiple-GPU Training"
-date: 2021-01-11T00:18:23+08:00
-lastmod: 2021-01-11T00:18:23+08:00
+date: 2022-06-11T00:18:23+08:00
+lastmod: 2023-04-11T00:18:23+08:00
 author: ["Jun"]
 keywords: 
 - 
@@ -37,6 +37,22 @@ Solution: when we load model, we only load parameters and strip all state inform
 ```
 python3 -m torch.distributed.launch --nnodes=1 --nproc_per_node=8 my_script.py my_config_file 
 ```
+
+
+### Gradient Accumulation
+Gradient accumulation is a way to virtually increase the batch size during training. In gradient accumulation, `N` batches go through the forward path and backward path, and each time, the gradient is computed and accumulated (usually summed or averaged), but model parameters are not updated. Model parameters are updated after iterate through all `N` batches. The logic is as follows:
+```
+for step, oneBatch in enumerate(dataloader):
+   ... 
+   ypred = model(oneBatch)
+   loss = loss_func(ytrue, ypred)
+   loss.backward() # release all activations memory
+   if step % accumulation_step == 0: 
+      # update weights every accumulation_step steps
+      loss.step() 
+      loss.zero_grad()
+```
+In order to backpropagate, all the hidden activations must be stored until we call loss.backward(). In contrast, if we only add losses together (accumulating losses), all the activation memory won't be released, so we can't save memory. 
 
 
 ### Install Apex
