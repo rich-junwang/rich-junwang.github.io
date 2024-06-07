@@ -26,6 +26,15 @@
     </item>
     
     <item>
+      <title>All Gather and Gradients</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/pytorch/all_gather_and_gradient_backpropagation/</link>
+      <pubDate>Mon, 11 Dec 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/pytorch/all_gather_and_gradient_backpropagation/</guid>
+      <description>PyTorch..</description>
+    </item>
+    
+    <item>
       <title>Model Evaluation</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/model_eval/</link>
       <pubDate>Wed, 18 Oct 2023 00:18:23 +0800</pubDate>
@@ -126,10 +135,10 @@
     
     <item>
       <title>Pytorch Multiple-GPU Training</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/pytorch/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/pytorch/pytorch/</link>
       <pubDate>Sat, 11 Jun 2022 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/pytorch/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/pytorch/pytorch/</guid>
       <description>PyTorch..</description>
     </item>
     

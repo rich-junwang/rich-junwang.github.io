@@ -29,6 +29,9 @@
     <loc>https://rich-junwang.github.io/en-us/tags/ml/</loc>
     <lastmod>2023-12-18T00:18:23+08:00</lastmod>
   </url><url>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/pytorch/all_gather_and_gradient_backpropagation/</loc>
+    <lastmod>2023-12-11T00:18:23+08:00</lastmod>
+  </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/model_eval/</loc>
     <lastmod>2023-10-18T00:18:23+08:00</lastmod>
   </url><url>
@@ -65,7 +68,7 @@
     <loc>https://rich-junwang.github.io/en-us/posts/tech/diffusion/</loc>
     <lastmod>2022-07-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/pytorch/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/pytorch/pytorch/</loc>
     <lastmod>2023-04-11T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/blog/blog/</loc>
