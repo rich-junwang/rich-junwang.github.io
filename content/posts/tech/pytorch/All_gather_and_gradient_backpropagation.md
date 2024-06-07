@@ -66,7 +66,7 @@ model.weight.data[:] = 1.
 model = model.cuda()
 x = torch.ones((bs_each, 1), requires_grad=True).cuda()
 y = model(x)
-ys = [torch.zeros_like(y) for i in range(get_mpi_size())]
+ys = [torch.zeros_like(y) for i in range(world_size)]
 torch.distributed.all_gather(ys, y)
 print(y.grad_fn)
 #<MmBackward object at 0x7ff10dfea500>
