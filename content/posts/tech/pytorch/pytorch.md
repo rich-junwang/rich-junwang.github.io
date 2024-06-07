@@ -30,14 +30,6 @@ cover:
 
 Using PyTorch for NN model training on single GPU is simple and easy. However, when it comes to multiple GPU training, there could be various of issues. In this blog, I'll summarize all kinds of issues I ran into during model training/evaluation.
 
-### Loading a pretrained checkpoint
-A lot of times when we save a checkpoint of a pretrained model, we also save the trainer (or model state) information. This means when we load model checkpoint again, model will already have a preallocated device. When we use the same number of GPU to continue training, it will work as expected. However, the issue will arise when we have different number of GPUs for two runs. Let's say, we first trained model on a single GPU, then we want to use multiple GPU to continue the training. When we move model to multiple GPU, there will be something weird. For instance, on GPU 0, you might see multiple process (normally one process per GPU). Or in other cases, you can see GPU 0 has much higher memory usage than other GPUs. 
-
-Solution: when we load model, we only load parameters and strip all state information. This might be tricky sometimes. The simplest way to solve this issue is to wrap the command with with PyTorch distributed data parallel. 
-```
-python3 -m torch.distributed.launch --nnodes=1 --nproc_per_node=8 my_script.py my_config_file 
-```
-
 
 ### Gradient Accumulation
 Gradient accumulation is a way to virtually increase the batch size during training. In gradient accumulation, `N` batches go through the forward path and backward path, and each time, the gradient is computed and accumulated (usually summed or averaged), but model parameters are not updated. Model parameters are updated after iterate through all `N` batches. The logic is as follows:
@@ -53,7 +45,19 @@ for step, oneBatch in enumerate(dataloader):
       loss.zero_grad()
 ```
 In order to backpropagate, all the hidden activations must be stored until we call loss.backward(). In contrast, if we only add losses together (accumulating losses), all the activation memory won't be released, so we can't save memory. 
+<!-- ```
+totalLoss = 0
+for step, eachBatch in enumerate(dataloader):
+   ... 
+   loss = loss_func(ytrue, ypred)
+   totalLoss += loss # accumulate the loss
+   if step % 5 ==0: 
+      totalLoss.backward()
+      totalLoss.step()
+      totalLoss.zero_grad()
+      totalLoss=0
 
+``` -->
 
 ### Install Apex
 Sometimes to use the latest distributed training feature, we have to install Apex. As Apex is closely coupled with Cuda, we need to follow the next few steps to correctlly install apex.
@@ -117,4 +121,12 @@ print (y)
 # output
 [[ 0  2]
  [ 9 11]]
+```
+
+### Loading a pretrained checkpoint
+A lot of times when we save a checkpoint of a pretrained model, we also save the trainer (or model state) information. This means when we load model checkpoint again, model will already have a preallocated device. When we use the same number of GPU to continue training, it will work as expected. However, the issue will arise when we have different number of GPUs for two runs. Let's say, we first trained model on a single GPU, then we want to use multiple GPU to continue the training. When we move model to multiple GPU, there will be something weird. For instance, on GPU 0, you might see multiple process (normally one process per GPU). Or in other cases, you can see GPU 0 has much higher memory usage than other GPUs. 
+
+Solution: when we load model, we only load parameters and strip all state information. This might be tricky sometimes. The simplest way to solve this issue is to wrap the command with with PyTorch distributed data parallel. 
+```
+python3 -m torch.distributed.launch --nnodes=1 --nproc_per_node=8 my_script.py my_config_file 
 ```
