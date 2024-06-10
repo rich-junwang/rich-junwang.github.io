@@ -97,6 +97,14 @@ The ReduceScatter operation performs the same operation as Reduce, except that t
 Note: Executing ReduceScatter, followed by AllGather, is equivalent to the AllReduce operation.
 
 
+### Difference between All2All and All_gather
+The following figure shows the difference between MPI all2all and all_gather.
+<p align="center">
+    <img alt="all2all and allgather" src="images/all2all_and_allgather.png" width="60%" height=auto/> 
+    <em>MPI all2all and all_gather</em>
+    <br>
+</p>
+
 ### Mixed Precision Training
 Normally, during training we use single precision (32-bit floats). However, for LLM pretraining, this requires high-bandwidth computing platform. To address this challenge, people proposed mixed precision training. As the name suggested, mixed precision training is to leverage mixed different data type during training process, e.g. fp32 and fp16 or fp32 and bf16. We train model mostly in 
 half precision and leave some critical ops in fp32. ss
