@@ -12,7 +12,7 @@ tags:
 description: "Distributed data processing"
 weight:
 slug: ""
-draft: true # 是否为草稿
+draft: false # 是否为草稿
 comments: true
 reward: false # 打赏
 mermaid: true #是否开启mermaid
@@ -32,8 +32,8 @@ math: true
 
 1. Probability proportional to size sampling (PPS sampling)
 $$
-q_i = \frac{p_i^\alpha}{\sum_j p_j^\alpha}
+q_i = \frac{p_i^t}{\sum_j p_j^t}
 $$
 
-Here $p_i$ is the number of sequences in the $i_{th}$ dataset. In this sampling, it will keep the largest dataset intact and up sample the remaining dataset to conform to the distribution in q. When $\alpha$ is 0, it's uniform sampling. When $\alpha$ is 1.0, no up-sampling will be performed.
+Here $p_i$ is the number of sequences in the $i_{th}$ dataset. In this sampling, it will keep the largest dataset intact and up sample the remaining dataset to conform to the distribution in q. $t$ is the temperature. When $t$ is 0, it's uniform sampling. When $t$ is 1.0, no up-sampling will be performed.
 
