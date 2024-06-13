@@ -16,5 +16,14 @@
       <description>Distributed data processing</description>
     </item>
     
+    <item>
+      <title>Data Sampling in Training</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/data_sampling/</link>
+      <pubDate>Fri, 05 May 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/data_sampling/</guid>
+      <description>Distributed data processing</description>
+    </item>
+    
   </channel>
 </rss>
