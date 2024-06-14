@@ -12,7 +12,7 @@ tags:
 description: "Distributed data processing"
 weight:
 slug: ""
-draft: false # 是否为草稿
+draft: true # 是否为草稿
 comments: true
 reward: false # 打赏
 mermaid: true #是否开启mermaid
