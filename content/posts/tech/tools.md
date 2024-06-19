@@ -1,5 +1,5 @@
 ---
-title: "Tmux"
+title: "All Kinds of Tools"
 date: 2022-05-05T00:17:58+08:00
 lastmod: 2022-05-05T00:17:58+08:00
 author: ["Jun"]
@@ -27,6 +27,12 @@ cover:
     alt: ""
     relative: false
 ---
+
+
+### Github
+1. How to clone github private repo on a new machine
+(1) Add ssh public key into github webpage. settings -> ssh and GPG keys -> add ssh key.
+(2) To clone a repo, use ssh link. git@github.com:xxx 
 
 
 ### Search in Tmux
