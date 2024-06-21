@@ -105,6 +105,16 @@ The following figure shows the difference between MPI all2all and all_gather.
     <br>
 </p>
 
+
+### Ring-AllReduce Implementation
+
+An all_reduce takes in a local array on each machine and returns the sum of all the arrays on every machine. The most common algorithm for doing this is a variant of the “ring allreduce”, which we’ll show how it works below. In practice, it's usually optimized for better performance. It has two steps:
+- Reduce-scatter
+- All-gather
+
+
+
+
 ### Mixed Precision Training
 Normally, during training we use single precision (32-bit floats). However, for LLM pretraining, this requires high-bandwidth computing platform. To address this challenge, people proposed mixed precision training. As the name suggested, mixed precision training is to leverage mixed different data type during training process, e.g. fp32 and fp16 or fp32 and bf16. We train model mostly in 
 half precision and leave some critical ops in fp32. ss
@@ -127,3 +137,4 @@ The training loop is as follows:
 
 ### References
 1. https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/collectives.html
+2. Andrew Gibiansky. Bringing HPC techniques to deep learning. http://research.baidu.com/bringing-hpc-techniques-deep-learning, 2017. [Online; accessed 6-December2017].
