@@ -188,7 +188,7 @@ Here we first look at the implementation from Deepspeed-chat model. The actor-cr
 ](https://arxiv.org/abs/2308.01320) <br>
 [11] [Secrets of RLHF in Large Language Models Part I: PPO](https://arxiv.org/pdf/2307.04964.pdf) <br>
 [12] [Secrets of RLHF in Large Language Models Part II: Reward Modeling](https://arxiv.org/pdf/2401.06080.pdf) <br>
-[13] [The N+ Implementation Details of RLHF with PPO: A Case Study on TL;DR Summarization](https://arxiv.org/abs/2403.17031) <br>   
+[13] [The N+ Implementation Details of RLHF with PPO: A Case Study on TL;DR Summarization](https://arxiv.org/abs/2403.17031) <br>
 [14] [Is DPO Superior to PPO for LLM Alignment? A Comprehensive Study](https://arxiv.org/pdf/2404.10719.pdf) <br>
 [15] [Implementation Matters in Deep Policy Gradients: A Case Study on PPO and TRPO](https://arxiv.org/abs/2005.12729) <br>
 <!-- [11] [The 37 Implementation Details of Proximal Policy Optimization](https://iclr-blog-track.github.io/2022/03/25/ppo-implementation-details/) -->
