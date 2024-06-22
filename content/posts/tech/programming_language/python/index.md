@@ -127,3 +127,11 @@ pdb.post_mortem()
 * The __new__() is a static method of the object class.
 * When you create a new object by calling the class, Python calls the __new__() method to create the object first and then calls the __init__() method to initialize the object’s attributes.
 * Override the __new__() method if you want to tweak the object at creation time.
+
+
+### Hacky Way to Add File into PYTHONPATH
+```python
+curr_file_path = os.path.dirname(os.path.abspath(os.path.expanduser(__file__)))
+sys.path.append(curr_file_path)
+sys.path.append(os.path.dirname(curr_file_path))
+```
