@@ -39,4 +39,9 @@ propose a consistency-based data filtering technique: a model is first trained o
 pairs, and then used to rank each pair against a pool of 1 million random passages. A text pair is kept
 only if it falls in the top-k ranked lists. In other words, the model’s prediction should be consistent
 with the training labels. Here we set k = 2 based on manual inspection of data quality. After this
-step, we end up with ∼ 270M text pairs for contrastive pre-training
+step, we end up with ∼ 270M text pairs for contrastive pre-training.
+
+
+
+### References
+1. [Text Embeddings by Weakly-Supervised Contrastive Pre-training](https://arxiv.org/pdf/2212.03533)

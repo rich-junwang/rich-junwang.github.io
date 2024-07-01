@@ -301,9 +301,12 @@ When combining find with xargs, it's usually faster than using `exec` mentioned 
 
 
 ### rsync command
-When use the following command, be careful about the relative path. In this command, we're using 16 processes. 
+When use the following command, be careful about the relative path. In this command, we're using 4 processes. 
 ```bash
-ls /my_model/checkpoints/source_dir | xargs -n16 -P -I% rsync -aP % target_dir
+ls /my_model/checkpoints/source_dir | xargs -n1 -P4 -I% rsync -aP % target_dir
+
+# the above command may suffer when there is only one folder inside the source dir that is too big. To solve this issue, use the following command. Note the -R here is relative path. 
+cd src_dir && find . -type f -print0  | xargs -0 -P4 -I% rsync -avR % target_dir
 ```
 
 
