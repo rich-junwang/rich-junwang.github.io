@@ -491,5 +491,13 @@ The current remote working directory is: /home/user
 ```
 
 
+
+### Tmux
+How to run a python script on each GPU
+```bash
+for rank in {0..7} ; do
+CUDA_VISIBILE_DEVICES=$rank  tmux new-session -d -s my_session_${rank} python3 my_python_script my_arguments  2>&1 &
+```
+
 ### References
 [1] https://itsnotbugitsfeature.com/2019/10/22/splitting-a-big-pull-request-into-smaller-review-able-ones/
