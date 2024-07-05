@@ -64,7 +64,7 @@ At inference time, we call `model.eval()` so that model wouldn't calculate the g
 
 
 ### PyTorch DataParallel
-DataParallel is very easy to use, we just wrap the model with `DataParallel()` wrapper. The input should be splittable on dim 0. Caveat here normally when we directly feed output of tokenizer into model, e.g. `tokenizer(input)` this will lead to unsplittable input. 
+DataParallel is very easy to use, we just wrap the model with `DataParallel()` wrapper. The input should be splittable on dim 0. Caveat here normally when we directly feed output of tokenizer into model, e.g. using `tokenizer(input)` as model input, sthis will lead to unsplittable tensors.  
 
 The issue with `DataParallel` is unbalanced GPU usage. The input is splitted to each GPU, and gathered on default GPU (usually cuda:0). Thus, the default GPU has much larger memory load. 
 
@@ -123,6 +123,16 @@ for data in rand_loader:
 
 ```
 
+Always make sure that the batch size is divisible by 8. If not, we can do this simple trick. This is helpful when we don't use dataloadder and sampler.
+```python
+# get smaller number that is greater than x and is multiples of 8
+def roundup(x):
+   return (x + 7) & (-8)
+
+if len(input_batch) < batch_size:
+   new_batch_size = roundup(len(input_batch))
+   input_batch += [input_batch[-1]] * (new_batch_size - len(input_batch))
+``` 
 
 ### Install Apex
 Sometimes to use the latest distributed training feature, we have to install Apex. As Apex is closely coupled with Cuda, we need to follow the next few steps to correctlly install apex.
