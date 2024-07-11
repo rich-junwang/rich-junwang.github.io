@@ -45,7 +45,7 @@ In model-free algorithms, we don't want to or we can't learn the system dynamics
 
 
 ### References
-[1] [RL — Reinforcement Learning Algorithms Overview](https://jonathan-hui.medium.com/rl-reinforcement-learning-algorithms-overview-96a1500ffcda)
-
+1. [RL — Reinforcement Learning Algorithms Overview](https://jonathan-hui.medium.com/rl-reinforcement-learning-algorithms-overview-96a1500ffcda)
+2. [Spinning Up in Deep RL](https://spinningup.openai.com/en/latest/) 
 
 <!-- [x] https://github.com/ShangtongZhang/reinforcement-learning-an-introduction -->
