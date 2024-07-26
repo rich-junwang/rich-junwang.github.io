@@ -84,7 +84,7 @@ source .venv/bin/activate
 ```
 
 ### Debug
-```
+```python
 # using pdb
 import pdb; pdb.set_trace()
 
