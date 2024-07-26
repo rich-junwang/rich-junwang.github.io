@@ -87,6 +87,18 @@ source .venv/bin/activate
 ```
 # using pdb
 import pdb; pdb.set_trace()
+
+
+# using ipdb
+from ipdb import launch_ipdb_on_exception
+def filter_even(nums):
+    for i in range(len(nums)):
+        if nums[i] % 2 == 0:
+            del nums[i]
+
+with launch_ipdb_on_exception():
+    print(filter_even(list(range(6))))
+
 ```
 
 ### Exception
@@ -134,4 +146,23 @@ pdb.post_mortem()
 curr_file_path = os.path.dirname(os.path.abspath(os.path.expanduser(__file__)))
 sys.path.append(curr_file_path)
 sys.path.append(os.path.dirname(curr_file_path))
+```
+
+### Subprocess
+```python
+import subprocess
+# Download
+dl = subprocess.Popen(["git", "clone", str(repo_path), str(repo_dir)])
+
+# It also accepts str as the input command
+output_path = "my_out"
+cmd = """python3 train.py --local-rank 0"""
+proc = subprocess.Popen(
+    cmd,
+    stdout=subprocess.PIPE,
+    stderr=open(f"{output_path}.stderr", "wt", encoding="utf-8"),
+    shell=True,
+    encoding='utf-8',
+    bufsize=0)
+
 ```
