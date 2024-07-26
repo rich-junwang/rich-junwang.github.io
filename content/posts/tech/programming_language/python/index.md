@@ -98,6 +98,19 @@ def filter_even(nums):
 
 with launch_ipdb_on_exception():
     print(filter_even(list(range(6))))
+# we can check internal stack, `i`, `nums` etc and can also execute the next step. 
+    
+# We can also use the following way. The program will error out and enter ipdb.
+import sys
+from IPython.core import ultratb
+sys.excepthook = ultratb.FormattedTB(call_pdb=1)
+
+def filter_even(nums):
+    for i in range(len(nums)):
+        if nums[i] % 2 == 0:
+            del nums[i]
+
+filter_even(list(range(6)))
 
 ```
 
