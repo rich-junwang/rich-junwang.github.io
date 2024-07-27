@@ -81,6 +81,9 @@ python3 -m pip install --upgrade pip
 python3 -m pip install --user virtualenv
 python3 -m venv .venv
 source .venv/bin/activate
+
+# exit
+deactivate
 ```
 
 ### Debug
@@ -89,7 +92,7 @@ source .venv/bin/activate
 import pdb; pdb.set_trace()
 
 
-# using ipdb
+# using ipdb. Program will enter ipython at the exception
 from ipdb import launch_ipdb_on_exception
 def filter_even(nums):
     for i in range(len(nums)):
