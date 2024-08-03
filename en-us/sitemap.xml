@@ -2,31 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://rich-junwang.github.io/en-us/posts/read/</loc>
-    <lastmod>2022-05-05T00:18:06+08:00</lastmod>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/</loc>
+    <lastmod>2024-03-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/</loc>
-    <lastmod>2024-03-05T00:18:23+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/</loc>
-    <lastmod>2024-03-05T00:18:23+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/tags/read/</loc>
-    <lastmod>2022-05-05T00:18:06+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/read/us_politics/</loc>
-    <lastmod>2022-05-05T00:18:06+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/tags/</loc>
-    <lastmod>2024-03-05T00:18:23+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/</loc>
     <lastmod>2024-03-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/tags/blog/</loc>
     <lastmod>2024-03-05T00:18:23+08:00</lastmod>
   </url><url>
+    <loc>https://rich-junwang.github.io/en-us/</loc>
+    <lastmod>2024-03-05T00:18:23+08:00</lastmod>
+  </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_system/</loc>
+    <lastmod>2024-03-05T00:18:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/tags/</loc>
     <lastmod>2024-03-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/coder_training/</loc>
@@ -64,6 +55,15 @@
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/tags/distributed-training/</loc>
     <lastmod>2023-05-05T00:18:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/posts/read/</loc>
+    <lastmod>2023-05-05T00:18:06+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/tags/read/</loc>
+    <lastmod>2023-05-05T00:18:06+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/posts/read/us_politics/</loc>
+    <lastmod>2023-05-05T00:18:06+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/large_scale_pretraining/pretrain/</loc>
     <lastmod>2022-12-18T00:18:23+08:00</lastmod>
