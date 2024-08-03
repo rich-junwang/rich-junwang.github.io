@@ -111,7 +111,7 @@ params:
     - name: Google scholar
       url: https://scholar.google.com/citations?user=ct92MO4AAAAJ&hl=en
     - name: email
-      url: "mailto:richard.junwang@gmail.com"
+      url: "mailto:richard.{first_name}{last_name} at gmail.com"
     - name: RSS
       url: "index.xml"
 
