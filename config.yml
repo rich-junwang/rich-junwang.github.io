@@ -104,8 +104,8 @@ params:
         url: posts/tech
       - name: 📕 Read
         url: posts/read
-      - name: 🏖 Life
-        url: posts/life
+      # - name: 🏖 Life
+      #   url: posts/life
 
   socialIcons:
     - name: Google scholar
