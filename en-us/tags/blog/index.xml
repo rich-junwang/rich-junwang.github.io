@@ -44,15 +44,6 @@
     </item>
     
     <item>
-      <title>Blog</title>
-      <link>https://rich-junwang.github.io/en-us/posts/blog/blog/</link>
-      <pubDate>Thu, 05 May 2022 00:18:23 +0800</pubDate>
-      
-      <guid>https://rich-junwang.github.io/en-us/posts/blog/blog/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Distributed Training Infra</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/infra/</link>
       <pubDate>Thu, 05 May 2022 00:18:23 +0800</pubDate>
