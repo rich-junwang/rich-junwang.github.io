@@ -48,7 +48,7 @@ $$
 \mathbb{E}\left(f(x)\right) \approx \frac{1}{N}\sum_{i=1}^{N}{f(x_i)}
 $$
 
-assuming that the $x_i$ here is the i.i.d samples from the distribution $p(x)$.
+assuming that the $x_i$ here is the i.i.d samples from the distribution $p(x)$. So we say that Monte Carlo Approximation is to use one or more samples to calculate the expectation of a distribution. 
 
 #### Importance Sampling
 In reality, it could be very challenging to sample data according to the distribution $p(x)$ as it is usually unknown to us. A workaround is to have another known distribution $q(x)$, and define the expectation as:
@@ -112,6 +112,31 @@ $$
 $$
 The last step assumes that $\frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, a)$ follows a distribution of $\pi(a|s_t; \theta)$ with respect to the random variable $A$.
 
+Let's take another look at the policy gradient here. First, in practice, when we calculate the expectation we can use Monte Carlo Approximation. The gradient here becomes summations as below:
+
+$$
+\nabla_{\theta}(J(\theta)) = \sum_{t} \nabla_{\theta}{\log\pi (a|s; \theta)} \cdot Q_{\pi}(s, a)
+$$
+
+This is also called Monte Carlo policy gradient. Since gradient is a direction, this formula shows that policy gradient estimation is the direction of the steepest increase in reward/return. When reward is larger, the policy gradient will be larger.
+
+
+#### REINFORCE
+Since $Q_{\pi}(s, a)$ is the expectation of the return, we can once again use Monte Carlo approximation,
+$$
+\begin{aligned}
+Q_{\pi}(s_t, a_t) &= u_t \\\
+&= \sum_{i=t}^{N} {\gamma^{i-t} \cdot r_{i}}
+\end{aligned} 
+$$
+The above MCPG actually gives us a practical algorithm to do policy gradient based RL. Let's summarize it as follows:
+1. Play one episode of game to get the trajectory: $s_1, a_1, r_1, s_2, a_2, r_2, ...$
+2. Estimate all $q_t \approx u_t$ using above equation
+3. Differentiate policy network to get $d_{\theta, t}$
+4. Compute policy gradient $g(a_t, \theta_t) = q_t \cdot d_{\theta, t}$
+
+
+#### Advantage Function and Generalized Advantage Estimation
 The above equation is the vanilla policy gradient method. More policy gradient algorithms are proposed later to reduce high variance of the vanilla version. John Schulman's [GAE paper](https://arxiv.org/pdf/1506.02438.pdf) summarized all the improvement methods. In the derivation, the policy gradient is represented as
 $$
 \frac{\partial{V(s; \theta)}}{\partial{\theta}} = \mathbb{E_A}\left[  \frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} \cdot  \hat{A_t}(s, a) \right]
