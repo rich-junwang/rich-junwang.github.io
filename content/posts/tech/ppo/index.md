@@ -146,6 +146,7 @@ $$
 L(\theta) = \mathbb{E_t}\left[ \log\pi (a|s; \theta) \hat{A_t}(s, a)  \right]
 $$
 
+The idea is that the Advantage function calculates how better taking that action at a state is compared to the average value of the state. It’s subtracting the mean value of the state from the state action pair. Mathematically, $A(s_t, a_t) = Q(s_t, a_t) − V (s_t)$, where $Q(s_t, a_t)$ is the action-value function, representing the expected return after taking action at at state $s$, and $V (s_t)$ is the value function, representing the average expected return at state st.
 
 #### Actor-Critic Algorithm
 There we give a recap of how actor-critic method works. In Actor-Critic algorithm, we use one neural network $\pi(a|s; \theta)$ to approximate policy function $\pi(a|s)$ and use another neural network $q(s, a; w)$ to approximate value function $Q_{\pi}(s, a)$.
