@@ -120,6 +120,27 @@ $$
 
 This is also called Monte Carlo policy gradient. Since gradient is a direction, this formula shows that policy gradient estimation is the direction of the steepest increase in reward/return. When reward is larger, the policy gradient will be larger.
 
+#### Temporal Difference (TD) Learning
+Temporal Difference (TD) learning is one of the core concepts in Reinforcement Learning. Temporal difference algorithm always aims to bring the expected prediction and the new prediction together, thus matching expectations with reality and gradually increasing the accuracy of the entire chain of prediction.
+
+The most basic version is TD(0) method. Specifically, if our agent is in a current state $s_t$, takes the action $a_t$ and receives the reward $r_t$, then we update our estimate of $V$ following
+
+$$
+V(s_t) \xleftarrow[]{} V(s_t) + \alpha[r_{t+1} + \gamma V(s_{t+1}) – V(s_t)]
+$$
+
+Here $r_{t+1} + \gamma V(s_{t+1})$ is TD target and $r_{t+1} + \gamma V(s_{t+1}) – V(s_t)$ is called TD error ($\delta$). 
+
+There is SARSA (state-action-reward-state-action), where we replace the value function as the action-state value function.
+
+$$
+Q(s_t, a_t) \xleftarrow[]{} Q(s_t, a_t) + \alpha[r_{t+1} + \gamma Q(s_{t+1}, a_{t+1}) – Q(s_t, a_t)]
+$$
+
+And TD with Q-learning
+$$
+Q(s_t, a_t)  \xleftarrow[]{} Q(s_t, a_t)  + \alpha[r_{t+1} + \gamma \max_{a} Q(s_{t+1}, a) – Q(s_t, a_t)]
+$$
 
 #### REINFORCE
 Since $Q_{\pi}(s, a)$ is the expectation of the return, we can once again use Monte Carlo approximation,
