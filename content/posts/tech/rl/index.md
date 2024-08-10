@@ -44,6 +44,10 @@ In model-free algorithms, we don't want to or we can't learn the system dynamics
     - Policy gradients: using neural network to approximate policy and optimize policy using gradient ascent.
 
 
+### Concepts
+A return is a measured value (or a random variable), representing the actual discounted sum of rewards seen following a specific state or state/action pair. Value function is the expected return function. 
+
+
 ### References
 1. [RL — Reinforcement Learning Algorithms Overview](https://jonathan-hui.medium.com/rl-reinforcement-learning-algorithms-overview-96a1500ffcda)
 2. [Spinning Up in Deep RL](https://spinningup.openai.com/en/latest/) 
