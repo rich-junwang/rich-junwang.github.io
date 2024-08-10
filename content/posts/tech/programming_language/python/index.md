@@ -92,6 +92,11 @@ deactivate
 import pdb; pdb.set_trace()
 
 
+# using ipdb
+if torch.distributed.get_rank() == 0:
+    import ipdb; ipdb.set_trace()
+
+
 # using ipdb. Program will enter ipython at the exception
 from ipdb import launch_ipdb_on_exception
 def filter_even(nums):
