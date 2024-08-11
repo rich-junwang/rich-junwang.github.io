@@ -3,21 +3,24 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/</loc>
-    <lastmod>2024-03-05T00:18:23+08:00</lastmod>
+    <lastmod>2024-07-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/</loc>
-    <lastmod>2024-03-05T00:18:23+08:00</lastmod>
+    <lastmod>2024-07-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/tags/blog/</loc>
-    <lastmod>2024-03-05T00:18:23+08:00</lastmod>
+    <lastmod>2024-07-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/</loc>
-    <lastmod>2024-03-05T00:18:23+08:00</lastmod>
+    <lastmod>2024-07-05T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_system/</loc>
-    <lastmod>2024-03-05T00:18:23+08:00</lastmod>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ppo/</loc>
+    <lastmod>2024-07-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/tags/</loc>
+    <lastmod>2024-07-05T00:18:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_system/</loc>
     <lastmod>2024-03-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/coder_training/</loc>
@@ -40,9 +43,6 @@
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/rag/</loc>
     <lastmod>2023-10-18T00:18:23+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/ppo/</loc>
-    <lastmod>2023-07-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/flash_attn/</loc>
     <lastmod>2023-07-18T00:18:23+08:00</lastmod>
