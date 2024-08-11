@@ -1,7 +1,7 @@
 ---
 title: "PPO and Its Implementation"
-date: 2023-7-05T00:18:23+08:00
-lastmod: 2023-07-05T00:18:23+08:00
+date: 2024-7-05T00:18:23+08:00
+lastmod: 2024-07-05T00:18:23+08:00
 author: ["Jun"]
 keywords: 
 - 
@@ -180,9 +180,7 @@ $$
 $$
 
 Notice that $\hat{A_t^{(1)}}$ has high bias, low variance, whilst
-$\hat{A_t^{(\infty)}}$ is unbiased, high variance.
-
-A weighted average of $\hat{A_t^{(k)}}$ can be used to balance bias and variance.
+$\hat{A_t^{(\infty)}}$ is unbiased, high variance. A weighted average of $\hat{A_t^{(k)}}$ can be used to balance bias and variance.
 $$\hat{A_t} = \hat{A_t^{GAE}} = \frac{\sum_k w_k \hat{A_t^{(k)}}}{\sum_k w_k}$$
 We set $w_k = \lambda^{k-1}$, this gives clean calculation for $\hat{A_t}$. Below we have the recursion equations. (Refer to [11] to learn how to derive the second equation here.)
 
