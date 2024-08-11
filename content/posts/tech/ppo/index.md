@@ -167,7 +167,35 @@ $$
 L(\theta) = \mathbb{E_t}\left[ \log\pi (a|s; \theta) \hat{A_t}(s, a)  \right]
 $$
 
-The idea is that the Advantage function calculates how better taking that action at a state is compared to the average value of the state. It’s subtracting the mean value of the state from the state action pair. Mathematically, $A(s_t, a_t) = Q(s_t, a_t) − V (s_t)$, where $Q(s_t, a_t)$ is the action-value function, representing the expected return after taking action at at state $s$, and $V (s_t)$ is the value function, representing the average expected return at state st.
+The idea is that the Advantage function calculates how better taking that action at a state is compared to the average value of the state. It’s subtracting the mean value of the state from the state action pair. Mathematically, $A(s_t, a_t) = Q(s_t, a_t) − V (s_t)$, where $Q(s_t, a_t)$ is the action-value function, representing the expected return after taking action at at state $s$, and $V (s_t)$ is the value function, representing the average expected return at state $s_t$.
+
+Based on the above advantage definition, we have
+$$
+\begin{aligned}
+\hat{A_t^{(1)}} &= r_t + \gamma V(s_{t+1}) - V(s)  \\\
+\hat{A_t^{(2)}} &= r_t + \gamma r_{t+1} +\gamma^2 V(s_{t+2}) - V(s) \\\
+...\\\
+\hat{A_t^{(\infty)}} &= r_t + \gamma r_{t+1} +\gamma^2 r_{t+2} + ... - V(s)
+\end{aligned}
+$$
+
+Notice that $\hat{A_t^{(1)}}$ has high bias, low variance, whilst
+$\hat{A_t^{(\infty)}}$ is unbiased, high variance.
+
+A weighted average of $\hat{A_t^{(k)}}$ can be used to balance bias and variance.
+$$\hat{A_t} = \hat{A_t^{GAE}} = \frac{\sum_k w_k \hat{A_t^{(k)}}}{\sum_k w_k}$$
+We set $w_k = \lambda^{k-1}$, this gives clean calculation for $\hat{A_t}$. Below we have the recursion equations. (Refer to [11] to learn how to derive the second equation here.)
+
+$$
+\begin{aligned}
+\delta_t &= r_t + \gamma V(s_{t+1}) - V(s_t)
+\\\
+\hat{A_t} &= \delta_t + \gamma \lambda \delta_{t+1} + ... +
+                        (\gamma \lambda)^{T - t + 1} \delta_{T - 1}
+\\\
+&= \delta_t + \gamma \lambda \hat{A_{t+1}}
+\end{aligned}
+$$        
 
 #### Actor-Critic Algorithm
 There we give a recap of how actor-critic method works. In Actor-Critic algorithm, we use one neural network $\pi(a|s; \theta)$ to approximate policy function $\pi(a|s)$ and use another neural network $q(s, a; w)$ to approximate value function $Q_{\pi}(s, a)$.
