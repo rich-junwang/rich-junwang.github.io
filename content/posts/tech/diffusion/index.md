@@ -1,7 +1,7 @@
 ---
 title: "Diffusion Probabilistic Models"
-date: 2022-06-18T00:18:23+08:00
-lastmod: 2022-07-18T00:18:23+08:00
+date: 2024-06-18T00:18:23+08:00
+lastmod: 2024-07-18T00:18:23+08:00
 author: ["Jun"]
 keywords: 
 - 
@@ -58,6 +58,13 @@ Then we have
 $$
 q_\theta(x_t|x_0) = \mathcal{N}(x_t; \sqrt{\bar{\alpha}}x_0, (1 - \bar{\alpha_t})\mathbf{I})
 $$
+This process is called reparameterization. This allows us to directly sample $x_t$ from $x_0$ using a single sample of Gaussian noise:
+
+$$
+x_t = \sqrt{\bar{\alpha_{t}}}x_0 + \sqrt{1 - \bar{\alpha_{t}}} \epsilon
+$$
+Here $\epsilon \sim \mathcal{N}(0, I)$. Even though we know the distribution, we don't know the value the noise. In practice, we use neural network to approximate this noise. 
+
 
 #### Reparameterization
 Reparameterization is used on both VAE and diffusion. It's needed because in diffusion, we have a lot of sampling operation and these operations are not differentiable. We use reparameterization to make it differentiable. Concretely, people introduce a random variable $\epsilon$, then we can sample from any gussian $z \sim \mathcal{N}(z; \mu_{\theta}, \sigma^2_{\theta}\mathbf{I}) $ as follows:
@@ -67,7 +74,12 @@ $$
 
 
 ### Reverse Process
+Obviously, in reverse process we denoise the data and recover the images we have originally step by step. In the reverse process, we use the image at time $t$ to predict image at $t-1$, it follows the following distribution
+$$
+p(x_{t-1}|x_{t}) = \mathcal{N}(\frac{1}{\sqrt{\alpha_{t}}}(x_t - \frac{1- \alpha_{t}}{\sqrt{1 - \bar{\alpha_{t}}}} \epsilon); \frac{(1- \alpha_{t})(1 - \bar{\alpha_{t-1}})}{\sqrt{1 - \bar{\alpha_{t}}}})
+$$
 
+Everything relates to $\alpha$ is a constant. 
 
 ### References
 [1] [Denoising Diffusion Probabilistic Models](https://arxiv.org/pdf/2006.11239.pdf) <br>
