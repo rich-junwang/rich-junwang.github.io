@@ -3,22 +3,28 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/</loc>
-    <lastmod>2024-07-05T00:18:23+08:00</lastmod>
+    <lastmod>2024-07-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/</loc>
-    <lastmod>2024-07-05T00:18:23+08:00</lastmod>
+    <lastmod>2024-07-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/tags/blog/</loc>
     <lastmod>2024-07-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/</loc>
-    <lastmod>2024-07-05T00:18:23+08:00</lastmod>
+    <lastmod>2024-07-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ppo/</loc>
     <lastmod>2024-07-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/tags/</loc>
-    <lastmod>2024-07-05T00:18:23+08:00</lastmod>
+    <lastmod>2024-07-18T00:18:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/diffusion/</loc>
+    <lastmod>2024-07-18T00:18:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/tags/ml/</loc>
+    <lastmod>2024-07-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_system/</loc>
     <lastmod>2024-03-05T00:18:23+08:00</lastmod>
@@ -27,9 +33,6 @@
     <lastmod>2023-12-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/tags/llm/</loc>
-    <lastmod>2023-12-18T00:18:23+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/tags/ml/</loc>
     <lastmod>2023-12-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/pytorch/all_gather_and_gradient_backpropagation/</loc>
@@ -79,9 +82,6 @@
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/parallelism/</loc>
     <lastmod>2022-07-08T12:01:14-07:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/diffusion/</loc>
-    <lastmod>2022-07-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/pytorch/pytorch/</loc>
     <lastmod>2023-04-11T00:18:23+08:00</lastmod>

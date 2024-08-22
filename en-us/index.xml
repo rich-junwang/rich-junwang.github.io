@@ -17,6 +17,15 @@
     </item>
     
     <item>
+      <title>Diffusion Probabilistic Models</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/diffusion/</link>
+      <pubDate>Tue, 18 Jun 2024 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/diffusion/</guid>
+      <description>Dive into diffusion</description>
+    </item>
+    
+    <item>
       <title>ML System</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/ml_system/</link>
       <pubDate>Tue, 05 Mar 2024 00:18:23 +0800</pubDate>
@@ -140,15 +149,6 @@
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/parallelism/</guid>
       <description>Parallelism in LLM training</description>
-    </item>
-    
-    <item>
-      <title>Diffusion Probabilistic Models</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/diffusion/</link>
-      <pubDate>Sat, 18 Jun 2022 00:18:23 +0800</pubDate>
-      
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/diffusion/</guid>
-      <description>Dive into diffusion</description>
     </item>
     
     <item>
