@@ -55,7 +55,11 @@ The main concept of MCTS is a search. Search is tree traversals of the game tree
 
 ### Modeling 
 
-To keep record of the game tree traversal simulation results, we have to define a few concepts:
+From the above process, we can see that there are two key problems that needs to be addressed in MCTS. 
+- First is the node selection. How do we select which node to explore. Basically this defines how we explore all action space. 
+- Second simulation. How do we get the current traversal evaluated. 
+
+Before answering these question, we first have to keep record of the game tree traversal simulation results. We'll need to maintain a few values for each node:
 
  – $Q(v)$ is total simulation reward is an attribute of a node $v$
  and in a simplest form is a sum of simulation results that passed through considered node.
@@ -63,17 +67,36 @@ To keep record of the game tree traversal simulation results, we have to define 
  – $N(v)$ is total number of visits. It's another atribute of a node $v$ 
  representing a counter of how many times a node has been on the backpropagation path (and so how many times it contributed to the total simulation reward)
 
+These node statistics reflects the exploitation and exploration in the algorithm. Nodes with high reward are good candidates to follow (exploitation) but those with low amount of visits may be interesting too as they are not explored well. 
  
 
+### Selection
+#### UCT
+Upper Confidence Bound applied to trees (UCT) is the function used for node selection when traverse the tree. 
+For node $v$ with child node $v_i$, we define the UCT function as follows:
+$$
+UCT(v_i, v) = \frac{Q(v_i)}{N(v_i)} + c \sqrt{\frac{log(N(v))}{N(v_i)}}
+$$
 
+where $c$ is a hyperparameter which is used to balance exploitation and exploration. The first part is exploitation component which qualifies the winning rate of a particular child. However, only exploitation component is not enough because it will lead to greedily exploring only those nodes that bring a single winning playout very early at the beginning of the search. 
+
+The second component of UCT called exploration component which favors nodes that have not been explored. 
+
+#### PUCT
+Predictor UCT is from Ref 5, it adds prior of the preference of a particular node. 
+$$
+PUCT(v_i, v) = \frac{Q(v_i)}{N(v_i)} + c P(v, v_i) \frac{\sqrt{N(v)}}{1 + N(v_i)}
+$$
 
 
 ### References
 1. [Thinking Fast and Slow with Deep Learning and Tree Search](https://arxiv.org/abs/1705.08439)
 2. [Mastering Chess and Shogi by Self-Play with a General Reinforcement Learning Algorithm](https://arxiv.org/abs/1712.01815)
 3. https://int8.io/monte-carlo-tree-search-beginners-guide
-
+4. [Bandit based Monte-Carlo Planning](http://ggp.stanford.edu/readings/uct.pdf)
+5. Multi-armed bandits with episode context
 
 <!-- ### Implementation
 1. https://github.com/trotsky1997/MathBlackBox
-2. https://github.com/BrendanGraham14/mcts-llm -->
+2. https://github.com/BrendanGraham14/mcts-llm
+3. https://zhuanlan.zhihu.com/p/670885213 -->
