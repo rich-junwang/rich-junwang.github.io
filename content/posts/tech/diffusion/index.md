@@ -82,6 +82,7 @@ $$
 Everything relates to $\alpha$ is a constant. 
 
 ### References
-[1] [Denoising Diffusion Probabilistic Models](https://arxiv.org/pdf/2006.11239.pdf) <br>
-[2] [Understanding Diffusion Models: A Unified Perspective](https://arxiv.org/abs/2208.11970) <br>
+1. [Denoising Diffusion Probabilistic Models](https://arxiv.org/pdf/2006.11239.pdf) <br>
+2. [Understanding Diffusion Models: A Unified Perspective](https://arxiv.org/abs/2208.11970) <br>
+3. [Transfusion: Predict the Next Token and Diffuse Images with One Multi-Modal Model](https://www.arxiv.org/pdf/2408.11039)
 
