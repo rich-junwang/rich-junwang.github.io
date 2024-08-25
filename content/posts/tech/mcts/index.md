@@ -33,7 +33,7 @@ math: true
 In this blog, we talk about Monte Carlo Tree Search, the algorithm behind very popular AlphaZero. 
 
 ### Duel Process
-Human cognition has a duel process model which suggests that human reason has two modes. System 1 is a fast, unconscious and automatic mode of thought,like intuition. System 2 is a slow, conscious, explicit and rule-based mode of reasoning. 
+Human cognition has a duel process model which suggests that human reasoning has two modes: System 1 is a fast, unconscious and automatic mode of thought,like intuition. System 2 is a slow, conscious, explicit and rule-based mode of reasoning. 
 
 Comparing with how LLM works, we can think about that token-level generation (greedy decoding) is like System 1 mode, and agent planning, lookahead and backtracks is the System 2 mode. MCTS is the algorithm we can leverage to achieve the system 2 deliberation through exploration, proposing solution and evaluation. 
 
