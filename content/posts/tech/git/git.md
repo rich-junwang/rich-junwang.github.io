@@ -216,5 +216,24 @@ git diff xxxx~ xxxx
 git diff my_branch~ my_branch
 ```
 
+
+### Git submodule
+```bash
+# Add submodule
+git submodule add -b branch_name  URL_to_Git_repo  optional_dir_rename
+
+# update you submodules with origin/main or origin/your_branch
+git submodule update --remote
+
+
+# clone repo with submodules
+git clone --recurse-submodules repo_url
+
+
+# get submodules after clone
+git submodule update --init
+git submodule update --init --recursive  # if there are nested submodules
+
+```
 ### References
 [1] https://itsnotbugitsfeature.com/2019/10/22/splitting-a-big-pull-request-into-smaller-review-able-ones/
