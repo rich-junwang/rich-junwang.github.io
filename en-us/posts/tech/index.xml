@@ -35,15 +35,6 @@
     </item>
     
     <item>
-      <title>ML System</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_system/</link>
-      <pubDate>Tue, 05 Mar 2024 00:18:23 +0800</pubDate>
-      
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_system/</guid>
-      <description>ML System</description>
-    </item>
-    
-    <item>
       <title>Coder Training</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/coder_training/</link>
       <pubDate>Mon, 18 Dec 2023 00:18:23 +0800</pubDate>
@@ -113,6 +104,15 @@
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/data_processing/</guid>
       <description>Distributed data processing</description>
+    </item>
+    
+    <item>
+      <title>ML System</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_system/</link>
+      <pubDate>Sun, 05 Mar 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_system/</guid>
+      <description>ML System</description>
     </item>
     
     <item>
