@@ -1,7 +1,7 @@
 ---
 title: "ML System"
-date: 2024-03-05T00:18:23+08:00
-lastmod: 2024-03-05T00:18:23+08:00
+date: 2023-03-05T00:18:23+08:00
+lastmod: 2023-03-05T00:18:23+08:00
 author: ["Jun"]
 keywords: 
 - 
@@ -27,7 +27,13 @@ cover:
     alt: ""
     relative: false
 ---
+It's a long way to go, but let's just start with baby steps.
 
+### Common Libs
+- Cuda: Library to use GPUs.
+- cudnn: Library to do Neural Net stuff on GPUs (probably uses cuda to talk to the GPUs)
+- CUTLASS: CUDA GEMM lib.
+- cuBLAS: cuda basic linear algebra lib.
 
 
 <!-- ## References

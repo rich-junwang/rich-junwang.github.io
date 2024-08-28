@@ -235,5 +235,12 @@ git submodule update --init
 git submodule update --init --recursive  # if there are nested submodules
 
 ```
+
+
+### Git config
+```bash
+# set default branch name
+ git config --global init.defaultBranch main
+```
 ### References
 [1] https://itsnotbugitsfeature.com/2019/10/22/splitting-a-big-pull-request-into-smaller-review-able-ones/
