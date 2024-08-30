@@ -8,7 +8,7 @@ keywords:
 categories: 
 - 
 tags: 
-- distributed optimizer
+- ML
 description: "Distributed optimizer"
 weight:
 slug: ""
@@ -85,4 +85,3 @@ The following image shows the data flow of the optimizer. Here I'll give a thoro
 
 ## Reference
 1. Reducing Activation Recomputation in Large Transformer Models
-s
