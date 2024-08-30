@@ -71,6 +71,24 @@
     </item>
     
     <item>
+      <title>Distributed Optimizer</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/distributed_optimizer/</link>
+      <pubDate>Fri, 05 May 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/distributed_optimizer/</guid>
+      <description>Distributed optimizer</description>
+    </item>
+    
+    <item>
+      <title>LoRA Model Fine-tuning</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/lora_finetuning/</link>
+      <pubDate>Fri, 05 May 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/lora_finetuning/</guid>
+      <description>LoRA finetuning</description>
+    </item>
+    
+    <item>
       <title>InstructGPT and ChatGPT</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/instructgpt/</link>
       <pubDate>Wed, 18 Jan 2023 00:18:23 +0800</pubDate>
