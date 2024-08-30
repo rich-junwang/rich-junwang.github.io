@@ -49,7 +49,8 @@ Another benefit is that model's predictions are more complete, with the generate
 
 
 ### Build Training Data
-Given the fact that code data is mostly from github which already comes with some meta information. We could leverage these meta info to build high quality training dataset. Here are the 7 steps to build AIxcoder training data. 
+
+Given the fact that code data is mostly from github which already comes with some meta information. We could leverage these meta info and static analysis tools to build high quality training dataset. Here are the 7 steps to build AIxcoder training data. 
 
 1. Raw Data Selection
     - Exclude projects under copyleft licenses.

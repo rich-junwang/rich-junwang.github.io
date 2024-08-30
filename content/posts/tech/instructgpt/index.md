@@ -31,7 +31,9 @@ cover:
 
 
 Recently ChatGPT model has demonstrated remarkable success of large pretrained language model being able to generate coherent, logical and meaningful conversations. While as of this writing, the corresponding paper is still not available yet. In this blog, I'll dive deep into InstructGPT model to see what's under the hood of this model. 
+
 ### Issues with Traditional LM
+
 Language modeling objective is trying to predict next token given all previous tokens. However, when we're prompting LM in inference time, we hope LM can generate things based on our instructions/intent instead of merely predicting the most likely tokens. This is the so-called `misalignment` between training and inference. 
 
 ### Solution
