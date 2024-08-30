@@ -74,4 +74,5 @@ Given the fact that code data is mostly from github which already comes with som
 
 ### References
 1. [Efficient Training of Language Models to Fill in the Middle](https://arxiv.org/pdf/2207.14255.pdf)
-2. https://github.com/aixcoder-plugin/aiXcoder-7B
+2. [DeepSeek-Coder-V2: Breaking the Barrier of Closed-Source Models in Code Intelligence](https://arxiv.org/abs/2406.11931)
+3. https://github.com/aixcoder-plugin/aiXcoder-7B

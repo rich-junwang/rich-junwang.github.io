@@ -1,7 +1,7 @@
 ---
 title: "InstructGPT and ChatGPT"
-date: 2023-06-18T00:18:23+08:00
-lastmod: 2023-07-18T00:18:23+08:00
+date: 2023-01-18T00:18:23+08:00
+lastmod: 2023-01-18T00:18:23+08:00
 author: ["Jun"]
 keywords: 
 - 
