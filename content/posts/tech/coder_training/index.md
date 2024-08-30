@@ -32,7 +32,7 @@ math: true
 
 In the code pre-training, it is often necessary to generate corresponding inserted content based on both the left context and right context. Thus, in code pretraining we have an additional task called fill-in-the-middle. 
 
-### Data Format
+### Training Data Format
 
 With a certain probability $p$ called the FIM rate, documents are cut into three parts: prefix, middle, and suffix. For PSM format,
 it arrange the text as the following format
@@ -43,8 +43,35 @@ it arrange the text as the following format
 
 Accordingly, SPM format we swap the order of prefix and suffix. At training time, we can jointly do both PSM and SPM training. At inference time, we can choose either as the inference format.
 
+FIM style training gives us the opportunity to explore more training paradigms with code data. For instance, constructing training data, we can parse the code into an abstract syntax tree (AST) and randomly select a complete node to construct a FIM task. The rationale is simple. Through this training, model could learn to predict from top-down or bottom-up. This is exactly what is needed for reasoning.
+
+Another benefit is that model's predictions are more complete, with the generated code having a full hierarchical structure.
+
+
+### Build Training Data
+Given the fact that code data is mostly from github which already comes with some meta information. We could leverage these meta info to build high quality training dataset. Here are the 7 steps to build AIxcoder training data. 
+
+1. Raw Data Selection
+    - Exclude projects under copyleft licenses.
+    - Deduplicate projects gathered from various code hosting platforms and open-source datasets
+2. Project-Level Comprehensive Ranking
+    - Calculate project metrics, including the number of Stars, Git Commit counts, and the quantity of Test files.
+    - Exclude the lowest 10% of data based on a comprehensive score.
+3. Code File-Level Filtering
+    - Remove automatically generated code.
+    - Employ near-deduplication for redundancy removal.
+4. Sensitive Information Removal
+    - Use named entity recognition models to identify and delete sensitive information such as names, IP addresses, account passwords, and URLs.
+5. Commented Code
+    - Randomly deleting large sections of commented code
+6. Syntax Analysis
+    - Delete code with syntax parsing errors or syntactical errors in the top fifty languages.
+7. Static Analysis
+    - Utilize static analysis tools to scan for and locate 161 types of Bugs affecting code reliability and maintainability, as well as 197 types of vulnerabilities impacting code security.
+
 
 
 
 ### References
 1. [Efficient Training of Language Models to Fill in the Middle](https://arxiv.org/pdf/2207.14255.pdf)
+2. https://github.com/aixcoder-plugin/aiXcoder-7B
