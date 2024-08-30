@@ -49,6 +49,22 @@ There are a couple of ways to design router to route tokens to each expert. Idea
 
 For any input $x$ of dimension $[\text{sequence\\_len}, \text{dim}]$, it multiplies with a gate matrix $W$ of shape $[\text{dim}, 8]$, then we get a router representation of shape $[\text{sequence\\_len}, 8]$. It selects top k (num of experts per token) logits which then go through softmax op to normalize to get k experts weights. In Mixtral, the k is equal to 2. 
 
+MoE training is prone to instability issues because it has extra exponential functions. To deal with mixed precision roundoff errors, people apply z-loss to logits before sending them to router. 
+
+$$
+L_z = \frac{1}{B} \sum_{i=1}^{B} (log\sum_{j=1}^{N}e^{x_j^{x_i}})^2
+$$
+
+In python, 
+```python
+z_loss = torch.mean(torch.square(torch.logsumexp(logits, dim=-1))) * z_loss_coeff
+```
+
+Ref [7] uses the similar kind of approach to stabilize the training.
+$$
+L_{max_z} = 2 e^{-4} * z^2
+$$
+where $z$ is the max logit value.
 
 
 ### Load Balancing
@@ -93,10 +109,11 @@ Directly training MoE could be challenging due to low efficiency. One popular ap
 
 
 ### References
-[1] [Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer](https://arxiv.org/abs/1701.06538) <br>
-[2] [Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity](https://arxiv.org/pdf/2101.03961.pdf) <br>
-[3] [BASE Layers: Simplifying Training of Large, Sparse Models](https://arxiv.org/pdf/2103.16716.pdf) <br>
-[4] [Mixtral of Experts](https://arxiv.org/pdf/2401.04088.pdf) <br>
-[5] [Sparse Upcycling: Training Mixture-of-Experts from Dense Checkpoints](https://arxiv.org/abs/2212.05055) <br>
-[6] [Beyond Distillation: Task-level Mixture-of-Experts for Efficient Inference](https://arxiv.org/pdf/2110.03742.pdf)
+1. [Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer](https://arxiv.org/abs/1701.06538) <br>
+2. [Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity](https://arxiv.org/pdf/2101.03961.pdf) <br>
+3. [BASE Layers: Simplifying Training of Large, Sparse Models](https://arxiv.org/pdf/2103.16716.pdf) <br>
+4. [Mixtral of Experts](https://arxiv.org/pdf/2401.04088.pdf) <br>
+5. [Sparse Upcycling: Training Mixture-of-Experts from Dense Checkpoints](https://arxiv.org/abs/2212.05055) <br>
+6. [Beyond Distillation: Task-level Mixture-of-Experts for Efficient Inference](https://arxiv.org/pdf/2110.03742.pdf)
+7. [Baichuan 2: Open Large-scale Language Models](https://arxiv.org/abs/2309.10305)
 <!-- [6] https://zhuanlan.zhihu.com/p/674751021 -->

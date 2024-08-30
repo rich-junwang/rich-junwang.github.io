@@ -29,6 +29,7 @@ cover:
 math: true
 ---
 
+In this blog, we talk about distributed optimizer implementation. The discussion here is mostly based on Megatron-LM.
 
 ## Adam Optimizer
 Adaptive moment estimation is an algorithm to compute the adaptive learning rate for each parameters. It consists two parts: first-order momentum which is exponentially decaying average (moving average) of gradient and second-order momentum (variance, which controls adaptive learning rate) which is exponentially decaying average of squared gradient.
@@ -58,10 +59,30 @@ When use the above Adam optimizer and assuming the model parameter is $M$, then 
 - 4M (fp32 grad moving avg)
 - 4M (fp32 grad sq moving avg)
 
-In total, we need 20M to per replica in model training. 
+In total, we need 20M memory to per replica in model training. For instance, for 7B model training, the above parameters and optimizer state will consume 140G memory. Refer to [1] for how to compute the activation part. Keeping a fp32 copy of model parameters for model update in optimizer state is important for performance as is shown in Gopher paper. 
 
 
 ## Distributed Optimizer
 
 Distributed optimizer is to save memory by distributing the optimizer state evenly across data parallel ranks, versus the current method of replicating the optimizer state across data parallel ranks.
 
+Theoretical memory savings vary depending on the combination of the model's param dtype and grad dtype. In the Megatron-LM implementation, the theoretical number of bytes per parameter is (where 'd' is the data parallel size):
+
+|        | Non-distributed optim | Distributed optim |
+| ------ | ------ | ------ |
+| float16 param, float16 grads | 20 | 4 + 16/d |
+| float16 param, fp32 grads    | 18 | 6 + 12/d |
+| fp32 param, fp32 grads       | 16 | 8 + 8/d  |
+
+
+### Data flow
+The following image shows the data flow of the optimizer. Here I'll give a thorough walk-through about how this works.
+<p align="center">
+    <img alt="optimizer" src="images/data_flow.png" width="80%" height=auto/> 
+    Figure 1. Distributed optimizer data flow
+    <br>
+</p>
+
+## Reference
+1. Reducing Activation Recomputation in Large Transformer Models
+s
