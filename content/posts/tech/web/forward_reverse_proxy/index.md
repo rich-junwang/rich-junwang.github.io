@@ -47,3 +47,10 @@ Why we use reverse proxy server?
 - SSL encryption
 
 A simplified way to sum it up would be to say that a forward proxy sits in front of a client and ensures that no origin server ever communicates directly with that specific client. On the other hand, a reverse proxy sits in front of an origin server and ensures that no client ever communicates directly with that origin server.
+
+### Port Forwarding
+Network Address Translation (NAT): Most routers use NAT to allow multiple devices on a local network to share a single public IP address. NAT changes the private IP addresses of devices on the local network to the public IP address of the router when sending data out to the internet.
+
+Port Numbers: When data is sent over the internet, it is associated with a port number, which helps identify the specific service or application that data should be directed to. For example, HTTP traffic typically uses port 80, and HTTPS traffic uses port 443.
+
+Port Forwarding Rule: When you set up port forwarding on a router, you create a rule that tells the router to forward traffic received on a specific port (or range of ports) to a specific internal IP address and port on the local network. This allows external devices to access a service on a device within the private network.

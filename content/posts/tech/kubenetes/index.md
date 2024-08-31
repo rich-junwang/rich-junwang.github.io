@@ -61,6 +61,13 @@ kubectl get services
 # create deployment. (blueprint of pod)
 kubectl create deployment my_pod_name --image=my_image
 kubectl get deployment
+
+# Log into the pod
+kubectl exec -it my_pod_name -- /bin/bash
+
+
+# delete a pod
+kubectl delete Pod my_pod_name
 ```
 
 To get all the containers running the pod, using the following command
@@ -76,11 +83,6 @@ View logs of job running in the pod
 kubectl logs my_pod_name
 kubectl logs -f my_pod_name # similar to attach
 kubectl attach my_pod_name  # works with tqdm 
-```
-
-Log into the pod
-```bash
-kubectl exec -it my_pod_name -- /bin/bash
 ```
 
 
