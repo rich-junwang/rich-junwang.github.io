@@ -145,6 +145,22 @@ xpanes -c "kubectl exec -p {}" $(kubectl get pods | grep my_pod_prefixes | cut -
 ```
 
 
+
+
+## EKS
+AWS has managed kubenetes service called EKS.
+
+```bash
+# create a basic cluster
+eksctl create cluster
+eksctl create cluster -f ./my_eks.yaml
+
+
+# get details of a cluster
+eksctl get cluster --name="my_cluster_1" --region="us-west-2"
+```
+
+
 ## References
 [1] [Setting up a Kubernetes cluster using Docker in Docker](https://callistaenterprise.se/blogg/teknik/2017/12/20/kubernetes-on-docker-in-docker/) <br>
 [2] https://kubernetes.io/docs/reference/kubectl/cheatsheet/ <br>
