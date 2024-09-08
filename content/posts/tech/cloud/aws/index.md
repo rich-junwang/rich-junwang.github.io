@@ -149,3 +149,36 @@ NAT Gateways exist because organizations want the additional security offered by
 You are right that all of the above is implemented as a virtual network. There is no physical device called an Internet Gateway or a NAT Gateway. Much of it is logical routing, although the NAT Gateway does involve launching infrastructure behind-the-scenes (probably on the same infrastructure that runs EC2 instances). The NAT Gateway only connects to one VPC -- it is not a 'shared service' like Amazon S3, which is available to many AWS users simultaneously.
 
 You also mention performing work 'manually'. An entire VPC (including subnets, route tables, Internet Gateway, NAT Gateway, Security Groups) can be deployed automatically using an AWS CloudFormation template, or via the VPC Wizard in the VPC management console.
+
+
+### EFS
+
+```bash
+# install efs-utils, depends on platform, it could be different.
+# Then
+mkdir $HOME/efs
+sudo mount -t efs efs_id $HOME/efs
+
+```
+
+
+### EKS
+```bash
+# create an eks without node group
+eksctl create cluster --region us-east-1 --without-nodegroup --vpc-public-subnets ${subnets} 
+
+
+# dry run
+eksctl create cluster -f ./eks.yaml --dry-run
+```
+
+
+When use cloudformation to create eks node group, the hardware could fail. We can use the following command to check the failure. The first failure in the stack (the resource provision is in a certain order) is usually what we're looking for. 
+```bash
+aws cloudformation describe-stack-events --stack-name my-cluster-stack-name
+```
+
+To delete a failed stack
+```bash
+aws cloudformation delete-stack --stack-name my-cluster-stack-name
+```
