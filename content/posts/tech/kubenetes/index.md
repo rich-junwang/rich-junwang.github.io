@@ -61,6 +61,7 @@ kubectl get services
 # create deployment. (blueprint of pod)
 kubectl create deployment my_pod_name --image=my_image
 kubectl get deployment
+kubectl delete deployment deployment_name
 
 # Log into the pod
 kubectl exec -it my_pod_name -- /bin/bash
@@ -85,6 +86,14 @@ kubectl logs -f my_pod_name # similar to attach
 kubectl attach my_pod_name  # works with tqdm 
 ```
 
+Deploy a k8s job
+```bash
+# deploy
+kubectl apply -f ./job.yaml
+
+# delete
+kubectl delete -f ./job.yaml
+```
 
 We can use `kubectl` to copy files to/from the pod. Be careful that your container may not support `~` this kind of path expansion.
 ```bash

@@ -182,3 +182,17 @@ To delete a failed stack
 ```bash
 aws cloudformation delete-stack --stack-name my-cluster-stack-name
 ```
+
+
+
+### FSx for Lustre
+Lustre (linux + cluster) is a high performance file system. FSx for lustre is an aws managed service to launch and run for lustre file system.
+
+
+#### FSx and S3
+s3 is long-term durable storage. FSx for lustre is used when processing data. Usually FSx is used as a high performance file system linked into s3 bucket. 
+ 
+1. Store your data on s3
+2. Create an FSx file system and link it to your s3 bucket
+3. At any time, use a lustre command to write changes back to s3
+4. Delete FSx file system when you're done processing
