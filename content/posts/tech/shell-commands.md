@@ -279,7 +279,7 @@ find my_directory/  -type f -exec lfs hsm_restore {} \;
 ### Xargs Command
 There are commands that only take input as arguments like `cp`, `rm`, `echo` etc. We can use xargs to convert input coming from standard input to arguements.
 
-```
+```bash
 $find . -type f -name "*.log" | xargs -n 1 echo rm
 rm ./log/file5.log
 rm ./log/file6.log
@@ -287,7 +287,7 @@ rm ./log/file6.log
 -n 1 argument, xargs turns each line into a command of its own.
 
 -I option takes a string that gets replaced with the supplied input before the command executes. Commond choices are {} and %.
-```
+```bash
 find ./log -type f -name "*.log" | xargs -I % mv % backup/
 aws s3 ls --recursive s3://my-bucket/ | grep "my_test" | cut -d' ' -f4 | xargs -I{} aws s3 rm s3://my-bucket/{}
 ```
@@ -298,6 +298,13 @@ The command below parallelly encodes a series of wav files to mp3 format:
 $find . -type f -name '*.wav' -print0 |xargs -0 -P 3 -n 1 mp3 -V8
 
 When combining find with xargs, it's usually faster than using `exec` mentioned above.
+
+
+#### Export and Xargs
+To export each line as an environment variable we can use
+```bash
+export $(cat filename | xargs -L 1)
+```
 
 
 ### rsync command
@@ -466,7 +473,7 @@ Wored
 
 To write the piped data to a file:
 
-```
+```bash
 cat <<'EOF' |  sed 's/l/e/g' > file.txt
 Hello
 World
@@ -477,14 +484,14 @@ Using Heredoc is one of the most convenient and easiest ways to execute multiple
 
 When using unquoted delimiter make sure you escape all variables, commands and special characters otherwise they will be interpolated locally:
 
-```
+```bash
 ssh -T user@host.com << EOF
 echo "The current local working directory is: $PWD"
 echo "The current remote working directory is: \$PWD"
 EOF
 ```
 
-```
+```bash
 #above command output
 The current local working directory is: /home/linuxize
 The current remote working directory is: /home/user
