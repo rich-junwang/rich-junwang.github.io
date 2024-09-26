@@ -111,6 +111,10 @@ aws configure get region --profile $PROFILE_NAME
 
 # aws sync with exclude
 aws s3 sync s3://my-first-bucket s3://my-second-bucket --exclude 'datasets/*'
+
+
+# get the identity
+aws sts get-caller-identity
 ```
 
 

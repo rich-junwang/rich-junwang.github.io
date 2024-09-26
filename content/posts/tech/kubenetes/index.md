@@ -66,6 +66,9 @@ kubectl delete deployment deployment_name
 # Log into the pod
 kubectl exec -it my_pod_name -- /bin/bash
 
+# describe a pod
+kubectl describe pods
+kubectl describe Pod my_pod
 
 # delete a pod
 kubectl delete Pod my_pod_name
@@ -93,6 +96,17 @@ kubectl apply -f ./job.yaml
 
 # delete
 kubectl delete -f ./job.yaml
+
+# describe
+kubectl describe -f ./job.yaml
+```
+
+
+When we want to delete kubernetes created resources, it's important to remember the dependencies of the resources. For instance, to delete a fsx app, we have to do the following in order
+```bash
+kubectl delete pod --all
+kubectl delete pvc --all
+kubectl delete pv --all
 ```
 
 We can use `kubectl` to copy files to/from the pod. Be careful that your container may not support `~` this kind of path expansion.
@@ -150,8 +164,11 @@ chown -R 33:33 /data/uploads
 
 When we want to log into multiple pods, we can use the following command:
 ```shell
-xpanes -c "kubectl exec -p {}" $(kubectl get pods | grep my_pod_prefixes | cut -d" " -f1 | tr '\n' ' ')
+xpanes -c "kubectl exec -it {} -- /bin/bash " $(kubectl get pods | grep my_pod_prefixes | cut -d" " -f1 | tr '\n' ' ')
 ```
+
+
+
 
 
 
