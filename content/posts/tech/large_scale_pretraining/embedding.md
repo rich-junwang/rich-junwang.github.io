@@ -1,6 +1,6 @@
 ---
 title: "Embedding"
-date: 2023-7-05T00:18:23-08:00
+date: 2023-07-05T00:18:23-08:00
 lastmod: 2023-07-05T00:18:23-08:00
 author: ["Jun"]
 keywords: 
