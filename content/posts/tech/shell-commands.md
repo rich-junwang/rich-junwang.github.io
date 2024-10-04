@@ -28,6 +28,11 @@ cover:
     relative: false
 ---
 
+### Commonly Used Commands
+```bash
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+```
 
 ### Git 
 
