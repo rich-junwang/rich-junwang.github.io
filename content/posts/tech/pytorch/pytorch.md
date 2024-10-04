@@ -163,6 +163,13 @@ Dataloader sometimes can be buggy, when there are errors related to dataloader, 
 ### Launch Distributed Run
 ```bash
 python3 -m torch.distributed.run --nnodes=2 --nproc_per_node 8 --node_rank=${NODE_RANK} --master_port=1234 --master_addr=xxx train.py args..
+
+MASTER_ADDR=${MASTER_ADDR:-"localhost"}
+MASTER_PORT=${MASTER_PORT:-2345}
+NODE_RANK=${RANK}
+NNODES=${NUM_NODES}
+torchrun  --nproc-per-node=$GPUS_PER_NODE --nnodes=$NUM_NODES --node_rank $NODE_RANK  --rdzv-endpoint=${MASTER_ADDR}:${MASTER_PORT}  --rdzv-backend=c10d train.py args..
+
 ```
 
 
