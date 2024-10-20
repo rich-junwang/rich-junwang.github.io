@@ -187,3 +187,37 @@ proc = subprocess.Popen(
     bufsize=0)
 
 ```
+
+
+## Dataclass
+Data classes use something called a default_factory to handle mutable default values. To use default_factory, we need to use the field() specifier.
+```python
+from dataclasses import dataclass, field
+from typing import List
+
+RANKS = '2 3 4 5 6 7 8 9 10 J Q K A'.split()
+SUITS = '♣ ♢ ♡ ♠'.split()
+
+def make_french_deck():
+    return [PlayingCard(r, s) for s in SUITS for r in RANKS]
+
+@dataclass
+class Deck:
+    # we can't do the following way to assign a mutable default value to a field. 
+    # cards: List[PlayingCard] = make_french_deck()
+
+    cards: List[PlayingCard] = field(default_factory=make_french_deck)
+
+```
+A few commonly used parameters that field supports
+- default: Default value of the field
+- default_factory: Function that returns the initial value of the field
+- init: Use field in .__init__() method? (Default is True.)
+- repr: Use field in repr of the object? (Default is True.)
+
+
+
+
+
+## References
+1. https://realpython.com/python-data-classes/
