@@ -92,6 +92,7 @@ H(p, q) &= -\sum_i p_i\log(q_i) \\\
 &= -\log(\text{softmax}(\hat{y})_y) \\\ 
 \end{aligned} $$
 
+When $max(x)$ is very large, the numerator could become $0$, and $log$ computation could overflow. To prevent this, we can do one more step:
 $$
 \begin{aligned}
 \log(\text{softmax}(x)_i) &= \log(\frac{e^{x_i - \max(x)}}{\sum_j e^{x_j - \max(x)}}) \\\
