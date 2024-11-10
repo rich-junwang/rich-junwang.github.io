@@ -28,7 +28,7 @@ cover:
     relative: false
 ---
 
-Sama has a very good blog talking about the how to manage one's career. I copied it here. 
+Sama has a very good blog talking about how to manage one's career. I copied it here. 
 
 -------------------------------
 
