@@ -44,21 +44,31 @@ The Pipe() function returns a pair of connection objects connected by a pipe whi
 
 **We always use a pipe with the system call _fork()_ that creates a new process.** As we guess, there is no point to use pipes when we have only one process. The figure below represents how we can have a two-way pipe between the parent and child process when we don’t close unnecessary file descriptors:
 
-![pipeUPDATED](https://www.baeldung.com/wp-content/uploads/sites/4/2022/04/pipeUPDATED-1024x512.png)
+<!-- ![pipeUPDATED](images/pipe_extra_conn.png) -->
+<img src="images/pipe_extra_conn.png" alt="drawing" width="80%"/>
 
 **When we close the unused file descriptors we will have a figure like the below.** As we can see from the correct version in the figure below both the parent process and child process can read and write to pipes when we use _pipe_ and _fork_. **However, since the pipe is unidirectional we should be careful if we want the communicate unidirectionally.** That means both parent and child can send data to each other. In that case, one pipe wouldn’t work and that’s why we would need two pipes. One pipe for data flow from parent to child, and one pipe from data flow from child to parent. **We should also close the unneeded pipe descriptors:**
 
-![pipes3](https://www.baeldung.com/wp-content/uploads/sites/4/2022/04/pipes3-1024x476.png)
+<!-- ![pipes3](images/pipe.png) -->
+<img src="images/pipe.png" alt="drawing" width="80%"/>
+
 
 **As we’ve said pipes are a more suitable IPC method for related processes.** Because communication should be simple enough to use raw binary bytes. Actually, pipes that we use in a shell script are the best application of pipes. What they do is that they basically execute binary programs. **So, the limitation of pipe is obvious that we can apply it only to related processes and we can have one-to-one communication.**
 
 For more advanced IPC, there are of course some other ways like [shared memory](https://www.baeldung.com/cs/inter-process-communication#1-shared-memory), [message queue](https://en.wikipedia.org/wiki/Message_queue), and sockets.
 
+As is shown below, there are three steps to create a pipe:
+Three steps to build a pipe. 
+- Create a pipe 
+- Fork process and pipe connection 
+- Close not used connection 
+<p align="center">
+    <img alt="Build a pipe" src="./images/build_pipe.png" width="80%" height=auto/> 
+</p>
 
+<!-- ![](images/build_pipe.png) -->
 
-![](images/build_pipe.png)
-
-Here I give a small code snippet to show how pipe works. 
+Below is a small code snippet to show how pipe works. 
 
 ```python
 from multiprocessing import Pipe, Process
