@@ -26,6 +26,15 @@
     </item>
     
     <item>
+      <title>Python Pipe in Multiprocessing</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/pipe/</link>
+      <pubDate>Tue, 09 Apr 2024 12:01:14 -0700</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/pipe/</guid>
+      <description>Python</description>
+    </item>
+    
+    <item>
       <title>Monte Carlo Tree Search</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/mcts/</link>
       <pubDate>Fri, 05 Apr 2024 00:18:23 +0800</pubDate>
@@ -434,10 +443,10 @@ paper reading. Feel free to reach out to me if you have any comments/suggestions
     
     <item>
       <title>Python</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/python_basics/</link>
       <pubDate>Thu, 09 Apr 2015 12:01:14 -0700</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/python_basics/</guid>
       <description>Python Master</description>
     </item>
     
