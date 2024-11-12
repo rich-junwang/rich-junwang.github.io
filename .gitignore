@@ -7,3 +7,4 @@ _site/
 .ruby-version
 *.code-workspace
 public
+resources/_gen/images/en-us/
