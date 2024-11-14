@@ -244,5 +244,11 @@ git submodule update --init --recursive  # if there are nested submodules
 ```
 
 
+### How to Push
+When we clone a repo using HTTPS, how to push the repo using SSH. We have to set a new remote url. 
+```bash
+git remote set-url origin git@github.com:xxx/yyy.git
+```
+
 ### References
 [1] https://itsnotbugitsfeature.com/2019/10/22/splitting-a-big-pull-request-into-smaller-review-able-ones/
