@@ -58,3 +58,18 @@ Network Address Translation (NAT): Most routers use NAT to allow multiple device
 Port Numbers: When data is sent over the internet, it is associated with a port number, which helps identify the specific service or application that data should be directed to. For example, HTTP traffic typically uses port 80, and HTTPS traffic uses port 443.
 
 Port Forwarding Rule: When you set up port forwarding on a router, you create a rule that tells the router to forward traffic received on a specific port (or range of ports) to a specific internal IP address and port on the local network. This allows external devices to access a service on a device within the private network.
+
+
+### Home Network Debugging
+
+I have a MBP, but somehow the internet speed is very slow. When I use iphone the speed could be 300M+, however, while I use MBP, it's like 30M+. I did some research, the following command helped me. 
+```bash
+ifconfig awdl0 down
+```
+
+Turning off bluetooth might help. But from my experience, it's not that much. 
+
+
+## References
+1. https://www.speedtest.net/
+2. https://www.reddit.com/r/macbookpro/comments/rtyjbt/finally_solved_my_slow_wifi_speeds_on_my_2021/
