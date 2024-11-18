@@ -12,7 +12,7 @@ tags:
 description: "Create a fork"
 weight:
 slug: ""
-draft: true # 是否为草稿
+draft: false # 是否为草稿
 comments: true
 reward: false # 打赏
 mermaid: true #是否开启mermaid
@@ -28,9 +28,25 @@ cover:
     relative: false
 ---
 
-1. make changes in .git/config
+### Three-way Code Management
+![alt text](./image.png)
+```bash
+# Assuming the current directory is <your-repo-name>
+git remote add upstream https://github.com/alshedivat/al-folio.git
+git fetch upstream
 
-This is the original .git/config
+# check all branches
+git branch -avv
+
+git checkout main # local main tracking personal repo
+git rebase upstream/main # rebase from upstream
+git push -f # push to personal repo
+```
+
+
+
+### Manually Add Upstream Branch 
+We can also manually do the changes. This is the original .git/config
 
 ```
 [core]
@@ -39,7 +55,7 @@ This is the original .git/config
     bare = false
     logallrefupdates = true
 [remote "origin"]
-    url = https://github.com/ElementAI/duorat
+    url = https://github.com/yyy/zzz
     fetch = +refs/heads/*:refs/remotes/origin/*
 [branch "master"]
     remote = origin
@@ -56,10 +72,10 @@ Making changes like this:
     bare = false
     logallrefupdates = true
 [remote "origin"]
-    url = https://github.com/rich-junwang/duorat
+    url = https://github.com/xxx/zzz
     fetch = +refs/heads/*:refs/remotes/origin/*
 [remote "upstream"]
-    url = https://github.com/ElementAI/duorat
+    url = https://github.com/yyy/zzz
     fetch = +refs/heads/*:refs/remotes/upstream/*
 [branch "master"]
     remote = origin
@@ -67,24 +83,11 @@ Making changes like this:
 ```
 
 
-I guess we can also do this by the following command:
-
-```
-git remote add upstream https://github.com/ElementAI/duorat
-```
-
-
-2. Push your current mainline to my private remote
-
-```
-git push origin master
-```
-
 ## Sync New Commits from Public Repo
 
 If we haven’t make changes at master, we can do:
 
-```
+```bash
 git checkout master
 git pull upstream master  # pull public (upstream) to local branch
 git push origin master
@@ -92,20 +95,13 @@ git push origin master
 
 If there is conflict with your changes:
 
-```
+```bash
 git checkout master
 git fetch upstream
-
 git merge --no-ff upstream/master
-
 git push origin master
 ```
 
 
 
-```
-# Assuming the current directory is <your-repo-name>
-$ git remote add upstream https://github.com/alshedivat/al-folio.git
-$ git fetch upstream
-```
 
