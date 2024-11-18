@@ -332,6 +332,15 @@
     </item>
     
     <item>
+      <title>Using Git to Create a Private Fork</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/git/git_fork/</link>
+      <pubDate>Sun, 11 Feb 2018 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/git/git_fork/</guid>
+      <description>Create a fork</description>
+    </item>
+    
+    <item>
       <title>Basics of Web</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/web/forward_reverse_proxy/</link>
       <pubDate>Thu, 05 May 2016 00:17:58 +0800</pubDate>
