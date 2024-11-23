@@ -8,7 +8,7 @@ keywords:
 categories: 
 - 
 tags: 
-- blog
+- RL
 description: "Proximal Policy Optimization"
 weight:
 slug: ""
@@ -85,7 +85,7 @@ $$
 Q_{\pi}(s_t, a_t) = \mathbb{E_t}[U_t|S_t=s_t, A_t=a_t]
 $$
 
-State-value function can be calculated as:
+State-value function (or value function) can be calculated as:
 $$
 V_{\pi}(s_t) = \mathbb{E_A}[Q_{\pi}(s_t, A)] = \sum_a \pi(a|s_t) \cdot Q_{\pi}(s_t, a)
 $$

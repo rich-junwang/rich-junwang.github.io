@@ -46,7 +46,23 @@ In model-free algorithms, we don't want to or we can't learn the system dynamics
 
 ### Concepts
 A return is a measured value (or a random variable), representing the actual discounted sum of rewards seen following a specific state or state/action pair. Value function is the expected return function. 
+The discounted return for a trajectory is defined as:
+$$
+U_t = R_t + \gamma R_{t+1} + \gamma^2 R_{t+2} + \gamma^3 R_{t+3} + ...
+$$
 
+Consequently, the action-value function is defined as
+$$
+Q_{\pi}(s_t, a_t) = \mathbb{E_t}[U_t|S_t=s_t, A_t=a_t]
+$$
+
+State-value function (or value function) can be calculated as:
+$$
+V_{\pi}(s_t) = \mathbb{E_A}[Q_{\pi}(s_t, A)] = \sum_a \pi(a|s_t) \cdot Q_{\pi}(s_t, a)
+$$
+
+#### Bellman Equations
+From the definition of the 
 
 ### References
 1. [RL — Reinforcement Learning Algorithms Overview](https://jonathan-hui.medium.com/rl-reinforcement-learning-algorithms-overview-96a1500ffcda)
