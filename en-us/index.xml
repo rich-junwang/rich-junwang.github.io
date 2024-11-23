@@ -9,10 +9,10 @@
     <lastBuildDate>Fri, 05 Jul 2024 00:18:23 -0700</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>PPO and Its Implementation</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/ppo/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/rl/ppo/</link>
       <pubDate>Fri, 05 Jul 2024 00:18:23 -0700</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/ppo/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/rl/ppo/</guid>
       <description>Proximal Policy Optimization</description>
     </item>
     
@@ -380,10 +380,10 @@ paper reading. Feel free to reach out to me if you have any comments/suggestions
     
     <item>
       <title>RL Basics</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/rl/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/rl/rl_basics/</link>
       <pubDate>Sat, 18 Jul 2020 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/rl/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/rl/rl_basics/</guid>
       <description>RL basics</description>
     </item>
     
