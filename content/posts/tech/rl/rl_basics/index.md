@@ -62,8 +62,25 @@ V_{\pi}(s_t) = \mathbb{E_A}[Q_{\pi}(s_t, A)] = \sum_a \pi(a|s_t) \cdot Q_{\pi}(s
 $$
 
 #### Bellman Equations
-From the definition of the 
+From the definition of the return, we can get the following equation
+$$
+U_t = R_t + \gamma U_{t+1}
+$$
 
+Similarly it's easy to get the value function
+$$
+\begin{aligned}
+V_{\pi}(s_t) &= \mathbb{E}[R_t + \gamma V(s_{t+1}) \bigm\vert  S_{t} = s] \\\
+&=\mathbb{E}[R_t \bigm\vert  S_{t} = s] + \mathbb{E}[\gamma V(s_{t+1}) \bigm\vert  S_{t} = s]
+\end{aligned} 
+$$
+
+For action-value function, we have
+$$
+\begin{aligned}
+Q_{\pi}(s_t, a_t) =\mathbb{E}[R_t \bigm\vert  S_{t} = s, A_{t} = t] + \mathbb{E}[\gamma Q_{\pi}(s_{t+1}, a_{t+1}) \bigm\vert  S_{t} = s, A_{t} = t]
+\end{aligned} 
+$$
 ### References
 1. [RL — Reinforcement Learning Algorithms Overview](https://jonathan-hui.medium.com/rl-reinforcement-learning-algorithms-overview-96a1500ffcda)
 2. [Spinning Up in Deep RL](https://spinningup.openai.com/en/latest/) 
