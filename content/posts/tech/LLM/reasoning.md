@@ -36,3 +36,4 @@ cover:
 2. score: [Training Language Models to Self-Correct via Reinforcement Learning](https://arxiv.org/pdf/2409.12917)
 3. https://github.com/koayon/awesome-adaptive-computation
 4. https://github.com/srush/awesome-o1
+5. https://github.com/Open-Source-O1/Open-O1
