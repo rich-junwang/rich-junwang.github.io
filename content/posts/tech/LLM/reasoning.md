@@ -30,10 +30,24 @@ cover:
 
 
 
+## Datasets
+1. Public CoT datasets
+    - Open-O1 CoT Dataset (Filtered)
+    - https://github.com/AIDC-AI/Marco-o1/blob/main/data/CoT_demo.json
+    - MathCritique-76k 
+
+2. Instruction-following data
+3. Synthetic CoT data
+
 
 ## References
 1. omegaprm: [Improve Mathematical Reasoning in Language Models by Automated Process Supervision](https://arxiv.org/pdf/2406.06592)
 2. score: [Training Language Models to Self-Correct via Reinforcement Learning](https://arxiv.org/pdf/2409.12917)
-3. https://github.com/koayon/awesome-adaptive-computation
-4. https://github.com/srush/awesome-o1
-5. https://github.com/Open-Source-O1/Open-O1
+3. math-shepherd: [Math-Shepherd: Verify and Reinforce LLMs Step-by-step without Human Annotations](https://arxiv.org/abs/2312.08935)
+4. https://github.com/koayon/awesome-adaptive-computation
+5. https://github.com/srush/awesome-o1
+6. https://github.com/Open-Source-O1/Open-O1
+7. openr: [OpenR: An Open Source Framework for Advanced Reasoning with Large Language Models](https://arxiv.org/pdf/2410.09671)
+8. rStar: https://github.com/zhentingqi/rStar
+9. sos: [Stream of Search (SoS): Learning to Search in Language](https://arxiv.org/abs/2404.03683)
+
