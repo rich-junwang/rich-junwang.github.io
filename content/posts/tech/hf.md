@@ -37,5 +37,15 @@ The difference between `AutoModel` and `AutoModelForCausalLM` is that the former
 # Might need to install the pkg
 # pip install huggingface_hub
 python -c "from huggingface_hub.hf_api import HfFolder; HfFolder.save_token('MY_HUGGINGFACE_TOKEN_HERE')"
+
+
+
+# speedup model download
+pip install hf-transfer
+export HF_HUB_ENABLE_HF_TRANSFER=1
+
+# or in python we can add the following
+import os
+os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1" 
 ```
 [1] https://uvadlc-notebooks.readthedocs.io/en/latest/index.html
