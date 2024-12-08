@@ -45,7 +45,7 @@ pip install hf-transfer
 export HF_HUB_ENABLE_HF_TRANSFER=1
 
 # or in python we can add the following
-import os
-os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1" 
+# import os
+# os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1" 
 ```
 [1] https://uvadlc-notebooks.readthedocs.io/en/latest/index.html
