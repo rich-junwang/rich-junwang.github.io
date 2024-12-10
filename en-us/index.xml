@@ -341,11 +341,7 @@
 &lt;img class=&#34;img-fluid z-depth-1 rounded&#34; id=&#34;mypic&#34; src=&#34;https://rich-junwang.github.io/img/junwang.jpeg&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Hi there, this is Jun Wang. Welcome to my website. I&#39;m a programmer. I love programming. 
-&lt;p&gt;Currently, I&amp;rsquo;m a Senior Applied Scientist at Amazon. My research focuses on LLMs, foundational model training, machine learning and its applications in
-natural language processing. I aim to design systems that understand natural language in a way that makes
-sense to humans. Generally, I’m interested in areas such as semantic parsing, question answering and
-knowledge representation learning and reasoning, language grounding, and methods insipred by cognitive
-science.&lt;/p&gt;
+&lt;p&gt;I am a Senior Applied Scientist at Amazon, specializing in foundational model pre-training, post-training, and reinforcement learning for complex reasoning tasks. My expertise spans the entire lifecycle of large language model (LLM) development, including data curation, pretraining, supervised fine-tuning (SFT), and reinforcement learning with human feedback (RLHF). I have experience training both text-based and code-focused models. Most recently, I&amp;rsquo;ve been focusing on deep RL for math, code generation tasks.&lt;/p&gt;
 &lt;/p&gt;
 &lt;p&gt;Opinions are my own and I do not speak for my employer or my team. On this webpage, I&#39;d like to share my study and my
 paper reading. Feel free to reach out to me if you have any comments/suggestions&lt;/p&gt;</description>
