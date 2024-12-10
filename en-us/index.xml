@@ -26,6 +26,15 @@
     </item>
     
     <item>
+      <title>Ray</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/rl/ray/</link>
+      <pubDate>Tue, 18 Jun 2024 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/rl/ray/</guid>
+      <description>Async Ops in Ray</description>
+    </item>
+    
+    <item>
       <title>Python Pipe in Multiprocessing</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/pipe/</link>
       <pubDate>Tue, 09 Apr 2024 12:01:14 -0700</pubDate>
