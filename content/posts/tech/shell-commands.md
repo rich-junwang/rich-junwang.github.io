@@ -322,10 +322,6 @@ cd src_dir && find . -type f -print0  | xargs -0 -P4 -I% rsync -avR % target_dir
 ```
 
 
-### Here Document/Text
-
-
-
 ### Tips and Tricks
 1. Sometimes we need to copy multiple files from a directory. In order to copy multiple ones without explicitly listing all the absolute paths, we can use the following way. However, to use the autocomplete, we need to type left `{` first without the right one. 
 ```bash
@@ -503,6 +499,53 @@ The current remote working directory is: /home/user
 ```
 
 
+Another usage is to read strings into a variable. The following is an example where we can read a json format config to `my_config_json` variable. 
+```bash
+read -r -d '' my_config_json <<EOT
+{
+"working_dir": "${WORK_DIR}",
+"env_vars": {
+"PYTHONPATH": "${SRC_DIR}:$PYTHONPATH",
+"LD_LIBRARY_PATH": "my_ld_path:$LD_LIBRARY_PATH"
+}
+}
+
+# we can use the above config in Ray
+ray job submit --address="http://127.0.0.1:8265" \
+--runtime-env-json="${my_config_json}" \
+-- python xx
+
+```
+
+Another example on heredoc:
+
+```bash
+# https://github.com/bigscience-workshop/bigscience/blob/master/train/tr8b-104B/tr8b-104B-emb-norm-64n.slurm
+config_json="./ds_config.$SLURM_JOBID.json"
+
+# Deepspeed figures out GAS dynamically from dynamic GBS via set_train_batch_size()
+cat <<EOT > $config_json
+{
+  "train_micro_batch_size_per_gpu": $MICRO_BATCH_SIZE,
+  "train_batch_size": $GLOBAL_BATCH_SIZE,
+  "gradient_clipping": 1.0,
+  "zero_optimization": {
+    "stage": $ZERO_STAGE
+  },
+  "fp16": {
+    "enabled": true,
+    "loss_scale": 0,
+    "loss_scale_window": 500,
+    "hysteresis": 2,
+    "min_loss_scale": 1,
+    "initial_scale_power": 12
+  },
+  "zero_allow_untested_optimizer": true,
+  "steps_per_print": 2000,
+  "wall_clock_breakdown": false
+}
+EOT
+```
 
 ### Tmux
 How to run a python script on each GPU
