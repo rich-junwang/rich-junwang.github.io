@@ -501,7 +501,7 @@ The current remote working directory is: /home/user
 
 Another usage is to read strings into a variable. The following is an example where we can read a json format config to `my_config_json` variable. 
 ```bash
-read -r -d '' my_config_json <<EOT
+read -r -d '' my_config_json <<EOF
 {
 "working_dir": "${WORK_DIR}",
 "env_vars": {
@@ -509,6 +509,7 @@ read -r -d '' my_config_json <<EOT
 "LD_LIBRARY_PATH": "my_ld_path:$LD_LIBRARY_PATH"
 }
 }
+EOF
 
 # we can use the above config in Ray
 ray job submit --address="http://127.0.0.1:8265" \
