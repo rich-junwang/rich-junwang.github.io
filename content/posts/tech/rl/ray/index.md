@@ -39,7 +39,7 @@ To handle these heterogenous tasks, Ray abstracts two kinds of computation:
 - Stateless task: functions decorated with `@ray.remote` in python
 - Stateful actor: classes decorated with `@ray.remote` in python
 
-One example
+Below is one example of task computation in Ray. 
 ```python
 
 # Ray task example
