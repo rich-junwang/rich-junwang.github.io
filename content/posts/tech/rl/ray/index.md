@@ -29,6 +29,39 @@ cover:
 math: true
 ---
 
+### Introduction
+Ray was designed with training RL system in mind. There are three kinds of tasks in RL system training
+- Simulation where agents interact with environments and environments omit responses
+- Evaluation where agents generate rollout trajectory
+- Training where policy is updated for improvement
+
+To handle these heterogenous tasks, Ray abstracts two kinds of computation:
+- Stateless task: functions decorated with `@ray.remote` in python
+- Stateful actor: classes decorated with `@ray.remote` in python
+
+One example
+```python
+
+# Ray task example
+
+import ray
+ray.init()
+
+@ray.remote
+def func(x):
+    return x ** 2
+
+# driver process
+if __name__ == "__main__":
+
+    # create 2 workers, execute func remotely, return 2 futures which each points to a remote op
+    futures = [func.remote(i) for i in range(2)]
+
+    # blocking
+    results = ray.get(futures)) 
+    print(f"The final result is: {results}") # [0, 1]
+```
+
 ### Promise and Future
 Before diving deep into Ray, I'll first give a brief introduction to the async ops in programming in C++.
  An asynchronous call delegates time-consuming or blocking tasks to other threads, thereby ensuring the current thread's responsiveness. Concretely, it involves the current thread delegating a task to another thread for execution. The current thread continues executing its own tasks without waiting for the delegated task's result. The result of the delegated task is only required at some point in the future when it is needed.
@@ -36,7 +69,7 @@ Before diving deep into Ray, I'll first give a brief introduction to the async o
 An asynchronous operation is created, executed by another thread, and upon completion, returns a result. The creator of the asynchronous call retrieves this result when needed. To meet these requirements, C++ provides std::future and std::promise. The relation is shown in the figure below. 
 <p align="center">
     <img alt="Promise and future" src="images/image.png" width="90%"/>
-    <em>Promise and future</em>
+    <em>Promise and future: worker gets the promise instance and main driver gets the future</em>
     <br>
 </p>
 
@@ -80,7 +113,7 @@ int main() {
 ```
 
 
-### Ray
+### Ray Architecture
 Ray is a general-purpose framework for parallel programming on a cluster. 
 <p align="center">
     <img alt="Ray Architecture" src="images/ray_architecture.png" width="90%"/>
