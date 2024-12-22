@@ -140,6 +140,23 @@ class Counter:
 
 # Create an actor from this class.
 counter = Counter.remote()
+
+# Call the actor.
+obj_ref = counter.increment.remote()
+print(ray.get(obj_ref))
+
+# Create ten Counter actors.
+counters = [Counter.remote() for _ in range(10)]
+
+# Increment each Counter once and get the results. These tasks all happen in
+# parallel.
+results = ray.get([c.increment.remote() for c in counters])
+print(results)
+
+# Increment the first Counter five times. These tasks are executed serially
+# and share state.
+results = ray.get([counters[0].increment.remote() for _ in range(5)])
+print(results)
 ```
 
 ### Ray Architecture
