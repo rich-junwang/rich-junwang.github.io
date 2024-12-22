@@ -217,7 +217,26 @@ A few commonly used parameters that field supports
 
 
 
+## Global Variable in Python
+Python looks for variables in four different scopes:
 
+> 1. The local, or function-level, scope, which exists inside functions
+> 2. The enclosing, or non-local, scope, which appears in nested functions
+> 3. The global scope, which exists at the module level
+> 4. The built-in scope, which is a special scope for Python’s built-in names
+
+The code snippet below shows how these scopes work. 
+```python
+# Global scope
+
+def outer_func():
+    # Non-local scope
+    def inner_func():
+        # Local scope
+        print(some_variable)
+    inner_func()
+```
+Notice that global is only at module level. There is no program level global variable for python. After we define a global variable in one module, we could use it in other module with its module name.  
 
 ## References
 1. https://realpython.com/python-data-classes/
