@@ -29,39 +29,6 @@ cover:
 math: true
 ---
 
-### Introduction
-Ray was designed with training RL system in mind. There are three kinds of tasks in RL system training
-- Simulation where agents interact with environments and environments omit responses
-- Evaluation where agents generate rollout trajectory
-- Training where policy is updated for improvement
-
-To handle these heterogenous tasks, Ray abstracts two kinds of computation:
-- Stateless task: functions decorated with `@ray.remote` in python
-- Stateful actor: classes decorated with `@ray.remote` in python
-
-Below is one example of task computation in Ray. 
-```python
-
-# Ray task example
-
-import ray
-ray.init()
-
-@ray.remote
-def func(x):
-    return x ** 2
-
-# driver process
-if __name__ == "__main__":
-
-    # create 2 workers, execute func remotely, return 2 futures which each points to a remote op
-    futures = [func.remote(i) for i in range(2)]
-
-    # blocking
-    results = ray.get(futures)) 
-    print(f"The final result is: {results}") # [0, 1]
-```
-
 ### Promise and Future
 Before diving deep into Ray, I'll first give a brief introduction to the async ops in programming in C++.
  An asynchronous call delegates time-consuming or blocking tasks to other threads, thereby ensuring the current thread's responsiveness. Concretely, it involves the current thread delegating a task to another thread for execution. The current thread continues executing its own tasks without waiting for the delegated task's result. The result of the delegated task is only required at some point in the future when it is needed.
@@ -112,6 +79,68 @@ int main() {
 // async result is 21
 ```
 
+### Introduction
+Ray was designed with training RL system in mind. There are three kinds of tasks in RL system training
+- Simulation where agents interact with environments and environments omit responses
+- Evaluation where agents generate rollout trajectory
+- Training where policy is updated for improvement
+
+To handle these heterogenous tasks, Ray abstracts two kinds of computation:
+- Stateless task: functions decorated with `@ray.remote` in python
+- Stateful actor: classes decorated with `@ray.remote` in python
+
+Below is one example of task computation in Ray. 
+```python
+
+# Ray task example
+
+import ray
+ray.init()
+
+@ray.remote
+def func(x):
+    return x ** 2
+
+# driver process
+if __name__ == "__main__":
+
+    # create 2 workers, execute func remotely, return 2 futures which each points to a remote op
+    futures = [func.remote(i) for i in range(2)]
+
+    # blocking
+    results = ray.get(futures)) 
+    print(f"The final result is: {results}") # [0, 1]
+```
+
+
+### Ray Actor
+Ray actor is different from python class in the following ways: 
+
+> 1. Declare an actor by annotating a class with @ray.remote, just like declaring a task from a function.
+> 2. Add accessor methods for any data members that you need to read or write, because using direct access, such as my_game.state, doesn't work for actors.
+> 3. Construct actor instances with my_instance = MyClass.remote(...).
+> 4. Call methods with my_instance.some_method.remote(...).
+> 5. Use ray.get() and ray.wait() to retrieve results, just like you do for task results.
+
+```python
+import ray
+
+@ray.remote
+class Counter:
+    def __init__(self):
+        self.value = 0
+
+    def increment(self):
+        self.value += 1
+        return self.value
+
+    # define the accessor as we can't use direct access
+    def get_counter(self):
+        return self.value
+
+# Create an actor from this class.
+counter = Counter.remote()
+```
 
 ### Ray Architecture
 Ray is a general-purpose framework for parallel programming on a cluster. 
