@@ -114,13 +114,12 @@ if __name__ == "__main__":
 
 
 ### Ray Actor
-Ray actor is different from python class in the following ways: 
+Declare an actor by annotating a class with @ray.remote, just like declaring a task from a function. Ray actor is different from python class in the following ways: 
 
-> 1. Declare an actor by annotating a class with @ray.remote, just like declaring a task from a function.
-> 2. Add accessor methods for any data members that you need to read or write, because using direct access, such as my_game.state, doesn't work for actors.
-> 3. Construct actor instances with my_instance = MyClass.remote(...).
-> 4. Call methods with my_instance.some_method.remote(...).
-> 5. Use ray.get() and ray.wait() to retrieve results, just like you do for task results.
+> 1. Add accessor methods for any data members that you need to read or write, because using direct access, such as my_game.state, doesn't work for actors.
+> 2. Construct actor instances with my_instance = MyClass.remote(...).
+> 3. Call methods with my_instance.some_method.remote(...).
+> 4. Use ray.get() and ray.wait() to retrieve results, just like you do for task results.
 
 ```python
 import ray
@@ -167,6 +166,7 @@ Ray is a general-purpose framework for parallel programming on a cluster.
     <br>
 </p>
 
+### Ray Tips
 
 #### Delay ray.get()
 
