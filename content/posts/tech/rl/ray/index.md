@@ -394,3 +394,4 @@ results = trainer.fit()
 1. https://rise.cs.berkeley.edu/blog/ray-tips-for-first-time-users/
 2. [Ray: A Distributed Framework for Emerging AI Applications](https://arxiv.org/abs/1712.05889)
 3. https://github.com/dmatrix/ray-core-tutorial
+4. [Ray Whitepaper](https://docs.google.com/document/d/1tBw9A4j62ruI5omIJbMxly-la5w4q_TjyJgJL_jN2fI/preview?tab=t.0#heading=h.iyrm5j2gcdoq)
