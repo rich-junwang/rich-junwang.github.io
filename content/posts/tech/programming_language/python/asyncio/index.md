@@ -1,5 +1,5 @@
 ---
-title: "Python AsyncIO"
+title: "AsyncIO"
 date: 2024-08-09T12:01:14-07:00
 lastmod: 2024-08-09T12:01:14-07:00
 author: ["Jun"]
@@ -9,7 +9,7 @@ categories: # 没有分类界面可以不填写
 - 
 tags: # 标签
 - 
-description: "Python Master"
+description: "Async concurrency"
 weight:
 slug: ""
 draft: false # 是否为草稿
