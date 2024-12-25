@@ -1,5 +1,5 @@
 ---
-title: "How to Manager Your Career"
+title: "How to Manage Your Career"
 date: 2023-05-05T00:18:06+08:00
 lastmod: 2023-05-05T00:18:06+08:00
 author: ["Jun"]
@@ -8,7 +8,7 @@ keywords:
 categories: 
 - 
 tags: 
-- read
+- career
 description: ""
 weight:
 slug: ""
