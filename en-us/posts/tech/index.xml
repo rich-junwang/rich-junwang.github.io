@@ -8,12 +8,12 @@
     <language>en-us</language>
     <lastBuildDate>Fri, 09 Aug 2024 12:01:14 -0700</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/posts/tech/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Python AsyncIO</title>
+      <title>AsyncIO</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/asyncio/</link>
       <pubDate>Fri, 09 Aug 2024 12:01:14 -0700</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/asyncio/</guid>
-      <description>Python Master</description>
+      <description>Async concurrency</description>
     </item>
     
     <item>
