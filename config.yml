@@ -15,7 +15,8 @@ buildExpired: false
 googleAnalytics:  # 谷歌统计
 # Copyright: Jun
 
-paginate: 15    # 首页每页显示的文章数
+pagination:
+  pagerSize: 15
 summaryLength: 140 # 文章概览的自字数，默认70
 
 minify:
