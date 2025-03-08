@@ -249,7 +249,7 @@ async/await is used to hint the scheduler about coroutines that are waiting on I
 
 
 ## References
-1. https://realpython.com/async-io-python/3. 
+1. https://realpython.com/async-io-python/
 2. https://www.roguelynn.com/words/asyncio-we-did-it-wrong/
 
 
