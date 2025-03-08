@@ -31,7 +31,7 @@ math: true
 
 
 
-### Attach GDB
+## Attach GDB
 ```
 /usr/local/cuda/bin/cuda-gdb attach process-id
 bt
@@ -39,16 +39,16 @@ bt
 gdb python process-id
 ```
 
-### Python Debug
+## Python Debug
 ```Python
 # python code
 import pdb; pdb.set_trace()
 ```
 
 
-### Tools
+## Tools
 
-#### Shortcuts
+### Shortcuts
 These shortcuts can be redefined in the keymap(Pycharm) or Keyboard shortcuts (VScode), but we need to know the meaning of these keys. 
 Pycharm
 - reformatting: CMD + ALT + L -> convert json line format to json format

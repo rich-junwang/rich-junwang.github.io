@@ -40,13 +40,13 @@ RAG system contains: chunking, indexing, querying and generation. Chunking and i
 </p>
 
 
-### Indexing
+## Indexing
 
-### Retrieval
+## Retrieval
 Retrieval is the online process where the system converts user query into vector representation and retrieve relevant documents. 
 
 
-#### Retrieval Evaluation Metric
+### Retrieval Evaluation Metric
 Like recommender system, retrieval system commonly use the following evaluation metrics.
 - Hit ratio (hit@k), 
 - Normalized Discounted Cumulative Gain (NDCG), 
@@ -55,10 +55,10 @@ Like recommender system, retrieval system commonly use the following evaluation 
 - Mean Reciprocal Rank (MRR)
 - Mean Average Precision (MAP)
 
-##### Hit@k
+#### Hit@k
 Hit@k sometimes is also called Top-k accuracy. It is the percentage of search queries for each of which at least one item from the ground truth is returned within the top-k results. Simply put, it means % of queries get answer hit at top k retrieved passages. (Answer hit means user clicked on the doc). This number is meaningful when there are multiple test cases.
 
-##### NDCG
+#### NDCG
 Normalized Discounted Cumulative Gain (NDCG) is popular method for measuring the quality of a set of search results. It asserts the following:
 - Very relevant results are more useful than somewhat relevant results which are more useful than irrelevant results (cumulative gain)
 - Relevant results are more useful when they appear earlier in the set of results (discounting).
@@ -89,7 +89,7 @@ $$
 where $IDCG@k$ is the best $DCG$ we can get at position $k$. 
 
 
-##### Precision@k and Recall@k
+#### Precision@k and Recall@k
 Precision@k measures the percentage of relevant results among top k results. At the same time, recall@k evaluates the ratio of relevant results among top k to the total number of relevant items in the whole dataset.
 $$
 Precision@k = \frac{\text{number of recommended relevant items among top k}}{\text{number of recommended items k}}
@@ -119,7 +119,7 @@ MRR Cons
 - This might not be a good evaluation metric for users that want a list of related items to browse. The goal of the users might be to compare multiple related items.
 
 
-##### MAP
+#### MAP
 The P@N decision support metric calculates the fraction of n recommendations that are good. The drawback of this metric is that it does not consider the recommended list as an ordered list. Precision@k considers the whole list as a set of items, and treats all the errors in the recommended list equally. The goal is to cut the error in the first few elements rather than much later in the list. For this, we need a metric that weights the errors accordingly. The goal is to weight heavily the errors at the top of the list. Then gradually decrease the significance of the errors as we go down the lower items in a list. The Average Prediction (AP) metric tries to approximate this weighting sliding scale. 
 
  Average Precision (AP) is a metric about how a single sorted prediction compares with the ground truth. i.e., AP tells how correct a single ranking of documents is, with respect to a single query. Thus, MAP is meaningful when there are multiple test cases.
@@ -131,7 +131,7 @@ AP is calculated as the average of precision@k over the list.
     <br>
 </p>
 
-#### TREC_EVAL
+### TREC_EVAL
 [TREC_EVAL](https://github.com/usnistgov/trec_eval) is an evaluation tool which is used to evaluate an Information Retrieval system. TREC_EVAL requires two files: one is qrels (query relevance) and the other is retrieval output that needs to be evaluated.
 ```bash
 trec_eval [-q] [-a] trec_rel_file trec_top_file

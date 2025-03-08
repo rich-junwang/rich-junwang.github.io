@@ -29,7 +29,7 @@ cover:
 math: true
 ---
 
-### Promise and Future
+## Promise and Future
 Before diving deep into Ray, I'll first give a brief introduction to the async ops in programming in C++.
  An asynchronous call delegates time-consuming or blocking tasks to other threads, thereby ensuring the current thread's responsiveness. Concretely, it involves the current thread delegating a task to another thread for execution. The current thread continues executing its own tasks without waiting for the delegated task's result. The result of the delegated task is only required at some point in the future when it is needed.
 
@@ -79,7 +79,7 @@ int main() {
 // async result is 21
 ```
 
-### Introduction
+## Introduction
 Ray was designed with training RL system in mind. There are three kinds of tasks in RL system training
 - Simulation where agents interact with environments and environments omit responses
 - Evaluation where agents generate rollout trajectory
@@ -113,7 +113,7 @@ if __name__ == "__main__":
 ```
 
 
-### Ray Actor
+## Ray Actor
 Declare an actor by annotating a class with @ray.remote, just like declaring a task from a function. Ray actor is different from python class in the following ways: 
 
 > 1. Add accessor methods for any data members that you need to read or write, because using direct access, such as my_game.state, doesn't work for actors.
@@ -166,9 +166,9 @@ Ray is a general-purpose framework for parallel programming on a cluster.
     <br>
 </p>
 
-### Ray Tips
+## Ray Tips
 
-#### Delay ray.get()
+### Delay ray.get()
 
 With Ray, the invocation of every remote operation (e.g., task, actor method) is asynchronous. This means that the operation returns _immediately_ a promise/future, which is essentially an identifier (ID) of the operation’s result. This is key to achieve parallelism, as it allows the driver program to launch multiple operations in parallel. To get the actual results, the programmer needs to call ray.get() on the IDs of the results. This call blocks until the results are available. As a side effect, this operation also blocks the driver program from invoking other operations, which can hurt parallelism.
 
@@ -217,7 +217,7 @@ Note that `ray.get()` is blocking, so calling it after each remote operation mea
 To enable parallelism, we need to call ray.get() _after_ invoking all tasks. We can easily do so in our example by replacing line “results = \[do\_some\_work.remote(x) for x in range(4)\]” with:
 
 
-#### Avoid passing same object repeatedly to remote tasks
+### Avoid passing same object repeatedly to remote tasks
 When we pass a large object as an argument to a remote function, Ray calls ray.put() under the hood to store that object in the local object store. This can significantly improve the performance of a remote task invocation when the remote task is executed locally, as all local tasks share the object store. However, there are cases when automatically calling ray.put() on a task invocation leads to performance issues. One example is passing the same large object as an argument _repeatedly_, as illustrated by the program below:
 
 ```python
@@ -262,7 +262,7 @@ print("duration =", time.time() - start)
 # duration = 0.12425804138183594
 ```
 
-#### Pipeline data processing
+### Pipeline data processing
 
 If we use ray.get() on the results of multiple tasks we will have to wait until the _last_ one of these tasks finishes. This can be an issue if tasks take widely different amounts of time. To illustrate this issue, consider the following example where we run four do\_some\_work() tasks in parallel, with each task taking a time uniformly distributed between 0 and 4 sec. Next, assume the results of these tasks are processed by process\_results(), which takes 1 sec per result. The expected running time is then (1) the time it takes to execute the slowest of the do\_some\_work() tasks, plus (2) 4 sec which is the time it takes to execute process\_results().
 

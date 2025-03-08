@@ -36,7 +36,7 @@ Diffusion is the process where we gradually convert a know distribution into a t
     <br>
 </p>
 
-### Forward Process
+## Forward Process
 As is shown in the figure above, there are two processes in diffusion:
 - Forward diffusion process: we slowly and iteratively add noise to the images
 - Reverse diffusion process: we iteratively perform the denoising in small steps starting from a noisy image to convert it back to original form.
@@ -66,14 +66,14 @@ $$
 Here $\epsilon \sim \mathcal{N}(0, I)$. Even though we know the distribution, we don't know the value the noise. In practice, we use neural network to approximate this noise. 
 
 
-#### Reparameterization
+### Reparameterization
 Reparameterization is used on both VAE and diffusion. It's needed because in diffusion, we have a lot of sampling operation and these operations are not differentiable. We use reparameterization to make it differentiable. Concretely, people introduce a random variable $\epsilon$, then we can sample from any gussian $z \sim \mathcal{N}(z; \mu_{\theta}, \sigma^2_{\theta}\mathbf{I}) $ as follows:
 $$
 z = \mu_{\theta} + \sigma_{\theta}  \odot \epsilon ; \epsilon \sim \mathcal{N}(0, \mathbf{I})
 $$
 
 
-### Reverse Process
+## Reverse Process
 Obviously, in reverse process we denoise the data and recover the images we have originally step by step. In the reverse process, we use the image at time $t$ to predict image at $t-1$, it follows the following distribution
 $$
 p(x_{t-1}|x_{t}) = \mathcal{N}(\frac{1}{\sqrt{\alpha_{t}}}(x_t - \frac{1- \alpha_{t}}{\sqrt{1 - \bar{\alpha_{t}}}} \epsilon); \frac{(1- \alpha_{t})(1 - \bar{\alpha_{t-1}})}{\sqrt{1 - \bar{\alpha_{t}}}})
@@ -81,7 +81,7 @@ $$
 
 Everything relates to $\alpha$ is a constant. 
 
-### References
+## References
 1. [Denoising Diffusion Probabilistic Models](https://arxiv.org/pdf/2006.11239.pdf) <br>
 2. [Understanding Diffusion Models: A Unified Perspective](https://arxiv.org/abs/2208.11970) <br>
 3. [Transfusion: Predict the Next Token and Diffuse Images with One Multi-Modal Model](https://www.arxiv.org/pdf/2408.11039)

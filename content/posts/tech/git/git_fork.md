@@ -28,7 +28,7 @@ cover:
     relative: false
 ---
 
-### Three-way Code Management
+## Three-way Code Management
 ![alt text](./image.png)
 ```bash
 # Assuming the current directory is <your-repo-name>
@@ -45,7 +45,7 @@ git push -f # push to personal repo
 
 
 
-### Manually Add Upstream Branch 
+## Manually Add Upstream Branch 
 We can also manually do the changes. This is the original .git/config
 
 ```

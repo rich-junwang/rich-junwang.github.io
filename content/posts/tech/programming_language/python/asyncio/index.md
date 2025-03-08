@@ -29,7 +29,7 @@ cover:
     relative: false
 ---
 
-### Introduction
+## Introduction
 AysncIO in python has two keywords: async/await. Many people who first encounter async concept might wonder isn't that python can only have one thread in execution given the constraint of GIL? 
 
 Indeed, ayncio is bound by GIL and it can't run more than one task at any moment as is shown below. This means that if another thread needs to run, the ownership of the GIL must be passed from the current executing thread to the other thread. This is what is called preemptive concurrency. This kind of switching is expensive when there are lots of threads. 
@@ -248,7 +248,7 @@ async/await is used to hint the scheduler about coroutines that are waiting on I
 
 
 
-### References
+## References
 1. https://realpython.com/async-io-python/3. 
 2. https://www.roguelynn.com/words/asyncio-we-did-it-wrong/
 

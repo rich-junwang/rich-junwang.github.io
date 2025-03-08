@@ -30,9 +30,9 @@ math: true
 
 ---
 In this blog, I'll go through the theory (simplified version) of PPO algorithm and try to code it from scratch.
-### Basics
+## Basics
 
-#### Monte Carlo Approximation
+### Monte Carlo Approximation
 Distributions of random variables in reality are mostly unknown. Sampling-based methods are extensively used in practice becaue of its ease of use and the generality where they can be applied. One of the fundamental problems is to calculate the expectation of a random variable, which can be expressed as 
 
 $$
@@ -50,7 +50,7 @@ $$
 
 assuming that the $x_i$ here is the i.i.d samples from the distribution $p(x)$. So we say that Monte Carlo Approximation is to use one or more samples to calculate the expectation of a distribution. 
 
-#### Importance Sampling
+### Importance Sampling
 In reality, it could be very challenging to sample data according to the distribution $p(x)$ as it is usually unknown to us. A workaround is to have another known distribution $q(x)$, and define the expectation as:
 $$
 \mathbb{E_{x\sim p(x)}}[f] = \int{q(x)\frac{p(x)}{q(x)}f(x)} dx
@@ -74,7 +74,7 @@ Var_{x\sim q(x)}[f] &= \mathbb{E_{x\sim q(x)}}[({\frac{p(x_i)}{q(x_i)}f(x_i)})^2
 $$
 Notice that the second equation here, in the second step derivation, the expectation is relative to distribution of $p(x)$. From the above two equations, we can see that to make the sampling distribution as close as possible to the original distribution, the ratio $\frac{p(x_i)}{q(x_i)}$ has to be close to 1.
 
-#### Policy Gradient
+### Policy Gradient
 First, let's remind ourselves some basics. The discounted return for a trajectory is defined as:
 $$
 U_t = R_t + \gamma R_{t+1} + \gamma^2 R_{t+2} + \gamma^3 R_{t+3} + ...
@@ -120,7 +120,7 @@ $$
 
 This is also called Monte Carlo policy gradient. Since gradient is a direction, this formula shows that policy gradient estimation is the direction of the steepest increase in reward/return. When reward is larger, the policy gradient will be larger.
 
-#### Temporal Difference (TD) Learning
+### Temporal Difference (TD) Learning
 Temporal Difference (TD) learning is one of the core concepts in Reinforcement Learning. Temporal difference algorithm always aims to bring the expected prediction and the new prediction together, thus matching expectations with reality and gradually increasing the accuracy of the entire chain of prediction.
 
 The most basic version is TD(0) method. Specifically, if our agent is in a current state $s_t$, takes the action $a_t$ and receives the reward $r_t$, then we update our estimate of $V$ following
@@ -142,7 +142,7 @@ $$
 Q(s_t, a_t)  \xleftarrow[]{} Q(s_t, a_t)  + \alpha[r_{t+1} + \gamma \max_{a} Q(s_{t+1}, a) – Q(s_t, a_t)]
 $$
 
-#### REINFORCE
+### REINFORCE
 Since $Q_{\pi}(s, a)$ is the expectation of the return, we can once again use Monte Carlo approximation,
 $$
 \begin{aligned}
@@ -157,7 +157,7 @@ The above MCPG actually gives us a practical algorithm to do policy gradient bas
 4. Compute policy gradient $g(a_t, \theta_t) = q_t \cdot d_{\theta, t}$
 
 
-#### Advantage Function and Generalized Advantage Estimation
+### Advantage Function and Generalized Advantage Estimation
 The above equation is the vanilla policy gradient method. More policy gradient algorithms are proposed later to reduce high variance of the vanilla version. John Schulman's [GAE paper](https://arxiv.org/pdf/1506.02438.pdf) summarized all the improvement methods. In the derivation, the policy gradient is represented as
 $$
 \frac{\partial{V(s; \theta)}}{\partial{\theta}} = \mathbb{E_A}\left[  \frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} \cdot  \hat{A_t}(s, a) \right]
@@ -195,7 +195,7 @@ $$
 \end{aligned}
 $$        
 
-#### Actor-Critic Algorithm
+### Actor-Critic Algorithm
 There we give a recap of how actor-critic method works. In Actor-Critic algorithm, we use one neural network $\pi(a|s; \theta)$ to approximate policy function $\pi(a|s)$ and use another neural network $q(s, a; w)$ to approximate value function $Q_{\pi}(s, a)$.
 - Observe state $s_t$, and randomly sample action from policy  $a_t \sim \pi(\cdot | s_t; \Theta_t)$
 - Let agent perform action $a_t$, and get new state $s_{t+1}$ and reward $r_t$ from environment
@@ -210,7 +210,7 @@ There we give a recap of how actor-critic method works. In Actor-Critic algorith
 Essentially, the algorithm alternates between sampling and optimization. The expectation in the above equation indicates that we need to average over a finite batch of empirical samples. 
 
 
-#### Proximal Policy Optimization
+### Proximal Policy Optimization
 Vanilla policy gradient method uses on-policy update. Concretely, the algorithm samples empirical data from a policy network $\pi_{\theta}$ parameterized with $\theta$. After updating the network itself, the new policy network is $\pi_{\theta_{new}}$ and the old policy $\pi_{\theta}$ is out of use and future sampling will be from $\pi_{\theta_{new}}$. This whole process is not efficient enough. The solution to this is to reuse the old samples to achieve off-policy training. From above importance sampling section, we know that:
 
 $$
@@ -239,7 +239,7 @@ L(\theta) = \mathbb{E_{{(s_t, a_t)} \sim \pi_{\theta_{old}}}}\left[ \frac{\pi_{\
 $$
 
 
-### Implementation
+## Implementation
 For language generation task, generating a token is an action. Agent is the target language model we want to train.
 
 Here we first look at the implementation from Deepspeed-chat model. The actor-critic algorithm requires to load four model in training: actor model, critic model, reference model and reward mdoel. Actor model is the poliy network and critice model is the value network. Reference model and reward model are frozen in training. Reference model is used to contrain the actor model predictions so that they won't divege too much. Reward model gives the current step reward.
@@ -247,7 +247,7 @@ Here we first look at the implementation from Deepspeed-chat model. The actor-cr
 
 
 
-### References
+## References
 [1] [High-Dimensional Continuous Control Using Generalized Advantage Estimation](https://arxiv.org/pdf/1506.02438.pdf) <br>
 [2] [Proximal Policy Optimization Algorithms](https://arxiv.org/pdf/1707.06347.pdf) <br>
 [3] [Policy Gradient Methods for Reinforcement Learning with Function Approximation](https://papers.nips.cc/paper_files/paper/1999/file/464d828b85b0bed98e80ade0a5c43b0f-Paper.pdf) <br>
