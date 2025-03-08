@@ -104,4 +104,8 @@ git push origin master
 
 
 
-
+Or simply 
+```bash
+git checkout main
+git rebase upstream/main
+```
