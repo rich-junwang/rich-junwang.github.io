@@ -434,7 +434,25 @@ trainer = TorchTrainer(
 results = trainer.fit()
 ```
 
-### References
+
+## Ray Debugging
+
+```bash
+
+# check ray status, if seeing connection error
+ray status
+
+
+# stop existing ray server
+ray stop
+
+
+# start new ray server
+ray start --head 
+```
+
+
+## References
 <!-- 1. https://zhuanlan.zhihu.com/p/672327290 -->
 <!-- 2. https://github.com/OpenRL-Lab/Ray_Tutorial/ -->
 1. https://rise.cs.berkeley.edu/blog/ray-tips-for-first-time-users/
