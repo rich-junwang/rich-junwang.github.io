@@ -452,6 +452,45 @@ ray start --head
 ```
 
 
+There is another way to stop ray
+```python
+import ray
+ray.shutdown()
+```
+
+
+
+There are two ways to initialize ray with environment variables. 
+- set env variables before ray initialization. It will pick up the env variables at startup. 
+```bash
+read -r -d '' my_config_json <<EOF
+{
+"working_dir": "${WORK_DIR}",
+"env_vars": {
+"PYTHONPATH": "${SRC_DIR}:$PYTHONPATH",
+"LD_LIBRARY_PATH": "my_ld_path:$LD_LIBRARY_PATH"
+}
+}
+EOF
+
+# we can use the above config in Ray
+ray job submit --address="http://127.0.0.1:8265" \
+--runtime-env-json="${my_config_json}" \
+-- python xx
+
+```
+
+
+- set the envs in python codes
+```python
+if not ray.is_initialized():
+# this is for local ray cluster
+    ray.init(runtime_env={'env_vars': {'TOKENIZERS_PARALLELISM': 'true', 'NCCL_DEBUG': 'WARN'}})
+```
+
+
+
+
 ## References
 <!-- 1. https://zhuanlan.zhihu.com/p/672327290 -->
 <!-- 2. https://github.com/OpenRL-Lab/Ray_Tutorial/ -->
