@@ -481,7 +481,7 @@ ray job submit --address="http://127.0.0.1:8265" \
 ```
 
 
-- set the envs in python codes
+- set the envs in python codes. Generally, this is a better approach. Because we can easily set environment variables running bash script.
 ```python
 if not ray.is_initialized():
 # this is for local ray cluster
