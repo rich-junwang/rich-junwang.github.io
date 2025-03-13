@@ -213,7 +213,7 @@ The field query-id is a alphanumeric sequence to identify the query. The second 
 
 
 
-#### Retrieval Fusion
+### Retrieval Fusion
 The straightforward idea in the era is dense retrieval is that we could combine sparse retrieval and dense retrieval together. A common approach is to use reciprocal rank fusion. The RRF score of document $d$ is:
 $$
 RRF_d = \sum_r^R{\frac{1}{c + r(d)}}
