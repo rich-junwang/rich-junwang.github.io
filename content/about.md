@@ -40,7 +40,7 @@ cover:
 
 <p>Hi there, this is Jun Wang. Welcome to my website. I'm a programmer. I love programming. 
     
-I am a Senior Applied Scientist at Amazon, specializing in foundational model pre-training, post-training, and reinforcement learning for complex reasoning tasks. My expertise spans the entire lifecycle of large language model (LLM) development, including data curation, pretraining, supervised fine-tuning (SFT), and reinforcement learning with human feedback (RLHF). I have experience training both text-based and code-focused models. Most recently, I've been focusing on deep RL for math, code generation tasks. 
+I am a Senior Applied Scientist at Amazon, specializing in foundational model pre-training, post-training, and reinforcement learning for complex reasoning tasks. My expertise spans the entire lifecycle of large language model (LLM) development, including data curation, pretraining, supervised fine-tuning (SFT), and reinforcement learning with human feedback (RLHF). I have experience training both text and code models. Most recently, I've been focusing on deep RL for math, code generation tasks. 
 </p>
 <p>Opinions are my own and I do not speak for my employer or my team. On this webpage, I'd like to share my study and my
 paper reading. Feel free to reach out to me if you have any comments/suggestions</p>
