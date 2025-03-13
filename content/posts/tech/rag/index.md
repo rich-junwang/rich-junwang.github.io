@@ -113,13 +113,13 @@ The R_cap@k metric is a variant of the Recall@k metric. It measures the proporti
 
 The formula to calculate Recall_cap@k is as follows:
 $$
-Recall_cap@k = \frac{\text{number of recommended relevant items among top k}}{min(k, \text{number of all relevant items in the system})}
+Recall/cap@k = \frac{\text{number of recommended relevant items among top k}}{min(k, \text{number of all relevant items in the system})}
 $$
 
 The intuition is that if there are 100 relevant documents and we retrieved 10 docs, all of them are relevant. Then recall@k is 0.1, which seems quite low, but the system is probably doing well. 
 
 
-##### MRR
+#### MRR
 MRR measures “Where is the first relevant item?”. Given a query and a list of returned items, we find the rank (position $p_i$) of the first relevant items. We take the inverse of the rank to get the so-called reciprocal rank. For mean reciprocal rank, we just take average of reciprocal rank for all queries.
 <p align="center">
     <img alt="mrr" src="images/mrr.png" width="60%"/>
@@ -139,7 +139,7 @@ MRR Cons
 - This might not be a good evaluation metric for users that want a list of related items to browse. The goal of the users might be to compare multiple related items.
 
 
-#### MAP
+### MAP
 The P@N decision support metric calculates the fraction of n recommendations that are good. The drawback of this metric is that it does not consider the recommended list as an ordered list. Precision@k considers the whole list as a set of items, and treats all the errors in the recommended list equally. The goal is to cut the error in the first few elements rather than much later in the list. For this, we need a metric that weights the errors accordingly. The goal is to weight heavily the errors at the top of the list. Then gradually decrease the significance of the errors as we go down the lower items in a list. The Average Prediction (AP) metric tries to approximate this weighting sliding scale. 
 
  Average Precision (AP) is a metric about how a single sorted prediction compares with the ground truth. i.e., AP tells how correct a single ranking of documents is, with respect to a single query. Thus, MAP is meaningful when there are multiple test cases.
