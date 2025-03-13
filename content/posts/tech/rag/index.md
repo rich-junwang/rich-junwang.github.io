@@ -94,9 +94,29 @@ Precision@k measures the percentage of relevant results among top k results. At 
 $$
 Precision@k = \frac{\text{number of recommended relevant items among top k}}{\text{number of recommended items k}}
 $$
+For example, suppose we have a corpus containing 20 documents, and we want to calculate the Precision@4 score for a given query. If the top 4 documents in the ranking contain 2 relevant documents, the Precision@4 score would be calculated as follows:
+```
+Precision@k = (number of relevant items in top k) / k
+
+Precision@4 = (number of relevant items in top 4) / 4
+= 2 / 4
+= 0.5
+
+```
 $$
 Recall@k = \frac{\text{number of recommended relevant items among top k}}{\text{number of all relevant items in the system}}
 $$
+
+
+#### Capped Recall@k
+The R_cap@k metric is a variant of the Recall@k metric. It measures the proportion of relevant items in the top k items of the ranking, relative to the total number of relevant items in the corpus, but caps the total number of relevant documents to k.
+
+The formula to calculate Recall_cap@k is as follows:
+$$
+Recall_cap@k = \frac{\text{number of recommended relevant items among top k}}{min(k, \text{number of all relevant items in the system})}
+$$
+
+The intuition is that if there are 100 relevant documents and we retrieved 10 docs, all of them are relevant. Then recall@k is 0.1, which seems quite low, but the system is probably doing well. 
 
 
 ##### MRR
@@ -130,6 +150,39 @@ AP is calculated as the average of precision@k over the list.
     MAP
     <br>
 </p>
+
+
+### Codes
+How to calculate these metrics. We can use `TREC_EVAL` tool mentioned below. It has a [Python interface](https://github.com/cvangysel/pytrec_eval). We can also manually calculate it. 
+
+```python
+# compute recall_cap@k
+def recall_cap(qrels: Dict[str, Dict[str, int]],
+           results: Dict[str, Dict[str, float]],
+           k_values: List[int]) -> Tuple[Dict[str, float]]:
+    capped_recall = {}
+
+    for k in k_values:
+        capped_recall[f"R_cap@{k}"] = 0.0
+
+    k_max = max(k_values)
+    logging.info("\n")
+
+    for query_id, doc_scores in results.items():
+        top_hits = sorted(doc_scores.items(), key=lambda item: item[1], reverse=True)[0:k_max]
+        query_relevant_docs = [doc_id for doc_id in qrels[query_id] if qrels[query_id][doc_id] > 0]
+        for k in k_values:
+            retrieved_docs = [row[0] for row in top_hits[0:k] if qrels[query_id].get(row[0], 0) > 0]
+            denominator = min(len(query_relevant_docs), k)
+            capped_recall[f"R_cap@{k}"] += (len(retrieved_docs) / denominator)
+
+    for k in k_values:
+        capped_recall[f"R_cap@{k}"] = round(capped_recall[f"R_cap@{k}"] / len(qrels), 5)
+        logging.info("R_cap@{}: {:.4f}".format(k, capped_recall[f"R_cap@{k}"]))
+
+    return capped_recall
+```
+
 
 ### TREC_EVAL
 [TREC_EVAL](https://github.com/usnistgov/trec_eval) is an evaluation tool which is used to evaluate an Information Retrieval system. TREC_EVAL requires two files: one is qrels (query relevance) and the other is retrieval output that needs to be evaluated.
@@ -177,10 +230,12 @@ assuming there are $R$ ranking items and $r(d)$ is the rank of document $d$. Her
 
 
 ### References
-[1] [Retrieval-Augmented Generation for Large Language Models: A Survey](https://arxiv.org/abs/2312.10997) <br>
-[2] [Evaluation Metrics for Ranking problems: Introduction and Examples](https://queirozf.com/entries/evaluation-metrics-for-ranking-problems-introduction-and-examples) <br>
-[3] [Reciprocal Rank Fusion outperforms Condorcet and individual Rank Learning Methods](https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf) <br>
-[4] [Advanced RAG Techniques: an Illustrated Overview](https://pub.towardsai.net/advanced-rag-techniques-an-illustrated-overview-04d193d8fec6)
+1. [Retrieval-Augmented Generation for Large Language Models: A Survey](https://arxiv.org/abs/2312.10997) 
+2. [Evaluation Metrics for Ranking problems: Introduction and Examples](https://queirozf.com/entries/evaluation-metrics-for-ranking-problems-introduction-and-examples)
+3. [Reciprocal Rank Fusion outperforms Condorcet and individual Rank Learning Methods](https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf)
+4. [Advanced RAG Techniques: an Illustrated Overview](https://pub.towardsai.net/advanced-rag-techniques-an-illustrated-overview-04d193d8fec6)
+5. https://fabianhertwig.com/blog/information-retrieval-metrics/#ndcgk---normalized-discounted-cumulative-gain-at-k
+6. https://github.com/cvangysel/pytrec_eval
 
 
 <!-- [5] Effective reformulation of query for code search using crowdsourced knowledge and extra-large data analystics.
