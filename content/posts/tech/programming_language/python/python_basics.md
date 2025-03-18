@@ -92,6 +92,7 @@ deactivate
 # use `n` to step over
 # use `s` to step into
 # use `ll` to check current lines
+# see more here: https://realpython.com/python-debugging-pdb/
 import pdb; pdb.set_trace()
 
 
@@ -243,3 +244,4 @@ Notice that global is only at module level. There is no program level global var
 
 ## References
 1. https://realpython.com/python-data-classes/
+2. https://realpython.com/python-debugging-pdb/
