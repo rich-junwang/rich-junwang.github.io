@@ -89,6 +89,9 @@ deactivate
 ### Debug
 ```python
 # using pdb
+# use `n` to step over
+# use `s` to step into
+# use `ll` to check current lines
 import pdb; pdb.set_trace()
 
 
