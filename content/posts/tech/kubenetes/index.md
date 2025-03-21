@@ -188,6 +188,8 @@ eksctl get cluster --name="my_cluster_1" --region="us-west-2"
 
 
 ## References
-[1] [Setting up a Kubernetes cluster using Docker in Docker](https://callistaenterprise.se/blogg/teknik/2017/12/20/kubernetes-on-docker-in-docker/) <br>
-[2] https://kubernetes.io/docs/reference/kubectl/cheatsheet/ <br>
+1. [Setting up a Kubernetes cluster using Docker in Docker](https://callistaenterprise.se/blogg/teknik/2017/12/20/kubernetes-on-docker-in-docker/)
+2. https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+3. https://catalog.workshops.aws/sagemaker-hyperpod-eks/en-US
+4. https://catalog.workshops.aws/sagemaker-hyperpod/en-US
 
