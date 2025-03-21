@@ -449,6 +449,13 @@ ray stop
 
 # start new ray server
 ray start --head 
+
+
+# multi-node training
+# on head node
+ray start --head --dashboard-host=0.0.0.0
+# on worker node
+ray start --address=<address>
 ```
 
 
