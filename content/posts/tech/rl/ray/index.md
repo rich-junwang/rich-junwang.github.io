@@ -456,6 +456,10 @@ ray start --head
 ray start --head --dashboard-host=0.0.0.0
 # on worker node
 ray start --address=<address>
+
+
+# to test the setup
+ray job submit --address http://localhost:8265 -- python -c "import ray; ray init(); print(ray.cluster_resources())"
 ```
 
 
