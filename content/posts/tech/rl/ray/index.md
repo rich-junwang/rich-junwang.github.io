@@ -454,12 +454,13 @@ ray start --head
 # multi-node training
 # on head node
 ray start --head --dashboard-host=0.0.0.0
+ray start --head --dashboard-host=0.0.0.0 --num-gpus 8
 # on worker node
 ray start --address=<address>
 
 
 # to test the setup
-ray job submit --address http://localhost:8265 -- python -c "import ray; ray init(); print(ray.cluster_resources())"
+ray job submit --address http://localhost:8265 -- python -c "import ray; ray.init(); print(ray.cluster_resources())"
 
 
 # sometime the error is not that obvious, we can go check ray logs here, e.g.
