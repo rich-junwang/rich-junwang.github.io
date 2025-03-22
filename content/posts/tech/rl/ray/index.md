@@ -460,6 +460,15 @@ ray start --address=<address>
 
 # to test the setup
 ray job submit --address http://localhost:8265 -- python -c "import ray; ray init(); print(ray.cluster_resources())"
+
+
+# sometime the error is not that obvious, we can go check ray logs here, e.g.
+tail -f /tmp/ray/session_latest/logs/dashboard*
+less /tmp/ray/session_latest/logs/dashboard*
+
+
+# list all ray jobs
+ray job list
 ```
 
 
