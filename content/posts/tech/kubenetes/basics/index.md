@@ -68,7 +68,10 @@ kubectl exec -it my_pod_name -- /bin/bash
 
 # describe a pod
 kubectl describe pods
-kubectl describe Pod my_pod
+kubectl describe pod my_pod_name
+
+# get pod config
+kubectl get pod my_pod_name -o yaml
 
 # delete a pod
 kubectl delete Pod my_pod_name
@@ -192,4 +195,5 @@ eksctl get cluster --name="my_cluster_1" --region="us-west-2"
 2. https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 3. https://catalog.workshops.aws/sagemaker-hyperpod-eks/en-US
 4. https://catalog.workshops.aws/sagemaker-hyperpod/en-US
+5. https://github.com/aws-samples/aws-do-ray
 
