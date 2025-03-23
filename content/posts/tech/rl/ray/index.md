@@ -459,6 +459,11 @@ ray start --head --dashboard-host=0.0.0.0 --num-gpus 8
 ray start --address=<address>
 
 
+# submit a job
+ray job submit --address="http://127.0.0.1:8265" \
+--runtime-env=my_runtime_env.yaml \
+python3 my_script.py \
+
 # to test the setup
 ray job submit --address http://localhost:8265 -- python -c "import ray; ray.init(); print(ray.cluster_resources())"
 
