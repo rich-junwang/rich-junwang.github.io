@@ -9,19 +9,19 @@
     <lastBuildDate>Tue, 18 Jun 2024 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/ml/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Diffusion Probabilistic Models</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/diffusion/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/diffusion/</link>
       <pubDate>Tue, 18 Jun 2024 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/diffusion/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/diffusion/</guid>
       <description>Dive into diffusion</description>
     </item>
     
     <item>
       <title>Ray</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/infra/ray/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/ray/</link>
       <pubDate>Tue, 18 Jun 2024 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/infra/ray/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/ray/</guid>
       <description>Async Ops in Ray</description>
     </item>
     
@@ -72,28 +72,28 @@
     
     <item>
       <title>Flash Attention</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/flash_attn/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/flash_attn/</link>
       <pubDate>Sun, 18 Jun 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/flash_attn/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/flash_attn/</guid>
       <description>Large language model pretraining</description>
     </item>
     
     <item>
       <title>Distributed Optimizer</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/distributed_optimizer/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/distributed_optimizer/</link>
       <pubDate>Fri, 05 May 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/distributed_optimizer/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/distributed_optimizer/</guid>
       <description>Distributed optimizer</description>
     </item>
     
     <item>
       <title>LoRA Model Fine-tuning</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/lora_finetuning/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/lora_finetuning/</link>
       <pubDate>Fri, 05 May 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/lora_finetuning/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/lora_finetuning/</guid>
       <description>LoRA finetuning</description>
     </item>
     

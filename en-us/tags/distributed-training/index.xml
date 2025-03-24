@@ -9,10 +9,10 @@
     <lastBuildDate>Fri, 05 May 2023 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/distributed-training/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Data Processing in Distributed Training</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/data_processing/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/data_processing/</link>
       <pubDate>Fri, 05 May 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/data_processing/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/data_processing/</guid>
       <description>Distributed data processing</description>
     </item>
     

@@ -9,10 +9,10 @@
     <lastBuildDate>Mon, 11 Dec 2023 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>All Gather and Gradients</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/infra/pytorch/all_gather_and_gradient_backpropagation/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/all_gather_and_gradient_backpropagation/</link>
       <pubDate>Mon, 11 Dec 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/infra/pytorch/all_gather_and_gradient_backpropagation/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/all_gather_and_gradient_backpropagation/</guid>
       <description>PyTorch..</description>
     </item>
     
@@ -27,19 +27,19 @@
     
     <item>
       <title>Pytorch Multiple-GPU Training</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/infra/pytorch/pytorch/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/pytorch/</link>
       <pubDate>Sat, 11 Jun 2022 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/infra/pytorch/pytorch/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/pytorch/</guid>
       <description>PyTorch..</description>
     </item>
     
     <item>
       <title>Distributed Training Infra</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/infra/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/distributed_train_infra/</link>
       <pubDate>Thu, 05 May 2022 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/infra/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/distributed_train_infra/</guid>
       <description>Distributed training infrastructure</description>
     </item>
     

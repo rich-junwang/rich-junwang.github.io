@@ -23,13 +23,13 @@
     <loc>https://rich-junwang.github.io/en-us/tags/</loc>
     <lastmod>2024-07-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/diffusion/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/diffusion/</loc>
     <lastmod>2024-07-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/tags/ml/</loc>
     <lastmod>2024-07-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/infra/ray/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/ray/</loc>
     <lastmod>2024-06-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/pipe/</loc>
@@ -44,7 +44,7 @@
     <loc>https://rich-junwang.github.io/en-us/tags/llm/</loc>
     <lastmod>2023-12-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/infra/pytorch/all_gather_and_gradient_backpropagation/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/all_gather_and_gradient_backpropagation/</loc>
     <lastmod>2023-12-11T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/tags/blog/</loc>
@@ -59,19 +59,19 @@
     <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/rag/</loc>
     <lastmod>2023-10-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/flash_attn/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/flash_attn/</loc>
     <lastmod>2023-07-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/data_processing/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/data_processing/</loc>
     <lastmod>2023-05-05T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/distributed_optimizer/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/distributed_optimizer/</loc>
     <lastmod>2023-05-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/tags/distributed-training/</loc>
     <lastmod>2023-05-05T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/lora_finetuning/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/lora_finetuning/</loc>
     <lastmod>2023-05-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/read/</loc>
@@ -98,7 +98,7 @@
     <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/large_scale_pretraining/pretrain/</loc>
     <lastmod>2022-12-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/infra/kubenetes/basics/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/kubenetes/basics/</loc>
     <lastmod>2022-12-08T12:01:14-07:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/antlr/</loc>
@@ -107,13 +107,13 @@
     <loc>https://rich-junwang.github.io/en-us/tags/parsing/</loc>
     <lastmod>2022-08-08T12:01:14-07:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/infra/parallelism/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/parallelism/</loc>
     <lastmod>2022-07-08T12:01:14-07:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/infra/pytorch/pytorch/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/pytorch/</loc>
     <lastmod>2023-04-11T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/infra/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/distributed_train_infra/</loc>
     <lastmod>2022-05-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/read/history/</loc>

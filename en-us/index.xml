@@ -27,19 +27,19 @@
     
     <item>
       <title>Diffusion Probabilistic Models</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/diffusion/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/diffusion/</link>
       <pubDate>Tue, 18 Jun 2024 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/diffusion/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/diffusion/</guid>
       <description>Dive into diffusion</description>
     </item>
     
     <item>
       <title>Ray</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/infra/ray/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/ray/</link>
       <pubDate>Tue, 18 Jun 2024 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/infra/ray/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/ray/</guid>
       <description>Async Ops in Ray</description>
     </item>
     
@@ -72,10 +72,10 @@
     
     <item>
       <title>All Gather and Gradients</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/infra/pytorch/all_gather_and_gradient_backpropagation/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/all_gather_and_gradient_backpropagation/</link>
       <pubDate>Mon, 11 Dec 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/infra/pytorch/all_gather_and_gradient_backpropagation/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/all_gather_and_gradient_backpropagation/</guid>
       <description>PyTorch..</description>
     </item>
     
@@ -108,37 +108,37 @@
     
     <item>
       <title>Flash Attention</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/flash_attn/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/flash_attn/</link>
       <pubDate>Sun, 18 Jun 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/flash_attn/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/flash_attn/</guid>
       <description>Large language model pretraining</description>
     </item>
     
     <item>
       <title>Data Processing in Distributed Training</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/data_processing/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/data_processing/</link>
       <pubDate>Fri, 05 May 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/data_processing/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/data_processing/</guid>
       <description>Distributed data processing</description>
     </item>
     
     <item>
       <title>Distributed Optimizer</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/distributed_optimizer/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/distributed_optimizer/</link>
       <pubDate>Fri, 05 May 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/distributed_optimizer/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/distributed_optimizer/</guid>
       <description>Distributed optimizer</description>
     </item>
     
     <item>
       <title>LoRA Model Fine-tuning</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/lora_finetuning/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/lora_finetuning/</link>
       <pubDate>Fri, 05 May 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/lora_finetuning/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/lora_finetuning/</guid>
       <description>LoRA finetuning</description>
     </item>
     
@@ -197,10 +197,10 @@
     
     <item>
       <title>Kubernetes</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/infra/kubenetes/basics/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/kubenetes/basics/</link>
       <pubDate>Thu, 08 Dec 2022 12:01:14 -0700</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/infra/kubenetes/basics/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/kubenetes/basics/</guid>
       <description>Kubenetes is everywhere.</description>
     </item>
     
@@ -215,28 +215,28 @@
     
     <item>
       <title>Parallelism in LLM Training</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/infra/parallelism/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/parallelism/</link>
       <pubDate>Fri, 08 Jul 2022 12:01:14 -0700</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/infra/parallelism/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/parallelism/</guid>
       <description>Parallelism in LLM training</description>
     </item>
     
     <item>
       <title>Pytorch Multiple-GPU Training</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/infra/pytorch/pytorch/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/pytorch/</link>
       <pubDate>Sat, 11 Jun 2022 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/infra/pytorch/pytorch/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/pytorch/</guid>
       <description>PyTorch..</description>
     </item>
     
     <item>
       <title>Distributed Training Infra</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/infra/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/distributed_train_infra/</link>
       <pubDate>Thu, 05 May 2022 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/infra/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/distributed_train_infra/</guid>
       <description>Distributed training infrastructure</description>
     </item>
     
