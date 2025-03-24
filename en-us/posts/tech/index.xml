@@ -18,10 +18,10 @@
     
     <item>
       <title>PPO and Its Implementation</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/rl/ppo/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/rl/ppo/</link>
       <pubDate>Fri, 05 Jul 2024 00:18:23 -0700</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/rl/ppo/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/rl/ppo/</guid>
       <description>Proximal Policy Optimization</description>
     </item>
     
@@ -36,10 +36,10 @@
     
     <item>
       <title>Ray</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/infra/kubenetes/ray/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/infra/ray/</link>
       <pubDate>Tue, 18 Jun 2024 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/infra/kubenetes/ray/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/infra/ray/</guid>
       <description>Async Ops in Ray</description>
     </item>
     
@@ -54,37 +54,37 @@
     
     <item>
       <title>Monte Carlo Tree Search</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/mcts/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/mcts/</link>
       <pubDate>Fri, 05 Apr 2024 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/mcts/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/mcts/</guid>
       <description>MCTS</description>
     </item>
     
     <item>
       <title>Coder Training</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/coder_training/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/coder_training/</link>
       <pubDate>Mon, 18 Dec 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/coder_training/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/coder_training/</guid>
       <description>Large coder model pretraining</description>
     </item>
     
     <item>
       <title>All Gather and Gradients</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/pytorch/all_gather_and_gradient_backpropagation/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/infra/pytorch/all_gather_and_gradient_backpropagation/</link>
       <pubDate>Mon, 11 Dec 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/pytorch/all_gather_and_gradient_backpropagation/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/infra/pytorch/all_gather_and_gradient_backpropagation/</guid>
       <description>PyTorch..</description>
     </item>
     
     <item>
       <title>Model Evaluation</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/model_eval/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/model_eval/</link>
       <pubDate>Wed, 18 Oct 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/model_eval/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/model_eval/</guid>
       <description>Model Evaluation</description>
     </item>
     
@@ -99,10 +99,10 @@
     
     <item>
       <title>Retrieval Augmented Generation</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/rag/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/rag/</link>
       <pubDate>Wed, 18 Oct 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/rag/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/rag/</guid>
       <description>RAG system</description>
     </item>
     
@@ -153,10 +153,10 @@
     
     <item>
       <title>InstructGPT and ChatGPT</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/instructgpt/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/instructgpt/</link>
       <pubDate>Wed, 18 Jan 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/instructgpt/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/instructgpt/</guid>
       <description>RLHF</description>
     </item>
     
@@ -189,19 +189,19 @@
     
     <item>
       <title>Parallelism in LLM Training</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/parallelism/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/infra/parallelism/</link>
       <pubDate>Fri, 08 Jul 2022 12:01:14 -0700</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/parallelism/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/infra/parallelism/</guid>
       <description>Parallelism in LLM training</description>
     </item>
     
     <item>
       <title>Pytorch Multiple-GPU Training</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/pytorch/pytorch/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/infra/pytorch/pytorch/</link>
       <pubDate>Sat, 11 Jun 2022 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/pytorch/pytorch/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/infra/pytorch/pytorch/</guid>
       <description>PyTorch..</description>
     </item>
     
@@ -288,19 +288,19 @@
     
     <item>
       <title>Transformer</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/transformer/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/transformer/</link>
       <pubDate>Fri, 18 Jun 2021 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/transformer/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/transformer/</guid>
       <description>Transformer details</description>
     </item>
     
     <item>
       <title>RL Basics</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/rl/rl_basics/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/rl/rl_basics/</link>
       <pubDate>Sat, 18 Jul 2020 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/rl/rl_basics/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/rl/rl_basics/</guid>
       <description>RL basics</description>
     </item>
     

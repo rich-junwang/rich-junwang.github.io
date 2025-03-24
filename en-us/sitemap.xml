@@ -14,7 +14,7 @@
     <loc>https://rich-junwang.github.io/en-us/</loc>
     <lastmod>2024-08-09T12:01:14-07:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/rl/ppo/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/rl/ppo/</loc>
     <lastmod>2024-07-05T00:18:23-07:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/tags/rl/</loc>
@@ -29,34 +29,34 @@
     <loc>https://rich-junwang.github.io/en-us/tags/ml/</loc>
     <lastmod>2024-07-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/infra/kubenetes/ray/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/infra/ray/</loc>
     <lastmod>2024-06-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/pipe/</loc>
     <lastmod>2024-04-09T12:01:14-07:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/mcts/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/mcts/</loc>
     <lastmod>2024-04-05T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/coder_training/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/coder_training/</loc>
     <lastmod>2023-12-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/tags/llm/</loc>
     <lastmod>2023-12-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/pytorch/all_gather_and_gradient_backpropagation/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/infra/pytorch/all_gather_and_gradient_backpropagation/</loc>
     <lastmod>2023-12-11T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/tags/blog/</loc>
     <lastmod>2023-12-11T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/model_eval/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/model_eval/</loc>
     <lastmod>2023-10-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/moe_models/</loc>
     <lastmod>2023-10-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/rag/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/rag/</loc>
     <lastmod>2023-10-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/flash_attn/</loc>
@@ -92,7 +92,7 @@
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_system/</loc>
     <lastmod>2023-03-05T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/instructgpt/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/instructgpt/</loc>
     <lastmod>2023-01-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/large_scale_pretraining/pretrain/</loc>
@@ -107,10 +107,10 @@
     <loc>https://rich-junwang.github.io/en-us/tags/parsing/</loc>
     <lastmod>2022-08-08T12:01:14-07:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/parallelism/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/infra/parallelism/</loc>
     <lastmod>2022-07-08T12:01:14-07:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/pytorch/pytorch/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/infra/pytorch/pytorch/</loc>
     <lastmod>2023-04-11T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/distributed_training/infra/</loc>
@@ -170,13 +170,13 @@
     <loc>https://rich-junwang.github.io/en-us/posts/tech/probability/</loc>
     <lastmod>2021-07-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/transformer/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/transformer/</loc>
     <lastmod>2021-07-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/tags/web/</loc>
     <lastmod>2021-07-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/rl/rl_basics/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/rl/rl_basics/</loc>
     <lastmod>2020-07-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/programming_language/remote-development-with-vscode/</loc>

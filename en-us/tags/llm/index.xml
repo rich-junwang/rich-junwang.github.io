@@ -9,10 +9,10 @@
     <lastBuildDate>Mon, 18 Dec 2023 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/llm/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Coder Training</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/coder_training/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/coder_training/</link>
       <pubDate>Mon, 18 Dec 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/coder_training/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/coder_training/</guid>
       <description>Large coder model pretraining</description>
     </item>
     
@@ -27,10 +27,10 @@
     
     <item>
       <title>InstructGPT and ChatGPT</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/instructgpt/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/instructgpt/</link>
       <pubDate>Wed, 18 Jan 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/instructgpt/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/instructgpt/</guid>
       <description>RLHF</description>
     </item>
     
@@ -45,10 +45,10 @@
     
     <item>
       <title>Transformer</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/transformer/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/transformer/</link>
       <pubDate>Fri, 18 Jun 2021 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/transformer/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/transformer/</guid>
       <description>Transformer details</description>
     </item>
     
