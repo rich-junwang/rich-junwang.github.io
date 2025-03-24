@@ -29,7 +29,7 @@
     <loc>https://rich-junwang.github.io/en-us/tags/ml/</loc>
     <lastmod>2024-07-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/kubenetes/ray/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/infra/kubenetes/ray/</loc>
     <lastmod>2024-06-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/pipe/</loc>
@@ -53,7 +53,7 @@
     <loc>https://rich-junwang.github.io/en-us/posts/tech/model_eval/</loc>
     <lastmod>2023-10-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/moe_models/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/moe_models/</loc>
     <lastmod>2023-10-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/rag/</loc>
@@ -95,10 +95,10 @@
     <loc>https://rich-junwang.github.io/en-us/posts/tech/instructgpt/</loc>
     <lastmod>2023-01-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/large_scale_pretraining/pretrain/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/large_scale_pretraining/pretrain/</loc>
     <lastmod>2022-12-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/kubenetes/basics/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/infra/kubenetes/basics/</loc>
     <lastmod>2022-12-08T12:01:14-07:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/antlr/</loc>
