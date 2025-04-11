@@ -9,7 +9,7 @@ categories:
 - 
 tags: 
 - LLM
-description: "Reasoning with LLM"
+description: "Whisper Model"
 weight:
 slug: ""
 draft: false # 是否为草稿
