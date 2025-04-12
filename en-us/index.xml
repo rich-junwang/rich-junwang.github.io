@@ -35,6 +35,15 @@
     </item>
     
     <item>
+      <title>Loss Reduction</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/loss/loss_reduction/</link>
+      <pubDate>Tue, 18 Jun 2024 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/loss/loss_reduction/</guid>
+      <description>Losses in ML</description>
+    </item>
+    
+    <item>
       <title>Ray</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/ray/</link>
       <pubDate>Tue, 18 Jun 2024 00:18:23 +0800</pubDate>
@@ -439,10 +448,10 @@ paper reading. Feel free to reach out to me if you have any comments/suggestions
     
     <item>
       <title>Loss in ML</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/loss/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/loss/loss/</link>
       <pubDate>Tue, 18 Jun 2019 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/loss/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/loss/loss/</guid>
       <description>Losses in ML</description>
     </item>
     
