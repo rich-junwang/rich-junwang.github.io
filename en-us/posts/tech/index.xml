@@ -44,6 +44,15 @@
     </item>
     
     <item>
+      <title>VQ-VAE</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/multimodality/</link>
+      <pubDate>Sat, 18 May 2024 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/multimodality/</guid>
+      <description>Multimodality</description>
+    </item>
+    
+    <item>
       <title>Pipe in Multiprocessing</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/pipe/</link>
       <pubDate>Tue, 09 Apr 2024 12:01:14 -0700</pubDate>
@@ -59,6 +68,15 @@
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/mcts/</guid>
       <description>MCTS</description>
+    </item>
+    
+    <item>
+      <title>Whisper Model</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/speech/whisper/</link>
+      <pubDate>Tue, 05 Mar 2024 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/speech/whisper/</guid>
+      <description>Whisper Model</description>
     </item>
     
     <item>
@@ -113,15 +131,6 @@
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/flash_attn/</guid>
       <description>Large language model pretraining</description>
-    </item>
-    
-    <item>
-      <title>VQ-VAE</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/multimodality/</link>
-      <pubDate>Sun, 18 Jun 2023 00:18:23 +0800</pubDate>
-      
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/multimodality/</guid>
-      <description>Multimodality</description>
     </item>
     
     <item>
