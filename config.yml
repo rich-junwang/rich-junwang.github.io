@@ -109,7 +109,7 @@ params:
       #   url: posts/life
 
   socialIcons:
-    - name: Google scholar
+    - name: googlescholar
       url: https://scholar.google.com/citations?user=ct92MO4AAAAJ&hl=en
     - name: email
       url: "mailto:richard.{first_name}{last_name}@gmail.com"
