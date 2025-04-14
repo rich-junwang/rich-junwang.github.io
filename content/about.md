@@ -53,7 +53,7 @@ paper reading. Feel free to reach out to me if you have any comments/suggestions
 All my publications can be found on <a href="https://scholar.google.com/citations?user=ct92MO4AAAAJ&hl=en" target="_blank" title="Google Scholar">google scholar</a>
 
 
-<style>
+<!-- <style>
 .well {
     background-image: -webkit-linear-gradient(top,#e8e8e8 0,#f5f5f5 100%);
     background-image: -o-linear-gradient(top,#e8e8e8 0,#f5f5f5 100%);
@@ -65,7 +65,7 @@ All my publications can be found on <a href="https://scholar.google.com/citation
     -webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,.05), 0 1px 0 rgba(255,255,255,.1);
     box-shadow: inset 0 1px 3px rgba(0,0,0,.05), 0 1px 0 rgba(255,255,255,.1);
 }
-</style>
+</style> -->
 
 <p style="font-size: 25px;">Professional Services</p>
 <div class="style">
