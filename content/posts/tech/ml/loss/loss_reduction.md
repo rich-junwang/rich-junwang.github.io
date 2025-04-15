@@ -31,7 +31,7 @@ math: true
 
 The devil is in the details. Many times, when model doesn't work as expected, it's most likely there are nuances that are not taken care of in implementation. Today we talk about a common issue in LLM implementations -- loss reduction. 
 
-For multi-turn chat mode data, the data could contain multiple role and one training instance could have multiple sessions.
+For multi-turn chat mode data, the data could contain multiple roles and one training instance could have multiple sessions.
 ```json
 {
   "messages": [
