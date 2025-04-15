@@ -68,14 +68,14 @@ All my publications can be found on [google scholar](https://scholar.google.com/
 }
 </style> -->
 
-<p style="font-size: 25px;">Professional Services</p>
-<div class="style">
-<li>Reviewer for ACL ARR 2024, EMNLP 2025, ICLR 2025</li>
-<li>Reviewer for NeurIPS, ICLR 2023</li>
-<li>Reviewer for AMLC 2020, 2021</li>
-<li>Reviewer for ICLR 2022</li>
-<li>Reviewer for AAAI 2021</li>
+<p style="font-size: 25px;">Professional Services
+
+- Reviewer for ACL ARR 2024, EMNLP 2025, ICLR 2025
+- Reviewer for NeurIPS, ICLR 2023
+- Reviewer for AMLC 2020, 2021
+- Reviewer for ICLR 2022
+- Reviewer for AAAI 2021
 
 I served as the Amazon Research Award reviewer and was an AC for AMLC conference at Amazon.
-</div>
+
 
