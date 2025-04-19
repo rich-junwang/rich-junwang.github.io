@@ -49,7 +49,7 @@ paper reading. Feel free to reach out to me if you have any comments/suggestions
     you want to chat more! </p>
 
 
-<p style="font-size: 25px;">Publications</p>
+<!-- <!-- <p style="font-size: 25px;">Publications</p> -->
 
 All my publications can be found on [google scholar](https://scholar.google.com/citations?user=ct92MO4AAAAJ&hl=en)
 
