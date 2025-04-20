@@ -42,6 +42,43 @@ Most of today's MoE model are following an architecture that is similar to the S
 
 In these models, the sparsity lies in the feed-forward layer for the Transformer block. Switch is using one expert out of 4 experts for each token. For models like Mixtral/Grok both are using two experts out of 8 experts. Router dynamically chooses experts for each token. Can we route different samples to different experts? The answer is yes, however, coarse-grained design (giving less flexibility for model to learn the pattern) usually leads to worse performance.
 
+The follow code snippet shows how it works for Mixtral MoE model at inference time. 
+
+```python
+# 注意：为了容易理解，我对代码进行了简化，同时不考虑batch size，实际使用时还是要用官方代码
+class MixtralSparseMoeBlock(nn.Module):
+    def __init__(self, config):
+        super().__init__()
+        self.gate = nn.Linear(self.hidden_dim, 8)
+        self.experts = nn.ModuleList([MLP(config) for _ in range(8)])
+
+    def forward(self, x):
+        # 对每个token计算8个expert的权重，并将权重归一化
+        router_logits = self.gate(x) 
+        routing_weights = F.softmax(router_logits, dim=1) 
+        # 每个token选择top-2 experts的权重、索引， 并将索引转为size=(len(tokens), 8)的独热编码
+        routing_weights, selected_experts = torch.top2(routing_weights, dim=-1) 
+        expert_mask = torch.nn.functional.one_hot(selected_experts, num_classes=8)
+        # 重新将top-2 expert的权重归一化（因为删掉其余6个expert，权重的和不等于1了）
+        routing_weights /= routing_weights.sum(dim=-1)  
+            # 创建形状和x一致，初始值为0的矩阵，用来存储每个expert的输出
+        final_hidden_states = torch.zeros_like(x) 
+        for expert_idx in range(8):
+            # 选择当前使用的expert
+            expert_layer = self.experts[expert_idx] 
+            # 选择当前expert对应的index
+            idx_list, top_x_list = torch.where(expert_mask[expert_idx]) 
+            # 选择需要计算的状态
+            current_state = x[top_x_list] 
+            # 选择当前expert对每个token的权重
+            current_routing_weights = routing_weights.t()[top_x_list, idx_list] 
+            # 将选择的状态输入给专家模型计算，并乘上权重
+            current_hidden_states = expert_layer(current_state) * current_routing_weights 
+            # 将每个expert的输出按照索引加到最终结果里
+            final_hidden_states.index_add_(0, top_x_list, current_hidden_states) 
+        return final_hidden_states
+```
+
 
 ### Dynamic Routing
 
@@ -52,10 +89,10 @@ For any input $x$ of dimension $[\text{sequence\\_len}, \text{dim}]$, it multipl
 MoE training is prone to instability issues because it has extra exponential functions. To deal with mixed precision roundoff errors, people apply z-loss to logits before sending them to router. 
 
 $$
-L_z = \frac{1}{B} \sum_{i=1}^{B} (log\sum_{j=1}^{N}e^{x_j^{x_i}})^2
+L_z = \frac{1}{B} \sum_{i=1}^{B} (log\sum_{j=1}^{N}e^{x_j^{(i)}})^2
 $$
 
-In python, 
+This is called router z-loss [9]. In python, 
 ```python
 z_loss = torch.mean(torch.square(torch.logsumexp(logits, dim=-1))) * z_loss_coeff
 ```
@@ -67,10 +104,22 @@ $$
 where $z$ is the max logit value.
 
 
+
 ### Load Balancing
-For dynamic routing, which token is routed to which expert is unknown upfront, so there exists the load balancing issue. Common solution is to add an load balancing loss.
+For dynamic routing, which token is routed to which expert is unknown upfront, so there exists the load balancing issue. Common solution is to add an auxiliary load balancing loss [2].
 
+$$
+\text{loss} = \alpha \cdot N \cdot \sum_{i=1}^{N} f_i \cdot P_i
+$$
 
+Here $N$ is the number of experts, $T$ is the total number of tokens in batch $B$. $f_i$ is the fraction of tokens dispatched to expert $i$. 
+
+and $P_i$ is the fraction of the router probability allocated for expert $i$, i.e. the summation of probability assigning token to expert i for all tokens
+$$
+P_i = \frac{1}{T} \sum_{x \in \mathcal{B}} p_i(x)
+$$
+
+Note that this loss is added for each MoE layer. 
 
 
 ### Training
@@ -90,7 +139,7 @@ Directly training MoE could be challenging due to low efficiency. One popular ap
 
 
 
-#### Public Implementations
+### Public Implementations
  - https://github.com/XueFuzhao/OpenMoE
  - https://github.com/pjlab-sys4nlp/llama-moe
  - https://github.com/NVIDIA/NeMo
@@ -116,4 +165,8 @@ Directly training MoE could be challenging due to low efficiency. One popular ap
 5. [Sparse Upcycling: Training Mixture-of-Experts from Dense Checkpoints](https://arxiv.org/abs/2212.05055) <br>
 6. [Beyond Distillation: Task-level Mixture-of-Experts for Efficient Inference](https://arxiv.org/pdf/2110.03742.pdf)
 7. [Baichuan 2: Open Large-scale Language Models](https://arxiv.org/abs/2309.10305)
+8. [DeepSeek-V3 Technical Report](https://arxiv.org/html/2412.19437v1)
+9. [ST-MoE: Designing Stable and Transferable Sparse Expert Models](https://arxiv.org/abs/2202.08906)
 <!-- [6] https://zhuanlan.zhihu.com/p/674751021 -->
+<!-- https://zhuanlan.zhihu.com/p/1893328591913189877 -->
+<!-- https://zhuanlan.zhihu.com/p/18565423596 -->
