@@ -42,15 +42,17 @@ Layer norm normalizes across feature dimension (i.e embedding dimension) for eac
 </p>
 
 After understanding of the basics, we can write down the pseudo code as below
-Pseudo code for batch norm
+
 ```python
+# Pseudo code for batch norm
 for i in range(seq_len):
     for j in range(hidden_size):
         Norm([bert_tensor[k][i][j] for k in range(batch_size)])
 ```
 
-Pseudo code for layer norm
+
 ```python
+# Pseudo code for layer norm
 for i in range(batch_size):
     for j in range(seq_len):
         Norm([bert_tensor[i][j][k] for k in range(hidden_size)])
