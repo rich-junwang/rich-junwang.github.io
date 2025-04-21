@@ -33,8 +33,8 @@ math: true
 
 ## LayerNorm vs BatchNorm
 
-BatchNorm is commonly used in computer vision. LayerNorm is widely used in NLP. In CV, the channel dimension is RGB channel. In NLP, the channel dimension is feature dimin (embedding dim). 
-Layer norm normalizes across feature dimension (such as embedding dim) for each of the inputs which removes the dependence on batches. This makes layer normalization well suited for sequence models such as transformers.
+BatchNorm is commonly used in computer vision. LayerNorm is widely used in NLP. In CV, the channel dimension is RGB channel. In NLP, the channel dimension is feature dimension (embedding dimension). 
+Layer norm normalizes across feature dimension (i.e embedding dimension) for each of the inputs which removes the dependence on batches. This makes layer normalization well suited for sequence models such as transformers.
 <p align="center">
     <img alt="batch norm vs layer norm" src="images/norm.png" width="80%" height=auto/> 
     <em>Figure 1. batch norm vs layer norm</em>
