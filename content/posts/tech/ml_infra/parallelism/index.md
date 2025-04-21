@@ -122,6 +122,10 @@ For operations such as layer normation, the operation can be paralleized on the 
 </p>
 
 
+### Context Parallelism
+Context Parallelism (CP) is a method for parallelizing the processing of neural network activations across multiple GPUs, partitioning the input tensors in the sequence dimension. Unlike SP, which partitions the activations of specific layers, CP divides the activations of all layers. It can be more efficient than sequence parallelism for very long sequences, as it parallelizes the entire attention mechanism, similar to Ring Attention
+
+
 ### Implementation
 A few key points in 3D parallelism implementation. 
 - TP is communication heavy, thus TP blocks should be put on different GPUs within the same node to leverage fast NVLink communication. On the contrary, PP communication is light, and it is usually put across nodes. 
@@ -148,4 +152,5 @@ Generally a good MFU should be above 40%.
 [6] https://www.deepspeed.ai/tutorials/pipeline/ <br>
 [7] [MegaScale: Scaling Large Language Model Training to More Than 10,000 GPUs](https://arxiv.org/pdf/2402.15627.pdf) <br>
 [8] [AMSP: Reducing Communication Overhead of ZeRO for Efficient LLM Training](https://arxiv.org/abs/2311.00257) <br>
-[9] [Reducing Activation Recomputation in Large Transformer Models](https://browse.arxiv.org/pdf/2205.05198)
+[9] [Reducing Activation Recomputation in Large Transformer Models](https://browse.arxiv.org/pdf/2205.05198) <br>
+[10] [The Ultra-Scale Playbook: Training LLMs on GPU Clusters](https://huggingface.co/spaces/nanotron/ultrascale-playbook)
