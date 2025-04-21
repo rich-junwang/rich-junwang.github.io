@@ -44,3 +44,101 @@ Memory-mapped files provide more efficient access for initial reads. When read()
     <em>mmap file</em>
     <br>
 </p>
+
+
+## Data Format
+
+
+
+
+### Apache Arrow
+Key Features of the Arrow Format:
+- Columnar Layout: Stores data column-by-column instead of row-by-row, which is great for analytical processing.
+- In-Memory Format: It’s optimized for in-memory operations and can be shared across processes.
+- Efficient Serialization: The format can be serialized (saved to disk or sent over the wire) with minimal overhead.
+- Language Interoperability: Data can be shared between Python, Java, R, and more without conversion.
+
+
+### Parquet
+Row-wise formats store data as records, one after another, much like a relational database table. The issue with row-wise storage is that when we need to access a specific column, e.g. aggregate the number of products sold on Amazon, we have to scan the whole dataset. 
+Column-wise formats stores data based on fields thus we could quickly access specific columns. However, it could be slow when we want to update/write multiple fields because such ops could touch multiple column blocks on storage. 
+Parquet solves this problem utilizing a mixed of both row-wise and column-wise design of data format. 
+<p align="center">
+    <img alt="flat sharp minimum" src="images/parquet.png" width="60%" height=auto/> 
+    <em>parquet data format, image from [1]</em>
+</p>
+
+- Row group: multiple data records form a row group
+- Column chunk: each field has a column chunk in the row group. 
+- Pages: each column chunk can further be divided as pages. 
+    - Dictionary page: contains information related to how values are encoded. (Note that parquet offers compression option for data)
+    - Index page: fast data access
+    - Data page: data chunk
+
+Parquet file can be stored in multiple files, the application can read them simultaneously with multi-threading. A single Parquet file is partitioned horizontally (row groups) and vertically (column chunks), which allows the application to use multi-thread to read data in parallel to the read on the row group or column level.
+
+### Comparison
+
+| Feature                | **In-Memory Format (e.g., Arrow, NumPy)** | **Disk-Based Format (e.g., Parquet, CSV)** |
+|------------------------|-------------------------------------------|--------------------------------------------|
+| **Speed**              | Very Fast ⚡ (RAM access)                  | Slower (Disk I/O needed)                   |
+| **Storage Efficiency** | Less efficient (uncompressed)             | Highly compressed (Parquet)                |
+| **Columnar Storage**   | Yes (Arrow)                               | Yes (Parquet)                              |
+| **Zero-Copy Reads**    | Yes (No duplication)                      | No (Requires reloading)                    |
+| **Persistence**        | No (Lost when session ends)               | Yes (Stored permanently)                   |
+
+
+
+In practice, we can combine pyarrow and parquet to process file. Parquet is a compressed, columnar storage format. PyArrow is optimized for reading/writing Parquet files extremely fast. For example:
+```python
+import pyarrow as pa
+import arrow
+import pyarrow.parquet as pq
+
+schema = pa.schema([
+        ("symbol", pa.string()),
+        ("frame", pa.date64()),
+        ("open", pa.float32()),
+        ("high", pa.float32()),
+        ("low", pa.float32()),
+        ("close", pa.float32()),
+        ("volume", pa.float64()),
+        ("money", pa.float64()),
+        ("factor", pa.float64())
+])
+
+
+async def save_1m_bars(codes, dt: datetime.datetime):
+    tables = None
+
+    for code in codes:
+        bars = await Stock.get_bars(code, 240, FrameType.MIN1, end=dt)
+        data = [[code] * len(bars)]
+
+        data.extend([
+                    bars[key] for key in bars.dtype.names
+                ])
+        table = pa.Table.from_arrays(data, schema=schema)
+        if tables is None:
+            tables = table
+        else: # 拼接表
+            tables = pa.concat_tables([tables, table])
+
+    # 写入磁盘
+    name = arrow.get(dt).format("YYYY-MM-DD")
+    pq.write_table(tables, f"/tmp/pyarrow/1m/{name}.parquet")
+
+
+codes = ["000001.XSHE", "600000.XSHG"]
+for i in (25, 26, 27, 28, 29):
+    dt = datetime.datetime(2023, 12, i, 15)
+    await save_1m_bars(codes, dt)
+
+```
+
+
+
+
+## References
+1. https://vutr.substack.com/p/the-overview-of-parquet-file-format
+<!-- https://zhuanlan.zhihu.com/p/675767714 -->

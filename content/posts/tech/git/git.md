@@ -95,6 +95,7 @@ To summarize, we can have the following table:
 {:.mbtablestyle}
 
 <br>
+
 #### Git Diff
 
 To check two branch difference, suppose we're on branch1, then we can do,
