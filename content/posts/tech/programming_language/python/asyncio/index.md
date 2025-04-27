@@ -34,7 +34,8 @@ AysncIO in python has two keywords: async/await. Many people who first encounter
 
 Indeed, ayncio is bound by GIL and it can't run more than one task at any moment as is shown below. This means that if another thread needs to run, the ownership of the GIL must be passed from the current executing thread to the other thread. This is what is called preemptive concurrency. This kind of switching is expensive when there are lots of threads. 
 
-The core concept in asyncio is coroutine. asyncio has its own concurrency synchronization through coroutine. It coordinates task switch with little cost. Simply put, python emulate concurrency in one thread through coroutine using event loop. 
+The core concept in asyncio is coroutine. asyncio has its own concurrency synchronization through coroutine. It coordinates task switch with little cost. Simply put, python emulates concurrency in one thread through coroutine using event loop. 
+
 <p align="center">
     <img alt="Thread and coroutine" src="images/image.png" width="80%"/>
     <em>Thread and coroutine</em>
@@ -51,7 +52,7 @@ How much it would take a person to complete all these tasks. It won't take us 10
 >- Task2: jogging 30 mins
 >- Task3: playing video games 40 mins
 
-This example is just how illustrate where async ops help in Python -- only in IO-bound programs such as http requests, file I/O etc, but not in CPU-bound programs. Note that in reality, python won't allow us to coordinate the execution of each tasks. We can only pack tasks and send them for async execution. 
+This example is just to illustrate where async ops help in Python -- only in IO-bound programs such as http requests, file I/O etc, but not in CPU-bound programs. Note that in reality, python won't allow us to coordinate the execution of each tasks. We can only pack tasks and send them for async execution. 
 
 ```python
 import asyncio
@@ -94,10 +95,11 @@ print(f"Time elapsed for running 3 sync tasks: {time.time() - now}")
 
 
 ## How Does it Work
+
 Let's first have a more formal definition of the two keywords, async and await. From realpython:  
 
 > - The syntax async def introduces either a native coroutine or an asynchronous generator. The expressions async with and async for are also valid.
-> - The keyword await passes function control back to the event loop. (It suspends the execution of the surrounding coroutine.) If Python encounters an await f() expression in the scope of g(), this is how await tells the event loop, “Suspend execution of g() until whatever I’m waiting on—the result of f()—is returned. In the meantime, go let something else run.” Await can only appear with async functions. 
+> - The keyword await passes function control back to the event loop. (It suspends the execution of the surrounding coroutine.) If Python encounters an await f() expression in the scope of g(), this is how await tells the event loop, “Suspend execution of g() until whatever I’m waiting on -- the result of f() -- is returned. In the meantime, go let something else run.” Await can only appear with async functions. 
 
 Example:
 ```python
@@ -110,15 +112,30 @@ async def g():
 
 The event loop is the coordinator of how the coroutine tasks are executed. It is something like a while True loop that monitors coroutines, taking feedback on what’s idle, and looking around for things that can be executed in the meantime. It is able to wake up an idle coroutine when whatever that coroutine is waiting on becomes available. By default, an async IO event loop runs in a single thread and on a single CPU core.
 
-The entire management of the event loop can be implicitly handled by one function call:
+Historically, we have to explicitly create event loop, execute tasks and close the event loop. After Python 3.7, the entire management of the event loop can be implicitly handled by one function call:
 
 ```python
 asyncio.run(main())  # Python 3.7+
 ```
 
+For instance,
+
+```python
+import asyncio
+
+async def myfunc(i):
+    print(f"coroutine {i} starting execution")
+    await asyncio.sleep(2)
+    print(f"coroutine {i} completes!")
+
+if __name__ == '__main__':
+    asyncio.run(myfunc(1))
+
+```
+
 ### Create Tasks and Gather Tasks
-Using `asyncio.create_task` method
-After creating tasks, we use asyncio.wait to gather all the tasks. 
+
+Old-fashioned way to create task is to use `asyncio.create_task` method. After creating tasks, we use asyncio.wait to gather all the tasks. 
 
 ```python
 import asyncio
@@ -155,8 +172,10 @@ async def func1(i):
 async def main():
     tasks = []
     for i in range(1, 5):
-        tasks.append(asyncio.create_task(func1(i)))
+        # here we're not using create_task
+        tasks.append(func1(i))
 
+    # gather creates the coroutine
     await asyncio.gather(*tasks)
 
 if __name__ == '__main__':
@@ -206,7 +225,7 @@ async def func1(i):
 async def main():
     tasks = []
     for i in range(1, 5):
-        tasks.append(asyncio.create_task(func1(i)))
+        tasks.append(func1(i))
 
     results = await asyncio.gather(*tasks)
     for result in results:
@@ -231,6 +250,7 @@ asyncio.wait() does not guarantee order—results come as tasks complete.
 
 
 ## Coroutine, Task and Future
+
 Let's give some clarifications about the concepts. 
 1. Future: similar to C++ std::future
 In C++, std::future acts as a handle for an asynchronous result. The main thread assigns a carrier to a new thread and retrieves a future before continuing its execution.
