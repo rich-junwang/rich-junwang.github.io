@@ -64,9 +64,9 @@ At inference time, we call `model.eval()` so that model wouldn't calculate the g
 
 
 ### PyTorch DataParallel
-DataParallel is very easy to use, we just wrap the model with `DataParallel()` wrapper. The input should be splittable on dim 0. Caveat here normally when we directly feed output of tokenizer into model, e.g. using `tokenizer(input)` as model input, sthis will lead to unsplittable tensors.  
+DataParallel is very easy to use, we just wrap the model with `DataParallel()` wrapper. The input should be splittable on dim 0. Caveat here normally when we directly feed output of tokenizer into model, e.g. using `tokenizer(input)` as model input, this will lead to unsplittable tensors because DP can't handle the dictionary there.  
 
-The issue with `DataParallel` is unbalanced GPU usage. The input is splitted to each GPU, and gathered on default GPU (usually cuda:0). Thus, the default GPU has much larger memory load. 
+The issue with `DataParallel` is unbalanced GPU usage. The input is split to each GPU, and gathered on default GPU (usually cuda:0). Thus, the default GPU has much larger memory load. 
 
 A way to solve this issue is to wrap your model and make sure most ops are done on each GPU. Model only return a small tensor. 
 ```python
@@ -125,7 +125,7 @@ for data in rand_loader:
 
 Always make sure that the batch size is divisible by 8. If not, we can do this simple trick. This is helpful when we don't use dataloadder and sampler.
 ```python
-# get smaller number that is greater than x and is multiples of 8
+# get smallest number that is greater than x and is multiples of 8
 def roundup(x):
    return (x + 7) & (-8)
 

@@ -83,5 +83,18 @@ The following image shows the data flow of the optimizer. Here I'll give a thoro
     <br>
 </p>
 
+
+## Computation and Communication Overlapping
+
+Here we think about a deep neural network with n layers. Assuming we're using Adam with DDP, then training process is composed of the following:
+
+1. Each node compute: layer 1 forward -> layer 2 forward -> … -> layer n forward -> layer n backward -> layer n-1 backward -> … -> layer 1 backward 
+2. all-reduce gradients of all layers
+3. update the weight of each layer
+
+The forward and backward in step (1) must be conducted sequentially. However,  we don't need to wait until all operations in step (1) are completed to start step (2). 
+In fact, once layer n backward is completed, we can immediately start to all-reduce layer n gradient and then even update the weight using this all-reduced gradient (as layer n weight is not needed in the backward for layer n-1 to layer 1.) 
+Note that step (2) are communication operations and backward in step (1) are computation operations. So overlapping them should not slow down either, i.e. IO ops and CPU ops are not competing with each other. 
+
 ## Reference
 1. Reducing Activation Recomputation in Large Transformer Models

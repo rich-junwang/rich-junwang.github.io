@@ -204,7 +204,7 @@ print(y.grad)
 ```
 
 
-Another example [3]
+Another example [2]
 ```python
 
 # Notice that we have ops (like multiply, sum) and tensors (A, B, C etc)
@@ -306,5 +306,5 @@ One last word at `eval()` and `no_grad()`. These two are actually unrelated. Dur
 
 ## References
 1. https://amsword.medium.com/understanding-pytorchs-autograd-with-grad-fn-and-next-functions-b2c4836daa00
-<!-- 2. https://zhuanlan.zhihu.com/p/10091011992
-3. https://zhuanlan.zhihu.com/p/321449610 -->
+2. https://zhuanlan.zhihu.com/p/321449610 
+<!-- 3. https://zhuanlan.zhihu.com/p/10091011992 -->
