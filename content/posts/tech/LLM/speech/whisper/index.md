@@ -42,7 +42,7 @@ Whisper model is large scale weakly supervised training ASR model from OpenAI. W
 
 ## Model
 
-The model architecture is encoder-decoder Transformer. Notice that this is different from LLM training where most models are decoder-only model. The reason is for ASR task, the whole audio segment is available before transcribe. 
+The model architecture is encoder-decoder Transformer. Notice that this is different from LLM training where most models are decoder-only model. The reason is for ASR task, the whole audio segment is available before transcription. 
 
 The data flow is as follows
 1. extract fbank features using a window length of 25ms and a stride of 10ms; 
