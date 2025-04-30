@@ -53,6 +53,15 @@
     </item>
     
     <item>
+      <title>Entropy Collapsing in RL Training</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/llm_inference/entropy_decoding/</link>
+      <pubDate>Fri, 05 Jan 2024 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/llm_inference/entropy_decoding/</guid>
+      <description>Decoding</description>
+    </item>
+    
+    <item>
       <title>Coder Training</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/llm/coder_training/</link>
       <pubDate>Mon, 18 Dec 2023 00:18:23 +0800</pubDate>
