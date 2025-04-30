@@ -3,13 +3,22 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/</loc>
-    <lastmod>2024-09-08T12:01:14-07:00</lastmod>
+    <lastmod>2025-01-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/</loc>
-    <lastmod>2024-09-08T12:01:14-07:00</lastmod>
+    <lastmod>2025-01-05T00:18:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/llm_inference/entropy_decoding/</loc>
+    <lastmod>2025-01-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/</loc>
-    <lastmod>2024-09-08T12:01:14-07:00</lastmod>
+    <lastmod>2025-01-05T00:18:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/tags/ml/</loc>
+    <lastmod>2025-01-05T00:18:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/tags/</loc>
+    <lastmod>2025-01-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/asyncio/</loc>
     <lastmod>2024-08-09T12:01:14-07:00</lastmod>
@@ -20,16 +29,10 @@
     <loc>https://rich-junwang.github.io/en-us/tags/rl/</loc>
     <lastmod>2024-07-05T00:18:23-07:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/tags/</loc>
-    <lastmod>2024-07-18T00:18:23+08:00</lastmod>
-  </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/diffusion/</loc>
     <lastmod>2024-07-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/loss/loss_reduction/</loc>
-    <lastmod>2024-07-18T00:18:23+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/tags/ml/</loc>
     <lastmod>2024-07-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/ray/</loc>
@@ -61,9 +64,6 @@
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/pytorch_rpc/</loc>
     <lastmod>2024-01-11T00:18:23+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/llm_inference/entropy_decoding/</loc>
-    <lastmod>2024-01-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/coder_training/</loc>
     <lastmod>2023-12-18T00:18:23+08:00</lastmod>

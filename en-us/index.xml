@@ -6,7 +6,16 @@
     <description>Recent content on Jun&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 08 Sep 2024 12:01:14 -0700</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 Jan 2025 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Entropy Collapsing in RL Training</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/llm_inference/entropy_decoding/</link>
+      <pubDate>Sun, 05 Jan 2025 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/llm_inference/entropy_decoding/</guid>
+      <description>Decoding</description>
+    </item>
+    
     <item>
       <title>AsyncIO</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/asyncio/</link>
@@ -104,15 +113,6 @@
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/pytorch_rpc/</guid>
       <description>PyTorch..</description>
-    </item>
-    
-    <item>
-      <title>Entropy Collapsing in RL Training</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/llm_inference/entropy_decoding/</link>
-      <pubDate>Fri, 05 Jan 2024 00:18:23 +0800</pubDate>
-      
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/llm_inference/entropy_decoding/</guid>
-      <description>Decoding</description>
     </item>
     
     <item>
