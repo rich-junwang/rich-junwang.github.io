@@ -1,7 +1,7 @@
 ---
 title: "Entropy Collapsing in RL Training"
-date: 2024-01-05T00:18:23+08:00
-lastmod: 2024-01-05T00:18:23+08:00
+date: 2025-01-05T00:18:23+08:00
+lastmod: 2025-01-05T00:18:23+08:00
 author: ["Jun"]
 keywords: 
 - 
