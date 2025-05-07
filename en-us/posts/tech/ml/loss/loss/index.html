@@ -113,13 +113,13 @@ $p_i$ is the probability and $y_i$ is the label, 1 for positive class and 0 for 
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>CLIPModel</span>(nn<span style=color:#f92672>.</span>Module):
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> __init__(
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__init__</span>(
 </span></span><span style=display:flex><span>        self,
 </span></span><span style=display:flex><span>        temperature<span style=color:#f92672>=</span>CFG<span style=color:#f92672>.</span>temperature,
 </span></span><span style=display:flex><span>        image_embedding<span style=color:#f92672>=</span>CFG<span style=color:#f92672>.</span>image_embedding,
 </span></span><span style=display:flex><span>        text_embedding<span style=color:#f92672>=</span>CFG<span style=color:#f92672>.</span>text_embedding,
 </span></span><span style=display:flex><span>    ):
-</span></span><span style=display:flex><span>        super()<span style=color:#f92672>.</span>__init__()
+</span></span><span style=display:flex><span>        super()<span style=color:#f92672>.</span><span style=color:#a6e22e>__init__</span>()
 </span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>image_encoder <span style=color:#f92672>=</span> ImageEncoder()
 </span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>text_encoder <span style=color:#f92672>=</span> TextEncoder()
 </span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>image_projection <span style=color:#f92672>=</span> ProjectionHead(embedding_dim<span style=color:#f92672>=</span>image_embedding)

@@ -40,21 +40,21 @@
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>RandomDataset</span>(Dataset):
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> __init__(self, size, length):
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__init__</span>(self, size, length):
 </span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>len <span style=color:#f92672>=</span> length
 </span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>data <span style=color:#f92672>=</span> torch<span style=color:#f92672>.</span>randn(length, size)
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> __getitem__(self, index):
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__getitem__</span>(self, index):
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>data[index]
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> __len__(self):
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__len__</span>(self):
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>return</span> self<span style=color:#f92672>.</span>len
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>rand_loader <span style=color:#f92672>=</span> DataLoader(dataset<span style=color:#f92672>=</span>RandomDataset(input_size, data_size),
 </span></span><span style=display:flex><span>                         batch_size<span style=color:#f92672>=</span>batch_size, shuffle<span style=color:#f92672>=</span><span style=color:#66d9ef>True</span>)
 </span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Model</span>(nn<span style=color:#f92672>.</span>Module):
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> __init__(self, input_size, output_size):
-</span></span><span style=display:flex><span>        super(Model, self)<span style=color:#f92672>.</span>__init__()
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__init__</span>(self, input_size, output_size):
+</span></span><span style=display:flex><span>        super(Model, self)<span style=color:#f92672>.</span><span style=color:#a6e22e>__init__</span>()
 </span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>fc <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Linear(input_size, output_size)
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>forward</span>(self, input):

@@ -74,7 +74,7 @@ An asynchronous call delegates time-consuming or blocking tasks to other threads
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#a6e22e>@ray.remote</span>
 </span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>Counter</span>:
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> __init__(self):
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__init__</span>(self):
 </span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>value <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>increment</span>(self):
@@ -250,8 +250,8 @@ Pipeline execution, image from 1<br></p><p>A full example on how to use Ray for 
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#66d9ef>class</span> <span style=color:#a6e22e>NeuralNetwork</span>(nn<span style=color:#f92672>.</span>Module):
-</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> __init__(self):
-</span></span><span style=display:flex><span>        super()<span style=color:#f92672>.</span>__init__()
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>def</span> <span style=color:#a6e22e>__init__</span>(self):
+</span></span><span style=display:flex><span>        super()<span style=color:#f92672>.</span><span style=color:#a6e22e>__init__</span>()
 </span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>flatten <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Flatten()
 </span></span><span style=display:flex><span>        self<span style=color:#f92672>.</span>linear_relu_stack <span style=color:#f92672>=</span> nn<span style=color:#f92672>.</span>Sequential(
 </span></span><span style=display:flex><span>            nn<span style=color:#f92672>.</span>Linear(<span style=color:#ae81ff>28</span> <span style=color:#f92672>*</span> <span style=color:#ae81ff>28</span>, <span style=color:#ae81ff>512</span>),
