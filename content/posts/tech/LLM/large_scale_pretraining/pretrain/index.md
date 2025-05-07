@@ -208,3 +208,5 @@ Inference speed determines product cost. Over the years, people have proposed va
 [40] [The Falcon Series of Open Language Models](https://arxiv.org/abs/2311.16867) <br>
 [41] [Simplifying Transformer Blocks](https://arxiv.org/abs/2311.01906) <br>
 [42] [What Language Model Architecture and Pretraining Objective Work Best for Zero-Shot Generalization?](https://arxiv.org/abs/2204.05832) <br>
+[43] https://huggingface.co/spaces/nanotron/ultrascale-playbook?section=high_level_overview
+
