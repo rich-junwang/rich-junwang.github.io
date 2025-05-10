@@ -242,6 +242,68 @@ def outer_func():
 ```
 Notice that global is only at module level. There is no program level global variable for python. After we define a global variable in one module, we could use it in other module with its module name.  
 
+
+
+
+## UV
+
+### Common Usages
+```bash
+
+# install
+pip install uv
+
+# Add the following line to zshrc or bashrc after pip install to get the binary in PATH
+# export PATH=\"`python3 -m site --user-base`/bin:\$PATH\"
+
+# create virtual env
+uv venv
+uv venv .my_venv_path
+
+# specify python version in venv
+uv venv -p 3.11
+uv venv -python 3.11
+
+source .my_venv_path/bin/activate
+
+
+# install packages using uv
+uv pip install pandas 
+
+# update package
+uv pip install -U pandas
+
+# install from local directory
+uv pip install .
+# install from local, support editable
+uv pip install -e .
+
+
+# uninstall 
+uv pip uninstall pandas
+
+# uv get package versions
+uv pip compile my_packages.txt -o requirements.txt
+uv pip compile - -o requirements.txt
+uv pip sync requirements.txt
+
+
+uv cache prune
+uv cache clean
+```
+
+
+
+## Python Development Mode
+
+```bash
+pip install -e path/to/SomeProject
+```
+
+Editable installs allow you to install your project without copying any files. Instead, the files in the development directory are added to Python’s import path. This approach is well suited for development and is also known as a “development installation”.
+
+
+
 ## References
 1. https://realpython.com/python-data-classes/
 2. https://realpython.com/python-debugging-pdb/
