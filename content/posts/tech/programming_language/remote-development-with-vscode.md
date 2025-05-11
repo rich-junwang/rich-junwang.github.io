@@ -155,6 +155,7 @@ Here is the config settings I used.
 
 ### Remote SSH config
 Install the plugin from [here](https://github.com/Natizyskunk/vscode-sftp?tab=readme-ov-file)
+
 Connecting to a single serve the `sftp.json` is like this:
 ```json
 {
@@ -218,6 +219,11 @@ Connecting to multiple servers, the "sftp.json" is like this:
     }
 }
 ```
+
+After saving the `sftp.json` in the `.vscode` folder, we can trigger a start sync. 
+- CTRL + P to start command palette
+- using `>` to start a command, typing sftp. Select for example sync from local to remote.
+
 
 ### Paste and Indentation
 Install `Paste and Indent` from g3rry

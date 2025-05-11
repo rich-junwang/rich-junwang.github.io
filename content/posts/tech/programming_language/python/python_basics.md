@@ -254,7 +254,7 @@ Notice that global is only at module level. There is no program level global var
 pip install uv
 
 # Add the following line to zshrc or bashrc after pip install to get the binary in PATH
-# export PATH=\"`python3 -m site --user-base`/bin:\$PATH\"
+# export PATH=`python3 -m site --user-base`/bin:\$PATH
 
 # create virtual env
 uv venv

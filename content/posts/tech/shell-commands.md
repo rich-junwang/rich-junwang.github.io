@@ -555,5 +555,17 @@ for rank in {0..7} ; do
 CUDA_VISIBILE_DEVICES=$rank  tmux new-session -d -s my_session_${rank} python3 my_python_script my_arguments  2>&1 &
 ```
 
+
+
+### Tree
+```bash
+# using tree to get the structure of the directory
+tree vllm -F -L 1 --dirsfirst | sed -E \
+  -e 's/([├└]── )([^ ]*\/)$/\1📁 \2/' \
+  -e 's/([├└]── )([^ ]*)$/\1📄 \2/'
+
+```
+
 ### References
-[1] https://itsnotbugitsfeature.com/2019/10/22/splitting-a-big-pull-request-into-smaller-review-able-ones/
+1. https://itsnotbugitsfeature.com/2019/10/22/splitting-a-big-pull-request-into-smaller-review-able-ones/
+2. https://fingertap.github.io/p/vllm%E4%BB%A3%E7%A0%81%E5%AD%A6%E4%B9%A0%E4%B9%8B%E4%B8%80%E6%A6%82%E8%A7%88/
