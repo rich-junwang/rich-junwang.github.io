@@ -17,6 +17,15 @@
     </item>
     
     <item>
+      <title>vLLM</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/llm_inference/vllm/</link>
+      <pubDate>Sat, 05 Oct 2024 12:01:14 -0700</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/llm_inference/vllm/</guid>
+      <description>VLLM</description>
+    </item>
+    
+    <item>
       <title>AsyncIO</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/asyncio/</link>
       <pubDate>Fri, 09 Aug 2024 12:01:14 -0700</pubDate>
