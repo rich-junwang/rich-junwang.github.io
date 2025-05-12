@@ -29,8 +29,8 @@ cover:
 math: true
 ---
 
-## LLM Inference Mode
-vLLM has two inference model:
+## LLM Inference Modes
+vLLM has two inference modes:
 - offline batch mode: mostly for offline model evaluation, large-scale, high-throughput inference where latency is less critical 
 - online serving mode: Real-time applications like chatbots or APIs where latency is important.
 
@@ -42,6 +42,13 @@ No matter what kind mode vLLM is in for inference, the LLM inference process has
 
 Prefilling phase llm encodes the prompt at once. This is one forward path execution in LLM. 
 Decoding phase, llm generates each token step by step. 
+
+## KV Cache
+
+KV Cache at inference time refers that caching key and value vectors in self-attention saves redundant computation and accelerates decoding - but takes up memory.
+![alt text](image.png)
+
+
 
 ## Page Attention
 
@@ -61,7 +68,7 @@ Designed with a similar philosophy, paged attention utilizes logical view and ph
 
 <div align="center"> <img src=images/pagedattn.png style="width: 80%; height: auto;"/> </div>
 
-Obviously the block table here is the same with memory management unit which manages the mapping from logical view to physical address. For page attention here logical view is just needed batch KV cache. 
+Obviously the block table here is the same with memory management unit which manages the mapping from logical address to physical address. For page attention here logical view is just needed batch KV cache. 
 
 
 
