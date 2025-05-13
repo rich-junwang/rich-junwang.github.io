@@ -6,7 +6,16 @@
     <description>Recent content in RL on Jun&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 05 Jul 2024 00:18:23 -0700</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/rl/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 05 Aug 2024 00:18:23 -0700</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/rl/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>veRL</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/rl/verl/</link>
+      <pubDate>Mon, 05 Aug 2024 00:18:23 -0700</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/rl/verl/</guid>
+      <description>RL training framework</description>
+    </item>
+    
     <item>
       <title>PPO and Its Implementation</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/ml/rl/ppo/</link>

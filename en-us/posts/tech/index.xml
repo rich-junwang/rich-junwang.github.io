@@ -35,6 +35,15 @@
     </item>
     
     <item>
+      <title>veRL</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/rl/verl/</link>
+      <pubDate>Mon, 05 Aug 2024 00:18:23 -0700</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/rl/verl/</guid>
+      <description>RL training framework</description>
+    </item>
+    
+    <item>
       <title>PPO and Its Implementation</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/ml/rl/ppo/</link>
       <pubDate>Fri, 05 Jul 2024 00:18:23 -0700</pubDate>
