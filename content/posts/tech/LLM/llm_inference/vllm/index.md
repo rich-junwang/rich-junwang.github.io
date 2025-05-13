@@ -46,7 +46,6 @@ Decoding phase, llm generates each token step by step.
 ## KV Cache
 
 KV Cache at inference time refers that caching key and value vectors in self-attention saves redundant computation and accelerates decoding - but takes up memory.
-![alt text](image.png)
 
 
 
