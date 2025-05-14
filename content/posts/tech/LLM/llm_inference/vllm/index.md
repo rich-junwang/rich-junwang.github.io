@@ -29,11 +29,55 @@ cover:
 math: true
 ---
 
-## LLM Inference Modes
+## vLLM Inference Modes
 vLLM has two inference modes:
 - offline batch mode: mostly for offline model evaluation, large-scale, high-throughput inference where latency is less critical 
 - online serving mode: Real-time applications like chatbots or APIs where latency is important.
 
+The interface to these two approaches are shown in the diagram below.
+
+<div align="center"> <img src=images/interface.png style="width: 80%; height: auto;"/> </div>
+
+
+### Offline Inference
+```python
+# batch prompts
+prompts = ["Hello, my name is",
+           "The president of the United States is",
+           "The capital of France is",
+           "The future of AI is",]
+
+# sampling parameters
+sampling_params = SamplingParams(temperature=0.8, top_p=0.95)
+# load model
+llm = LLM(model="facebook/opt-125m")
+
+# Inference
+outputs = llm.generate(prompts, sampling_params)
+
+for output in outputs:
+    prompt = output.prompt
+    generated_text = output.outputs[0].text
+    print(f"Prompt: {prompt!r}, Generated text: {generated_text!r}")
+```
+
+
+### API Server
+The API server utilizes Uvicorn to deploy FastAPI application. 
+```bash
+# Server
+python -m vllm.entrypoints.openai.api_server --model meta-llama/Llama-2-7b-hf
+
+# Client：(compatible with openai)
+curl http://localhost:8000/v1/completions \
+    -H "Content-Type: application/json" \
+    -d '{
+        "model": "meta-llama/Llama-2-7b-hf",
+        "prompt": "San Francisco is a",
+        "max_tokens": 256,
+        "temperature": 0
+    }'
+```
 
 ## LLM Inference
 No matter what kind mode vLLM is in for inference, the LLM inference process has two stages: 
