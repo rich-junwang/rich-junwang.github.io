@@ -59,7 +59,7 @@ Traditional LLM inference has inefficient KV cache management. There are three i
 
 Remember that in OS, each program sees isolated, contiguous logical address (virtual memory) ranging from 0 - N which is dynamically mapped to physical memory (main memory). 
 
-<div align="center"> <img src=images/mem.png style="width: 70%; height: auto;"/> </div>
+<div align="center"> <img src=images/mem.png style="width: 80%; height: auto;"/> </div>
 
 Because of the indirection between logical and physical addresses, a process’s pages can be located anywhere in memory and can be moved (relocated). Needed pages are ‘paged into’ main memory as they are referenced by the executing program. 
 
@@ -70,6 +70,14 @@ Designed with a similar philosophy, paged attention utilizes logical view and ph
 Obviously the block table here is the same with memory management unit which manages the mapping from logical address to physical address. For page attention here logical view is just needed batch KV cache. 
 
 
+## Continuous Batching
+The main topic for inference is how to handle multiple concurrent requests efficiently. Remember that LLM inference is memory-IO bound, not compute-bound. This means it takes more time to load 1MB of data to the GPU’s compute cores than it does for those compute cores to perform LLM computations on 1MB of data. Thus LLM inference throughput is largely determined by how large a batch you can fit into high-bandwidth GPU memory.
+
+The very obvious one for online serving is to batch processing individual request. The left side of the following figure shows request-level batching. However as is illustrated in the figure, GPU is underutilized as generation lengths vary. 
+
+As is shown in the right hand side, in continuous batching, LLMs continuously add new requests to the current batch as others finish. This allows it to maximize GPU utilization. In reality, the complexity comes from how to manage the KV cache of requests which are finished. In vLLM, KV cache is managed by pagedattention discussed above which makes things slightly easier. 
+
+<div align="center"> <img src=images/batching.png style="width: 80%; height: auto;"/> </div>
 
 
 ## AsyncLLM
@@ -110,3 +118,6 @@ This code snippet demonstrates how to use the infer method to get predictions fr
 ## References
 1. [Efficient Memory Management for Large Language Model Serving with PagedAttention](https://arxiv.org/abs/2309.06180)
 2. POD-Attention: Unlocking Full Prefill-Decode Overlap for Faster LLM Inference
+3. Orca: A Distributed Serving System for Transformer-Based Generative Models
+4. https://www.anyscale.com/blog/continuous-batching-llm-inference
+5. [vLLM slides](https://docs.google.com/presentation/d/1_q_aW_ioMJWUImf1s1YM-ZhjXz8cUeL0IJvaquOYBeA/)

@@ -78,11 +78,13 @@ for prompts in dataloader:
 Modern LLM training engine and inference engine gradually diverges. Inferences focuses on leverages customized kernels to minimize latency while training aims to support high precision, large batches and N-D parallelism to maximize throughput. Thus, veRL chooses to have both training engine and rollout/inference engine for actor model. 
 
 Given that we have actor training engine, rollout engine, critic model, reference model and reward model, it's critical to optimize GPU allocation and placement of the models. There are generally three placement plans:
-1. Each model placed on separate devices
-2. Different group of models can be placed together
+1. Separate placement: each model placed on separate devices
+2. Group coloate: different group of models can be placed together
 Actor/Ref colocated on some GPUs
 Critic/RM colocated on other GPUs
-3. Colocate
+3. All model colocate together
+
+
 
 
 (to be continued)
