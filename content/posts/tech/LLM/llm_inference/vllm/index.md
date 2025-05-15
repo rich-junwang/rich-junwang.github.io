@@ -34,12 +34,13 @@ vLLM has two inference modes:
 - offline batch mode: mostly for offline model evaluation, large-scale, high-throughput inference where latency is less critical 
 - online serving mode: Real-time applications like chatbots or APIs where latency is important.
 
-The interface to these two approaches are shown in the diagram below.
+The interface to these two approaches are shown in the diagram below. 
 
-<div align="center"> <img src=images/interface.png style="width: 80%; height: auto;"/> </div>
+<div align="center"> <img src=images/interface.png style="width: 100%; height: auto;"/> </div>
 
 
 ### Offline Inference
+Simpler offline batch inference example:
 ```python
 # batch prompts
 prompts = ["Hello, my name is",
@@ -59,6 +60,91 @@ for output in outputs:
     prompt = output.prompt
     generated_text = output.outputs[0].text
     print(f"Prompt: {prompt!r}, Generated text: {generated_text!r}")
+```
+
+A data parallel (SPMD style) offline inference example.
+
+```python
+import os
+
+from vllm import LLM, SamplingParams
+from vllm.utils import get_open_port
+
+GPUs_per_dp_rank = 2
+DP_size = 2
+
+
+def main(dp_size, dp_rank, dp_master_ip, dp_master_port, GPUs_per_dp_rank):
+    os.environ["VLLM_DP_RANK"] = str(dp_rank)
+    os.environ["VLLM_DP_SIZE"] = str(dp_size)
+    os.environ["VLLM_DP_MASTER_IP"] = dp_master_ip
+    os.environ["VLLM_DP_MASTER_PORT"] = str(dp_master_port)
+    # set devices for each dp_rank
+    os.environ["CUDA_VISIBLE_DEVICES"] = ",".join(
+        str(i) for i in range(dp_rank * GPUs_per_dp_rank, (dp_rank + 1) *
+                              GPUs_per_dp_rank))
+
+    # Sample prompts.
+    prompts = [
+        "Hello, my name is",
+        "The president of the United States is",
+        "The capital of France is",
+        "The future of AI is",
+    ]
+
+    # with DP, each rank should process different prompts.
+    # usually all the DP ranks process a full dataset,
+    # and each rank processes a different part of the dataset.
+    promts_per_rank = len(prompts) // dp_size
+    start = dp_rank * promts_per_rank
+    end = start + promts_per_rank
+    prompts = prompts[start:end]
+    if len(prompts) == 0:
+        # if any rank has no prompts to process,
+        # we need to set a placeholder prompt
+        prompts = ["Placeholder"]
+    print(f"DP rank {dp_rank} needs to process {len(prompts)} prompts")
+
+    # Create a sampling params object.
+    # since we are doing data parallel, every rank can have different
+    # sampling params. here we set different max_tokens for different
+    # ranks for demonstration.
+    sampling_params = SamplingParams(temperature=0.8,
+                                     top_p=0.95,
+                                     max_tokens=16 * (dp_rank + 1))
+
+    # Create an LLM.
+    llm = LLM(model="ibm-research/PowerMoE-3b",
+              tensor_parallel_size=GPUs_per_dp_rank,
+              enforce_eager=True,
+              enable_expert_parallel=True)
+    outputs = llm.generate(prompts, sampling_params)
+    # Print the outputs.
+    for output in outputs:
+        prompt = output.prompt
+        generated_text = output.outputs[0].text
+        print(f"DP rank {dp_rank}, Prompt: {prompt!r}, "
+              f"Generated text: {generated_text!r}")
+
+
+if __name__ == "__main__":
+    from multiprocessing import Process
+    dp_master_ip = "127.0.0.1"
+    dp_master_port = get_open_port()
+    procs = []
+    for i in range(DP_size):
+        proc = Process(target=main,
+                       args=(DP_size, i, dp_master_ip, dp_master_port,
+                             GPUs_per_dp_rank))
+        proc.start()
+        procs.append(proc)
+    exit_code = 0
+    for proc in procs:
+        proc.join()
+        if proc.exitcode:
+            exit_code = proc.exitcode
+
+    exit(exit_code)
 ```
 
 
@@ -165,3 +251,9 @@ This code snippet demonstrates how to use the infer method to get predictions fr
 3. Orca: A Distributed Serving System for Transformer-Based Generative Models
 4. https://www.anyscale.com/blog/continuous-batching-llm-inference
 5. [vLLM slides](https://docs.google.com/presentation/d/1_q_aW_ioMJWUImf1s1YM-ZhjXz8cUeL0IJvaquOYBeA/)
+6. https://github.com/vllm-project/vllm/pull/12071
+
+
+
+<!-- 1. https://zhuanlan.zhihu.com/p/691045737
+2. https://docs.google.com/presentation/d/1QL-XPFXiFpDBh86DbEegFXBXFXjix4v032GhShbKf3s -->

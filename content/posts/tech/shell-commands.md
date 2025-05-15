@@ -8,7 +8,7 @@ keywords:
 categories: 
 - 
 tags: 
-- blog
+- Shell
 description: "Some of my frequently used commands"
 weight:
 slug: ""

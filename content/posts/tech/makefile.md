@@ -8,7 +8,7 @@ keywords:
 categories: 
 - 
 tags: 
-- blog
+- Makefile
 description: "make sense of makefile"
 weight:
 slug: ""

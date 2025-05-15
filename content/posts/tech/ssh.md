@@ -8,7 +8,7 @@ keywords:
 categories: 
 - 
 tags: 
-- blog
+- Shell
 description: "How to always keep ssh connection alive"
 weight:
 slug: ""

@@ -96,6 +96,7 @@ Critic/RM colocated on other GPUs
 1. HybridFlow: A Flexible and Efficient RLHF Framework
 2. https://github.com/vllm-project/vllm/issues/11400
 3. https://verl.readthedocs.io/en/latest/hybrid_flow.html#id9
+4. GSPMD: General and Scalable Parallelization for ML Computation Graphs
 
 <!-- 1. https://zhuanlan.zhihu.com/p/30876678559
 2. https://zhuanlan.zhihu.com/p/27676081245

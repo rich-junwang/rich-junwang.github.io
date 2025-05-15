@@ -8,7 +8,7 @@ keywords:
 categories: # 没有分类界面可以不填写
 - 
 tags: # 标签
-- 
+- Serving
 description: "How to serve your model locally for a demo"
 weight:
 slug: ""
