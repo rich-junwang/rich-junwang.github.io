@@ -6,7 +6,16 @@
     <description>Recent content in 🧩 Tags on Jun&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 05 Jan 2025 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 Jan 2025 12:01:14 -0700</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LLM</title>
+      <link>https://rich-junwang.github.io/en-us/tags/llm/</link>
+      <pubDate>Sun, 05 Jan 2025 12:01:14 -0700</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/tags/llm/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>ML</title>
       <link>https://rich-junwang.github.io/en-us/tags/ml/</link>
@@ -26,6 +35,15 @@
     </item>
     
     <item>
+      <title>Python</title>
+      <link>https://rich-junwang.github.io/en-us/tags/python/</link>
+      <pubDate>Fri, 09 Aug 2024 12:01:14 -0700</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>RL</title>
       <link>https://rich-junwang.github.io/en-us/tags/rl/</link>
       <pubDate>Mon, 05 Aug 2024 00:18:23 -0700</pubDate>
@@ -40,15 +58,6 @@
       <pubDate>Sat, 18 May 2024 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/tags/multimodality/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>LLM</title>
-      <link>https://rich-junwang.github.io/en-us/tags/llm/</link>
-      <pubDate>Tue, 05 Mar 2024 00:18:23 +0800</pubDate>
-      
-      <guid>https://rich-junwang.github.io/en-us/tags/llm/</guid>
       <description></description>
     </item>
     
@@ -116,6 +125,24 @@
     </item>
     
     <item>
+      <title>Serving</title>
+      <link>https://rich-junwang.github.io/en-us/tags/serving/</link>
+      <pubDate>Tue, 08 Feb 2022 12:01:14 -0700</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/tags/serving/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Shell</title>
+      <link>https://rich-junwang.github.io/en-us/tags/shell/</link>
+      <pubDate>Tue, 11 Jan 2022 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/tags/shell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Redis</title>
       <link>https://rich-junwang.github.io/en-us/tags/redis/</link>
       <pubDate>Tue, 30 Nov 2021 15:55:23 +0800</pubDate>
@@ -145,9 +172,18 @@
     <item>
       <title>Tool</title>
       <link>https://rich-junwang.github.io/en-us/tags/tool/</link>
-      <pubDate>Sun, 11 Feb 2018 00:18:23 +0800</pubDate>
+      <pubDate>Sat, 08 Feb 2020 12:01:14 -0700</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/tags/tool/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Makefile</title>
+      <link>https://rich-junwang.github.io/en-us/tags/makefile/</link>
+      <pubDate>Sat, 11 Jan 2020 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/tags/makefile/</guid>
       <description></description>
     </item>
     

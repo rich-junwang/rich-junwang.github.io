@@ -6,7 +6,16 @@
     <description>Recent content in LLM on Jun&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 05 Mar 2024 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/llm/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 Jan 2025 12:01:14 -0700</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/llm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Distillation</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/model_distillation/</link>
+      <pubDate>Sun, 05 Jan 2025 12:01:14 -0700</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/model_distillation/</guid>
+      <description>Knowledge distillation</description>
+    </item>
+    
     <item>
       <title>Whisper Model</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/llm/speech/whisper/</link>
