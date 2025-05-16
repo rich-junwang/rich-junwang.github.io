@@ -210,6 +210,10 @@ As is shown in the right hand side, in continuous batching, LLMs continuously ad
 <div align="center"> <img src=images/batching.png style="width: 80%; height: auto;"/> </div>
 
 
+## Chunked Prefill
+
+By default, vLLM scheduler prioritizes prefills and doesn’t batch prefill and decode to the same batch. Chunked prefill [7] allows to chunk large prefills into smaller chunks and batch them together with decode requests. 
+
 ## AsyncLLM
 
 When a request comes in, it goes through a sequence of steps: 
@@ -252,6 +256,8 @@ This code snippet demonstrates how to use the infer method to get predictions fr
 4. https://www.anyscale.com/blog/continuous-batching-llm-inference
 5. [vLLM slides](https://docs.google.com/presentation/d/1_q_aW_ioMJWUImf1s1YM-ZhjXz8cUeL0IJvaquOYBeA/)
 6. https://github.com/vllm-project/vllm/pull/12071
+7. SARATHI: Efficient LLM Inference by Piggybacking Decodes with Chunked Prefills
+
 
 
 
