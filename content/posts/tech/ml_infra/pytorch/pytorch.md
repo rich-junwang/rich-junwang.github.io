@@ -31,7 +31,7 @@ cover:
 Using PyTorch for NN model training on single GPU is simple and easy. However, when it comes to multiple GPU training, there could be various of issues. In this blog, I'll summarize all kinds of issues I ran into during model training/evaluation.
 
 
-### Gradient Accumulation
+## Gradient Accumulation
 Gradient accumulation is a way to virtually increase the batch size during training. In gradient accumulation, `N` batches go through the forward path and backward path, and each time, the gradient is computed and accumulated (usually summed or averaged), but model parameters are not updated. Model parameters are updated after iterate through all `N` batches. The logic is as follows:
 ```
 for step, oneBatch in enumerate(dataloader):
@@ -59,11 +59,11 @@ for step, eachBatch in enumerate(dataloader):
 
 ``` -->
 
-### PyTorch Inference
+## PyTorch Inference
 At inference time, we call `model.eval()` so that model wouldn't calculate the gradient. It would still be beneficial to wrap the code block with `with torch.no_grad()`. The reason is it seems PyTorch creates grad buffer for the input tensors created in the computation graph. With this no_grad wrapper, it could free more spaces. 
 
 
-### PyTorch DataParallel
+## PyTorch DataParallel
 DataParallel is very easy to use, we just wrap the model with `DataParallel()` wrapper. The input should be splittable on dim 0. Caveat here normally when we directly feed output of tokenizer into model, e.g. using `tokenizer(input)` as model input, this will lead to unsplittable tensors because DP can't handle the dictionary there.  
 
 The issue with `DataParallel` is unbalanced GPU usage. The input is split to each GPU, and gathered on default GPU (usually cuda:0). Thus, the default GPU has much larger memory load. 
@@ -134,7 +134,7 @@ if len(input_batch) < batch_size:
    input_batch += [input_batch[-1]] * (new_batch_size - len(input_batch))
 ``` 
 
-### Install Apex
+## Install Apex
 Sometimes to use the latest distributed training feature, we have to install Apex. As Apex is closely coupled with Cuda, we need to follow the next few steps to correctlly install apex.
 - Find out the Cuda version used in the system. 
 ```
@@ -160,7 +160,7 @@ torch.set_printoptions(linewidth=16000)
 Dataloader sometimes can be buggy, when there are errors related to dataloader, a good practice is to disable the worker number and disable prefetching.
 
 
-### Launch Distributed Run
+## Launch Distributed Run
 ```bash
 python3 -m torch.distributed.run --nnodes=2 --nproc_per_node 8 --node_rank=${NODE_RANK} --master_port=1234 --master_addr=xxx train.py args..
 
@@ -173,7 +173,7 @@ torchrun  --nproc-per-node=$GPUS_PER_NODE --nnodes=$NUM_NODES --node_rank $NODE_
 ```
 
 
-### Pytorch and Numpy Advanced Indexing
+## Pytorch and Numpy Advanced Indexing
 When selection object is sequence object, ndarray/tensor, it will trigger advanced indexing. To understand how it works, we start from simple.
 ```python
 x = np.arange(12).reshape(4,3)
@@ -205,10 +205,81 @@ print (y)
  [ 9 11]]
 ```
 
-### Loading a pretrained checkpoint
+## Loading a pretrained checkpoint
 A lot of times when we save a checkpoint of a pretrained model, we also save the trainer (or model state) information. This means when we load model checkpoint again, model will already have a preallocated device. When we use the same number of GPU to continue training, it will work as expected. However, the issue will arise when we have different number of GPUs for two runs. Let's say, we first trained model on a single GPU, then we want to use multiple GPU to continue the training. When we move model to multiple GPU, there will be something weird. For instance, on GPU 0, you might see multiple process (normally one process per GPU). Or in other cases, you can see GPU 0 has much higher memory usage than other GPUs. 
 
 Solution: when we load model, we only load parameters and strip all state information. This might be tricky sometimes. The simplest way to solve this issue is to wrap the command with with PyTorch distributed data parallel. 
 ```
 python3 -m torch.distributed.launch --nnodes=1 --nproc_per_node=8 my_script.py my_config_file 
 ```
+
+
+
+## Nvidia Issues
+
+1. CUDA initialization: Unexpected error from cudaGetDeviceCount()
+
+This issue arises because ubuntu system update leads to nvidia-fabricmanager update, which leads the version mismatch between cuda driver and nvidia-fabricmanager. 
+
+Check nvidia fabric package status:
+```bash
+systemctl status nvidia-fabricmanager
+
+# or the following command
+journalctl -u nvidia-fabricmanager.service
+```
+
+My solution is to install the latest cuda driver and latest nvidia-fabricmanager. Below I just show how to install the latest nvidia-fabricmanager.
+
+```bash
+# purge old version
+sudo apt remove nvidia-fabricmanager-*
+
+# download latest version, note that
+# - don't download cuda-driver-fabricmanager-xxx
+# - don't download the dev version
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/nvidia-fabricmanager-575_575.51.03-1_amd64.deb
+
+sudo dpkg -i ./nvidia-fabricmanager-575_575.51.03-1_amd64.deb
+
+# if there is issue
+sudo apt --fix-broken install
+
+# re-enable the service
+sudo systemctl enable nvidia-fabricmanager
+sudo systemctl restart nvidia-fabricmanager
+```
+
+If getting the error `Failed to enable unit: Unit file /etc/systemd/system/nvidia-fabricmanager.service is masked`,
+we can do
+```bash
+sudo systemctl unmask nvidia-fabricmanager.service
+
+# or
+sudo rm /etc/systemd/system/nvidia-fabricmanager.service
+sudo rm /lib/systemd/system/nvidia-fabricmanager.service
+```
+Then reinstall the fabric manager package. Using the following command to verify the installation.
+```bash
+python -c "import torch ; print(torch.cuda.device_count())"
+```
+
+
+When installing nvidia driver has issue such as `NVIDIA kernel module appears to already be loaded in your kernel. This may be because it's in use`. Use the following to fix this issue
+
+```bash
+# check nvidia.drm
+lsmod | grep nvidia.drm
+# unload nvidia-drm
+sudo modprobe -r nvidia-drm
+
+sudo systemctl isolate multi-user.target
+sudo systemctl set-default multi-user.target
+
+sudo apt purge nvidia-*
+sudo apt autoremove
+
+sudo reboot
+```
+
+

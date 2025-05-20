@@ -256,6 +256,9 @@ pip install uv
 # Add the following line to zshrc or bashrc after pip install to get the binary in PATH
 # export PATH=`python3 -m site --user-base`/bin:\$PATH
 
+# initialize a project
+uv init
+
 # create virtual env
 uv venv
 uv venv .my_venv_path
