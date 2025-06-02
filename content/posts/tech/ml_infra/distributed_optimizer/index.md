@@ -98,3 +98,4 @@ Note that step (2) are communication operations and backward in step (1) are com
 
 ## Reference
 1. Reducing Activation Recomputation in Large Transformer Models
+2. https://github.com/marin-community/marin/issues/1290
