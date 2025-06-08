@@ -85,6 +85,13 @@ Making changes like this:
 
 ## Sync New Commits from Public Repo
 
+
+The best approach is:
+```bash
+git fetch upstream # this make sure we don't merge
+git rebase upstream/main
+```
+
 If we haven’t make changes at master, we can do:
 
 ```bash
