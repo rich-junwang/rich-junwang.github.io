@@ -38,8 +38,8 @@ cover:
 <img class="img-fluid z-depth-1 rounded" id="mypic" src="/img/junwang.jpeg">
 </div>
 
-<p>Hi there, this is Jun Wang. Welcome to my website. I'm a programmer. I love programming. 
-    
+<p>Hi there, this is Jun Wang. Welcome to my website. I'm an AI researcher. I love programming but I prefer training models to write code for me.. 
+
 I am a Senior Applied Scientist at Amazon, specializing in foundational model pre-training, post-training, and reinforcement learning for complex reasoning tasks. My expertise spans the full stack of large language model (LLM) development, including data curation, pretraining, supervised fine-tuning (SFT), and reinforcement learning with human feedback (RLHF). I have experience training both text and code models. Most recently, I've been focusing on deep RL for math, code generation tasks. 
 </p>
 <p>Opinions are my own and I do not speak for my employer or my team. On this webpage, I'd like to share my study and my

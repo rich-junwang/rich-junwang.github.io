@@ -220,7 +220,7 @@ Connecting to multiple servers, the "sftp.json" is like this:
 }
 ```
 
-After saving the `sftp.json` in the `.vscode` folder, we can trigger a start sync. 
+After saving the `sftp.json` in the `.vscode` folder, we can trigger a start sync. Sometimes we have to create the the destination directory to make the sync successful.
 - CTRL + P to start command palette
 - using `>` to start a command, typing sftp. Select for example sync from local to remote.
 
@@ -246,4 +246,5 @@ Adding the following to keybindings json
 }
 ```
 ## References
-[1] https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf
+1. https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf
+2. https://github.com/Natizyskunk/vscode-sftp
