@@ -32,24 +32,25 @@ math: true
 
 ## What is PD Disaggregation
 
-Prefilling decoding disaggregation refers to the process that decouples the prefilling phase and decoding phase in LLM inference. LLM Inference has two stage, prefilling and decoding as we've discussed before. LLM applications often emphasize individual latency for each phase: time to first token (TTFT) for the prefilling phase and time per output token (TPOT) of each request for the decoding phase. To provide good customer experience, different application optimize different target. For instance, real-time chatbot system prioritize low TTFT while DeepResearch type of application wants to reduce the TPOT such that the whole generation time would be shorter. 
+Prefilling decoding disaggregation refers to the process that decouples the prefilling phase and decoding phase in LLM inference. LLM Inference has two stages, prefilling and decoding as we've discussed before. LLM applications often emphasize individual latency for each phase: time to first token (TTFT) for the prefilling phase and time per output token (TPOT) of each request for the decoding phase. To provide good customer experience, different application optimizes different target. For instance, real-time chatbot system prioritizes low TTFT while DeepResearch type of application wants to reduce the TPOT such that the whole generation time would be shorter. 
 
 Decoupling the prefilling and decoding offers the flexibility to optimize each stage in decoding, thus has shown improving GPU utilization.
 
 ## KV Cache Store
-Now we understand that we need to separate the two stages of prefilling and decoding. In practice, we'll have to maintain two full models on different GPUs. After we compute the prefix, we transfer it to the decoding stage. The two stages can be seen as the producer and consumer. Like microservice system where we decouple client requests with backend services using message queue, here we can use KV cache store as the intermediate layer. 
+Now we understand that why we need to separate the two stages of prefilling and decoding. In practice, we'll have to maintain two full set of models on different GPUs. After we compute the prefix, we transfer it to the decoding stage. The two stages can be seen as the producer and consumer. Like microservice system where we decouple client requests with backend services using message queue, here we can use KV cache store as the intermediate layer. 
 
 <div align="center"> <img src=images/mooncake.png style="width: 100%; height: auto;"/> </div>
 
-In Mooncake [2] inference architecture, there is kv cache store is the kv cache pool shown above. The nice thing about adding kv cache store is that if decoding stage crashes, the system won't need to go through the prefilling stage again thus has better fault resilience. 
+In Mooncake [2] inference architecture, there is kv cache store which is the kv cache pool shown above. The nice thing about adding kv cache store is that if decoding stage crashes, the system won't need to go through the prefilling stage again thus has better fault resilience. 
+
 The kv cache store can also be used for prefix caching. 
 
 
 
 ## Computation and Communication Overlapping
 
-One thing that distinguish KV cache from other type of caches is that its huge size, thus it's hard to store it using distributed caching service such as Redis/Memcache. To put things into perspective, we can do a simple math here: assume we have llama 70B model which has 80 layers. 
-Assuming BF16, then the total kv cache of 1024 prefix is: 
+One thing that distinguishes KV cache from other type of caches is its huge size, thus it's hard to store it using distributed caching service such as Redis/Memcache. To put things into perspective, we can do a simple math here: assuming we have a llama 70B model which has 80 layers. 
+Assuming using BF16, then the total kv cache size of 1024 prefix is: 
 
 512(BS) * 1024( L:prefix ) * 8(D) * 128(H) * 80 (layer) * 2 (BF16) * 2 (KV) = 160GB !!!
 
@@ -62,6 +63,7 @@ Directly transferring such large amount of data is slow. We can overlap the comm
 2. [Mooncake: A KVCache-centric Disaggregated Architecture for LLM Serving](https://arxiv.org/abs/2407.00079)
     https://github.com/kvcache-ai/Mooncake
 3. DeepSeek-V3 Technical Report
+4. P/D-Serve: Serving Disaggregated Large Language Model at Scale
 
 
 <!-- 4. https://zhuanlan.zhihu.com/p/27836625742 -->

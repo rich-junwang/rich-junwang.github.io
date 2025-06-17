@@ -29,11 +29,7 @@ cover:
 ---
 It's a long way to go, but let's just start with baby steps.
 
-### Common Libs
-- Cuda: Library to use GPUs.
-- cudnn: Library to do Neural Net stuff on GPUs (probably uses cuda to talk to the GPUs)
-- CUTLASS: CUDA GEMM lib.
-- cuBLAS: cuda basic linear algebra lib.
+
 
 
 <!-- ## References
