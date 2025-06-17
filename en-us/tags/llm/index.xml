@@ -9,37 +9,37 @@
     <lastBuildDate>Sat, 05 Apr 2025 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/llm/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>PD Disaggregation</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/llm_inference/pd_disaggregation/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/llm_inference/pd_disaggregation/</link>
       <pubDate>Sat, 05 Apr 2025 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/llm_inference/pd_disaggregation/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/llm_inference/pd_disaggregation/</guid>
       <description>Inference</description>
     </item>
     
     <item>
       <title>Distillation</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/model_distillation/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/model_distillation/</link>
       <pubDate>Sun, 05 Jan 2025 12:01:14 -0700</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/model_distillation/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/model_distillation/</guid>
       <description>Knowledge distillation</description>
     </item>
     
     <item>
       <title>Whisper Model</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/speech/whisper/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/speech/whisper/</link>
       <pubDate>Tue, 05 Mar 2024 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/speech/whisper/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/speech/whisper/</guid>
       <description>Whisper Model</description>
     </item>
     
     <item>
       <title>Coder Training</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/coder_training/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/coder_training/</link>
       <pubDate>Mon, 18 Dec 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/coder_training/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/coder_training/</guid>
       <description>Large coder model pretraining</description>
     </item>
     
@@ -54,19 +54,19 @@
     
     <item>
       <title>InstructGPT and ChatGPT</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/instructgpt/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/instructgpt/</link>
       <pubDate>Wed, 18 Jan 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/instructgpt/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/instructgpt/</guid>
       <description>RLHF</description>
     </item>
     
     <item>
       <title>Large Scale Pretraining</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/large_scale_pretraining/pretrain/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/large_scale_pretraining/pretrain/</link>
       <pubDate>Sun, 18 Dec 2022 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/large_scale_pretraining/pretrain/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/large_scale_pretraining/pretrain/</guid>
       <description>Large language model pretraining</description>
     </item>
     

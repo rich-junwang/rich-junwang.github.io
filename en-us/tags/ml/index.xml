@@ -9,10 +9,10 @@
     <lastBuildDate>Sun, 05 Jan 2025 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/ml/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Entropy Collapsing in RL Training</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/llm_inference/entropy_decoding/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/llm_inference/entropy_decoding/</link>
       <pubDate>Sun, 05 Jan 2025 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/llm_inference/entropy_decoding/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/llm_inference/entropy_decoding/</guid>
       <description>Decoding</description>
     </item>
     
@@ -45,10 +45,10 @@
     
     <item>
       <title>Monte Carlo Tree Search</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/mcts/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/mcts/</link>
       <pubDate>Fri, 05 Apr 2024 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/mcts/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/mcts/</guid>
       <description>MCTS</description>
     </item>
     
@@ -62,38 +62,47 @@
     </item>
     
     <item>
+      <title>Triton, Cuda and GPU</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/triton/</link>
+      <pubDate>Tue, 05 Mar 2024 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/triton/</guid>
+      <description>Triton and cuda</description>
+    </item>
+    
+    <item>
       <title>Coder Training</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/coder_training/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/coder_training/</link>
       <pubDate>Mon, 18 Dec 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/coder_training/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/coder_training/</guid>
       <description>Large coder model pretraining</description>
     </item>
     
     <item>
       <title>Model Evaluation</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/model_eval/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/model_eval/</link>
       <pubDate>Wed, 18 Oct 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/model_eval/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/model_eval/</guid>
       <description>Model Evaluation</description>
     </item>
     
     <item>
       <title>MoE Models</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/moe_models/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/moe_models/</link>
       <pubDate>Wed, 18 Oct 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/moe_models/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/moe_models/</guid>
       <description>MoE Models</description>
     </item>
     
     <item>
       <title>Retrieval Augmented Generation</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/rag/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/rag/</link>
       <pubDate>Wed, 18 Oct 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/rag/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/rag/</guid>
       <description>RAG system</description>
     </item>
     
@@ -117,37 +126,37 @@
     
     <item>
       <title>LoRA Model Fine-tuning</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/lora_finetuning/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/lora_finetuning/</link>
       <pubDate>Fri, 05 May 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/lora_finetuning/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/lora_finetuning/</guid>
       <description>LoRA finetuning</description>
     </item>
     
     <item>
       <title>ML System</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_system/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/ml_system/</link>
       <pubDate>Sun, 05 Mar 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_system/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/ml_system/</guid>
       <description>ML System</description>
     </item>
     
     <item>
       <title>InstructGPT and ChatGPT</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/instructgpt/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/instructgpt/</link>
       <pubDate>Wed, 18 Jan 2023 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/instructgpt/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/instructgpt/</guid>
       <description>RLHF</description>
     </item>
     
     <item>
       <title>Large Scale Pretraining</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/large_scale_pretraining/pretrain/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/large_scale_pretraining/pretrain/</link>
       <pubDate>Sun, 18 Dec 2022 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/large_scale_pretraining/pretrain/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/large_scale_pretraining/pretrain/</guid>
       <description>Large language model pretraining</description>
     </item>
     

@@ -14,16 +14,16 @@
     <loc>https://rich-junwang.github.io/en-us/tags/llm/</loc>
     <lastmod>2025-04-05T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/llm_inference/pd_disaggregation/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/llm_inference/pd_disaggregation/</loc>
     <lastmod>2025-04-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/tags/</loc>
     <lastmod>2025-04-05T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/model_distillation/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/model_distillation/</loc>
     <lastmod>2025-01-05T12:01:14-07:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/llm_inference/entropy_decoding/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/llm_inference/entropy_decoding/</loc>
     <lastmod>2025-01-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/tags/ml/</loc>
@@ -32,7 +32,7 @@
     <loc>https://rich-junwang.github.io/en-us/tags/inference/</loc>
     <lastmod>2024-10-05T12:01:14-07:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/llm_inference/vllm/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/llm_inference/vllm/</loc>
     <lastmod>2024-10-05T12:01:14-07:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/asyncio/</loc>
@@ -68,13 +68,16 @@
     <loc>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/pipe/</loc>
     <lastmod>2024-04-09T12:01:14-07:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/mcts/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/mcts/</loc>
     <lastmod>2024-04-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/pytorch_autograd/</loc>
     <lastmod>2024-03-11T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/speech/whisper/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/triton/</loc>
+    <lastmod>2024-03-05T00:18:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/speech/whisper/</loc>
     <lastmod>2024-03-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/tags/infra/</loc>
@@ -83,7 +86,7 @@
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/pytorch_rpc/</loc>
     <lastmod>2024-01-11T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/coder_training/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/coder_training/</loc>
     <lastmod>2023-12-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/all_gather_and_gradient_backpropagation/</loc>
@@ -92,13 +95,13 @@
     <loc>https://rich-junwang.github.io/en-us/tags/blog/</loc>
     <lastmod>2023-12-11T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/model_eval/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/model_eval/</loc>
     <lastmod>2023-10-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/moe_models/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/moe_models/</loc>
     <lastmod>2023-10-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/rag/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/rag/</loc>
     <lastmod>2023-10-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/flash_attn/</loc>
@@ -113,7 +116,7 @@
     <loc>https://rich-junwang.github.io/en-us/tags/distributed-training/</loc>
     <lastmod>2023-05-05T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/lora_finetuning/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/lora_finetuning/</loc>
     <lastmod>2023-05-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/read/</loc>
@@ -131,13 +134,13 @@
     <loc>https://rich-junwang.github.io/en-us/posts/read/us_politics/</loc>
     <lastmod>2023-05-05T00:18:06+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_system/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/ml_system/</loc>
     <lastmod>2023-03-05T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/instructgpt/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/instructgpt/</loc>
     <lastmod>2023-01-18T00:18:23+08:00</lastmod>
   </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/llm/large_scale_pretraining/pretrain/</loc>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/large_scale_pretraining/pretrain/</loc>
     <lastmod>2022-12-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/kubenetes/basics/</loc>

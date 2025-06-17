@@ -9,10 +9,10 @@
     <lastBuildDate>Sat, 05 Oct 2024 12:01:14 -0700</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/inference/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>vLLM</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/llm/llm_inference/vllm/</link>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/llm_inference/vllm/</link>
       <pubDate>Sat, 05 Oct 2024 12:01:14 -0700</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/llm/llm_inference/vllm/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/llm_inference/vllm/</guid>
       <description>VLLM</description>
     </item>
     
