@@ -49,9 +49,11 @@ An SM contains multiple subcores, and each subcore has a warp scheduler and disp
 - CuBLAS: cuda basic linear algebra lib.
 - CuDNN: Library to do Neural Net stuff on GPUs (probably uses cuda to talk to the GPUs)
 
-
+<div align="center"> <img src=images/gemm_cuda.png style="width: 100%; height: auto;"/> image from [1]</div>
 
 ## References
 
+1. https://developer.nvidia.com/blog/cutlass-linear-algebra-cuda/
+2. https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#programming-model
 
 <!-- 4. https://www.zhihu.com/question/613405221/answer/3129776636 -->

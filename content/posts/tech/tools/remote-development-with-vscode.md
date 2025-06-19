@@ -245,6 +245,21 @@ Adding the following to keybindings json
     "when": "editorTextFocus && !editorReadonly"
 }
 ```
+
+
+### Remote SSH Development
+#### How to manage plugins
+There are two ways to manage plugins when using remote ssh server.
+1. You can also install all locally installed extensions on the SSH host by going to the Extensions view and selecting Install Local Extensions in SSH: {Hostname} using the cloud button at the right of the Local - Installed title bar. This will display a dropdown where you can select which locally installed extensions to install on your SSH host.
+
+2. "Always installed" extensions
+If there are extensions that you would like to always have installed on any SSH host, you can specify which ones using the remote.SSH.defaultExtensions property in settings.json. For example, if you wanted to install the GitLens and Resource Monitor extensions, specify their extension IDs as follows:
+
+"remote.SSH.defaultExtensions": [
+    "eamodio.gitlens",
+    "mutantdino.resourcemonitor"
+]
+
 ## References
 1. https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf
 2. https://github.com/Natizyskunk/vscode-sftp

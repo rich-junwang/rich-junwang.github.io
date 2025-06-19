@@ -70,3 +70,18 @@ Adding ssh public key to server sometimes can make the connections eaiser. The c
 ```
 cat ~/.ssh/id_ras.pub | ssh -i "my-keypair.pem"  ubuntu@myserver 'cat >> ~/.ssh/authorized_keys'
 ```
+
+
+## SSH Config
+
+We can add the following into the ssh config file so that we can directly `ssh pdn` into the server. Note that here hostname doesn't have username, i.e. it's not `Hostname ubuntu@my.compute.aws.com`. 
+
+```bash
+# in .ssh/config
+
+Host pdn
+    Hostname  my.compute.cloud.com
+    User ubuntu
+    IdentityFile ~/.ssh/id_rsa
+
+```
