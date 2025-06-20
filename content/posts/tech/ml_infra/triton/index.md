@@ -34,7 +34,7 @@ Whenever shared memory needs to fetch data from global memory, it first checks w
 
 An SM contains multiple subcores, and each subcore has a warp scheduler and dispatcher capable of handling 32 threads.
 
-<div align="center"> <img src=images/gpu_mem_hierarchy.png style="width: 100%; height: auto;"/> image from Nvidia</div>
+<div align="center"> <img src=images/gpu_mem_hierarchy.png style="width: 100%; height: auto;"/> Figure 1. image from Nvidia</div>
 
 - Registers—These are private to each thread, which means that registers assigned to a thread are not visible to other threads. The compiler makes decisions about register utilization.
 - L1/Shared memory (SMEM)—Every SM has a fast, on-chip scratchpad memory that can be used as L1 cache and shared memory. All threads in a CUDA block can share shared memory, and all CUDA blocks running on a given SM can share the physical memory resource provided by the SM. L1 cache is used by system, and 
@@ -58,15 +58,42 @@ The typical execution flow of a CUDA program is as follows:
 - Free the memory allocated on both the device and the host.
 
 
-A kernel is a function that runs in parallel across multiple threads on the device (GPU). Kernel functions are declared using the __global__ qualifier, and when calling a kernel, the syntax <<<grid, block>>> is used to specify the number of threads to execute.
+A kernel is a function that runs in parallel across multiple threads on the device (GPU). Kernel functions are declared using the __global__ qualifier, and when calling a kernel, the syntax \<\<\<grid, block\>\>\> is used to specify the number of threads to execute. The nvcc compiler recognizes this modifier and splits the code into two parts, sending them to the CPU and GPU compilers respectively for compilation. 
 
-In CUDA, every thread executes the kernel function, and each thread is assigned a unique thread ID. This thread ID can be accessed within the kernel using the built-in variable threadIdx.
+The \<\<\<a, b\>\>\> syntax following the kernel function call is a special CUDA syntax. These two numbers represent the number of thread blocks and the number of threads per block used during the kernel function execution. Since each thread block and each thread operate in parallel, this allocation determines the degree of parallelism in the program. In our case, since there is only one computation, we only assigned one thread within a single block. 
+
+All the threads launched by a kernel are collectively called a grid. Threads within the same grid share the same global memory space.A grid can be divided into multiple thread blocks (blocks), and each block contains many threads.
+
+Below both the grid and the block are 2-dimensional. Both grid and block are defined as variables of type `dim3`. The `dim3` type can be thought of as a struct containing three unsigned integer members: `x`, `y`, and `z`, which are initialized to 1 by default. Therefore, grid and block can be flexibly defined as 1-dimensional, 2-dimensional, or 3-dimensional structures. When calling the kernel, the execution configuration `<<<grid, block>>>` must be used to specify the number and structure of threads that the kernel will use.
+
+A thread requires two built-in coordinate variables (`blockIdx` and `threadIdx`) to be uniquely identified. Both are variables of type `dim3`. 
+
+
+<div align="center"> <img src=images/kernel.png style="width: 80%; height: auto;"/> Figure 2. kernel 2-dim structure</div>
 
 
 
+In CUDA, every thread executes a kernel function, and each thread is assigned a unique thread ID. This thread ID can be accessed within the kernel using the built-in variable threadIdx.
 
+```c
+#include<stdio.h>
 
+__global__ void kernel(int a, int b, int *c){
+	*c = a + b;
+}
 
+int main(){
+	int c = 20;
+	int *c_cuda;
+	cudaMalloc((void**)&c_cuda,sizeof(int));
+	kernel<<<1,1>>>(1,1,c_cuda);
+	cudaMemcpy(&c,c_cuda,sizeof(int),cudaMemcpyDeviceToHost);
+	printf("c=%d\n",c);
+	cudaFree(c_cuda);
+	return 0;
+}
+```
+The CPU can pass `c_cuda` as a parameter and perform type conversions, but it absolutely cannot read from or write to `c_cuda`, because this variable was allocated using `cudaMalloc` and therefore resides in GPU memory, not system memory. Similarly, the GPU cannot access the variable `c`. The bridge between the two is the `cudaMemcpy` function, which transfers values back and forth over the data bus. This essentially forms a logical structure where the CPU is responsible for sending and receiving data, while the GPU handles the computation.
 
 
 
@@ -85,6 +112,7 @@ In CUDA, every thread executes the kernel function, and each thread is assigned 
 
 1. https://developer.nvidia.com/blog/cutlass-linear-algebra-cuda/
 2. https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#programming-model
-
+3. https://zhuanlan.zhihu.com/p/34587739
 <!-- https://www.zhihu.com/question/613405221/answer/3129776636 -->
-<!-- https://zhuanlan.zhihu.com/p/34587739 -->
+
+<!-- https://zhuanlan.zhihu.com/p/482238286 -->
