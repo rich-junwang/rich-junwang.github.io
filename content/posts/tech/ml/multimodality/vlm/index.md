@@ -128,7 +128,7 @@ LWM's core goal is to create **multimodal large model capable of ultra-long cont
 * Implementation of high-performance optimizations such as *RingAttention* and *Masked Sequence Packing*, enabling training on multimodal sequences of million-token scale;
 * Open-sourcing of a 7B-parameter large model, including long-context text-only models (LWM-Text, LWM-Text-Chat) and multimodal models (LWM, LWM-Chat).
 
-In terms of architecture, LWM uses a Transformer-based structure and extends the context length limit on top of LLaMA 2 (7B). Unlike most previous approaches, LWM uses **VQGAN** as the visual encoder, which encodes 256 × 256 input images into 16 × 16 discrete tokens. This enables LWM not only to generate text, but also to generate image tokens from text, which can be reconstructed into video. For multiple images or video frames, visual features can be extracted individually and input into the LLM along with textual modalities.
+LWM uses a Transformer-based structure and extends the context length limit on top of LLaMA 2 (7B). LWM uses VQGAN as the visual encoder, which encodes 256 × 256 input images into 16 × 16 discrete tokens. This enables LWM not only to generate text, but also to generate image tokens from text, which can be reconstructed into video. For multiple images or video frames, visual features can be extracted individually and input into the LLM along with textual modalities.
 
 The model training process consists of two main stages:
 
