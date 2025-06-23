@@ -8,11 +8,20 @@
     <language>en-us</language>
     <lastBuildDate>Sat, 18 May 2024 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/multimodality/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>VQ-VAE</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/multimodality/</link>
+      <title>VLM</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/multimodality/vlm/</link>
       <pubDate>Sat, 18 May 2024 00:18:23 +0800</pubDate>
       
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/multimodality/</guid>
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/multimodality/vlm/</guid>
+      <description>Multimodality</description>
+    </item>
+    
+    <item>
+      <title>VQ-VAE</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/multimodality/vqvae/</link>
+      <pubDate>Sat, 18 May 2024 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/multimodality/vqvae/</guid>
       <description>Multimodality</description>
     </item>
     
