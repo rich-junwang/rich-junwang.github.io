@@ -1,7 +1,7 @@
 ---
 title: "Triton, Cuda and GPU"
-date: 2024-03-05T00:18:23+08:00
-lastmod: 2024-03-05T00:18:23+08:00
+date: 2024-05-05T00:18:23+08:00
+lastmod: 2024-05-05T00:18:23+08:00
 author: ["Jun"]
 keywords: 
 - 
@@ -71,7 +71,12 @@ A thread requires two built-in coordinate variables (`blockIdx` and `threadIdx`)
 
 <div align="center"> <img src=images/kernel.png style="width: 80%; height: auto;"/> Figure 2. kernel 2-dim structure</div>
 
-
+In the above diagram, the grid and block can be defined as follows
+```c
+dim3 grid(3, 2);
+dim3 block(5, 3);
+kernel_fun<<< grid, block >>>(prams...);
+```
 
 In CUDA, every thread executes a kernel function, and each thread is assigned a unique thread ID. This thread ID can be accessed within the kernel using the built-in variable threadIdx.
 
@@ -95,8 +100,32 @@ int main(){
 ```
 The CPU can pass `c_cuda` as a parameter and perform type conversions, but it absolutely cannot read from or write to `c_cuda`, because this variable was allocated using `cudaMalloc` and therefore resides in GPU memory, not system memory. Similarly, the GPU cannot access the variable `c`. The bridge between the two is the `cudaMemcpy` function, which transfers values back and forth over the data bus. This essentially forms a logical structure where the CPU is responsible for sending and receiving data, while the GPU handles the computation.
 
+In summary, for cuda we have two kinds of model, one is programming model and the other is hardware model. In programming model,
+we have 
+
+> Kernel -> multiple threads -> blocks -> grids
+
+Hardware model
+
+> Multiple register -> (owned by a) thread -> (32 of threads) warp -> (SM has multiple warps) SM
 
 
+
+## GPU Performance Roofline
+
+A kernel’s performance is limited by either its **memory bandwidth** or its **compute throughput**. These two limits define the performance regions.
+
+
+
+Arithmetic Intensity (AI) is the formal metric that determines the region. It is the ratio of computation to memory traffic.
+
+> `Arithmetic Intensity = Total Computation FLOPs / Total Bytes Accessed`
+
+For the Roofline model, Total Bytes Accessed specifically counts the data transferred between Global Memory (HBM) and the on-chip SM. This is because the model evaluates a kernel’s performance against the primary bottleneck: the slow off-chip memory bus. On-chip traffic, such as from Shared Memory to registers, is not included in this calculation.
+
+To visualize the tradeoff between memory and compute, people are using a roofline plot, which plots the peak achievable FLOPs/s (throughput) of an algorithm on our hardware (the y-axis) against the arithmetic intensity of that algorithm (the x-axis). 
+
+<div align="center"> <img src=images/roofline.png style="width: 70%; height: auto;"/> image from [4]</div>
 
 ### Common Libs
 - Cuda: Library to use GPUs.
@@ -113,6 +142,8 @@ The CPU can pass `c_cuda` as a parameter and perform type conversions, but it ab
 1. https://developer.nvidia.com/blog/cutlass-linear-algebra-cuda/
 2. https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#programming-model
 3. https://zhuanlan.zhihu.com/p/34587739
+4. https://jax-ml.github.io/scaling-book/roofline/
+5. https://damek.github.io/random/basic-facts-about-gpus/
 <!-- https://www.zhihu.com/question/613405221/answer/3129776636 -->
 
 <!-- https://zhuanlan.zhihu.com/p/482238286 -->
