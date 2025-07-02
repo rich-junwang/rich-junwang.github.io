@@ -100,5 +100,6 @@ Critic/RM colocated on other GPUs
 
 <!-- 1. https://zhuanlan.zhihu.com/p/30876678559
 2. https://zhuanlan.zhihu.com/p/27676081245
-3. https://zhuanlan.zhihu.com/p/24682036412 -->
+3. https://zhuanlan.zhihu.com/p/24682036412 
+4. https://zhuanlan.zhihu.com/p/29046833667 -->
 
