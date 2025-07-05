@@ -40,6 +40,13 @@ Creating a pipe will create two connection objects, one for sending data and one
 The Pipe() function returns a pair of connection objects connected by a pipe which by default is duplex (two-way).
 
 ```python
+parent_conn, child_conn = Pipe(True)
+```
+That means both endpoints `parent_conn` and `child_conn` have methods `recv()` and `send()`. This is called duplex. Think of it like a telephone call:
+
+You need two phones (even though each phone can both speak and listen). When you speak into your phone, the sound comes out of the other phone. Both phones are "bidirectional" but you still need two separate devices. 
+
+```python
 from multiprocessing import Pipe, Process
 
 def worker(conn):
@@ -53,6 +60,38 @@ if __name__ == "__main__":
 
     print(parent_conn.recv())  # Output: Hello from child!
     p.join()
+```
+
+A duplex example
+```python
+from multiprocessing import Process, Pipe
+
+def child_function(child_pipe):
+    # Child process uses one endpoint
+    child_pipe.send("Data from child")
+    response = child_pipe.recv()
+    print(f"Child received: {response}")
+    child_pipe.close()  # Good practice to close pipe
+
+
+# if __name__ == "__main__": - This is crucial on Mac (and Windows) because they use "spawn" method for multiprocessing, 
+# which reimports the module. Without this guard, you'd get infinite process creation.
+
+if __name__ == "__main__":
+    # Parent process creates the pipe
+    parent_pipe, child_pipe = Pipe(True)
+
+    # Parent keeps one end, gives the other to child
+    p = Process(target=child_function, args=(child_pipe,))
+    p.start()
+
+    # Parent uses its endpoint
+    data = parent_pipe.recv()  # Gets "Data from child"
+    print(f"Parent received: {data}")
+    parent_pipe.send("Data from parent")
+
+    p.join()
+    parent_pipe.close()  # Close parent's end too
 ```
 
 ### 1.1 How Do Pipes Work?
@@ -118,6 +157,43 @@ if __name__ == '__main__':
     print("Main process is done")
 ```
 
+
+
+```python
+from multiprocessing import Pipe, Process
+import time
+
+def son_process(pipe):
+    conn_child = pipe
+
+    # Close unused end if needed, here both ends are used
+    for _ in range(5):
+        msg = conn_child.recv()   # Receive from main
+        print(f"[Child] Received from parent: {msg}")
+        reply = f"Child processed {msg}"
+        conn_child.send(reply)    # Send back to parent
+
+    conn_child.close()
+    print("[Child] Done.")
+
+if __name__ == '__main__':
+    parent_conn, child_conn = Pipe(True)  # Duplex pipe
+
+    son_p = Process(target=son_process, args=(child_conn,))
+    son_p.start()
+
+    # Main process communicates using parent_conn
+    for i in range(5):
+        print(f"[Parent] Sending to child: {i}")
+        parent_conn.send(i)
+        reply = parent_conn.recv()
+        print(f"[Parent] Received from child: {reply}")
+
+    parent_conn.close()
+    son_p.join()
+    print("[Parent] Main process is done.")
+
+```
 
 ## 2\. Sockets
 
