@@ -115,7 +115,7 @@ As is shown below, there are three steps to create a pipe:
 Three steps to build a pipe. 
 - Create a pipe 
 - Fork process and pipe connection 
-- Close not used connection 
+- Close not used connection. (This is mostly resource cleanup if we use duplex because the single endpoint can do both send and recv)
 <p align="center">
     <img alt="Build a pipe" src="./images/build_pipe.png" width="80%" height=auto/> 
 </p>
@@ -217,6 +217,52 @@ We’ve explained pipes and sockets and tried to give intuition about how they w
 -   In order to establish communication between processes with pipes, processes should be related to each other. They should have a relationship like a parent and a child process. However, we don’t have such a restriction for sockets.
 -   The other important difference is that we can use pipes to connect processes on the same physical machine. On the other side, we use sockets to establish connections between processes on different physical machines. That’s why they are one of the fundamental concepts in network systems.
 -   There isn’t any concept of packaging in pipes. Sockets can have packages through communication using IPv4 or IPv6. While sockets can divide the big size of data into smaller chunks and send it in that way, pipes aren’t able to do that.
+
+
+
+## Queue
+Multiprocessing also provides another mechanism for processes communication - Queue. The difference is that pipe is used for point to point communication while queue for multiple processes like producer/consumer.
+```python
+# coding=utf-8
+from multiprocessing import Queue, Process
+from Queue import Empty as QueueEmpty
+import random
+
+
+def getter(name, queue):
+    print 'Son process %s' % name
+    while True:
+        try:
+            value = queue.get(True, 10)
+            # block为True,就是如果队列中无数据了。
+            #   |—————— 若timeout默认是None，那么会一直等待下去。
+            #   |—————— 若timeout设置了时间，那么会等待timeout秒后才会抛出Queue.Empty异常
+            # block 为False，如果队列中无数据，就抛出Queue.Empty异常
+            print "Process getter get: %f" % value
+        except QueueEmpty:
+            break
+
+
+def putter(name, queue):
+    print "Son process %s" % name
+    for i in range(0, 1000):
+        value = random.random()
+        queue.put(value)
+        # 放入数据 put(obj[, block[, timeout]])
+        # 若block为True，如队列是满的：
+        #  |—————— 若timeout是默认None，那么就会一直等下去
+        #  |—————— 若timeout设置了等待时间，那么会等待timeout秒后，如果还是满的，那么就抛出Queue.Full.
+        # 若block是False，如果队列满了，直接抛出Queue.Full
+        print "Process putter put: %f" % value
+
+
+if __name__ == '__main__':
+    queue = Queue()
+    getter_process = Process(target=getter, args=("Getter", queue))
+    putter_process = Process(target=putter, args=("Putter", queue))
+    getter_process.start()
+    putter_process.start()
+```
 
 
 ## References
