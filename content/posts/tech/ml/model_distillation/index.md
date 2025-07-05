@@ -163,6 +163,10 @@ if __name__ == '__main__':
 ```
 
 
+## Sparse Logit Sampling
+
+
+
 ## References
 1. Knowledge distillation: A good teacher is patient and consistent
 2. [On-Policy Distillation of Language Models: Learning from Self-Generated Mistakes](https://arxiv.org/abs/2306.13649)
@@ -180,6 +184,7 @@ if __name__ == '__main__':
 14. Speculative Knowledge Distillation: Bridging the Teacher-Student Gap Through Interleaved Sampling
 15. https://dibyaghosh.com/blog/probability/kldivergence.html
 16. MiniLLM: Knowledge Distillation of Large Language Models
+17. Sparse Logit Sampling: Accelerating Knowledge Distillation in LLMs
 
 
 

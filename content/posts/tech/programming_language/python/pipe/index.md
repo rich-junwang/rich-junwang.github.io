@@ -39,6 +39,21 @@ Creating a pipe will create two connection objects, one for sending data and one
 
 The Pipe() function returns a pair of connection objects connected by a pipe which by default is duplex (two-way).
 
+```python
+from multiprocessing import Pipe, Process
+
+def worker(conn):
+    conn.send("Hello from child!")
+    conn.close()
+
+if __name__ == "__main__":
+    parent_conn, child_conn = Pipe()
+    p = Process(target=worker, args=(child_conn,))
+    p.start()
+
+    print(parent_conn.recv())  # Output: Hello from child!
+    p.join()
+```
 
 ### 1.1 How Do Pipes Work?
 
