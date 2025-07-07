@@ -29,7 +29,7 @@ cover:
     relative: false
 ---
 
-### Concurrency in Python
+## Concurrency in Python
 Parallelism consists of performing multiple operations at the same time. Multiprocessing is a means to effect parallelism, and it entails spreading tasks over a computer’s central processing units (CPUs, or cores). Multiprocessing is well-suited for CPU-bound tasks: tightly bound for loops and mathematical computations usually fall into this category.
 
 Concurrency is a slightly broader term than parallelism. It suggests that multiple tasks have the ability to run in an overlapping manner. (There’s a saying that concurrency does not imply parallelism.)
@@ -41,7 +41,60 @@ What’s important to know about threading is that it’s better for IO-bound ta
 To recap the above, concurrency encompasses both multiprocessing (ideal for CPU-bound tasks) and threading (suited for IO-bound tasks). Multiprocessing is a form of parallelism, with parallelism being a specific type (subset) of concurrency. The Python standard library has offered longstanding support for both of these through its multiprocessing, threading, and concurrent.futures packages.
 
 
-### update python on ubuntu
+### Shared Memory
+
+**Why We Use Shared Memory?**
+
+When using Python for parallel processing, performance may not always scale as expected—especially due to how data is shared between tasks. Here's why:
+
+- Threading
+
+Python threads share the same memory space, making data sharing straightforward. However, due to the Global Interpreter Lock (GIL), threads are best suited for I/O-bound operations—not CPU-intensive workloads.
+
+- Multiprocessing
+
+In contrast, the multiprocessing module spawns separate processes, each with its own memory space. Sharing data between processes requires serialization via Queue, Pipe, or similar mechanisms. This copying and (de)serialization introduce significant communication overhead, which can negate performance gains.
+
+- A Better Approach: Shared Memory
+
+To reduce inter-process communication overhead, shared memory allows multiple processes to access the same memory block directly. This eliminates the need for serialization and copying, enabling much faster data exchange and improved scalability for CPU-bound tasks. If you're hitting performance bottlenecks with multiprocessing, consider using multiprocessing.shared_memory for efficient, zero-copy data sharing.
+
+```python
+from multiprocessing import Process, shared_memory
+import numpy as np
+
+
+def worker(shm_name, size):
+    """Process that modifies shared memory"""
+    existing_shm = shared_memory.SharedMemory(name=shm_name)
+    array = np.ndarray((size,), dtype=np.float64, buffer=existing_shm.buf)
+
+    array += 10  # Modify data in shared memory
+    existing_shm.close()
+
+
+if __name__ == "__main__":
+    size = 5
+    shm = shared_memory.SharedMemory(create=True, size=size * np.float64().nbytes)
+    array = np.ndarray((size,), dtype=np.float64, buffer=shm.buf)
+    array[:] = [1, 2, 3, 4, 5]  # Initialize array
+
+    print("Before:", array)
+
+    # Create a process that modifies shared memory
+    p = Process(target=worker, args=(shm.name, size))
+    p.start()
+    p.join()
+
+    print("After:", array)  # Values modified by worker process
+
+    # Cleanup
+    shm.close()
+    shm.unlink()
+```
+
+
+## update python on ubuntu
 When there are multiple version of python in the system, how to set the default python to use. Below we suppose to install newer version of python3.9
 ```
 sudo apt install python3.9
@@ -56,7 +109,7 @@ sudo update-alternatives --config python3
 sudo ln -sf /usr/bin/python3.9 /usr/bin/python3
 ```
 
-### find a python package related files
+## find a python package related files
 ```
 pip show -f package-name
 ```
@@ -68,14 +121,14 @@ pip show -f package-name
 ```
 
 
-### Process Got Killed
+## Process Got Killed
 Once in a while, I found my python process got killed without any errors. Most of time, it's related to out of memory (OOM) issue. We can quickly check that using the following command
 ```
 dmesg | grep "oom-kill" | less
 ```
 
 
-### Virtual Env
+## Virtual Env
 ```
 python3 -m pip install --upgrade pip
 python3 -m pip install --user virtualenv
@@ -86,7 +139,7 @@ source .venv/bin/activate
 deactivate
 ```
 
-### Debug
+## Debug
 ```python
 # using pdb
 # use `n` to step over
@@ -126,7 +179,7 @@ filter_even(list(range(6)))
 
 ```
 
-### Exception
+## Exception
 How to catch generic exception type
 ```python
 try:
@@ -160,20 +213,20 @@ import pdb
 pdb.post_mortem()
 ```
 
-### new method
+## new method
 * The __new__() is a static method of the object class.
 * When you create a new object by calling the class, Python calls the __new__() method to create the object first and then calls the __init__() method to initialize the object’s attributes.
 * Override the __new__() method if you want to tweak the object at creation time.
 
 
-### Hacky Way to Add File into PYTHONPATH
+## Hacky Way to Add File into PYTHONPATH
 ```python
 curr_file_path = os.path.dirname(os.path.abspath(os.path.expanduser(__file__)))
 sys.path.append(curr_file_path)
 sys.path.append(os.path.dirname(curr_file_path))
 ```
 
-### Subprocess
+## Subprocess
 ```python
 import subprocess
 # Download
