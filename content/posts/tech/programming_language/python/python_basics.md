@@ -93,6 +93,11 @@ if __name__ == "__main__":
     shm.unlink()
 ```
 
+Note that when aloocating memory, the unit is byte. The allocation such as shown below would create 1MB memory. 
+```python
+shm = SharedMemory(name="myshm", create=True, size=2**20) 
+```
+
 
 ## update python on ubuntu
 When there are multiple version of python in the system, how to set the default python to use. Below we suppose to install newer version of python3.9
