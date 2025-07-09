@@ -111,7 +111,29 @@ Hardware model
 
 
 
-## GPU Performance Roofline
+## GPU-related Performance Roofline
+
+GPU system performance is constrained by three primary components:
+
+- Memory Bandwidth
+
+Mainly the speed of transferring data from gpu HBM to on-chip SM. For memory-bound operations, the strategy is to fuse them into a single kernel to eliminate intermediate memory traffic. 
+
+- Compute
+
+Time spent on your GPU computing actual floating point operations. For a single, complex operation with high potential arithmetic intensity (like matrix multiplication), the strategy is to use tiling to maximize data reuse within the SM’s fast memory.
+
+- CPU Scheduling Overhead
+
+System performance may also be constrained by host-side overhead—time spent by the CPU (host) on tasks such as preparing and dispatching work (kernels) to the GPU. This could happen when host launches multiple GPU kernels which are either too small or too numerous. In such cases, the GPU completes each kernel execution rapidly but then remains idle while waiting for the CPU to issue subsequent commands. As a result, overall runtime becomes dominated by the CPU’s limited ability to keep the GPU consistently fed with work.
+
+
+One solution to scheduling overhead is async execution. For instance, SGLang proposed to optimize CPU overhead using async ops. 
+
+<div align="center"> <img src=images/sglang.png style="width: 90%; height: auto;"/> SGLang solution to CPU overhead</div>
+
+Fundamentally, this is designed to offer flexibility in designing kernels/tasks at each step. We can balance the tradeoff using `jit.trace`, `jax.jit` or `torch.compile()`. We can even go to lower level by manipulate the cuda graph. CUDA Graphs is designed to allow work to be defined as graphs rather than single operations. It provides a mechanism to launch multiple GPU operations through a single CPU operation, and hence reduce CPU overheads.
+
 
 A kernel’s performance is limited by either its **memory bandwidth** or its **compute throughput**. These two limits define the performance regions.
 
@@ -144,6 +166,10 @@ To visualize the tradeoff between memory and compute, people are using a rooflin
 3. https://zhuanlan.zhihu.com/p/34587739
 4. https://jax-ml.github.io/scaling-book/roofline/
 5. https://damek.github.io/random/basic-facts-about-gpus/
+6. [Making Deep Learning Go Brrrr From First Principles](https://horace.io/brrr_intro.html)
+7. [Getting Started with CUDA Graphs](https://developer.nvidia.com/blog/cuda-graphs/)
+8. https://pytorch.org/blog/accelerating-pytorch-with-cuda-graphs/
+
 <!-- https://www.zhihu.com/question/613405221/answer/3129776636 -->
 
 <!-- https://zhuanlan.zhihu.com/p/482238286 -->

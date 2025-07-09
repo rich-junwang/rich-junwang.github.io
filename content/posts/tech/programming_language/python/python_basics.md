@@ -101,7 +101,7 @@ shm = SharedMemory(name="myshm", create=True, size=2**20)
 
 ## update python on ubuntu
 When there are multiple version of python in the system, how to set the default python to use. Below we suppose to install newer version of python3.9
-```
+```bash
 sudo apt install python3.9
 
 sudo update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.[old-version] 1
@@ -134,7 +134,7 @@ dmesg | grep "oom-kill" | less
 
 
 ## Virtual Env
-```
+```bash
 python3 -m pip install --upgrade pip
 python3 -m pip install --user virtualenv
 python3 -m venv .venv
