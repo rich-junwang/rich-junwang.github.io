@@ -149,6 +149,16 @@ To visualize the tradeoff between memory and compute, people are using a rooflin
 
 <div align="center"> <img src=images/roofline.png style="width: 70%; height: auto;"/> image from [4]</div>
 
+
+
+### Cuda Graph
+
+In CUDA 10, NVIDIA introduced CUDA Graphs, a feature that allows developers to capture a sequence of GPU operations—including kernel launches, memory copies, and other device activities—into a graph structure that can be instantiated and launched with minimal CPU overhead. This approach is particularly beneficial in workloads where the same sequence of operations is executed repeatedly, as it avoids the overhead of repeatedly issuing individual operations from the CPU.
+
+A CUDA graph represents a recorded sequence of GPU operations and their dependencies. When a graph is instantiated (i.e., converted into an executable graph), it encodes the exact set of operations and the arguments used during recording—including memory addresses and kernel parameters. Therefore, all pointers and arguments must remain valid and consistent across launches of the graph executable. If kernel arguments or memory locations change between executions, the graph must be updated or re-recorded.
+
+By reducing CPU launch overhead and enabling more efficient scheduling on the GPU, CUDA Graphs can significantly improve performance in scenarios with fixed execution patterns, such as deep learning training loops, simulation time steps, or repeated signal processing stages.
+
 ### Common Libs
 - Cuda: Library to use GPUs.
 - CuTLASS: CUDA GEMM lib.
