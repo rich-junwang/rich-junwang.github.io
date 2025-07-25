@@ -55,7 +55,7 @@ If it's on Mac, replace CTRL key with CMD key
 (3) edit multiple line
 
 * edit multiple line simultaneously: CTRL + SHIFT + up/down arrow. (This will be continuous)
-* ALT + CLICK: can select multiple place and edit
+* ALT + CLICK (cmd + mouse click on mac): can select multiple place and edit
 * CTRL + SHIFT + L:  edit all variable in the file
 
 (4) block comment: select the block, then CTRL + SHIFT + A

@@ -157,13 +157,14 @@ $$
 Generally a good MFU should be above 40%. 
 
 ## References
-[1] https://huggingface.co/blog/bloom-megatron-deepspeed <br>
-[2] https://github.com/NVIDIA/NeMo <br>
-[3] https://openai.com/blog/techniques-for-training-large-neural-networks/ <br>
-[4] [GPipe: Efficient Training of Giant Neural Networks using Pipeline Parallelism](https://arxiv.org/abs/1811.06965) <br>
-[5] [Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism](https://arxiv.org/abs/1909.08053) <br>
-[6] https://www.deepspeed.ai/tutorials/pipeline/ <br>
-[7] [MegaScale: Scaling Large Language Model Training to More Than 10,000 GPUs](https://arxiv.org/pdf/2402.15627.pdf) <br>
-[8] [AMSP: Reducing Communication Overhead of ZeRO for Efficient LLM Training](https://arxiv.org/abs/2311.00257) <br>
-[9] [Reducing Activation Recomputation in Large Transformer Models](https://browse.arxiv.org/pdf/2205.05198) <br>
-[10] [The Ultra-Scale Playbook: Training LLMs on GPU Clusters](https://huggingface.co/spaces/nanotron/ultrascale-playbook)
+1. https://huggingface.co/blog/bloom-megatron-deepspeed
+2. https://github.com/NVIDIA/NeMo
+3. https://openai.com/blog/techniques-for-training-large-neural-networks/
+4. [GPipe: Efficient Training of Giant Neural Networks using Pipeline Parallelism](https://arxiv.org/abs/1811.06965)
+5. [Megatron-LM: Training Multi-Billion Parameter Language Models Using Model Parallelism](https://arxiv.org/abs/1909.08053)
+6. https://www.deepspeed.ai/tutorials/pipeline/
+7. [MegaScale: Scaling Large Language Model Training to More Than 10,000 GPUs](https://arxiv.org/pdf/2402.15627.pdf)
+8. [AMSP: Reducing Communication Overhead of ZeRO for Efficient LLM Training](https://arxiv.org/abs/2311.00257)
+9. [Reducing Activation Recomputation in Large Transformer Models](https://browse.arxiv.org/pdf/2205.05198)
+10.[The Ultra-Scale Playbook: Training LLMs on GPU Clusters](https://huggingface.co/spaces/nanotron/ultrascale-playbook)
+
