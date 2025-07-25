@@ -126,6 +126,19 @@ For operations such as layer normation, the operation can be paralleized on the 
 Context Parallelism (CP) is a method for parallelizing the processing of neural network activations across multiple GPUs, partitioning the input tensors in the sequence dimension. Unlike SP, which partitions the activations of specific layers, CP divides the activations of all layers. It can be more efficient than sequence parallelism for very long sequences, as it parallelizes the entire attention mechanism, similar to Ring Attention
 
 
+### FSDP
+
+Fully Sharded Data Parallel (FSDP) is proposed by PyTorch team which is very much similar to Deepspeed-zero. 
+
+FSDP includes the following modes:
+
+- NO_SHARD (equivalent to DDP): No sharding is applied; behaves like Distributed Data Parallel (DDP).
+- SHARD_GRAD_OP (comparable to ZeRO Stage 2): Gradients and optimizer states are sharded.
+- FULL_SHARD (comparable to ZeRO Stage 3): Parameters, gradients, and optimizer states are all fully sharded.
+- HYBRID_SHARD (node-level sharding with inter-node replication, similar to ZeRO++ Stage 3): Shards within a node, replicates across nodes.
+- HYBRID_SHARD_ZeRO2 (ZeRO Stage 2-style sharding within a node, replication across nodes): Uses ZeRO2-like gradient and optimizer state sharding within each node while replicating across nodes.
+
+
 ### Implementation
 A few key points in 3D parallelism implementation. 
 - TP is communication heavy, thus TP blocks should be put on different GPUs within the same node to leverage fast NVLink communication. On the contrary, PP communication is light, and it is usually put across nodes. 
