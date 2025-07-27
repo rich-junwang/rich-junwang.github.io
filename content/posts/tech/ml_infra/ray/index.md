@@ -114,12 +114,14 @@ if __name__ == "__main__":
 
 
 ## Ray Actor
-Declare an actor by annotating a class with @ray.remote, just like declaring a task from a function. Ray actor is different from python class in the following ways: 
+To declare an actor, we can annotate a class with @ray.remote, just like declaring a task from a function. Ray actor is different from python class in the following ways: 
 
 > 1. Add accessor methods for any data members that you need to read or write, because using direct access, such as my_game.state, doesn't work for actors.
 > 2. Construct actor instances with my_instance = MyClass.remote(...).
 > 3. Call methods with my_instance.some_method.remote(...).
 > 4. Use ray.get() and ray.wait() to retrieve results, just like you do for task results.
+
+Another way to get an Ray actor is through `ray.remote(myClass)`. Similarly, we can instantiate the ray actor using `myClass().remote()`. 
 
 ```python
 import ray
