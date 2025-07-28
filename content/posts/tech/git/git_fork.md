@@ -89,7 +89,18 @@ Making changes like this:
 The best approach is:
 ```bash
 git fetch upstream # this make sure we don't merge
+
+# rebase if you want to rebase
 git rebase upstream/main
+
+# merge if you want to merge
+git merge upstream/main
+
+# It's not recommended to do git pull as the following. Because git pull will do two things
+# - fetched and merged upstream/<branch> into your current branch
+# - creates a merge commit
+git pull upstream
+
 ```
 
 If we haven’t make changes at master, we can do:
