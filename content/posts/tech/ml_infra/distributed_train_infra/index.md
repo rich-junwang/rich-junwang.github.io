@@ -55,13 +55,17 @@ Broadcast is to distribute data from one node to other nodes. Scatter is to dist
 </p>
 
 
-### Gather
+### Gather and Allgather
 Gather is an inverse operation of scatter.
 <p align="center">
     <img alt="flat sharp minimum" src="images/gather.png" width="40%" height=auto/> 
     <em>MPI gather</em>
     <br>
 </p>
+
+All gather: supposing we have 4 gpus, on each gpu we have tensor of size [B\*S, 1024], after allgather, the tensor size on all gpus are [B\*S, 4096]
+<div align="center"> <img src=images/allgather.png style="width: 30%; height: auto;"/> </div>
+
 
 ### Reduce and Allreduce
 Reduce is a collections of ops. Specifically, the operator will process an array from each process and get reduced number of elements.
@@ -105,6 +109,8 @@ The following figure shows the difference between MPI all2all and all_gather.
     <br>
 </p>
 
+For all2all, assuming we have 4 gpus, we on each one we have tensor size [B\*S/4, 4096], after all2all, all the other gpus send
+data to gpu0. Its tensor size becomes [B\*S, 4096]
 
 ### Ring-AllReduce Implementation
 
@@ -138,3 +144,5 @@ The training loop is as follows:
 ### References
 1. https://docs.nvidia.com/deeplearning/nccl/user-guide/docs/usage/collectives.html
 2. Andrew Gibiansky. Bringing HPC techniques to deep learning. http://research.baidu.com/bringing-hpc-techniques-deep-learning, 2017. [Online; accessed 6-December2017].
+
+<!-- https://zhuanlan.zhihu.com/p/1912515046111699263 -->
