@@ -127,3 +127,12 @@ Or simply
 git checkout main
 git rebase upstream/main
 ```
+
+
+## Check Out an Upstream PR
+
+```bash
+# fetch the PR into a temporary or uniquely named branch like this:
+git fetch upstream pull/1234/head:pr-1234
+git checkout pr-1234
+```
