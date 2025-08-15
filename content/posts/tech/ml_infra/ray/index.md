@@ -518,6 +518,35 @@ if not ray.is_initialized():
 
 
 
+### Logging
+
+Normally in ray program logs, it might show
+```bash
+1234-pid dp_rank=1, [repeated 7x across cluster]
+```
+Ray by default would not print all the logs because it might be overwhelming in the output. When we debug distributed training/inference, if we want to print all ranks, we can do
+```bash
+export RAY_LOG_TO_STDERR=1
+
+# we can see stdout of worker using
+ray logs <worker_id>
+
+```
+
+Sometimes printing might be lost if we don't flush timely, in python we can do
+```python
+print(f"{dp_rank=}", flush=True)
+```
+Or we can set 
+```bash
+# env
+export PYTHONUNBUFFERED=1 
+
+# or
+python -u my_script.py
+
+```
+
 
 ## References
 <!-- 1. https://zhuanlan.zhihu.com/p/672327290 -->

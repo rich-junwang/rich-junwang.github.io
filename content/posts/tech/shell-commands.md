@@ -566,6 +566,15 @@ tree vllm -F -L 1 --dirsfirst | sed -E \
 
 ```
 
+### Kill
+```bash
+# 1
+for i in {1..10}; do ps aux | grep -E "(ray|sglang|torch|notebook)" | grep -v grep | awk '{print $2}' | xargs -r kill -9; done
+
+# 2 with pause
+for i in {1..10}; do ps aux | grep -E "(ray|sglang|torch|notebook)" | grep -v grep | awk '{print $2}' | xargs -r kill -9; sleep 1; done
+```
+
 ### References
 1. https://itsnotbugitsfeature.com/2019/10/22/splitting-a-big-pull-request-into-smaller-review-able-ones/
 2. https://fingertap.github.io/p/vllm%E4%BB%A3%E7%A0%81%E5%AD%A6%E4%B9%A0%E4%B9%8B%E4%B8%80%E6%A6%82%E8%A7%88/
