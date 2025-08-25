@@ -30,8 +30,8 @@ cover:
 math: true
 ---
 
-## From AE to VAE
-An autoencoder has two main parts, encoder and decoder. Encoder compresses the input data into a smaller, lower-dimensional representation called a latent space or bottleneck. For example, a 784-dimensional image (like a 28x28 pixel MNIST image) might be compressed into a 32-dimensional vector. Decoder attempts to reconstruct the original input from the encoded (compressed) representation. This process in illustrated in the figure below.
+## AE
+An autoencoder has two main parts, encoder and decoder. Encoder compresses the input data into a smaller, lower-dimensional representation called a latent vector. For example, a 784-dimensional image (like a 28x28 pixel MNIST image) might be compressed into a 32-dimensional vector. Decoder attempts to reconstruct the original input from the encoded (compressed) representation. This process in illustrated in the figure below.
 <p align="center">
     <img alt="Autoencoder" src="images/ae.png" width="80%" height=auto/> 
     <em>Figure 1. Autoencoder</em>
@@ -46,9 +46,21 @@ z &= g(X) , z \in \mathbb{R}^d\\\
 \end{aligned}
 $$
 
+The loss function is defined as the reconstruction loss.
+$$
+\mathcal{L}_{AE}(x, \hat{x}) = \|x - \hat{x}\|^2
+$$
+
 The decoder here promises us that we can input low dimension vector $z$ to get high-dimensional image data. Can we directly use this model as a generative model? i.e. randomly sample some latent vectors $ z $ in a low-dimensional space $ \mathbb{R}^d $, and then feed them into the decoder $ f(z) $ to generate images?
 
 The answer is that no. Why? It's because we haven't explicitly modeled the distribution $p(z)$. We don’t know which $ z $ can generate useful images. The data that decoder is trained on is limited. But $ z $ lies in a vast space ($ \mathbb{R}^d $), and if we just randomly sample in this space, we naturally cannot expect to produce useful images.
+
+To summarize, why AE can’t be a generative model: 
+
+**AE doesn’t model the distribution of latent variables $p(z)$ . If you randomly pick $z \in \mathbb{R}^d $ and decode, it usually produces junk. That’s because AE never learns what region of latent space corresponds to real data.**
+
+
+## VAE
 
 Remember our objective is to find the distribution $p(X)$ such that we can generate images. From bayes rule, 
 $$
@@ -57,23 +69,36 @@ $$
 
 If we explicitly model the $p(z)$, we might be able to get a good generative model which is the variational autoencoder. In practice, this is unrealistic because $z$ is in a big space, it's very hard to sample $z_i$ which is strongly correlated to $x_i$.
 
+
+
 The solution is to get a normal distribution for the posterior $p_{\theta}(z | x_i)$. The process is as follows: 
-1. Feed data sample $x_i$ to encoder and get posterior $p_{\theta}(z | x_i)$
+1. Feed data sample $x_i$ to encoder and get posterior $p_{\theta}(z | x_i)$, which is a normal distribution
+
+$$
+q_{\phi}(z \mid x) = \mathcal{N}\big(z;\, \mu_{\phi}(x),\, \sigma_{\phi}^2(x) I \big)
+$$
+It is a multivariate Gaussian distribution with independent dimensions. Why we want it to be a Gaussian distribution, because we can let encoder to output $\mu, \sigma$ to model it. Note that the notation here $q_{\phi}$ is encoder fitting posterior parameterized by $\phi$ and $p_{\theta}$ the real posterior.
+
+
 2. From the posterior, we sample $z_i$ which is the latent representation of $x_i$
+
+Sampling $z_i$ from distribution $\mathcal{N}(\mu, \sigma^2)$，is equivalent to sampling $\varepsilon$ from $\mathcal{N}(0, I)$. Thus, we get a constant from normal distribution. This is the so-called Reparameterization Trick. 
+$$
+z_i = \mu + \sigma \cdot \epsilon, \quad \epsilon \sim \mathcal{N}(0, 1)
+$$
+
 3. Feed $x_i$ to decoder, we get the distribution of $p(X | z_i)$. We think the generation of decoder (e.g. $\mu_i$, the mean is the recovered $x_i$).
 
-The difference between AE and VAE is in step 2. Instead of directly using encoding as the input, we sample a vector $z_i$ as the input to the decoder. The smart part of this approach is that each sampling result $z_i$ is correlated to input $x_i$, thus we don't have to go through enormous sampling process.
+The core idea of a VAE is to treat the latent vector as a probability distribution. The difference between AE and VAE is in step 2. Instead of directly using encoding as the input, we sample a vector $z_i$ as the input to the decoder. The smart part of this approach is that each sampling result $z_i$ is correlated to input $x_i$, thus we don't have to go through enormous sampling process.
 
 <p align="center">
     <img alt="Autoencoder" src="images/vae.jpg" width="80%" height=auto/> 
     <em>Figure 2. Variational Autoencoder</em>
 </p>
 
-Sampling $z_i$ from distribution $\mathcal{N}(\mu, \sigma^2)$ ，is equivalent to sampling $\varepsilon$ from $\mathcal{N}(0, I)$. Thus, we get a constant from normal distribution. This is the so-called Reparameterization Trick. 
 
-$$
-z_i = \mu + \sigma \cdot \epsilon, \quad \epsilon \sim \mathcal{N}(0, 1)
-$$
+Now that we know each element in the latent vector is a normal distribution, normally we would want to put some constraints on its distribution. For instance, we don't want it to have very small variance such that it collapses into a constant distribution. In this case, the VAE becomes AE. Since the objective is to constrain the output distribution to follow a normal distribution, the Kullback–Leibler (KL) divergence is utilized for regularization. From here we have the two components of VAE loss function: reconstruction loss and KL divergence regularization loss.
+
 
 
 
