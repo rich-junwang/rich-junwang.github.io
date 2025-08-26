@@ -55,10 +55,19 @@ The decoder here promises us that we can input low dimension vector $z$ to get h
 
 The answer is that no. Why? It's because we haven't explicitly modeled the distribution $p(z)$. We don’t know which $ z $ can generate useful images. The data that decoder is trained on is limited. But $ z $ lies in a vast space ($ \mathbb{R}^d $), and if we just randomly sample in this space, we naturally cannot expect to produce useful images.
 
+### Why AE Decoder Can Generate Images
+
+- The decoder in AE is trained for reconstruction, not generation. The decoder in a vanilla autoencoder only learns to map valid latent codes (produced by the encoder) back to images.
+
+- If we feed the decoder a random latent vector, the decoder doesn’t know how to interpret it — most likely we’ll get garbage or noise. In contrast, generative models (like VAEs, GANs, diffusion models) train the latent space to follow a structured distribution, so random samples make sense.
+
+- No structured latent space. Autoencoders don’t enforce any probability distribution over the latent codes. This means the latent space is irregular and discontinuous. **Only codes near actual training examples reconstruct to meaningful images**. Generative models like VAEs add a regularization term (KL divergence) so the latent space follows, e.g., a Gaussian distribution. That’s what makes sampling possible.
+
 To summarize, why AE can’t be a generative model: 
 
-**AE doesn’t model the distribution of latent variables $p(z)$ . If you randomly pick $z \in \mathbb{R}^d $ and decode, it usually produces junk. That’s because AE never learns what region of latent space corresponds to real data.**
+AE doesn’t model the distribution of latent variables $p(z)$ . If you randomly pick $z \in \mathbb{R}^d $ and decode, it usually produces junk. That’s because AE never learns what region of latent space corresponds to real data. 
 
+A decoder becomes generative when it can take latent codes sampled from a known prior distribution (e.g., Gaussian) — not just from the encoder — and map them to meaningful, diverse outputs.
 
 ## VAE
 
@@ -121,6 +130,10 @@ Here $q_\phi(z \mid X)$ is the posterior.
 
 
 ## VQ-VAE
+
+A VAE can encode an image into a vector that follows a standard Gaussian distribution. The reason for making the vector follow a standard Gaussian distribution is to facilitate random sampling. Note that the vectors encoded by a VAE are continuous vectors, meaning each dimension of the vector is a floating-point number. If you slightly change one dimension of the vector, the decoder can still recognize the vector and generate an image that is very similar to the one corresponding to the original vector.
+
+
 Contrary to VAE, in VQ-VAE, the latent representation is discrete. The intution is that in nature, where is male and female, limited number of colors etc.
 <p align="center">
     <img alt="Autoencoder" src="images/vq.png" width="100%" height=auto/> 
