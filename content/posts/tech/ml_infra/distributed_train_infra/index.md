@@ -101,7 +101,7 @@ The ReduceScatter operation performs the same operation as Reduce, except that t
 Note: Executing ReduceScatter, followed by AllGather, is equivalent to the AllReduce operation.
 
 
-### Difference between All2All and All_gather
+### All to All
 The following figure shows the difference between MPI all2all and all_gather.
 <p align="center">
     <img alt="all2all and allgather" src="images/all2all_and_allgather.png" width="60%" height=auto/> 
@@ -111,6 +111,26 @@ The following figure shows the difference between MPI all2all and all_gather.
 
 For all2all, assuming we have 4 gpus, we on each one we have tensor size [B\*S/4, 4096], after all2all, all the other gpus send
 data to gpu0. Its tensor size becomes [B\*S, 4096]
+
+All to all communication, is like during class break, there are several cluster of students. Each cluster has students from different classes. Then bell rings, and students go to their respective classrooms.
+All-gather: students share everything they know so that each one goes back to class with the full set of knowledge. 
+
+
+All-to-All in MPI: every process sends unique data to every other process, so each process ends up with a piece from everyone else.
+
+- During break, students from different classes form mixed clusters.
+- They exchange their notes / gossip / news with everyone in their cluster.
+- When the bell rings, each student goes back to their own classroom.
+- Now, every student has something from every other student, but each classroom contains only its own students again (no mixing remains).
+
+
+All-Gather in MPI all-gather: every process contributes one piece, and in the end, everyone has the full collection.
+
+- During break, each student has one piece of news.
+- Instead of splitting up, they all share their news so everyone hears everything.
+- When the bell rings, each student goes back to their classroom.
+- Now, every student knows all the news (the complete set).
+
 
 ### Ring-AllReduce Implementation
 
