@@ -133,7 +133,9 @@ Directly training MoE could be challenging due to low efficiency. One popular ap
 </p>
 
 
-(To be continued)
+## Expert Parallelism
+
+
 
 
 
@@ -158,8 +160,8 @@ Directly training MoE could be challenging due to low efficiency. One popular ap
 
 
 ### References
-1. [Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer](https://arxiv.org/abs/1701.06538) <br>
-2. [Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity](https://arxiv.org/pdf/2101.03961.pdf) <br>
+1. [Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer](https://arxiv.org/abs/1701.06538)
+2. [Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity](https://arxiv.org/pdf/2101.03961.pdf)
 3. [BASE Layers: Simplifying Training of Large, Sparse Models](https://arxiv.org/pdf/2103.16716.pdf) <br>
 4. [Mixtral of Experts](https://arxiv.org/pdf/2401.04088.pdf) <br>
 5. [Sparse Upcycling: Training Mixture-of-Experts from Dense Checkpoints](https://arxiv.org/abs/2212.05055) <br>
@@ -167,6 +169,7 @@ Directly training MoE could be challenging due to low efficiency. One popular ap
 7. [Baichuan 2: Open Large-scale Language Models](https://arxiv.org/abs/2309.10305)
 8. [DeepSeek-V3 Technical Report](https://arxiv.org/html/2412.19437v1)
 9. [ST-MoE: Designing Stable and Transferable Sparse Expert Models](https://arxiv.org/abs/2202.08906)
+10. [GShard: Scaling Giant Models with Conditional Computation and Automatic Sharding](https://arxiv.org/abs/2006.16668)
 <!-- [6] https://zhuanlan.zhihu.com/p/674751021 -->
 <!-- https://zhuanlan.zhihu.com/p/1893328591913189877 -->
 <!-- https://zhuanlan.zhihu.com/p/18565423596 -->
