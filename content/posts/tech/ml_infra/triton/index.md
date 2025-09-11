@@ -60,9 +60,18 @@ The typical execution flow of a CUDA program is as follows:
 
 A kernel is a function that runs in parallel across multiple threads on the device (GPU). Kernel functions are declared using the __global__ qualifier, and when calling a kernel, the syntax \<\<\<grid, block\>\>\> is used to specify the number of threads to execute. The nvcc compiler recognizes this modifier and splits the code into two parts, sending them to the CPU and GPU compilers respectively for compilation. 
 
-The \<\<\<a, b\>\>\> syntax following the kernel function call is a special CUDA syntax. These two numbers represent the number of thread blocks and the number of threads per block used during the kernel function execution. Since each thread block and each thread operate in parallel, this allocation determines the degree of parallelism in the program. In our case, since there is only one computation, we only assigned one thread within a single block. 
+```c
+kernel_func<<<grid_size, block_size, shared_memory_size, stream>>>(params_list)
 
-All the threads launched by a kernel are collectively called a grid. Threads within the same grid share the same global memory space.A grid can be divided into multiple thread blocks (blocks), and each block contains many threads.
+// grid_size: threads blocks to launch by the kernel
+// block_size: number of threads in each block
+// shared_memory_size: required shared_memory_size, optional
+// stream: the steam to execute the kernel, optional
+```
+
+The <<<a, b>>> syntax following the kernel function call is a special CUDA syntax. These grid_size and block_size represent the number of thread blocks and the number of threads per block used during the kernel function execution. Since each thread block and each thread operate in parallel, this allocation determines the degree of parallelism in the program. 
+
+All the threads launched by a kernel are collectively called a **grid**. Threads within the same grid share the same global memory space.A grid can be divided into multiple thread blocks (blocks), and each block contains many threads.
 
 Below both the grid and the block are 2-dimensional. Both grid and block are defined as variables of type `dim3`. The `dim3` type can be thought of as a struct containing three unsigned integer members: `x`, `y`, and `z`, which are initialized to 1 by default. Therefore, grid and block can be flexibly defined as 1-dimensional, 2-dimensional, or 3-dimensional structures. When calling the kernel, the execution configuration `<<<grid, block>>>` must be used to specify the number and structure of threads that the kernel will use.
 
@@ -75,7 +84,18 @@ In the above diagram, the grid and block can be defined as follows
 ```c
 dim3 grid(3, 2);
 dim3 block(5, 3);
-kernel_fun<<< grid, block >>>(prams...);
+kernel_func<<< grid, block >>>(params...);
+```
+
+In the follow diagram, the grid and block is deined as
+```c
+kernel_func<<<4,8>>>(params...);
+
+// we can also define one block or 32 blocks
+kernel_func<<<1, 32>>>(params...);
+kernel_func<<<32, 1>>>(params...);
+// people define single thread kernel to debug
+kernel_func<<<1, 1>>>(params...);
 ```
 
 In CUDA, every thread executes a kernel function, and each thread is assigned a unique thread ID. This thread ID can be accessed within the kernel using the built-in variable threadIdx.
