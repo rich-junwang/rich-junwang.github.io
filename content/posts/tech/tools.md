@@ -44,3 +44,11 @@ Scroll mouse to enter the history mode (or use CTRL + B followed by "[").
 
 ### Huggingface
 1. huggingface API save_pretrained(x) no longer saves the model into a single bin file, but into several shards. To load these shards, we have to use AutoModel.from_pretrained API to load. 
+
+
+
+### Nvidia
+
+```bash
+nvidia-smi --query-gpu=name --format=csv.noheader | head -n1 > my_output.log
+```

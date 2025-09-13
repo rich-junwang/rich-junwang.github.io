@@ -113,8 +113,8 @@ Megatron-LM and NeMo are the open source libraries from Nvidia for the distribut
 - global_batch_size % (PP * DP) == 0
 ```
 
-### [Sequence Parallel](https://browse.arxiv.org/pdf/2205.05198.pdf)
-For operations such as layer normation, the operation can be paralleized on the sequence dimension. Remember that layernorm is normalization over the feature dimenstion, ie. a token representation of 2048 will be normalized over 2048 numbers. In light of this, sequence parallel is proposed to reduce GPU memory consumption. 
+### [Sequence Parallelism](https://browse.arxiv.org/pdf/2205.05198.pdf)
+For operations such as layer normation and dropout, the operation can be parallelized on the sequence dimension. Remember that layernorm is normalization over the feature dimenstion, ie. a token representation of 2048 will be normalized over 2048 numbers. In light of this, sequence parallel is proposed to reduce GPU memory consumption. 
 <p align="center">
     <img alt="zero dp" src="images/seq_parallel.png" width="100%"/>
     <em>Sequence parallelism</em>
@@ -122,8 +122,16 @@ For operations such as layer normation, the operation can be paralleized on the 
 </p>
 
 
+### Ulysses Sequence Parallelism
+In transformer models, the self-attention mechanism scales quadratically with sequence length, which makes training with long contexts memory-intensive. Ulysses sequence parallelism partitions the sequence dimension across devices. This means each GPU only processes a chunk of the sequence, while still collaborating to compute global attention correctly. Megatron-LM’s sequence parallelism: Focuses on parallelizing certain layer-norm and residual operations across the sequence dimension. Ulysses goes further, introducing a communication pattern that allows attention itself to be distributed across GPUs, not just per-token computations.
+<div align="center"> <img src=images/ulysses.png style="width: 100%; height: auto;"/> </div>
+
+It’s worth noting that Ulysses only comes into play within the attention layer—it doesn’t interfere with the MLP or the layer normalization components.
+
 ### Context Parallelism
 Context Parallelism (CP) is a method for parallelizing the processing of neural network activations across multiple GPUs, partitioning the input tensors in the sequence dimension. Unlike SP, which partitions the activations of specific layers, CP divides the activations of all layers. It can be more efficient than sequence parallelism for very long sequences, as it parallelizes the entire attention mechanism, similar to Ring Attention
+
+
 
 
 ### FSDP
@@ -167,4 +175,5 @@ Generally a good MFU should be above 40%.
 8. [AMSP: Reducing Communication Overhead of ZeRO for Efficient LLM Training](https://arxiv.org/abs/2311.00257)
 9. [Reducing Activation Recomputation in Large Transformer Models](https://browse.arxiv.org/pdf/2205.05198)
 10.[The Ultra-Scale Playbook: Training LLMs on GPU Clusters](https://huggingface.co/spaces/nanotron/ultrascale-playbook)
-
+11. [VeOmni: Scaling Any Modality Model Training with Model-Centric Distributed Recipe Zoo](https://arxiv.org/abs/2508.02317)
+12. https://www.zhihu.com/question/4130491572/answer/31111638925

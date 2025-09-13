@@ -261,5 +261,11 @@ git remote set-url origin https://github.com/xxx/yyy  # used for https connectio
 ```
 
 
+### Git Add Files to New Branch
+Suppose we're on branch A, and we want to add branch B files to branch A
+```bash
+git ls-tree -r --name-only branch_A  | grep "my_name_pattern" | xargs git restore --source=branch_A --
+```
+
 ### References
 [1] https://itsnotbugitsfeature.com/2019/10/22/splitting-a-big-pull-request-into-smaller-review-able-ones/

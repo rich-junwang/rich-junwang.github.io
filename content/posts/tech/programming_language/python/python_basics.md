@@ -117,6 +117,8 @@ sudo ln -sf /usr/bin/python3.9 /usr/bin/python3
 ## find a python package related files
 ```
 pip show -f package-name
+
+pip list | grep kafka
 ```
 
 ### Find out python binry file path
@@ -305,7 +307,30 @@ Notice that global is only at module level. There is no program level global var
 
 ## UV
 
-### Common Usages
+Right now, my workflow with UV is to maintain a shared virtual environment. That way, I don’t have to reinstall packages for every single project, and I can still use the Python interpreter to run code directly on my local setup. For some tools, I lean on uv tool to handle the installation. I only spin up dedicated virtual environments when a project’s dependencies look like they could get messy.
+
+```bash
+
+# show all pythons available
+uv python list
+
+# fix python for uv
+uv python pin 3.12
+
+# create shared env
+uv venv ~/.uv/shared --python 3.12
+source ~/.uv/shared/bin/activate
+
+alias shared='source ~/.uv/shared/bin/activate' 
+alias dev='source ~/.uv/dev/bin/activate' 
+alias local='source .venv/bin/activate'
+
+# install common tools with uv tool
+uv tool install mytool
+```
+
+
+### Other Common Usages
 ```bash
 
 # install
