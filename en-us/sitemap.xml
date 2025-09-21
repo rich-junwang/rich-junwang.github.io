@@ -20,13 +20,16 @@
     <loc>https://rich-junwang.github.io/en-us/tags/</loc>
     <lastmod>2025-04-05T00:18:23+08:00</lastmod>
   </url><url>
+    <loc>https://rich-junwang.github.io/en-us/tags/ml/</loc>
+    <lastmod>2025-02-18T00:18:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/moe_models/</loc>
+    <lastmod>2025-02-18T00:18:23+08:00</lastmod>
+  </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/model_distillation/</loc>
     <lastmod>2025-01-05T12:01:14-07:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/llm_inference/entropy_decoding/</loc>
-    <lastmod>2025-01-05T00:18:23+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/tags/ml/</loc>
     <lastmod>2025-01-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/tags/inference/</loc>
@@ -99,9 +102,6 @@
     <lastmod>2023-12-11T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/model_eval/</loc>
-    <lastmod>2023-10-18T00:18:23+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/moe_models/</loc>
     <lastmod>2023-10-18T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/rag/</loc>

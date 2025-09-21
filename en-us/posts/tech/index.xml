@@ -17,6 +17,15 @@
     </item>
     
     <item>
+      <title>MoE Models</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/moe_models/</link>
+      <pubDate>Tue, 18 Feb 2025 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/moe_models/</guid>
+      <description>MoE Models</description>
+    </item>
+    
+    <item>
       <title>Distillation</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/ml/model_distillation/</link>
       <pubDate>Sun, 05 Jan 2025 12:01:14 -0700</pubDate>
@@ -194,15 +203,6 @@
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/model_eval/</guid>
       <description>Model Evaluation</description>
-    </item>
-    
-    <item>
-      <title>MoE Models</title>
-      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/moe_models/</link>
-      <pubDate>Wed, 18 Oct 2023 00:18:23 +0800</pubDate>
-      
-      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/moe_models/</guid>
-      <description>MoE Models</description>
     </item>
     
     <item>
