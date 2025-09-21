@@ -218,6 +218,7 @@ Directly training MoE could be challenging due to low efficiency. One popular ap
 8. [DeepSeek-V3 Technical Report](https://arxiv.org/html/2412.19437v1)
 9. [ST-MoE: Designing Stable and Transferable Sparse Expert Models](https://arxiv.org/abs/2202.08906)
 10. [GShard: Scaling Giant Models with Conditional Computation and Automatic Sharding](https://arxiv.org/abs/2006.16668)
+11. [Auxiliary-Loss-Free Load Balancing Strategy for Mixture-of-Experts](https://arxiv.org/abs/2408.15664)
 <!-- [6] https://zhuanlan.zhihu.com/p/674751021 -->
 <!-- https://zhuanlan.zhihu.com/p/1893328591913189877 -->
 <!-- https://zhuanlan.zhihu.com/p/18565423596 -->
