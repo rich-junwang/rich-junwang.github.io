@@ -82,6 +82,41 @@ class MixtralSparseMoeBlock(nn.Module):
 
 ### Dynamic Routing
 
+The workflow of topk router is as follows:
+
+1. Calculate the logits by the router gating network.
+2. Calculate the routing probabilities and map for top-k selection with score function.
+3. [Optional] Apply token dropping to top-k expert selection.
+4. [Optional] Apply the auxiliary load balancing loss for the given scores and routing map.
+
+A typical Megatron-LM implementation is like below:
+
+```python
+
+def forward(self, input):
+    # routing 
+    self._maintain_float32_expert_bias()
+    input = self.apply_input_jitter(input)
+    # gating
+    logits = torch.nn.functional.linear(input.to(router_dtype), self.gate_weight.to(router_dtype))
+    # Apply Z-Loss
+    logits = self.apply_z_loss(logits)
+    # usually with loading balance loss here below.
+    scores, routing_map, _ = topk_softmax_with_capacity(logits, top_k)
+
+    # token dispatch    
+    (dispatched_input, tokens_per_expert) = self.token_dispatcher.token_permutation(
+        hidden_states, probs, routing_map
+    )
+
+    # experts forward
+    expert_output, mlp_bias = self.experts(dispatched_input, tokens_per_expert)
+
+    # unpermutate to restore the order
+    output, mlp_bias = self.token_dispatcher.token_unpermutation(expert_output, mlp_bias)
+
+```
+
 There are a couple of ways to design router to route tokens to each expert. Ideally, we want to design a router that could make each expert specialize one of domains/tasks. Obviously there is no straightforward way to achieve this. In Mixtral, softmax-topk based gating mechanism is used to select experts. 
 
 For any input $x$ of dimension $[\text{sequence\\_len}, \text{dim}]$, it multiplies with a gate matrix $W$ of shape $[\text{dim}, 8]$, then we get a router representation of shape $[\text{sequence\\_len}, 8]$. It selects top k (num of experts per token) logits which then go through softmax op to normalize to get k experts weights. In Mixtral, the k is equal to 2. 
@@ -103,6 +138,19 @@ L_{max_z} = 2 e^{-4} * z^2
 $$
 where $z$ is the max logit value.
 
+
+#### Expert Bias
+There are some nuances in MoE implementations. The router/gating function computes logits + biases → softmax → expert probabilities.
+
+If biases can’t capture small shifts, the softmax output may "lock in" certain experts and fail to distribute properly. That leads to expert bias (some experts dominate unfairly, others starve).
+
+```python
+import torch 
+print(torch.tensor(0.5, dtype=torch.bfloat16) + 1e-3 )
+
+# 0.001 is ignored
+# tensor(0.5000, dtype=torch.bfloat16)
+```
 
 
 ### Load Balancing
