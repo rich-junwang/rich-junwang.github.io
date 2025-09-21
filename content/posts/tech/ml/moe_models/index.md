@@ -1,7 +1,7 @@
 ---
 title: "MoE Models"
-date: 2023-10-18T00:18:23+08:00
-lastmod: 2023-10-18T00:18:23+08:00
+date: 2025-02-18T00:18:23+08:00
+lastmod: 2025-02-18T00:18:23+08:00
 author: ["Jun"]
 keywords: 
 - 
@@ -139,8 +139,39 @@ $$
 where $z$ is the max logit value.
 
 
+### Load Balancing
+For dynamic routing, which token is routed to which expert is unknown upfront, so there exists the load balancing issue. Common solution is to add an auxiliary load balancing loss [2].
+
+$$
+\text{loss} = \alpha \cdot N \cdot \sum_{i=1}^{N} f_i \cdot P_i
+$$
+
+Here $N$ is the number of experts, $T$ is the total number of tokens in batch $B$. $f_i$ is the fraction of tokens dispatched to expert $i$ and $P_i$ is the fraction of the router probability allocated for expert $i$, i.e. the summation of probability assigning token to expert i for all tokens
+$$
+P_i = \frac{1}{T} \sum_{x \in \mathcal{B}} p_i(x)
+$$
+
+Note that this loss is added for each MoE layer. 
+
+
+#### Loss-free Load Balancing
+
+Introducing an auxiliary loss to encourage load balance inevitably would bring non-negligible interference gradients into language training and most of time would impair the model performance. To overcome this issue, DeepSeek paper [11] proposed a loss free load balancing strategy. 
+
+The idea is to introduce an expert-wise learnable bias term to modulate Top-k routing. Specifically, in the previous approach, the Top-k experts were selected based solely on their routing scores. In the new approach, the selection is based on the experts’ gating scores plus an expert bias term. When an expert is overloaded, its bias is decreased, thereby reducing the probability of it being activated; when an expert is underloaded, its bias is increased, thereby raising the probability of it being activated.
+
+$$
+g_{i,t} = \begin{cases}
+s_{i,t}, & s_{i,t} + b_i \in \text{Topk}(\{s_{j,t} + b_j \mid 1 \leq j \leq N\}, K), \\\
+0, & \text{otherwise}.
+\end{cases}
+$$
+
+
+
+
 #### Expert Bias
-There are some nuances in MoE implementations. The router/gating function computes logits + biases → softmax → expert probabilities.
+There are some nuances in MoE expert bias implementations. The router/gating function computes logits + biases → softmax → expert probabilities.
 
 If biases can’t capture small shifts, the softmax output may "lock in" certain experts and fail to distribute properly. That leads to expert bias (some experts dominate unfairly, others starve).
 
@@ -152,22 +183,13 @@ print(torch.tensor(0.5, dtype=torch.bfloat16) + 1e-3 )
 # tensor(0.5000, dtype=torch.bfloat16)
 ```
 
+### Token Dispatch
+Once the router outputs the assignment (e.g., token A → Expert 3, token B → Expert 7), the model must dispatch the tokens to the chosen experts. This involves:
 
-### Load Balancing
-For dynamic routing, which token is routed to which expert is unknown upfront, so there exists the load balancing issue. Common solution is to add an auxiliary load balancing loss [2].
-
-$$
-\text{loss} = \alpha \cdot N \cdot \sum_{i=1}^{N} f_i \cdot P_i
-$$
-
-Here $N$ is the number of experts, $T$ is the total number of tokens in batch $B$. $f_i$ is the fraction of tokens dispatched to expert $i$. 
-
-and $P_i$ is the fraction of the router probability allocated for expert $i$, i.e. the summation of probability assigning token to expert i for all tokens
-$$
-P_i = \frac{1}{T} \sum_{x \in \mathcal{B}} p_i(x)
-$$
-
-Note that this loss is added for each MoE layer. 
+- Gathering the tokens assigned to each expert.
+- Sending them to the correct expert for computation.
+- Collecting the expert outputs and reordering them back to match the original token sequence.
+<div align="center"> <img src=images/token_dispatch.png style="width: 100%; height: auto;"/> Token dispatch in MoE, image from [12]</div>
 
 
 ### Training
@@ -184,23 +206,10 @@ Directly training MoE could be challenging due to low efficiency. One popular ap
 ## Expert Parallelism
 
 
+The logic of Expert Parallelism is shown in the figure below: each EP rank contains only a subset of experts, and the tokens on each EP rank are dispatched to the experts on other EP ranks according to the gating results. This process is carried out through all-to-all communication.
 
 
-
-
-
-### Public Implementations
- - https://github.com/XueFuzhao/OpenMoE
- - https://github.com/pjlab-sys4nlp/llama-moe
- - https://github.com/NVIDIA/NeMo
- - https://github.com/hpcaitech/ColossalAI/tree/main/examples/language/openmoe
- - https://github.com/stanford-futuredata/megablocks
- 
-
-
-
-
-
+<div align="center"> <img src=images/scaling_moe.png style="width: 100%; height: auto;"/> EP in MoE, image from [10]</div>
 
 
 
@@ -219,6 +228,11 @@ Directly training MoE could be challenging due to low efficiency. One popular ap
 9. [ST-MoE: Designing Stable and Transferable Sparse Expert Models](https://arxiv.org/abs/2202.08906)
 10. [GShard: Scaling Giant Models with Conditional Computation and Automatic Sharding](https://arxiv.org/abs/2006.16668)
 11. [Auxiliary-Loss-Free Load Balancing Strategy for Mixture-of-Experts](https://arxiv.org/abs/2408.15664)
+12. https://zhuanlan.zhihu.com/p/13997146226
+13. https://github.com/pjlab-sys4nlp/llama-moe
+14. https://github.com/NVIDIA/NeMo
+15. https://github.com/hpcaitech/ColossalAI/tree/main/examples/language/openmoe
+16. https://github.com/stanford-futuredata/megablocks
 <!-- [6] https://zhuanlan.zhihu.com/p/674751021 -->
 <!-- https://zhuanlan.zhihu.com/p/1893328591913189877 -->
 <!-- https://zhuanlan.zhihu.com/p/18565423596 -->
