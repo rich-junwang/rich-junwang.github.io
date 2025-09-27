@@ -36,7 +36,7 @@ math: true
 BatchNorm is commonly used in computer vision. LayerNorm is widely used in NLP. In CV, the channel dimension is RGB channel. In NLP, the channel dimension is feature dimension (embedding dimension). 
 Layer norm normalizes across feature dimension (i.e embedding dimension) for each of the inputs which removes the dependence on batches. This makes layer normalization well suited for sequence models such as transformers.
 <p align="center">
-    <img alt="batch norm vs layer norm" src="images/norm.png" width="80%" height=auto/> 
+    <img alt="batch norm vs layer norm (image case)" src="images/norm.png" width="80%" height=auto/> 
     <em>Figure 1. batch norm vs layer norm</em>
     <br>
 </p>
@@ -75,15 +75,48 @@ class Norm(nn.Module):
         return self.gamma * x_norm + self.beta
 ```
 
+When I first saw the above figure, I don't understand why layer normalization for NLP tasks is across a plane as shown in the figure (which should be only across a feature dimension vector). The reason is simple because this image is showing image case. 
+
+### Image case
+
+For images, the typical tensor shape is:
+$$
+\text{[N, C, H, W]}
+$$
+
+- Batch Norm: mean/variance computed across `N, H, W` for each channel `C`.
+- Layer Norm: mean/variance computed across `C, H, W` for each individual sample (not across the batch).
+
+In vision, there is not time dimension or sequence length dimension, so we can think of the `C, H, W` dimension is a single time step (e.g. one text token). 
+
+### Text/NLP case
+
+For text, the tensor is often:
+$$
+\text{[N, L, D]}
+$$
+
+* `N`: batch size
+* `L`: sequence length (number of tokens)
+* `D`: feature dimension (hidden size per token)
+
+Layer Norm: is usually applied per token, i.e., for each position in the sequence, it normalizes across the feature dimension `D` only.
+That’s why in NLP, each token’s feature vector is normalized independently.
+
+The figure is drawn with a vision perspective, layer norm is normalizing across all feature dimensions (C × H × W)". It's across a plane.
+In NLP, the features are usually just the hidden size `D`, not `(C × H × W)`. So when adapted to text, Layer Norm colors only one row (token vector), not the whole sequence plane.
+
+In images, feature dimension = `(C × H × W)` per sample. In text, feature dimension = hidden size `D` per token.
+
 
 ### EMA in BN
 Note that at inference time, there could be no batch dimension for batch norm. In practice, during training people will keep record of moving average of mean and variance. During inference time, these values will be used. The exponential moving average is calculated as follows
-```
+```python
 moving_mean = moving_mean * momentum + batch_mean * (1 - momentum)
 moving_var = moving_var * momentum + batch_var * (1 - momentum)
 ```
 The momentum is a hyperparameter which is generally chosen to be close to 1. A lower value of momentum means that older values are forgotten sooner. A more efficient way to calculate it is as follows:
-```
+```python
 moving_mean -= (moving_mean - batch_mean) * (1 - momentum)
 moving_var -= (moving_var - batch_var) * (1 - momentum)
 ```
