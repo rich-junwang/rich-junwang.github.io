@@ -157,7 +157,41 @@ The process is like the follows:
    $$
 
 4. After replacing all green parts in the image with the purple $z_q$, reconstruction is performed.
-### References
-1. https://zhuanlan.zhihu.com/p/348498294
-2. https://zhuanlan.zhihu.com/p/34998569
-3. https://zhuanlan.zhihu.com/p/2433292582
+
+VQVAE uses codebook to replace the latent distribution in VAE. However in this way, the input to decoder becomes a fixed vector again like an autoencoder. To solve this issue, VQVAE trained a autoregressive model to fit the codebook. in this way, we can do generation again.
+
+
+### How VQ-VAE trains an autoregressive model 
+
+VQ-VAE needs something  like an autoregressive prior to regain the generative capability that a VAE naturally has via sampling. The missing piece is the **prior** over the discrete latent codes. VQ-VAE learns this in two stages:
+
+#### Step 1.  Train the VQ-VAE
+
+Train the encoder, codebook, and decoder using the reconstruction loss + codebook commitment loss. After training, we have a dataset of latent codes (discrete indices into the codebook) corresponding to the training data.
+
+#### Step 2: Learn a prior with an autoregressive model
+
+- Take the sequence of latent code indices produced by the encoder for your training data.
+- Train a powerful autoregressive model (PixelCNN, PixelSNAIL, or Transformer) on these code sequences.
+    - If the latent map is 2D (like an image grid of discrete codes), you flatten or use masked convolutions to model the spatial dependencies.
+    - The autoregressive model learns $P(z) = \prod_i P(z_i | z_{<i})$, where each $z_i$ is a code index.
+
+- This prior learns the distribution of code sequences across your dataset.
+
+#### Step 3: Generation
+
+- Sample a sequence of latent codes from the autoregressive prior.
+- Pass these codes through the decoder to generate a new image (or audio, depending on domain).
+
+That’s how VQ-VAE restores the generative power: instead of sampling from a Gaussian prior (like in a VAE), it samples from a learned discrete autoregressive prior.
+
+
+
+
+
+## References
+1. [Auto-Encoding Variational Bayes](https://arxiv.org/abs/1312.6114)
+2. [Neural Discrete Representation Learning](https://arxiv.org/abs/1711.00937)
+3. https://zhuanlan.zhihu.com/p/348498294
+4. https://zhuanlan.zhihu.com/p/34998569
+5. https://zhuanlan.zhihu.com/p/2433292582

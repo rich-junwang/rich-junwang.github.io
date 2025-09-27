@@ -304,6 +304,51 @@ z.sum().backward()
 One last word at `eval()` and `no_grad()`. These two are actually unrelated. During inference, both need to be used: model.eval() sets modules like BatchNorm and Dropout to evaluation mode, ensuring the correctness of the inference results, but it does not help save memory. torch.no_grad() declares that no gradients should be calculated, which does save a lot of memory and GPU memory.
 
 
+## Scale Gradient
+
+In megablocks lib, there is a piece of code which catches my attention
+```python
+class ScaleGradient(torch.autograd.Function):
+
+    @staticmethod
+    @torch.amp.autocast_mode.custom_fwd(device_type='cuda')
+    def forward(ctx: Any, x: torch.Tensor, scale: float):
+        ctx.scale = scale
+        return x
+
+    @staticmethod
+    @torch.amp.autocast_mode.custom_bwd(device_type='cuda')
+    def backward(ctx: torch.Tensor, grad: torch.Tensor):
+        return grad * ctx.scale, None
+```
+
+Why we want to scale gradient in such a way instead of scale the loss? 
+
+Let's take a look at this class. In the forward pass, it simply returns `x` unchanged. In the backward pass, it multiplies the gradient by `scale` before propagating it backward. So the value of `x` remains the same during forward, but its gradient flow is scaled. Essentially it acts as **identity operator with a custom gradient**.
+
+
+### Why not just scale the loss?
+
+Scaling the loss (`loss * scale`) will scale **all gradients in the computation graph** by that factor, globally.
+
+But sometimes we might want to:
+
+* **Scale gradients for a particular tensor or path**,
+* While leaving the rest of the model unchanged.
+
+That’s what `ScaleGradient` enables. We can selectively apply it to certain variables or branches of the computation graph.
+
+Example:
+
+```python
+y1 = scale_gradient(f(x), 0.5)   # Gradients to f(x) scaled down by 0.5
+y2 = g(x)                        # Normal gradient flow
+loss = y1 + y2
+```
+
+Here, only the gradient flowing through `f(x)` is scaled. Scaling the whole loss would shrink **both y1 and y2 paths**, which isn’t what we want.
+
+
 ## References
 1. https://amsword.medium.com/understanding-pytorchs-autograd-with-grad-fn-and-next-functions-b2c4836daa00
 2. https://zhuanlan.zhihu.com/p/321449610 
