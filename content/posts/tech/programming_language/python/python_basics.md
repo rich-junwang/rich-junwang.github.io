@@ -325,6 +325,9 @@ alias shared='source ~/.uv/shared/bin/activate'
 alias dev='source ~/.uv/dev/bin/activate' 
 alias local='source .venv/bin/activate'
 
+# install through pip after running shared command (aliased above) 
+uv pip install pandas
+
 # install common tools with uv tool
 uv tool install mytool
 ```
