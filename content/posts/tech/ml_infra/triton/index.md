@@ -58,6 +58,20 @@ The typical execution flow of a CUDA program is as follows:
 - Free the memory allocated on both the device and the host.
 
 
+CUDA organizes threads in three levels:
+
+- Thread – The smallest execution unit. Each has an ID given by threadIdx.
+- Block – A group of threads. Each block has an ID given by blockIdx.
+- Grid – A collection of blocks. The grid’s size (number of blocks) is described by gridDim.
+
+Correspondingly, we can
+- Use threadIdx for thread position inside a block.
+- Use blockIdx for block position inside a grid.
+- Use blockDim for number of threads per block
+- Use gridDim for number of blocks exist, so we can compute global indices or partition work.
+
+
+
 A kernel is a function that runs in parallel across multiple threads on the device (GPU). Kernel functions are declared using the __global__ qualifier, and when calling a kernel, the syntax \<\<\<grid, block\>\>\> is used to specify the number of threads to execute. The nvcc compiler recognizes this modifier and splits the code into two parts, sending them to the CPU and GPU compilers respectively for compilation. 
 
 ```c
