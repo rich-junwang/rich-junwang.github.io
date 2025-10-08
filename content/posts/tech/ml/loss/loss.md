@@ -29,7 +29,7 @@ cover:
 math: true
 ---
 
-### Sigmoid
+## Sigmoid
 Sigmoid is one of the most used activation functions. 
 $$
 \sigma(x) = \frac{1}{1+e^{-x}}
@@ -44,7 +44,8 @@ $$
 \left[log\left(1 - \sigma(x)\right)\right]^\prime = - \sigma(x)
 $$
 
-### Logistic Regression
+## Logistic Regression
+
 For a binary classification problem, for an example $x = (x_1, x_2, \dotsb , x_n)^T$, the hypothesis function (for the positive class) can be written as:
 $$
 \begin{aligned}
@@ -71,7 +72,7 @@ Notice that in the second term $1 - h_\theta(x_i)$ is the negative class probabi
 <!-- For my understanding, for each data example, there is only one label. So we never really sum positive label and negative label loss together for one example. We only sum them together for two training examples, say one has positive label and one has negative label.  -->
 
 
-### Cross Entropy
+## Cross Entropy
 Cross entropy defines the distance between model output distribution and the groudtruth distribution.
 $$
 H(y,p) = -\sum_{i}y_i \log(p_i)
@@ -98,7 +99,7 @@ $$
 $$
 $p_i$ is the probability and $y_i$ is the label, 1 for positive class and 0 for negative class.
 
-### Binary Cross Entropy
+## Binary Cross Entropy
 In the above section, we talked about softmax cross entropy loss, here we talk about binary cross entropy loss which is also called Sigmoid cross entropy loss. 
 
 We apply sigmoid function to the output logits before BCE. Notice that here we apply the function to each element in the tensor, all the elements are not related to each other, this is why BCE is widely used for **multi-label** classification task. 
@@ -144,17 +145,17 @@ print(loss2) # 0.7193
 
 
 
-### Noise Contrastive Estimation
+## Noise Contrastive Estimation
 Noise contrastive estimation or negative sampling is a commonly used computation trick in ML to deal with expansive softmax computation or intractable partition function in computation.
 
 The derivation of NCE loss sometimes can be bewildering, but the idea is actually very simple. For example, in word2vec implementation, the negative sampling is to choose 1 positive target and 5 negative target, and calculate the binary cross entropy loss (binary logistic loss) and then do backward propagation. 
 
 
 
-### Contrastive Loss
+## Contrastive Loss
 
 
-### CLIP Loss
+## CLIP Loss
 CLIP loss is the same with the paper from [3]. The negatives here are used for contrastive learning. However, they're not using NCE method like word2vec. It's more like softmax cross entropy.
 
 ```python
@@ -228,7 +229,79 @@ if __name__ == '__main__':
 
 
 
-### Reference
+## From MLE to Logistic Loss
+
+1. Model and likelihood
+
+We have binary outcomes $y_i\in{0,1}$ and feature vectors $x_i\in\mathbb{R}^d$. The logistic model assumes
+$$
+P(y_i=1\mid x_i,w) = \sigma(z_i),\qquad z_i = x_i^\top w,
+$$
+where $\sigma(z)=\dfrac{1}{1+e^{-z}}$ is the logistic (sigmoid) function. Let
+$$
+\mu_i \equiv \sigma(z_i) = \sigma(x_i^\top w).
+$$
+
+Because $y_i$ is Bernoulli with parameter $\mu_i$, the likelihood for one example is
+$$
+p(y_i\mid x_i,w) = \mu_i^{y_i}(1-\mu_i)^{1-y_i}.
+$$
+Assuming independent samples, the full likelihood is
+$$
+L(w)=\prod_{i=1}^n \mu_i^{y_i}(1-\mu_i)^{1-y_i}.
+$$
+
+
+2. Log-likelihood
+
+Take logs to get the log-likelihood, this turns product of probability to summation of probability which is much easier to handle.
+$$
+\ell(w) = \log L(w)
+= \sum_{i=1}^n \big( y_i\log\mu_i + (1-y_i)\log(1-\mu_i)\big).
+$$
+Using $\mu_i=\sigma(x_i^\top w)$ and the identity $\log\mu = -\log(1+e^{-z})$, $\log(1-\mu) = -\log(1+e^{z})$, this can be written as
+$$
+\ell(w)=\sum_{i=1}^n \big( y_i x_i^\top w - \log(1+e^{x_i^\top w})\big).
+$$
+Maximize $\ell(w)$ (or equivalently minimize the negative log-likelihood).
+
+
+
+3. Gradient of the log-likelihood
+
+Differentiate $\ell(w)=\sum_i [y_i x_i^\top w - \log(1+e^{x_i^\top w})]$ with respect to $w$.
+
+For a single term:
+$$
+\frac{\partial}{\partial w}\big(y_i x_i^\top w\big)=y_i x_i,
+\qquad
+\frac{\partial}{\partial w}\log(1+e^{x_i^\top w})=\frac{e^{x_i^\top w}}{1+e^{x_i^\top w}},x_i=\sigma(x_i^\top w),x_i=\mu_i x_i.
+$$
+So
+$$
+\nabla \ell(w) = \sum_{i=1}^n (y_i - \mu_i),x_i.
+$$
+
+Vector/matrix form: let $X$ be the $n\times d$ design matrix $rows (x_i^\top)$, $y$ the $n$-vector of labels, and $\mu$ the $n$-vector of $\mu_i$. Then
+$$
+\nabla \ell(w) = X^\top (y - \mu).
+$$
+
+Setting $\nabla\ell(w)=0$ gives the score equations $X^\top (y-\mu)=0$, which are nonlinear in $w$ (because $\mu$ depends on $w$). There is no closed-form solution — we solve numerically.
+
+
+
+4. Relationship to cross-entropy loss
+
+Maximizing $\ell(w)$ is equivalent to minimizing the negative log-likelihood (cross-entropy):
+$$
+\mathcal{L}(w) = -\ell(w) = \sum_{i=1}^n \big( -y_i x_i^\top w + \log(1+e^{x_i^\top w})\big).
+$$
+The gradient of this loss is $-\nabla\ell = X^\top(\mu - y)$, which is the form used in gradient descent.
+
+
+
+## Reference
 1. [Learning Transferable Visual Models From Natural Language Supervision](https://arxiv.org/pdf/2103.00020.pdf)
 2. http://www.cnblogs.com/peghoty/p/3857839.html
 3. [contrastive learning of medical visual representations from paired images and text](https://arxiv.org/abs/2010.00747)

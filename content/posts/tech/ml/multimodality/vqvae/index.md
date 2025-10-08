@@ -30,6 +30,97 @@ cover:
 math: true
 ---
 
+## Basics
+
+Here we have a short recap about KL-divergence. The materials are mostly from [6].
+
+1. Information
+
+Information is defined as the log probability of event
+$$
+I(p) = -logp(x)
+$$
+
+Minus sign here is to get positive value. If an event is rare (low p), then it carries a lot of information when it happens.
+
+
+2. Entropy
+
+Shannon entropy is the average of information - the expectation of $I(p)$ with respect to the distribution $p(x)$
+$$
+\begin{aligned}
+H(p) &= \mathbb{E}_{x \sim P}[I(p)] \\\
+     &= \sum p(x)I(p) \\\
+     &= -\sum p(x)\log p(x)
+\end{aligned}
+$$
+
+Shannon entropy is the average(expected) information under the same distribution.
+
+
+3. Cross-Entropy
+
+The average of $I(q)$ with respect to the distribution $p(x)$
+$$
+\begin{aligned}
+H(p, q) &= \mathbb{E}_{x \sim P}[I(q)] \\\
+        &= \sum p(x)I(q) \\\
+        &= -\sum p(x)\log q(x)
+\end{aligned}
+$$
+
+Cross entropy is the average(expected) information under the different distribution.
+
+4. KL-divergence
+
+KL divergence is the relative entropy or information gain. 
+
+$$
+\begin{aligned}
+D_{KL}(p||q) &= H(p, q) - H(p) \\\
+             &= -\sum p(x)\log q(x) + \sum p(x)\log p(x) \\\
+             &= -\sum p(x)\log \frac{q(x)}{p(x)} \\\
+             &= \sum p(x)\log \frac{p(x)}{q(x)} \\\
+             &= \mathbb{E}_{x \sim p(x)}[\log p(x) - \log q(x)]
+\end{aligned}
+$$
+
+Relative entropy is the difference between cross entropy and shannon entropy.
+Based on **Jensen's inequality**, we have 
+$$
+\begin{aligned}
+-D_{KL}(p||q) &= \sum p(x)\log \frac{q(x)}{p(x)} \\\
+              &<= \log \sum p(x) \frac{q(x)}{p(x)} \\\
+              &= log 1 \\\
+              &= 0
+\end{aligned}
+$$
+Thus, KL-divergence is always positive. 
+
+
+5. Forward and Reverse KL-divergence
+
+Normally we say $D_{KL}(p||q)$ is forward KL and $D_{KL}(q||p)$ is reverse KL.
+
+
+6. Minimizing KL-divergence
+
+In machine learning, we generally believe that data distribution $p_{d}$ is the real distribution. Model's output $q_{m}$ is what is used to approximate $p_d$. 
+
+<p>
+$$
+\begin{aligned}
+D_{KL}(p_d \| q_m) &= -\sum_{i=1}^{n} p_d(x_i)\cdot\log q_m(x_i) + \sum_{i=1}^{n} p_d(x_i)\cdot\log p_d(x_i) \\
+&= \mathbb{E}_{x \sim p_d(x)} [-\log q_m(x)] - \mathbb{E}_{x \sim p_d(x)} [-\log p_d(x)] \\
+&= H(p_d, q_m) - H(p_d).
+\end{aligned}
+$$
+</p>
+
+$H(p_d)$ is data entropy, thus a constant. Thus minimizing KL divergence is equivalent to maximizing cross entropy. 
+
+
+
 ## AE
 An autoencoder has two main parts, encoder and decoder. Encoder compresses the input data into a smaller, lower-dimensional representation called a latent vector. For example, a 784-dimensional image (like a 28x28 pixel MNIST image) might be compressed into a 32-dimensional vector. Decoder attempts to reconstruct the original input from the encoded (compressed) representation. This process in illustrated in the figure below.
 <p align="center">
@@ -78,9 +169,12 @@ $$
 
 If we explicitly model the $p(z)$, we might be able to get a good generative model which is the variational autoencoder. In practice, this is unrealistic because $z$ is in a big space, it's very hard to sample $z_i$ which is strongly correlated to $x_i$.
 
+The solution is to put constaints on $z$'s distribution. Let's assume $p(z)$ follows a normal distribution. 
+
+In practice we use encoder to approximate the posterior $p_{\theta}(z | x_i)$, the approximate distribution is $q_{\phi}(z \mid x)$. 
 
 
-The solution is to get a normal distribution for the posterior $p_{\theta}(z | x_i)$. The process is as follows: 
+Then the generation process is as follows: 
 1. Feed data sample $x_i$ to encoder and get posterior $p_{\theta}(z | x_i)$, which is a normal distribution
 
 $$
@@ -111,16 +205,73 @@ Now that we know each element in the latent vector is a normal distribution, nor
 
 
 
-### Evidence Lower Bound
-Using MLE to maximize $log(p(X))$, we have 
+
+
+### VAE Loss
+
+From MLE perspective, to get a generative model, we want to learn a model to maximize
+
+<p>
+$$
+\begin{aligned}
+L(\theta) &= \log \prod_{x \in X} p(x; \theta) \\
+&= \sum_{x \in X} \log p(x; \theta)
+\end{aligned}
+$$
+</p>
+
+To simplify, we can consider single example case. Considering the latent variable $z$, we can rewrite the above as a joint probability:
+$$
+\log p(x; \theta) = \log \sum_z p(x, z; \theta)
+$$
+
+Using Jensen inequality, we can have:
+
+<p>
+$$
+\begin{aligned}
+\log p(x; \theta) &= \log \sum_z p(x, z; \theta) \\
+&=\log \sum_z Q(z) \frac{p(x, z; \theta)}{Q(z)} \\
+&=\log E_{z \in Q(z)} \left[ \frac{p(x, z; \theta)}{Q(z)} \right] \\
+&\geq E_{z \in Q(z)} \left[ \log \frac{p(x, z; \theta)}{Q(z)} \right]
+\end{aligned}
+$$
+</p>
+
+This is what is called Evidence Lower Bound (ELBO). 
+
+Since encoder approximates the posterior, we can use $q(z|x; \phi)$ to replace the $Q(z)$ in the above equation. 
+
+<p>
+$$
+\begin{aligned}
+ELBO(\theta, \phi) &= E_{z \in Q(z)} \left[ \log \frac{p(x, z; \theta)}{Q(z)} \right] \\
+&= E_{z \in q(z|x; \phi)} \left[ \log \frac{p(x, z; \theta)}{q(z|x; \phi)} \right] \\
+&= E_{z \in q(z|x)} \left[ \log \frac{p(x|z; \theta) \times p(z)}{q(z|x; \phi)} \right] \\
+&= E_{z \in q(z|x)} \left[ \log p(x|z; \theta) \right] + E_{z \in q(z|x; \phi)} \left[ \log \frac{p(z)}{q(z|x; \phi)} \right] \\
+&= E_{z \in q(z|x)} \left[ \log p(x|z; \theta) \right] - D_{KL}(q(z | x; \phi) || p(z)) \\
+\end{aligned}
+$$
+</p>
+
+$E_{z \in q(z|x)} \left[ \log p(x|z; \theta) \right]$ is called reconstruction loss and is usually computed by sampling from $q(z|x; \phi)$
+
+$$
+E_{z \in q(z|x)} \left[ \log p(x|z; \theta) \right] \approx \frac{1}{m} \sum_{i=1}^{m} \log p (X | z_i; \theta)
+$$
+
+In practice, $m$ is often chosen to be 1. When variance is a constant, the MLE becomes MSE. This part can use MSE to compute.
+
+
+Similarly for continuous variable we can also use MLE to maximize $log(p(X))$, we have 
 
 $$
 \begin{aligned}
 \log p_\theta(X) 
-&= \int_z q_\phi(z \mid X) \log p_\theta(X) \, dz \quad  \\\
-&= \int_z q_\phi(z \mid X) \log \frac{p_\theta(X, z)}{p_\theta(z \mid X)} \, dz \quad  \\\
-&= \int_z q_\phi(z \mid X) \log \left( \frac{p_\theta(X, z)}{q_\phi(z \mid X)} \cdot \frac{q_\phi(z \mid X)}{p_\theta(z \mid X)} \right) \, dz \\\
-&= \int_z q_\phi(z \mid X) \log \frac{p_\theta(X, z)}{q_\phi(z \mid X)} \, dz + \int_z q_\phi(z \mid X) \log \frac{q_\phi(z \mid X)}{p_\theta(z \mid X)} \, dz \\\
+&= \int_z q_\phi(z \mid X) \log p_\theta(X)  dz \quad  \\\
+&= \int_z q_\phi(z \mid X) \log \frac{p_\theta(X, z)}{p_\theta(z \mid X)}  dz \quad  \\\
+&= \int_z q_\phi(z \mid X) \log \left( \frac{p_\theta(X, z)}{q_\phi(z \mid X)} \cdot \frac{q_\phi(z \mid X)}{p_\theta(z \mid X)} \right)  dz \\\
+&= \int_z q_\phi(z \mid X) \log \frac{p_\theta(X, z)}{q_\phi(z \mid X)} \, dz + \int_z q_\phi(z \mid X) \log \frac{q_\phi(z \mid X)}{p_\theta(z \mid X)}  dz \\\
 &= \ell(p_\theta, q_\phi) + D_{\mathrm{KL}}(q_\phi \| p_\theta) \\\
 &\geq \ell(p_\theta, q_\phi) \quad 
 \end{aligned}
@@ -134,7 +285,7 @@ Here $q_\phi(z \mid X)$ is the posterior.
 A VAE can encode an image into a vector that follows a standard Gaussian distribution. The reason for making the vector follow a standard Gaussian distribution is to facilitate random sampling. Note that the vectors encoded by a VAE are continuous vectors, meaning each dimension of the vector is a floating-point number. If you slightly change one dimension of the vector, the decoder can still recognize the vector and generate an image that is very similar to the one corresponding to the original vector.
 
 
-Contrary to VAE, in VQ-VAE, the latent representation is discrete. The intution is that in nature, where is male and female, limited number of colors etc.
+Contrary to VAE, in VQ-VAE, the latent representation is discrete. The intuition is that in nature, where is male and female, limited number of colors etc.
 <p align="center">
     <img alt="Autoencoder" src="images/vq.png" width="100%" height=auto/> 
     <em>Figure 3. VQ-VAE </em>
@@ -195,3 +346,6 @@ That’s how VQ-VAE restores the generative power: instead of sampling from a Ga
 3. https://zhuanlan.zhihu.com/p/348498294
 4. https://zhuanlan.zhihu.com/p/34998569
 5. https://zhuanlan.zhihu.com/p/2433292582
+6. https://zhuanlan.zhihu.com/p/425693597
+7. https://zhuanlan.zhihu.com/p/719968411
+<!-- https://zhuanlan.zhihu.com/p/346518942 -->
