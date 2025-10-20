@@ -233,6 +233,7 @@ The logic of Expert Parallelism is shown in the figure below: each EP rank conta
 14. https://github.com/NVIDIA/NeMo
 15. https://github.com/hpcaitech/ColossalAI/tree/main/examples/language/openmoe
 16. https://github.com/stanford-futuredata/megablocks
+17. [Demons in the Detail: On Implementing Load Balancing Loss for Training Specialized Mixture-of-Expert Models](https://arxiv.org/abs/2501.11873)
 <!-- [6] https://zhuanlan.zhihu.com/p/674751021 -->
 <!-- https://zhuanlan.zhihu.com/p/1893328591913189877 -->
 <!-- https://zhuanlan.zhihu.com/p/18565423596 -->
