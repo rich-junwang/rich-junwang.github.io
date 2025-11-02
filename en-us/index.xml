@@ -13,7 +13,11 @@
       <pubDate>Sat, 05 Apr 2025 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/llm_inference/pd_disaggregation/</guid>
-      <description>Inference</description>
+      <description>&lt;h2 id=&#34;what-is-pd-disaggregation&#34;&gt;What is PD Disaggregation&lt;/h2&gt;
+&lt;p&gt;Prefilling decoding disaggregation refers to the process that decouples the prefilling phase and decoding phase in LLM inference. LLM Inference has two stages, prefilling and decoding as we&amp;rsquo;ve discussed before. LLM applications often emphasize individual latency for each phase: time to first token (TTFT) for the prefilling phase and time per output token (TPOT) of each request for the decoding phase. To provide good customer experience, different application optimizes different target. For instance, real-time chatbot system prioritizes low TTFT while DeepResearch type of application wants to reduce the TPOT such that the whole generation time would be shorter.&lt;/p&gt;
+&lt;p&gt;Decoupling the prefilling and decoding offers the flexibility to optimize each stage in decoding, thus has shown improving GPU utilization.&lt;/p&gt;
+&lt;h2 id=&#34;kv-cache-store&#34;&gt;KV Cache Store&lt;/h2&gt;
+&lt;p&gt;Now we understand that why we need to separate the two stages of prefilling and decoding. In practice, we&amp;rsquo;ll have to maintain two full set of models on different GPUs. After we compute the prefix, we transfer it to the decoding stage. The two stages can be seen as the producer and consumer. Like microservice system where we decouple client requests with backend services using message queue, here we can use KV cache store as the intermediate layer.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -22,7 +26,15 @@
       <pubDate>Tue, 18 Feb 2025 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/moe_models/</guid>
-      <description>MoE Models</description>
+      <description>&lt;p&gt;The biggest lesson we&amp;rsquo;ve learnt in the past few years is that scaling is the key for model performance. Scaling without sacrificing inference speed makes Mixture of Export (MoE) models very appealing for large language model training. Today we&amp;rsquo;ll closely examine the Mixtral model to study MoE models.&lt;/p&gt;
+&lt;h3 id=&#34;introduction&#34;&gt;Introduction&lt;/h3&gt;
+&lt;p&gt;Most of today&amp;rsquo;s MoE model are following an architecture that is similar to the Switch Transformer [1] which is shown below:&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+    &lt;img alt=&#34;MoE model&#34; src=&#34;images/moe.png&#34; width=&#34;80%&#34; height=auto/&gt; 
+    Figure 1. Switch MoE Model
+    &lt;br&gt;
+&lt;/p&gt;
+&lt;p&gt;In these models, the sparsity lies in the feed-forward layer for the Transformer block. Switch is using one expert out of 4 experts for each token. For models like Mixtral/Grok both are using two experts out of 8 experts. Router dynamically chooses experts for each token. Can we route different samples to different experts? The answer is yes, however, coarse-grained design (giving less flexibility for model to learn the pattern) usually leads to worse performance.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -31,7 +43,25 @@
       <pubDate>Sun, 05 Jan 2025 12:01:14 -0700</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/model_distillation/</guid>
-      <description>Knowledge distillation</description>
+      <description>&lt;h2 id=&#34;why-distillation-works&#34;&gt;Why Distillation Works&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;It basically reweights the dataset to focus on tasks that teacher model is confident on, which reduces weight on data points that are too hard/impossible, which improves optimization.&lt;/li&gt;
+&lt;li&gt;Large model is more sample-efficient, meaning that it&amp;rsquo;s easier for them to find &lt;code&gt;shortcuts&lt;/code&gt; in the circuits. Online learning could help small model to generalize.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;forward-kl-and-reverse-kl&#34;&gt;Forward KL and Reverse KL&lt;/h2&gt;
+&lt;p&gt;KL divergence of two distributions $P$ and $Q$ is defined as:
+$$
+D_{KL}(P | Q) = \mathbb{E}_{x \sim P}\left[\log \frac{P(X)}{Q(X)}\right]
+$$&lt;/p&gt;
+&lt;p&gt;In general knowledge distillation, $P$ is the output of the teacher model and does not have trainable parameters, while $Q$ is the output of the student model and contains parameters that can be optimized.
+Because the KL Divergence is not symmetric, thus forward KL is
+$$
+\arg\min_\theta D_{\mathrm{KL}}(P | Q_\theta)
+$$&lt;/p&gt;
+&lt;p&gt;Reverse KL is
+$$
+\arg\min_\theta D_{\mathrm{KL}}(Q_\theta | P)
+$$&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -40,7 +70,21 @@
       <pubDate>Sun, 05 Jan 2025 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/llm_inference/entropy_decoding/</guid>
-      <description>Decoding</description>
+      <description>&lt;h2 id=&#34;entropy-collapsing&#34;&gt;Entropy Collapsing&lt;/h2&gt;
+&lt;p&gt;It&amp;rsquo;s common to see entropy collapsing phenomenon in GRPO based RL model training: the entropy of token generation of policy model decreases dramatically as training progresses.&lt;/p&gt;
+&lt;p&gt;Before diving deep into the topic, let&amp;rsquo;s first take a look at the entropy and varentropy of LLM generation process. Entropy measures how confident the model is when generating a specific token. It&amp;rsquo;s calculated at each generation step. Low entropy indicates that the model is certain about next token, i.e. the probabilities are concentrated on a few tokens.&lt;/p&gt;
+&lt;p&gt;$$
+H(X) = -\sum_{x \in \mathcal{X}} P(x) \log P(x)
+$$&lt;/p&gt;
+&lt;p&gt;Another concept is varentropy. Variance of (− log p(X)) of the discrete random variable X is called
+the varentropy. Varentropy is a measure of how the uncertainty varies across different tokens in generation. Mathematically the varentropy is defined as&lt;/p&gt;
+&lt;p&gt;$$
+\begin{aligned}
+V(X) &amp;amp;= \text{Var}(-\log P(X))  \\
+&amp;amp;= \sum_{x \in \mathcal{X}} P(x) \left(-\log_2 P(x) - H(X)\right)^2 \\
+&amp;amp;= \mathbb{E}[(-\log P(X))^2] - (H(X))^2
+\end{aligned}
+$$&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -49,7 +93,141 @@
       <pubDate>Sat, 05 Oct 2024 12:01:14 -0700</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/llm_inference/vllm/</guid>
-      <description>VLLM</description>
+      <description>&lt;h2 id=&#34;vllm-inference-modes&#34;&gt;vLLM Inference Modes&lt;/h2&gt;
+&lt;p&gt;vLLM has two inference modes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;offline batch mode: mostly for offline model evaluation, large-scale, high-throughput inference where latency is less critical&lt;/li&gt;
+&lt;li&gt;online serving mode: Real-time applications like chatbots or APIs where latency is important.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The interface to these two approaches are shown in the diagram below.&lt;/p&gt;
+&lt;div align=&#34;center&#34;&gt; &lt;img src=images/interface.png style=&#34;width: 100%; height: auto;&#34;/&gt; &lt;/div&gt;
+&lt;h3 id=&#34;offline-inference&#34;&gt;Offline Inference&lt;/h3&gt;
+&lt;p&gt;Simpler offline batch inference example:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# batch prompts&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;prompts &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Hello, my name is&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;           &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;The president of the United States is&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;           &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;The capital of France is&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;           &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;The future of AI is&amp;#34;&lt;/span&gt;,]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# sampling parameters&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sampling_params &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; SamplingParams(temperature&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8&lt;/span&gt;, top_p&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.95&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# load model&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;llm &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; LLM(model&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;facebook/opt-125m&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Inference&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;outputs &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; llm&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;generate(prompts, sampling_params)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; output &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; outputs:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    prompt &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; output&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;prompt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    generated_text &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; output&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;outputs[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Prompt: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;prompt&lt;span style=&#34;color:#e6db74&#34;&gt;!r}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;, Generated text: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;generated_text&lt;span style=&#34;color:#e6db74&#34;&gt;!r}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;A data parallel (SPMD style) offline inference example.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; os
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; vllm &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; LLM, SamplingParams
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; vllm.utils &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; get_open_port
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;GPUs_per_dp_rank &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;DP_size &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;(dp_size, dp_rank, dp_master_ip, dp_master_port, GPUs_per_dp_rank):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    os&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;environ[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;VLLM_DP_RANK&amp;#34;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; str(dp_rank)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    os&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;environ[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;VLLM_DP_SIZE&amp;#34;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; str(dp_size)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    os&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;environ[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;VLLM_DP_MASTER_IP&amp;#34;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dp_master_ip
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    os&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;environ[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;VLLM_DP_MASTER_PORT&amp;#34;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; str(dp_master_port)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# set devices for each dp_rank&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    os&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;environ[&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;CUDA_VISIBLE_DEVICES&amp;#34;&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;,&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;join(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        str(i) &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(dp_rank &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; GPUs_per_dp_rank, (dp_rank &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                              GPUs_per_dp_rank))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# Sample prompts.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    prompts &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Hello, my name is&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;The president of the United States is&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;The capital of France is&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;The future of AI is&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# with DP, each rank should process different prompts.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# usually all the DP ranks process a full dataset,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# and each rank processes a different part of the dataset.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    promts_per_rank &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; len(prompts) &lt;span style=&#34;color:#f92672&#34;&gt;//&lt;/span&gt; dp_size
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    start &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; dp_rank &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; promts_per_rank
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    end &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; start &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; promts_per_rank
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    prompts &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; prompts[start:end]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; len(prompts) &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# if any rank has no prompts to process,&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;# we need to set a placeholder prompt&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        prompts &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Placeholder&amp;#34;&lt;/span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;DP rank &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;dp_rank&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; needs to process &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;len(prompts)&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; prompts&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# Create a sampling params object.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# since we are doing data parallel, every rank can have different&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# sampling params. here we set different max_tokens for different&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# ranks for demonstration.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    sampling_params &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; SamplingParams(temperature&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                     top_p&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.95&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                     max_tokens&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;16&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; (dp_rank &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# Create an LLM.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    llm &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; LLM(model&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;ibm-research/PowerMoE-3b&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              tensor_parallel_size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;GPUs_per_dp_rank,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              enforce_eager&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              enable_expert_parallel&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    outputs &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; llm&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;generate(prompts, sampling_params)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#75715e&#34;&gt;# Print the outputs.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; output &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; outputs:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        prompt &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; output&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;prompt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        generated_text &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; output&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;outputs[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;text
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        print(&lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;DP rank &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;dp_rank&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;, Prompt: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;prompt&lt;span style=&#34;color:#e6db74&#34;&gt;!r}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;, &amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#e6db74&#34;&gt;f&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Generated text: &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;{&lt;/span&gt;generated_text&lt;span style=&#34;color:#e6db74&#34;&gt;!r}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; __name__ &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;__main__&amp;#34;&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; multiprocessing &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; Process
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dp_master_ip &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;127.0.0.1&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    dp_master_port &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; get_open_port()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    procs &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; []
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(DP_size):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        proc &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Process(target&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;main,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                       args&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;(DP_size, i, dp_master_ip, dp_master_port,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                             GPUs_per_dp_rank))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        proc&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;start()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        procs&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;append(proc)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    exit_code &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; proc &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; procs:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        proc&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;join()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; proc&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exitcode:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            exit_code &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; proc&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exitcode
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    exit(exit_code)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;api-server&#34;&gt;API Server&lt;/h3&gt;
+&lt;p&gt;The API server utilizes Uvicorn to deploy FastAPI application.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Network for Cluster</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/cluster/</link>
+      <pubDate>Sun, 08 Sep 2024 12:01:14 -0700</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/cluster/</guid>
+      <description>&lt;h3 id=&#34;test-network-bandwidth&#34;&gt;Test Network Bandwidth&lt;/h3&gt;
+&lt;p&gt;First step to verify instance networking. For instance, AWS P4 is supposed to have 400G networking.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# on server node 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;iperf3 -s
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# on server node 2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;iperf3 -c node_1_ip
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# for high performance compute cluster we can do&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# -O 3, ignore first 3 seconds&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# -P 32 use 32 parallel streams&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# -t 30, run for 30 seconds&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;iperf3 -c node_1_ip -P &lt;span style=&#34;color:#ae81ff&#34;&gt;32&lt;/span&gt; -O &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt; -t &lt;span style=&#34;color:#ae81ff&#34;&gt;30&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
     </item>
     
     <item>
@@ -58,7 +236,35 @@
       <pubDate>Fri, 09 Aug 2024 12:01:14 -0700</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/asyncio/</guid>
-      <description>Async concurrency</description>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;AysncIO in python has two keywords: async/await. Many people who first encounter async concept might wonder isn&amp;rsquo;t that python can only have one thread in execution given the constraint of GIL?&lt;/p&gt;
+&lt;p&gt;Indeed, ayncio is bound by GIL and it can&amp;rsquo;t run more than one task at any moment as is shown below. This means that if another thread needs to run, the ownership of the GIL must be passed from the current executing thread to the other thread. This is what is called preemptive concurrency. This kind of switching is expensive when there are lots of threads.&lt;/p&gt;
+&lt;p&gt;The core concept in asyncio is coroutine. asyncio has its own concurrency synchronization through coroutine. It coordinates task switch with little cost. Simply put, python emulates concurrency in one thread through coroutine using event loop.&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+    &lt;img alt=&#34;Thread and coroutine&#34; src=&#34;images/image.png&#34; width=&#34;80%&#34;/&gt;
+    &lt;em&gt;Thread and coroutine&lt;/em&gt;
+    &lt;br&gt;
+&lt;/p&gt;
+&lt;p&gt;Coroutine style synchronization still has its overhead, why we would bother switching tasks? The reason is behind the io part in asyncio. Think about that you have the following three tasks:&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Ray Cluster</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/ray_cluster/</link>
+      <pubDate>Thu, 08 Aug 2024 12:01:14 -0700</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/ray_cluster/</guid>
+      <description>&lt;h2 id=&#34;basics&#34;&gt;Basics&lt;/h2&gt;
+&lt;p&gt;Today let&amp;rsquo;s talk about using kuberay operator to build ray cluster for large scale reinforcement learning training.&lt;/p&gt;
+&lt;p&gt;We have to configure three main roles of a ray cluster, which are the head pod, the worker pods, and the shared file system that will be attached to both the head and worker pods.&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;kuberay: &lt;a href=&#34;https://github.com/ray-project/kuberay&#34;&gt;https://github.com/ray-project/kuberay&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://kubernetes.io/docs/reference/kubectl/cheatsheet/&#34;&gt;https://kubernetes.io/docs/reference/kubectl/cheatsheet/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://catalog.workshops.aws/sagemaker-hyperpod-eks/en-US&#34;&gt;https://catalog.workshops.aws/sagemaker-hyperpod-eks/en-US&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://catalog.workshops.aws/sagemaker-hyperpod/en-US&#34;&gt;https://catalog.workshops.aws/sagemaker-hyperpod/en-US&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/aws-samples/aws-do-ray&#34;&gt;https://github.com/aws-samples/aws-do-ray&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</description>
     </item>
     
     <item>
@@ -67,7 +273,11 @@
       <pubDate>Mon, 05 Aug 2024 00:18:23 -0700</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/rl/verl/</guid>
-      <description>RL training framework</description>
+      <description>&lt;h2 id=&#34;hybrid-controller-system&#34;&gt;Hybrid Controller System&lt;/h2&gt;
+&lt;p&gt;RL training can be modeled as a dataflow, where each node represents computation of a neural network (NN) and each edge denotes data dependencies between the NNs. For instance, actor, critic, reward model, reference model, rollout engine each can be seen as a node. The data transfer in-between is the edge. This is an important concept as later when we talk about intra-node computation and inter-node dataflow, the &lt;code&gt;node&lt;/code&gt; here refers to theses models, not a physical machine we usually talk about in distributed training setting.&lt;/p&gt;
+&lt;p&gt;The reason we talk about this is because we have to understand why veRL talks about single-controller and multi-controller system.
+Single-controller, simply put, is one process that coordinates all the workflow as opposed to multi-controller is multiple processes each manages its own workflow.&lt;/p&gt;
+&lt;p&gt;Now it becomes obvious that if we use multi-controller system to coordinate dataflow from rollout model to critic, reward model etc, it could be complicated because it&amp;rsquo;s multi-processes communication. Thus, for the dataflow, we want to have single-controller for inter-node data exchange. On the contrary, for modern model training and model inference, people tend to use single-process-multiple-data (SPMD) approach, which is a multi-controller approach. In the ideal case, if both training engine and rollout engine utilize SPMD, parameter update from training engine to rollout engine can be done in parallel from multiple copies which can greatly increase system robustness. vLLM recently added SPMD inference [2].&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -76,7 +286,23 @@
       <pubDate>Fri, 05 Jul 2024 00:18:23 -0700</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/rl/ppo/</guid>
-      <description>Proximal Policy Optimization</description>
+      <description>&lt;p&gt;In this blog, I&amp;rsquo;ll go through the theory (simplified version) of PPO algorithm and try to code it from scratch.&lt;/p&gt;
+&lt;h2 id=&#34;basics&#34;&gt;Basics&lt;/h2&gt;
+&lt;h3 id=&#34;monte-carlo-approximation&#34;&gt;Monte Carlo Approximation&lt;/h3&gt;
+&lt;p&gt;Distributions of random variables in reality are mostly unknown. Sampling-based methods are extensively used in practice becaue of its ease of use and the generality where they can be applied. One of the fundamental problems is to calculate the expectation of a random variable, which can be expressed as&lt;/p&gt;
+&lt;p&gt;$$
+\mathbb{E_{x\sim p(x)}}\left(f(x)\right) = \int{f(x)p(x)} dx
+$$
+when it&amp;rsquo;s a continuous random variable with a probability density function of $p$, or
+$$
+\mathbb{E}\left(f(x)\right) = \sum_x{f(x)p(x)}
+$$
+when it&amp;rsquo;s a discrete random variable with probability mass function of $p$.
+Then the Monte Carlo approximation says that the expectation is:
+$$
+\mathbb{E}\left(f(x)\right) \approx \frac{1}{N}\sum_{i=1}^{N}{f(x_i)}
+$$&lt;/p&gt;
+&lt;p&gt;assuming that the $x_i$ here is the i.i.d samples from the distribution $p(x)$. So we say that Monte Carlo Approximation is to use one or more samples to calculate the expectation of a distribution.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -85,7 +311,56 @@
       <pubDate>Tue, 18 Jun 2024 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/diffusion/</guid>
-      <description>Dive into diffusion</description>
+      <description>&lt;p&gt;Diffusion is the process where we gradually convert a know distribution into a target distribution and the corresponding reverse process. Fortunately, people have proved that for gaussian distributions, we can convert data to noise and noise to data using the same functional form.&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+    &lt;img alt=&#34;gpu memory&#34; src=&#34;images/diffusion_process.png&#34; width=&#34;80%&#34; height=auto/&gt; 
+    &lt;em&gt;Figure 1. diffusion process&lt;/em&gt;
+    &lt;br&gt;
+&lt;/p&gt;
+&lt;h2 id=&#34;forward-process&#34;&gt;Forward Process&lt;/h2&gt;
+&lt;p&gt;As is shown in the figure above, there are two processes in diffusion:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Forward diffusion process: we slowly and iteratively add noise to the images&lt;/li&gt;
+&lt;li&gt;Reverse diffusion process: we iteratively perform the denoising in small steps starting from a noisy image to convert it back to original form.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In the forward process (diffusion process), in each step, gaussian noise is added according to a variance schedule $ \beta_1, \dotsb, \beta_T $
+$$
+q_\theta(x_t|x_{t-1}) = \mathcal{N}(x_t; \sqrt{(1-\beta_t)}x_{t-1}, \beta_t\mathbf{I})
+$$
+And it&amp;rsquo;s a Markov chain process, so
+$$
+q_\theta(x_{1:T}|x_0) = \prod_{t=1}^{T}q(x_t|x_{t-1})
+$$
+However, in implementation the above formulation has a problem because doing sequential sampling will result in inefficient forward process. The authors defined the following items:
+$$
+\alpha_t = 1 - \beta_t \\
+\bar{\alpha} = \prod_{s=1}^t\alpha_s
+$$
+Then we have
+$$
+q_\theta(x_t|x_0) = \mathcal{N}(x_t; \sqrt{\bar{\alpha}}x_0, (1 - \bar{\alpha_t})\mathbf{I})
+$$
+This process is called reparameterization. This allows us to directly sample $x_t$ from $x_0$ using a single sample of Gaussian noise:&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>JAX</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/jax/</link>
+      <pubDate>Tue, 18 Jun 2024 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/jax/</guid>
+      <description>&lt;h2&gt;&lt;/h2&gt;
+&lt;p&gt;With the growing complexity of ML tasks execution across hardware and frameworks, the open community has come up with the OpenXLA project.&lt;/p&gt;
+&lt;p&gt;PJRT (Portable JAX Runtime) is a runtime that executes JAX programs using XLA (Accelerated Linear Algebra). PJRT is very flexible: you can run your programs on CPUs, GPUs, or even TPUs without having to rewrite your code.&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;!-- 1. https://zhuanlan.zhihu.com/p/672327290 --&gt;
+&lt;!-- 2. https://github.com/OpenRL-Lab/Ray_Tutorial/ --&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;https://rise.cs.berkeley.edu/blog/ray-tips-for-first-time-users/&#34;&gt;https://rise.cs.berkeley.edu/blog/ray-tips-for-first-time-users/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/1712.05889&#34;&gt;Ray: A Distributed Framework for Emerging AI Applications&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/dmatrix/ray-core-tutorial&#34;&gt;https://github.com/dmatrix/ray-core-tutorial&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.google.com/document/d/1tBw9A4j62ruI5omIJbMxly-la5w4q_TjyJgJL_jN2fI/preview?tab=t.0#heading=h.iyrm5j2gcdoq&#34;&gt;Ray Whitepaper&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</description>
     </item>
     
     <item>
@@ -94,7 +369,33 @@
       <pubDate>Tue, 18 Jun 2024 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/loss/loss_reduction/</guid>
-      <description>Losses in ML</description>
+      <description>&lt;p&gt;The devil is in the details. Many times, when model doesn&amp;rsquo;t work as expected, it&amp;rsquo;s most likely there are nuances that are not taken care of in implementation. Today we talk about a common issue in LLM implementations &amp;ndash; loss reduction.&lt;/p&gt;
+&lt;p&gt;For multi-turn chat mode data, the data could contain multiple roles and one training instance could have multiple sessions.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-json&#34; data-lang=&#34;json&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;messages&amp;#34;&lt;/span&gt;: [
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;role&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;system&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;content&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;You&amp;#39;re a helpful assistant!&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    },
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;role&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;user&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;content&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;When was George Washington born?&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    },
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;role&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;assistant&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;content&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;George Washington was born on February 22, 1732.&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    },
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;role&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;user&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;content&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;When he was the president?&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    },
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;role&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;assistant&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#34;content&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;George Washington served as the first President of the United States from April 30, 1789 to March 4, 1797.&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;For SFT training, we can formulate the training data into two kinds of format:&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -103,7 +404,15 @@
       <pubDate>Tue, 18 Jun 2024 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/ray/</guid>
-      <description>Async Ops in Ray</description>
+      <description>&lt;h2 id=&#34;promise-and-future&#34;&gt;Promise and Future&lt;/h2&gt;
+&lt;p&gt;Before diving deep into Ray, I&amp;rsquo;ll first give a brief introduction to the async ops in programming in C++.
+An asynchronous call delegates time-consuming or blocking tasks to other threads, thereby ensuring the current thread&amp;rsquo;s responsiveness. Concretely, it involves the current thread delegating a task to another thread for execution. The current thread continues executing its own tasks without waiting for the delegated task&amp;rsquo;s result. The result of the delegated task is only required at some point in the future when it is needed.&lt;/p&gt;
+&lt;p&gt;An asynchronous operation is created, executed by another thread, and upon completion, returns a result. The creator of the asynchronous call retrieves this result when needed. To meet these requirements, C++ provides std::future and std::promise. The relation is shown in the figure below.&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+    &lt;img alt=&#34;Promise and future&#34; src=&#34;images/image.png&#34; width=&#34;90%&#34;/&gt;
+    &lt;em&gt;Promise and future: worker gets the promise instance and main driver gets the future&lt;/em&gt;
+    &lt;br&gt;
+&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -112,7 +421,10 @@
       <pubDate>Sat, 18 May 2024 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/multimodality/vlm/</guid>
-      <description>Multimodality</description>
+      <description>&lt;h2 id=&#34;vit&#34;&gt;ViT&lt;/h2&gt;
+&lt;p&gt;ViT (Vision Transformer) flattens the input image into a 2D sequence of patches (e.g., 16x16), and then uses a linear projection layer to convert each patch into a fixed-length feature vector—similar to word embeddings in natural language processing. Additionally, each patch is assigned a positional index, which is mapped to a positional vector through a positional embedding layer. The patch embeddings and positional embeddings are summed together to form the input to the Transformer encoder, resembling the design of the BERT model.&lt;/p&gt;
+&lt;div align=&#34;center&#34;&gt; &lt;img src=images/vit.png style=&#34;width: 70%; height: auto;&#34;/&gt; Figure 1. ViT &lt;/div&gt;
+&lt;p&gt;ViT has a BERT encoder based architecture and it uses a learnable [CLS] token to obtain a representation of the entire image, which is then passed through a fully connected layer to serve downstream classification tasks. When pretrained on large-scale datasets and transferred to medium- or small-scale image recognition benchmarks (e.g., ImageNet, CIFAR-100, VTAB), ViT achieves better performance than CNN-based models, while significantly reducing computational resource requirements during training.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -121,7 +433,40 @@
       <pubDate>Sat, 18 May 2024 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/multimodality/vqvae/</guid>
-      <description>Multimodality</description>
+      <description>&lt;h2 id=&#34;basics&#34;&gt;Basics&lt;/h2&gt;
+&lt;p&gt;Here we have a short recap about KL-divergence. The materials are mostly from [6].&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Information&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Information is defined as the log probability of event
+$$
+I(p) = -logp(x)
+$$&lt;/p&gt;
+&lt;p&gt;Minus sign here is to get positive value. If an event is rare (low p), then it carries a lot of information when it happens.&lt;/p&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;Entropy&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Shannon entropy is the average of information - the expectation of $I(p)$ with respect to the distribution $p(x)$
+$$
+\begin{aligned}
+H(p) &amp;amp;= \mathbb{E}_{x \sim P}[I(p)] \\
+&amp;amp;= \sum p(x)I(p) \\
+&amp;amp;= -\sum p(x)\log p(x)
+\end{aligned}
+$$&lt;/p&gt;
+&lt;p&gt;Shannon entropy is the average(expected) information under the same distribution.&lt;/p&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;Cross-Entropy&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;The average of $I(q)$ with respect to the distribution $p(x)$
+$$
+\begin{aligned}
+H(p, q) &amp;amp;= \mathbb{E}_{x \sim P}[I(q)] \\
+&amp;amp;= \sum p(x)I(q) \\
+&amp;amp;= -\sum p(x)\log q(x)
+\end{aligned}
+$$&lt;/p&gt;
+&lt;p&gt;Cross entropy is the average(expected) information under the different distribution.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -130,7 +475,8 @@
       <pubDate>Sun, 05 May 2024 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/triton/</guid>
-      <description>Triton and cuda</description>
+      <description>&lt;p&gt;Cuda programming is all about multi-threading. Multiple threads create a thread block. Thread block is executed by the stream multiprocessor (SM, the SM-0, SM-1 etc shown below). Threads within the same block has a shared memory which is the shared memory below. Note that L1 cache and shared memory are different. The main difference between shared memory and the L1 is that the contents of shared memory are managed by user code explicitly, whereas the L1 cache is automatically managed. Shared memory is also a better way to exchange data between threads in a block with predictable timing.&lt;/p&gt;
+&lt;p&gt;Whenever shared memory needs to fetch data from global memory, it first checks whether the data is already in the L2 cache. If it is, then there&amp;rsquo;s no need to access global memory. The higher the probability of a cache hit, the higher the so-called memory hit rate. One of the goals in CUDA programming is to maximize this hit rate as much as possible.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -139,7 +485,14 @@
       <pubDate>Tue, 09 Apr 2024 12:01:14 -0700</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/pipe/</guid>
-      <description>Python</description>
+      <description>&lt;h2 id=&#34;1-multiprocess-communication-in-python&#34;&gt;1. Multiprocess Communication in Python&lt;/h2&gt;
+&lt;p&gt;In multiprocessing, a pipe is a connection between two processes in Python. It is used to send data from one process which is received by another process.&lt;/p&gt;
+&lt;p&gt;Under the covers, a pipe is implemented using a pair of connection objects, provided by the multiprocessing.connection.Connection class.&lt;/p&gt;
+&lt;p&gt;Creating a pipe will create two connection objects, one for sending data and one for receiving data. A pipe can also be configured to be duplex so that each connection object can both send and receive data.&lt;/p&gt;
+&lt;p&gt;The Pipe() function returns a pair of connection objects connected by a pipe which by default is duplex (two-way).&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;parent_conn, child_conn &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Pipe(&lt;span style=&#34;color:#66d9ef&#34;&gt;True&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;That means both endpoints &lt;code&gt;parent_conn&lt;/code&gt; and &lt;code&gt;child_conn&lt;/code&gt; have methods &lt;code&gt;recv()&lt;/code&gt; and &lt;code&gt;send()&lt;/code&gt;. This is called duplex. Think of it like a telephone call:&lt;/p&gt;
+&lt;p&gt;You need two phones (even though each phone can both speak and listen). When you speak into your phone, the sound comes out of the other phone. Both phones are &amp;ldquo;bidirectional&amp;rdquo; but you still need two separate devices.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -148,7 +501,12 @@
       <pubDate>Fri, 05 Apr 2024 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/mcts/</guid>
-      <description>MCTS</description>
+      <description>&lt;p&gt;In this blog, we talk about Monte Carlo Tree Search, the algorithm behind very popular AlphaZero.&lt;/p&gt;
+&lt;h3 id=&#34;duel-process&#34;&gt;Duel Process&lt;/h3&gt;
+&lt;p&gt;Human cognition has a duel process model which suggests that human reasoning has two modes: System 1 is a fast, unconscious and automatic mode of thought,like intuition. System 2 is a slow, conscious, explicit and rule-based mode of reasoning.&lt;/p&gt;
+&lt;p&gt;Comparing with how LLM works, we can think about that token-level generation (greedy decoding) is like System 1 mode, and agent planning, lookahead and backtracks is the System 2 mode. MCTS is the algorithm we can leverage to achieve the system 2 deliberation through exploration, proposing solution and evaluation.&lt;/p&gt;
+&lt;h3 id=&#34;mcts&#34;&gt;MCTS&lt;/h3&gt;
+&lt;p&gt;The main concept of MCTS is a search. Search is tree traversals of the game tree. Single traversal is a path from a root node (current game state) to a node that is not fully expanded. Node being not-fully expanded means at least one of its children is unvisited, not explored. Once not fully expanded node is encountered, one of its unvisited children is chosen to become a root node for a single playout/simulation. The result of the simulation is then propagated back up to the current tree root updating game tree nodes statistics. Once the search (constrained by time or computational power) terminates, the move is chosen based on the gathered statistics. Thus, the algorithm of the tree traversal in MCTS follows the following steps:&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -157,7 +515,20 @@
       <pubDate>Mon, 11 Mar 2024 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/pytorch_autograd/</guid>
-      <description>PyTorch..</description>
+      <description>&lt;p&gt;In PyTorch&amp;rsquo;s computation graph, there are only two types of elements: data (tensors) and operations (ops).&lt;/p&gt;
+&lt;p&gt;Operations include: addition, subtraction, multiplication, division, square root, exponentiation, trigonometric functions, and other differentiable operations.&lt;/p&gt;
+&lt;p&gt;Data has leaf nodes which are created by user and non-leaf node. The difference is after back propagation, gradient of non-leaf nodes will be released to save memory. If we want to retain non-leaf node gradient, we have to use &lt;code&gt;retain_grad&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;tensor&#34;&gt;Tensor&lt;/h2&gt;
+&lt;p&gt;Tensor in Pytorch has the following attributes:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;data: stored data&lt;/li&gt;
+&lt;li&gt;require_grad: whether need to compute gradient. Self-defined leaf nodes usually default require_grad as False, and non-leaf nodes default as True. Neural network weights default as True.&lt;/li&gt;
+&lt;li&gt;grad: grad holds the value of gradient. Each time when performing a backward computation, you need to reset (zero out) the gradients from the previous step; otherwise, the gradient values will keep accumulating.&lt;/li&gt;
+&lt;li&gt;grad_fn: This is the backward function used to calculate the gradient. Leaf nodes usually have &lt;code&gt;None&lt;/code&gt; for their grad_fn, and only the result nodes have a valid grad_fn, which indicates the type of gradient function.&lt;/li&gt;
+&lt;li&gt;is_leaf&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;gradient-computation&#34;&gt;Gradient Computation&lt;/h2&gt;
+&lt;p&gt;There are two ways to compute grad in Pytorch.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -166,7 +537,26 @@
       <pubDate>Tue, 05 Mar 2024 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/speech/whisper/</guid>
-      <description>Whisper Model</description>
+      <description>&lt;p&gt;Whisper model is large scale weakly supervised training ASR model from OpenAI. Whisper model encoder is widely used in speech tokenization.&lt;/p&gt;
+&lt;h2 id=&#34;data-processing&#34;&gt;Data Processing&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Construct the dataset from audio that is paired with transcripts on the Internet&lt;/li&gt;
+&lt;li&gt;Filter out machine generated data as other ASR systems generated data can significantly impair the performance of translation systems&lt;/li&gt;
+&lt;li&gt;Audio language detector&lt;/li&gt;
+&lt;li&gt;Break audio files into 30-second segments paired with transcript in the time segment&lt;/li&gt;
+&lt;li&gt;Trained model with segment without speech, but at a reduced data sampling rate&lt;/li&gt;
+&lt;li&gt;De-duplication at a transcript level between train and eval datasets&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;model&#34;&gt;Model&lt;/h2&gt;
+&lt;p&gt;The model architecture is encoder-decoder Transformer. Notice that this is different from LLM training where most models are decoder-only model. The reason is for ASR task, the whole audio segment is available before transcription.&lt;/p&gt;
+&lt;p&gt;The data flow is as follows&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;extract fbank features using a window length of 25ms and a stride of 10ms;&lt;/li&gt;
+&lt;li&gt;pass the fbank features through two convolutional layers (to reduce feature complexity, the second convolution uses a stride of 2 for 2x downsampling) and add positional encoding;&lt;/li&gt;
+&lt;li&gt;pass them through a standard Transformer encoder to perform self-attention and obtain the audio&amp;rsquo;s encoder hidden state;&lt;/li&gt;
+&lt;li&gt;decoder&amp;rsquo;s autoregressive decoding&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Training takes into consideration of multiple tasks such as transcription, translation, voice activity detection, alignment, and language identification etc.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -175,7 +565,22 @@
       <pubDate>Thu, 11 Jan 2024 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/pytorch_rpc/</guid>
-      <description>PyTorch..</description>
+      <description>&lt;p&gt;PyTorch supports several approaches to distributed training and communication, including:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Data Parallel (DP): A legacy approach where data is split across multiple GPUs on a single machine, and model replicas are kept synchronized manually.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Collective Communications (c10d): A low-level library providing collective communication primitives (e.g., all-reduce) for synchronizing data across multiple devices and nodes. It supports MPI, NCCL and GLOO backend.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Distributed Data Parallel (DDP): The recommended method for scaling training across multiple GPUs and machines, where each process maintains its own model replica and gradient synchronization is performed efficiently using collective communication.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Remote Procedure Call (RPC) Framework: A flexible framework enabling model parallelism by allowing different parts of a model to reside and execute on different devices or machines through asynchronous remote execution.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Data parallel is not really a distributed training tool which is discussed in our previous post, we&amp;rsquo;ll not cover it here. In this post, we mainly want to talk about why Torch introduce TorchRPC.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -184,7 +589,14 @@
       <pubDate>Mon, 18 Dec 2023 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/coder_training/</guid>
-      <description>Large coder model pretraining</description>
+      <description>&lt;p&gt;In the code pre-training, it is often necessary to generate corresponding inserted content based on both the left context and right context. Thus, in code pretraining we have an additional task called fill-in-the-middle.&lt;/p&gt;
+&lt;h3 id=&#34;training-data-format&#34;&gt;Training Data Format&lt;/h3&gt;
+&lt;p&gt;With a certain probability $p$ called the FIM rate, documents are cut into three parts: prefix, middle, and suffix. For PSM format,
+it arrange the text as the following format&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;PRE&amp;gt; ◦ Enc(prefix) ◦ &amp;lt;SUF&amp;gt; ◦ Enc(suffix) ◦ &amp;lt;MID&amp;gt; ◦ Enc(middle)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;&amp;lt;PRE&amp;gt;&lt;/code&gt;, &lt;code&gt;&amp;lt;SUF&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;MID&amp;gt;&lt;/code&gt; are special sentinel tokens.&lt;/p&gt;
+&lt;p&gt;Accordingly, SPM format we swap the order of prefix and suffix. At training time, we can jointly do both PSM and SPM training. At inference time, we can choose either as the inference format.&lt;/p&gt;
+&lt;p&gt;FIM style training gives us the opportunity to explore more training paradigms with code data. For instance, constructing training data, we can parse the code into an abstract syntax tree (AST) and randomly select a complete node to construct a FIM task. The rationale is simple. Through this training, model could learn to predict from top-down or bottom-up. This is exactly what is needed for reasoning.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -193,7 +605,22 @@
       <pubDate>Mon, 11 Dec 2023 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/all_gather_and_gradient_backpropagation/</guid>
-      <description>PyTorch..</description>
+      <description>&lt;p&gt;In PyTorch, autograd keeps a record of data (tensors) &amp;amp; all executed operations (along with the resulting new tensors) in a directed acyclic graph (DAG) consisting of Function objects. In this DAG, leaves are the input tensors, roots are the output tensors. By tracing this graph from roots to leaves, we can automatically compute the gradients using the chain rule.&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+In a forward pass, autograd does two things simultaneously:
+&lt;ul&gt;
+&lt;li&gt;run the requested operation to compute a resulting tensor, and&lt;/li&gt;
+&lt;li&gt;maintain the operation’s gradient function in the DAG.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;!--   # to block the following text block to generate p tag and creating extra space with listing items.  --&gt;
+&lt;p&gt;&lt;/p&gt;
+The backward pass kicks off when .backward() is called on the DAG root. autograd then:
+&lt;ul&gt;
+&lt;li&gt;computes the gradients from each &lt;a href=&#34;https://amsword.medium.com/understanding-pytorchs-autograd-with-grad-fn-and-next-functions-b2c4836daa00&#34;&gt;grad_fn&lt;/a&gt;,&lt;/li&gt;
+&lt;li&gt;accumulates them in the respective tensor’s .grad attribute, and&lt;/li&gt;
+&lt;li&gt;using the chain rule, propagates all the way to the leaf tensors.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;From this, we can know that when we call functions like &lt;code&gt; torch.distributed.all_gather&lt;/code&gt;, the resulting tensors do not propagate back gradients. This can be verified with the following code snippet.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -202,7 +629,17 @@
       <pubDate>Wed, 18 Oct 2023 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/model_eval/</guid>
-      <description>Model Evaluation</description>
+      <description>&lt;h2 id=&#34;model-evaluation-robustness&#34;&gt;Model Evaluation Robustness&lt;/h2&gt;
+&lt;p&gt;LLMs performance is sensitive to evaluation details. One of my previous co-workers&amp;rsquo;s work shows that for popular multiple choice question
+benchmarks (e.g. MMLU) minor perturbations to the benchmark, such as changing the order of choices or the method of answer selection, result in changes in rankings up to 8 positions.&lt;/p&gt;
+&lt;h2 id=&#34;pal-for-math-reasoning&#34;&gt;PAL for Math Reasoning&lt;/h2&gt;
+&lt;p&gt;In &lt;a href=&#34;https://arxiv.org/pdf/2211.10435.pdf&#34;&gt;PAL&lt;/a&gt; paper, the authors found that solving mathematical problems using external tools (Python interpreter) could greatly boost math reasoning performance.&lt;/p&gt;
+&lt;h3 id=&#34;references&#34;&gt;References&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/2402.01781&#34;&gt;When Benchmarks are Targets: Revealing the Sensitivity of Large Language Model Leaderboards&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/pdf/2305.14596.pdf&#34;&gt;Increasing Probability Mass on Answer Choices Does Not Always Improve Accuracy&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;!-- https://github.com/deepseek-ai/DeepSeek-Coder/tree/main/Evaluation/PAL-Math --&gt;</description>
     </item>
     
     <item>
@@ -211,7 +648,76 @@
       <pubDate>Wed, 18 Oct 2023 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/rag/</guid>
-      <description>RAG system</description>
+      <description>&lt;p&gt;LLMs has made remarkable progress these days, however, they still exhibit notable limitations. Among these, hallucination is one of the most seen issues. In other words, the generations from LLMs are not grounded. To this end, people are turning to retrieval augmented generation to tackle the issue. In this blog, let’s roll up our sleeves and dive deep into the retrieval augmented system.&lt;/p&gt;
+&lt;p&gt;RAG system contains: chunking, indexing, querying and generation. Chunking and indexing both are the offline processes which is the crucial data modeling phase. Querying and generation are online processes.&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+    &lt;img alt=&#34;mrr&#34; src=&#34;images/rag.png&#34; width=&#34;80%&#34;/&gt;
+    RAG system for QA, image from [1]
+    &lt;br&gt;
+&lt;/p&gt;
+&lt;h2 id=&#34;indexing&#34;&gt;Indexing&lt;/h2&gt;
+&lt;h2 id=&#34;retrieval&#34;&gt;Retrieval&lt;/h2&gt;
+&lt;p&gt;Retrieval is the online process where the system converts user query into vector representation and retrieve relevant documents.&lt;/p&gt;
+&lt;h3 id=&#34;retrieval-evaluation-metric&#34;&gt;Retrieval Evaluation Metric&lt;/h3&gt;
+&lt;p&gt;Like recommender system, retrieval system commonly use the following evaluation metrics.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Hit ratio (hit@k),&lt;/li&gt;
+&lt;li&gt;Normalized Discounted Cumulative Gain (NDCG),&lt;/li&gt;
+&lt;li&gt;Precision@k,&lt;/li&gt;
+&lt;li&gt;Recall@k&lt;/li&gt;
+&lt;li&gt;Mean Reciprocal Rank (MRR)&lt;/li&gt;
+&lt;li&gt;Mean Average Precision (MAP)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;hitk&#34;&gt;Hit@k&lt;/h4&gt;
+&lt;p&gt;Hit@k sometimes is also called Top-k accuracy. It is the percentage of search queries for each of which at least one item from the ground truth is returned within the top-k results. Simply put, it means % of queries get answer hit at top k retrieved passages. (Answer hit means user clicked on the doc). This number is meaningful when there are multiple test cases.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Embedding</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/large_scale_pretraining/embedding/</link>
+      <pubDate>Wed, 05 Jul 2023 00:18:23 -0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/large_scale_pretraining/embedding/</guid>
+      <description>&lt;h3 id=&#34;consistency-based-filter&#34;&gt;Consistency-based filter&lt;/h3&gt;
+&lt;p&gt;Consistency-based filter To further improve data quality and make training costs manageable, we
+propose a consistency-based data filtering technique: a model is first trained on the 1.3B noisy text
+pairs, and then used to rank each pair against a pool of 1 million random passages. A text pair is kept
+only if it falls in the top-k ranked lists. In other words, the model’s prediction should be consistent
+with the training labels. Here we set k = 2 based on manual inspection of data quality. After this
+step, we end up with ∼ 270M text pairs for contrastive pre-training.&lt;/p&gt;
+&lt;h3 id=&#34;references&#34;&gt;References&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/pdf/2212.03533&#34;&gt;Text Embeddings by Weakly-Supervised Contrastive Pre-training&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+    <item>
+      <title>Efficient Debugging</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/debug/</link>
+      <pubDate>Sun, 18 Jun 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/debug/</guid>
+      <description>&lt;h2 id=&#34;attach-gdb&#34;&gt;Attach GDB&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;/usr/local/cuda/bin/cuda-gdb attach process-id
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;bt
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;gdb python process-id
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;python-debug&#34;&gt;Python Debug&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-Python&#34; data-lang=&#34;Python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# python code&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; pdb; pdb&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;set_trace()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;tools&#34;&gt;Tools&lt;/h2&gt;
+&lt;h3 id=&#34;shortcuts&#34;&gt;Shortcuts&lt;/h3&gt;
+&lt;p&gt;These shortcuts can be redefined in the keymap(Pycharm) or Keyboard shortcuts (VScode), but we need to know the meaning of these keys.
+Pycharm&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;reformatting: CMD + ALT + L -&amp;gt; convert json line format to json format&lt;/li&gt;
+&lt;li&gt;join lines: CTRL + SHIFT + J -&amp;gt; convert json format to json line format. When in use, we can select the parts we want to join.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;VSCode&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;reformatting: SHIFT + ALT + F -&amp;gt; convert json line format to json format&lt;/li&gt;
+&lt;li&gt;join lines: CTRL + J -&amp;gt; convert json format to json line format&lt;/li&gt;
+&lt;/ul&gt;</description>
     </item>
     
     <item>
@@ -220,7 +726,15 @@
       <pubDate>Sun, 18 Jun 2023 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/flash_attn/</guid>
-      <description>Large language model pretraining</description>
+      <description>&lt;p&gt;In order to understand how flash attention and its variants help improve compute efficiency of modern LLMs training, we first have to dive deep into GPU compute model and its memory hierarchy.&lt;/p&gt;
+&lt;h2 id=&#34;gpu-compute-model-and-memory-hierarchy&#34;&gt;GPU Compute Model and Memory Hierarchy&lt;/h2&gt;
+&lt;p&gt;The Figure 1 here shows the high level compute model and memory in GPU. We can see that there are three types of memory affect GPU computation. CPU memory (data loading etc), GPU high bandwidth memory (the gpu memory we usually mentioned), and GPU caches (SRAM). These memories are of different size and bandwidth (read speed). The idea of flash attention is to design IO-aware fused computation kernel to save memory access to speed up training job.&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+    &lt;img alt=&#34;gpu memory&#34; src=&#34;images/gpu_mem.png&#34; width=&#34;80%&#34; height=auto/&gt; 
+    &lt;em&gt;Figure 1. GPU memory&lt;/em&gt;
+    &lt;br&gt;
+&lt;/p&gt;
+&lt;p&gt;Figure 2 shows a more detailed hierarchy of GPU memory in A100. Notice that cache is specific to each compute unit.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -229,7 +743,23 @@
       <pubDate>Fri, 05 May 2023 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/data_processing/</guid>
-      <description>Distributed data processing</description>
+      <description>&lt;p&gt;A memory mapping is a region of the process’s virtual memory space that is mapped in a one-to-one correspondence with another entity. In this section, we will focus exclusively on memory-mapped files, where the memory of region corresponds to a traditional file on disk. For example, assume that the address 0xf77b5000 is mapped to the first byte of a file. Then 0xf77b5001 maps to the second byte, 0xf77b5002 to the third, and so on.&lt;/p&gt;
+&lt;p&gt;When we say that the file is mapped to a particular region in memory, we mean that the process sets up a pointer to the beginning of that region. The process can the dereference that pointer for direct access to the contents of the file. Specifically, there is no need to use standard file access functions, such as read(), write(), or fseek(). Rather, the file can be accessed as if it has already been read into memory as an array of bytes. Memory-mapped files have several uses and advantages over traditional file access functions:&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Data Sampling in Training</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/data_sampling/</link>
+      <pubDate>Fri, 05 May 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/data_sampling/</guid>
+      <description>&lt;ol&gt;
+&lt;li&gt;Probability proportional to size sampling (PPS sampling)
+$$
+q_i = \frac{p_i^t}{\sum_j p_j^t}
+$$&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Here $p_i$ is the number of sequences in the $i_{th}$ dataset. In this sampling, it will keep the largest dataset intact and up sample the remaining dataset to conform to the distribution in q. $t$ is the temperature. When $t$ is 0, it&amp;rsquo;s uniform sampling. When $t$ is 1.0, no up-sampling will be performed.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -238,7 +768,16 @@
       <pubDate>Fri, 05 May 2023 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/distributed_optimizer/</guid>
-      <description>Distributed optimizer</description>
+      <description>&lt;p&gt;In this blog, we talk about distributed optimizer implementation. The discussion here is mostly based on Megatron-LM.&lt;/p&gt;
+&lt;h2 id=&#34;adam-optimizer&#34;&gt;Adam Optimizer&lt;/h2&gt;
+&lt;p&gt;Adaptive moment estimation is an algorithm to compute the adaptive learning rate for each parameters. It consists two parts: first-order momentum which is exponentially decaying average (moving average) of gradient and second-order momentum (variance, which controls adaptive learning rate) which is exponentially decaying average of squared gradient.
+$$
+m_t = \frac{\beta_1}{1 - \beta_{1}^{t}} m_{t-1} + \frac{1 - \beta_1}{1 - \beta_{1}^{t}} g_{t} \\[5pt]
+v_t = \frac{\beta_2}{1 - \beta_{2}^{t}} v_{t-1} + \frac{1 - \beta_2}{1 - \beta_{2}^{t}} g_{t}^2 \\[5pt]
+u_t = \frac{m_t}{\sqrt{v_t} + \epsilon} \\[5pt]
+\theta_{t+1} = \theta_t - \eta_t u_t
+$$&lt;/p&gt;
+&lt;p&gt;We can think about the adaptive learning rate part monitors the historical update frequency for each parameter. For frequently updated parameters, we don&amp;rsquo;t want them to be updated very often with a single sample, thus, we would like to have a smaller learning rate. The updating frequency is measured by $v = \sum g^2$.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -247,7 +786,19 @@
       <pubDate>Fri, 05 May 2023 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/lora_finetuning/</guid>
-      <description>LoRA finetuning</description>
+      <description>&lt;p&gt;Light-weight LoRA fine-tuning seems to be the go-to option for many application where compute resources are limited.&lt;/p&gt;
+&lt;h3 id=&#34;lora&#34;&gt;LoRA&lt;/h3&gt;
+&lt;p&gt;The way lora works is illustrated in the figure below. For some matrices in the transformer model, we add a parallel weighted matrix.
+The branch matrix can be decomposed into two smaller matrix. At training time, we only train these small matrices with original weights frozen.&lt;/p&gt;
+&lt;p&gt;At inference time, we don&amp;rsquo;t need to maintain separate parameters, thus we merge the LoRA weights into the original model weights.&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+    &lt;img alt=&#34;lora&#34; src=&#34;images/lora.png&#34; width=&#34;80%&#34; height=auto/&gt; 
+    Figure 1. Lora Fine-tuning and Inference
+    &lt;br&gt;
+&lt;/p&gt;
+&lt;h3 id=&#34;lora-fine-tuning-with-deepspeed&#34;&gt;LoRA Fine-tuning with Deepspeed&lt;/h3&gt;
+&lt;p&gt;Huggingface PEFT package already provides easy-to-use APIs for LoRA fine-tuning. However, when we combine these with Deepspeed, we need to be careful when we merge model weights.&lt;/p&gt;
+&lt;p&gt;Below we assume we have Deepspeed checkpoints and we want to have inference model weights with LoRA parameters merged. We have to follow the following steps:&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -277,12 +828,113 @@
     </item>
     
     <item>
+      <title>Image Synthesis</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/image_generation/</link>
+      <pubDate>Sun, 05 Mar 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/image_generation/</guid>
+      <description>&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;!-- 1. https://stats.stackexchange.com/questions/443259/how-to-avoid-overfitting-in-xgboost-model --&gt;</description>
+    </item>
+    
+    <item>
       <title>ML System</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/ml_system/</link>
       <pubDate>Sun, 05 Mar 2023 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/ml_system/</guid>
-      <description>ML System</description>
+      <description>&lt;p&gt;It&amp;rsquo;s a long way to go, but let&amp;rsquo;s just start with baby steps.&lt;/p&gt;
+&lt;!-- ## References
+[1] [Characterization of Large Language Model Development in the Datacenter](https://arxiv.org/pdf/2403.07648.pdf%EF%BC%8C)
+[2] https://github.com/intelligent-machine-learning/dlrover
+[3] [MegaScale: Scaling Large Language Model Training to More Than 10,000 GPUs](https://arxiv.org/abs/2402.15627) 
+[4] [The Falcon Series of Open Language Models](https://arxiv.org/pdf/2311.16867.pdf) --&gt;</description>
+    </item>
+    
+    <item>
+      <title>Reasoning with LLM</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/reasoning/</link>
+      <pubDate>Sun, 05 Mar 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/reasoning/</guid>
+      <description>&lt;h2 id=&#34;datasets&#34;&gt;Datasets&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Public CoT datasets&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Open-O1 CoT Dataset (Filtered)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/AIDC-AI/Marco-o1/blob/main/data/CoT_demo.json&#34;&gt;https://github.com/AIDC-AI/Marco-o1/blob/main/data/CoT_demo.json&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;MathCritique-76k&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Instruction-following data&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Synthetic CoT data&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;omegaprm: &lt;a href=&#34;https://arxiv.org/pdf/2406.06592&#34;&gt;Improve Mathematical Reasoning in Language Models by Automated Process Supervision&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;score: &lt;a href=&#34;https://arxiv.org/pdf/2409.12917&#34;&gt;Training Language Models to Self-Correct via Reinforcement Learning&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;math-shepherd: &lt;a href=&#34;https://arxiv.org/abs/2312.08935&#34;&gt;Math-Shepherd: Verify and Reinforce LLMs Step-by-step without Human Annotations&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/koayon/awesome-adaptive-computation&#34;&gt;https://github.com/koayon/awesome-adaptive-computation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/srush/awesome-o1&#34;&gt;https://github.com/srush/awesome-o1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/Open-Source-O1/Open-O1&#34;&gt;https://github.com/Open-Source-O1/Open-O1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;openr: &lt;a href=&#34;https://arxiv.org/pdf/2410.09671&#34;&gt;OpenR: An Open Source Framework for Advanced Reasoning with Large Language Models&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;rStar: &lt;a href=&#34;https://github.com/zhentingqi/rStar&#34;&gt;https://github.com/zhentingqi/rStar&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;sos: &lt;a href=&#34;https://arxiv.org/abs/2404.03683&#34;&gt;Stream of Search (SoS): Learning to Search in Language&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+    <item>
+      <title>Tokenizer in LLM</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/tokenizer/</link>
+      <pubDate>Sun, 05 Mar 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/tokenizer/</guid>
+      <description>&lt;p&gt;When we build LLMs, the very first step is to build a good tokenizer. Currently, there are two main frameworks to build tokenizers. The first is huggingface tokenizers library which can be used to build tokenizer like GPT series models. The second is sentencepiece from google which is used to build LLaMA series (LLaMA, mistral, Yi-34B etc) tokenizers.&lt;/p&gt;
+&lt;h3 id=&#34;byte-level-bpe&#34;&gt;Byte Level BPE&lt;/h3&gt;
+&lt;p&gt;There are mainly 5 components in the tokenizer.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Normalizer&lt;/li&gt;
+&lt;li&gt;Pretokenizer&lt;/li&gt;
+&lt;li&gt;BPE Model
+&lt;ul&gt;
+&lt;li&gt;WordPiece&lt;/li&gt;
+&lt;li&gt;Unigram&lt;/li&gt;
+&lt;li&gt;Sentencepiece&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;PostProcessor&lt;/li&gt;
+&lt;li&gt;Decoder&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I have been always in favor of sentencepiece style tokenizer because it provides a way to split based on spaces. However there is a catch.
+Very recently, I found that Mistral tokenizer is not a lossless tokenizer!!! What does that mean?&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tok &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; AutoTokenizer&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;from_pretrained(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;mistralai/Mistral-7B-v0.3&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;s &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;good good&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(tok&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;tokenize(s))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(tok&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;encode(s))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;print(tok&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;decode(tok&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;encode(s)))
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>XGBoost</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/xgboost/</link>
+      <pubDate>Sun, 05 Mar 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/xgboost/</guid>
+      <description>&lt;p&gt;Some parameters for using xgboost for simple classification tasks.&lt;/p&gt;
+&lt;p&gt;the ratio of features used (i.e. columns used); colsample_bytree. Lower ratios avoid over-fitting.
+the ratio of the training instances used (i.e. rows used); subsample. Lower ratios avoid over-fitting.
+the maximum depth of a tree; max_depth. Lower values avoid over-fitting.
+the minimum loss reduction required to make a further split; gamma. Larger values avoid over-fitting.
+the learning rate of our GBM (i.e. how much we update our prediction with each successive tree); eta. Lower values avoid over-fitting.
+the minimum sum of instance weight needed in a leaf, in certain applications this relates directly to the minimum number of instances needed in a node; min_child_weight. Larger values avoid over-fitting.&lt;/p&gt;
+&lt;h2 id=&#34;references&#34;&gt;References&lt;/h2&gt;
+&lt;!-- 1. https://stats.stackexchange.com/questions/443259/how-to-avoid-overfitting-in-xgboost-model --&gt;</description>
     </item>
     
     <item>
@@ -291,7 +943,17 @@
       <pubDate>Wed, 18 Jan 2023 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/instructgpt/</guid>
-      <description>RLHF</description>
+      <description>&lt;p&gt;Recently ChatGPT model has demonstrated remarkable success of large pretrained language model being able to generate coherent, logical and meaningful conversations. While as of this writing, the corresponding paper is still not available yet. In this blog, I&amp;rsquo;ll dive deep into InstructGPT model to see what&amp;rsquo;s under the hood of this model.&lt;/p&gt;
+&lt;h3 id=&#34;issues-with-traditional-lm&#34;&gt;Issues with Traditional LM&lt;/h3&gt;
+&lt;p&gt;Language modeling objective is trying to predict next token given all previous tokens. However, when we&amp;rsquo;re prompting LM in inference time, we hope LM can generate things based on our instructions/intent instead of merely predicting the most likely tokens. This is the so-called &lt;code&gt;misalignment&lt;/code&gt; between training and inference.&lt;/p&gt;
+&lt;h3 id=&#34;solution&#34;&gt;Solution&lt;/h3&gt;
+&lt;p&gt;Using reinforcement learning to learn human feedback. For this purpose, they have to collect a dataset. The way to collect the dataset is as follows:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;select some contract labeler&lt;/li&gt;
+&lt;li&gt;collect human written prompt-answer pairs. Prompts are either from GPT3 API or from human annotation.&lt;/li&gt;
+&lt;li&gt;collect a dataset of human-labeled comparisons between outputs from our models on a larger set of API prompts.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The following diagram from the paper demonstrated how these steps unfold during the training.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -300,7 +962,9 @@
       <pubDate>Sun, 18 Dec 2022 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/large_scale_pretraining/pretrain/</guid>
-      <description>Large language model pretraining</description>
+      <description>&lt;p&gt;Large language model pretraining is a very challenging task which requires very strong engineering and science skills. People tend to underestimate efforts needed to train a good large model like GPT3 etc. Most people imagine that they can get decent language models given enough computation resources. The fact is even today only OpenAI is providing LM APIs where people can freely play with and get good performances. In this blog, we&amp;rsquo;ll talk about pretraining from the whole pipeline: data sourcing, collection and processing, tokenization, architecture engineering and evaluation. Hopefully, it would be helpful for foundational model training practitioners.&lt;/p&gt;
+&lt;h3 id=&#34;data&#34;&gt;Data&lt;/h3&gt;
+&lt;p&gt;Data is crucial in any ML system. This is true to pretraining as well. As is shown in Gopher paper,  a large, diverse and high-quality dataset is needed to train a good model. In the following table, it shows the datasets used in &lt;a href=&#34;https://arxiv.org/pdf/2112.11446.pdf&#34;&gt;&lt;code&gt;Gopher&lt;/code&gt; model&lt;/a&gt; training. Now we&amp;rsquo;re looking at terabytes scale of training data.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -309,7 +973,17 @@
       <pubDate>Thu, 08 Dec 2022 12:01:14 -0700</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/kubenetes/basics/</guid>
-      <description>Kubenetes is everywhere.</description>
+      <description>&lt;h3 id=&#34;basics&#34;&gt;Basics&lt;/h3&gt;
+&lt;p&gt;Kubernetes, also known as “k8s”, is an open source platform solution provided by Google for scheduling and automating the deployment, management, and scaling of containerized applications. Kubernetes has the ability of scheduling and running application containers on a cluster of physical or virtual machines. In managing the applications, the concepts of &amp;rsquo;labels&amp;rsquo; and &amp;lsquo;pods&amp;rsquo; are used to group the containers which make up an application. Currently, it supports Docker for containers.&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+    &lt;img alt=&#34;gopher dataset&#34; src=&#34;images/kubernetes.png&#34; width=&#34;80%&#34;/&gt;
+    &lt;br&gt;
+    &lt;em&gt;kubernetes architecture, image from [1]&lt;/em&gt;
+    &lt;br&gt;
+&lt;/p&gt;
+&lt;p&gt;Pod is a type of abstraction on top of container. Deployment defines the pod. Deployment is used for stateless apps and StatefulSet is used for stateful apps or database. KubeCTL talks with API server to create components or delete components, in other words configuring the cluster. More about this basics is &lt;a href=&#34;https://www.youtube.com/watch?v=X48VuDVv0do&amp;amp;t=2749s&#34;&gt;here&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;basic-operations&#34;&gt;Basic Operations&lt;/h3&gt;
+&lt;p&gt;To find out all the pods, using the following command&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -318,7 +992,27 @@
       <pubDate>Mon, 08 Aug 2022 12:01:14 -0700</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/antlr/</guid>
-      <description>How to use antlr framework to generate code parser</description>
+      <description>&lt;p&gt;Parsing as the very first step of compiling is important for language analysis. ANTLR is a powerful tool to generate parsers. In this blog, we&amp;rsquo;re trying to understand more about ANTLR and its usage.&lt;/p&gt;
+&lt;h2 id=&#34;antlr-grammar&#34;&gt;ANTLR Grammar&lt;/h2&gt;
+&lt;p&gt;(1) ANTLR has two kinds of labels: &lt;em&gt;alternative labels&lt;/em&gt; and &lt;em&gt;rule elements labels&lt;/em&gt;; both can be useful. We assume you are familiar with these two kinds of labels, but here it is an example.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;expression  : left=expression &amp;#39;*&amp;#39; right=expression #multiplication
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;​           | expression &amp;#39;+&amp;#39; expression            #addition      
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;​           | NUMBER                               #atom
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;​           ;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Alternative labels are the one that follows an &lt;code&gt;#&lt;/code&gt;, the rule element labels are the one preceding the = sign. They serve two different purposes. The first ones facilitate act differently for each alternative while the second ones facilitate accessing the different parts of the rules.&lt;/p&gt;
+&lt;p&gt;For alternative labels, if you label one alternative, you have to label all alternatives, because there will be no base node. Rule element labels instead provides an alternative way to access the content parsed by the sub-rule to which the label is assigned.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Distributed Optimizer</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/optimizer/optimizer/</link>
+      <pubDate>Mon, 18 Jul 2022 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/optimizer/optimizer/</guid>
+      <description>&lt;p&gt;Megatron-LM when we set &lt;code&gt;use-distributed-optimizer&lt;/code&gt; it will use Zero-1 for training, namely, the optimizer will be splitted on data parallel ranks.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -327,7 +1021,10 @@
       <pubDate>Fri, 08 Jul 2022 12:01:14 -0700</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/parallelism/</guid>
-      <description>Parallelism in LLM training</description>
+      <description>&lt;p&gt;Modern large language model usually is trained with billions number of parameters and trillions number of tokens. With model size and training data at such scale, computation resource and memory footprint requirement is huge. How to effectively leverage GPU resources to speed up training is an important topic in language model pretraining. In this blog, we&amp;rsquo;ll dive deep into parallel training in recent distributed training paradigms.&lt;/p&gt;
+&lt;p&gt;A lot of contents of here are from OpenAI, Nvidia, Deepspeed and bigscience blogs. We&amp;rsquo;ll first go through different parallelism techniques and then talk about how to combine them to maximize training efficiency.&lt;/p&gt;
+&lt;h3 id=&#34;data-parallelism&#34;&gt;Data Parallelism&lt;/h3&gt;
+&lt;p&gt;Data parallelism (DP) is the most straightforward way of parallel training. With data parallelism, model parameters and optimzer states are replicated across different workers. Data is partitioned into the same number of shards and each replicate of model is fed with one shard of data. Forward and backward computation is in parallel (simutaneously) and then there is a synchronization step where gradients are averaged across workers to update parameters. The DP computation can be summarized as the following &lt;a href=&#34;https://www.adept.ai/blog/sherlock-sdc&#34;&gt;three steps&lt;/a&gt;:&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -336,7 +1033,19 @@
       <pubDate>Sat, 11 Jun 2022 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/pytorch/</guid>
-      <description>PyTorch..</description>
+      <description>&lt;p&gt;Using PyTorch for NN model training on single GPU is simple and easy. However, when it comes to multiple GPU training, there could be various of issues. In this blog, I&amp;rsquo;ll summarize all kinds of issues I ran into during model training/evaluation.&lt;/p&gt;
+&lt;h2 id=&#34;gradient-accumulation&#34;&gt;Gradient Accumulation&lt;/h2&gt;
+&lt;p&gt;Gradient accumulation is a way to virtually increase the batch size during training. In gradient accumulation, &lt;code&gt;N&lt;/code&gt; batches go through the forward path and backward path, and each time, the gradient is computed and accumulated (usually summed or averaged), but model parameters are not updated. Model parameters are updated after iterate through all &lt;code&gt;N&lt;/code&gt; batches. The logic is as follows:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; step, oneBatch &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; enumerate(dataloader):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   ypred &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; model(oneBatch)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   loss &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; loss_func(ytrue, ypred)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   loss&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;backward() &lt;span style=&#34;color:#75715e&#34;&gt;# release all activations memory&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; step &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; accumulation_step &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;: 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &lt;span style=&#34;color:#75715e&#34;&gt;# update weights every accumulation_step steps&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      loss&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;step() 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      loss&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;zero_grad()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;In order to backpropagate, all the hidden activations must be stored until we call loss.backward(). In contrast, if we only add losses together (accumulating losses), all the activation memory won&amp;rsquo;t be released, so we can&amp;rsquo;t save memory.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -345,7 +1054,18 @@
       <pubDate>Thu, 05 May 2022 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/distributed_train_infra/</guid>
-      <description>Distributed training infrastructure</description>
+      <description>&lt;p&gt;Distributed infrastructure is a big and interesting topic. I don&amp;rsquo;t work on infrastructure side, but I run into the concepts a lot, so I create this blog to help me understand more about infrastructure.&lt;/p&gt;
+&lt;p&gt;Most of today&amp;rsquo;s distributed framework involves three parts, collective communication, data loading and preprocessing and distributed scheduler. We&amp;rsquo;ll look into these three parts respectively.&lt;/p&gt;
+&lt;h2 id=&#34;distributed-system-overview&#34;&gt;Distributed System Overview&lt;/h2&gt;
+&lt;p&gt;In the diagram below, I&amp;rsquo;m showing the modern distributed network communication implementation stack, from the bottom hardware to top level application.&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+    &lt;img alt=&#34;flat sharp minimum&#34; src=&#34;images/system.png&#34; width=&#34;100%&#34; height=auto/&gt; 
+    &lt;em&gt;Training system architecture&lt;/em&gt;
+    &lt;br&gt;
+&lt;/p&gt;
+&lt;h2 id=&#34;collective-communication&#34;&gt;Collective Communication&lt;/h2&gt;
+&lt;p&gt;We can start with point to point communication. Normally point to point communication refers to two processes communication and it&amp;rsquo;s one to one communication. Accordingly, collective communication refers to 1 to many or many to many communication. In distributed system, there are large amount of communications among the nodes.&lt;/p&gt;
+&lt;p&gt;There are some common communication ops, such as Broadcast, Reduce, Allreduce, Scatter, Gather, Allgather etc.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -363,7 +1083,48 @@
       <pubDate>Thu, 05 May 2022 00:18:06 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/read/quotes/</guid>
-      <description>My favourite quotes</description>
+      <description>&lt;p&gt;Frequently, I would turn to these quotes as a source of inspiration, using them to encourage personal growth for both my mind and soul.&lt;/p&gt;
+&lt;h3 id=&#34;part-i&#34;&gt;Part I&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;The world is your oyster. It&amp;rsquo;s up to you to find the pearls.&lt;/li&gt;
+&lt;li&gt;Still a dreamer, yet more of a realist than ever before, I knew this
+was my time to sail. On the horizon I saw the shining future, as before. The difference now was that I felt
+the wind at my back. I was ready.&lt;/li&gt;
+&lt;li&gt;The future was uncertain, absolutely, and there were many hurdles,
+twists, and turns to come, but as long as I kept moving forward, one foot in front of the other, the voices
+of fear and shame, the messages from those who wanted me to believe that I wasn&amp;rsquo;t good enough, would be
+stilled.&lt;/li&gt;
+&lt;li&gt;Others may question your credentials, your papers, your degrees.
+Others may look for all kinds of ways to diminish your worth. But what is inside you no one can take from
+you or tarnish. This is your worth, who you really are, your degree that can go with you wherever you go,
+that you bring with you the moment you come into a room, that can&amp;rsquo;t be manipulated or shaken. Without that
+sense of self, no amount of paper, no pedigree, and no credentials can make you legit. No matter what, you
+have to feel legit inside first.&lt;/li&gt;
+&lt;li&gt;Walk that walk and go forward all the time. Don&amp;rsquo;t just talk that
+talk, walk it and go forward. Also, the walk didn&amp;rsquo;t have to be long strides; baby steps counted too. Go
+forward.&lt;/li&gt;
+&lt;li&gt;You got a dream&amp;hellip; You gotta protect it. People can&amp;rsquo;t do somethin&#39;
+themselves, they wanna tell you you can&amp;rsquo;t do it. If you want somethin&amp;rsquo;, go get it.&lt;/li&gt;
+&lt;li&gt;Don&amp;rsquo;t worry if your tasks are small and rewards are few, remember
+that the mighty oak was once a nut like you.&lt;/li&gt;
+&lt;li&gt;When you know this world as it is and you still love it, then your
+life will be beautiful.&lt;/li&gt;
+&lt;li&gt;What is a success: To laugh often and much, to win the respect of
+intelligent people and the affection of children, to earn the appreciation of honest critics and endure the
+betrayal of false friends, to appreciate beauty, to find the best in others, to leave the world a bit
+better&amp;hellip;&lt;/li&gt;
+&lt;li&gt;A journey of a thousand miles begins with a single step!&lt;/li&gt;
+&lt;li&gt;Adversity is a catalyst for greatness!&lt;/li&gt;
+&lt;li&gt;Winners worry about winning; losers worry about winners&lt;/li&gt;
+&lt;li&gt;Slow is smooth and smooth is fast&lt;/li&gt;
+&lt;li&gt;Success is not final, failure is not fatal, it is the courage to continue that counts.&lt;/li&gt;
+&lt;li&gt;Doublethink, to deliberately believe in lies, while knowing they&amp;rsquo;re false. Examples of this in everyday life: &amp;ldquo;Oh, I need to be pretty to be happy. I need surgery to be pretty. I need to be thin, famous, fashionable.&amp;rdquo; Our young men today are being told that women are whores, bitches, things to be screwed, beaten, shit on, and shamed. This is a marketing holocaust. Twenty-four hours a day for the rest of our lives, the powers that be are hard at work dumbing us to death. So to defend ourselves, and fight against assimilating this dullness into our thought processes, we must learn to read. To stimulate our own imagination, to cultivate our own consciousness, our own belief systems. We all need skills to defend, to preserve our own minds. (Detachment)&lt;/li&gt;
+&lt;li&gt;Happiness as a byproduct of a well-ordered life may last. As a goal, it is doomed to failure (Gilded Age).&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;part-ii&#34;&gt;Part II&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;不迁怒，不贰过: 回年二十九，发尽白，蚤死。孔子哭之恸，曰：“自吾有回，门人益亲。” 鲁哀公问：“弟子孰为好学？”孔子对曰：“有颜回者好学，不迁怒，不贰过。不幸短命死矣，今也则亡，未闻好学者 也。”&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -405,7 +1166,125 @@
       <pubDate>Thu, 05 May 2022 00:17:58 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/cloud/aws/</guid>
-      <description>AWS</description>
+      <description>&lt;p&gt;In this doc, I keep record of some commonly used aws related commands for my quick reference. I&amp;rsquo;ll be very glad if this could be somewhat helpful to you.&lt;/p&gt;
+&lt;h3 id=&#34;ecr&#34;&gt;ECR&lt;/h3&gt;
+&lt;p&gt;ECR login&lt;/p&gt;
+&lt;p&gt;For aws-cli 2.7 or above version, use the command below:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# check all images&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;aws ecr describe-repositories
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# login the docker&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;aws ecr get-login-password --region &amp;lt;region&amp;gt; | docker login --username AWS --password-stdin &amp;lt;aws_account_id&amp;gt;.dkr.ecr.&amp;lt;region&amp;gt;.amazonaws.com
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# we can get the aws account id using the following command&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;aws ecr get-login-password --region &amp;lt;region&amp;gt; | docker login --username AWS --password-stdin &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt;aws sts get-caller-identity --query Account --output text&lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;.dkr.ecr.&amp;lt;region&amp;gt;.amazonaws.com&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# pull the image&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker pull &amp;lt;image_name&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# If we pushed the image using sudo, then pull also add sudo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo docker pull &amp;lt;image_name&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Sometimes we need one image in one region, but it&amp;rsquo;s pushed to another region. We can do the dollowing steps to push the image to target region.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>All Kinds of Tools</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/tools/</link>
+      <pubDate>Thu, 05 May 2022 00:17:58 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/tools/</guid>
+      <description>&lt;h3 id=&#34;github&#34;&gt;Github&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;How to clone github private repo on a new machine
+(1) Add ssh public key into github webpage. settings -&amp;gt; ssh and GPG keys -&amp;gt; add ssh key.
+(2) To clone a repo, use ssh link. &lt;a href=&#34;mailto:git@github.com&#34;&gt;git@github.com&lt;/a&gt;:xxx&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;We can also use https to clone a repo, but need to add personal access token from github.&lt;/p&gt;
+&lt;h3 id=&#34;search-in-tmux&#34;&gt;Search in Tmux&lt;/h3&gt;
+&lt;p&gt;Scroll mouse to enter the history mode (or use CTRL + B followed by &amp;ldquo;[&amp;rdquo;).&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Search up: CTRL + R&lt;/li&gt;
+&lt;li&gt;Search down: CTRL + /&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;huggingface&#34;&gt;Huggingface&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;huggingface API save_pretrained(x) no longer saves the model into a single bin file, but into several shards. To load these shards, we have to use AutoModel.from_pretrained API to load.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;nvidia&#34;&gt;Nvidia&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nvidia-smi --query-gpu&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;name --format&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;csv.noheader | head -n1 &amp;gt; my_output.log
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+    </item>
+    
+    <item>
+      <title>HF Tools</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/hf/</link>
+      <pubDate>Thu, 05 May 2022 00:17:58 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/hf/</guid>
+      <description>&lt;h2 id=&#34;models-loading&#34;&gt;Models Loading&lt;/h2&gt;
+&lt;p&gt;The difference between &lt;code&gt;AutoModel&lt;/code&gt; and &lt;code&gt;AutoModelForCausalLM&lt;/code&gt; is that the former doesn&amp;rsquo;t have &lt;code&gt;lm_head&lt;/code&gt;. Thus, &lt;code&gt;AutoModel&lt;/code&gt; is usually used for embedding model training. &lt;code&gt;AutoModelForCausalLM&lt;/code&gt; is used for generative application.&lt;/p&gt;
+&lt;h2 id=&#34;model-access&#34;&gt;Model Access&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Might need to install the pkg&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# pip install huggingface_hub&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python -c &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;from huggingface_hub.hf_api import HfFolder; HfFolder.save_token(&amp;#39;MY_HUGGINGFACE_TOKEN_HERE&amp;#39;)&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# speedup model download&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pip install hf-transfer
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;export HF_HUB_ENABLE_HF_TRANSFER&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# or in python we can add the following&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# import os&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# os.environ[&amp;#34;HF_HUB_ENABLE_HF_TRANSFER&amp;#34;] = &amp;#34;1&amp;#34; &lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;[1] &lt;a href=&#34;https://uvadlc-notebooks.readthedocs.io/en/latest/index.html&#34;&gt;https://uvadlc-notebooks.readthedocs.io/en/latest/index.html&lt;/a&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>LoRA Fine-tuning</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/large_scale_pretraining/finetune/</link>
+      <pubDate>Thu, 05 May 2022 00:17:58 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/large_scale_pretraining/finetune/</guid>
+      <description>&lt;p&gt;This works because during training, the smaller weight matrices (A and B in the diagram below) are separate. But once training is complete, the weights can actually be merged into a new weight matrix that is identical.&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+    &lt;img alt=&#34;lora merge&#34; src=&#34;images/merge.png&#34; width=&#34;80%&#34; height=auto/&gt; 
+    &lt;em&gt;LoRA Merge Weights&lt;/em&gt;
+&lt;/p&gt;
+&lt;h3 id=&#34;how-to-merge-lora-weights&#34;&gt;How To Merge LoRA Weights&lt;/h3&gt;
+&lt;p&gt;Here we talk about Deepspeed + Lightning model merge.&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Merge Deepspeed model into single shard&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;module_spec &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; importlib&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;util&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;spec_from_file_location(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;zero_to_fp32&amp;#34;&lt;/span&gt;, os&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;path&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;join(ckpt_path_dir, &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;zero_to_fp32.py&amp;#34;&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;zero_to_fp32 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; importlib&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;util&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;module_from_spec(spec)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;spec&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;loader&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;exec_module(zero_to_fp32)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;zero_to_fp32&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;convert_zero_checkpoint_to_fp32_state_dict(ckpt_path_dir, single_shard_output_ckpt_path)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;Load Base model
+Load base model (the model before lora fine-tuning)&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;base_model &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; AutoModelForCausalLM&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;from_pretrained(base_model_name_or_path, torch_dtype&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;auto&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;Get peft model&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;peft_config &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; LoraConfig(&lt;span style=&#34;color:#f92672&#34;&gt;**&lt;/span&gt;json&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;load(open(args&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;peft_config)))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# This model has both base and adapter model definition, weights are not initialized&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;peft_model &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; get_peft_model(base_model, peft_config)s
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;
+&lt;p&gt;Load LoRA fine-tuned ckpt
+Load LoRA fine-tuned checkpoint and replace lightning prefix (&lt;code&gt;_forward_module&lt;/code&gt;) with peft model prefix (&lt;code&gt;base_model&lt;/code&gt;). Fix other parameter issues (like model head etc), then put the state_dict into the peft_model from above step.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Online DL Resources</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/learning_resources/</link>
+      <pubDate>Thu, 05 May 2022 00:17:58 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/learning_resources/</guid>
+      <description>&lt;p&gt;[1] &lt;a href=&#34;https://uvadlc-notebooks.readthedocs.io/en/latest/index.html&#34;&gt;https://uvadlc-notebooks.readthedocs.io/en/latest/index.html&lt;/a&gt;&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -414,7 +1293,8 @@
       <pubDate>Thu, 05 May 2022 00:17:58 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/tech/</guid>
-      <description>Tech and talents</description>
+      <description>&lt;p&gt;A lot of people are talking about leetcode problem solving these days. If you go to the popular Chinese overseas BBS website, you can find literally under every post there are people talking about solving leetcode problems. In this blog, I want to share my two cents on this issue.&lt;/p&gt;
+&lt;p&gt;I personally don&amp;rsquo;t like solving leetcode problems which I guess most people share with my feelings. I don&amp;rsquo;t take any pride in being ranked as the top K problem solver. My opinion is that it&amp;rsquo;s huge waste of time. There are definitely some good parts in doing this. If you&amp;rsquo;re not familiar with a programming langauge, you can learn a bit from good solutions in the disucssion section. Through solving the problem, you&amp;rsquo;ll get familiar with the specific programming language you use. Through the thinking process, you&amp;rsquo;ll learn how to convert logics into codes.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -423,7 +1303,28 @@
       <pubDate>Tue, 08 Feb 2022 12:01:14 -0700</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/serve_model/</guid>
-      <description>How to serve your model locally for a demo</description>
+      <description>&lt;h3 id=&#34;llm-serving&#34;&gt;LLM Serving&lt;/h3&gt;
+&lt;p&gt;Working on LLMs often entails us to conduct a demo for real-time test. Sometimes we have to set things up so that co-worker can play with our model to find out the issues there.
+An eassy way is to use Flask.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; flask
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;app &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; flask&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Flask(__name__)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;@app.route&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;/&amp;#39;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;index&lt;/span&gt;():
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;lt;h3&amp;gt;My LLM Playground&amp;lt;/h3&amp;gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;start-the-server&#34;&gt;Start the Server&lt;/h3&gt;
+&lt;p&gt;Start the server, we can run&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ApiServicePort&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;xxxx python3 serve.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;front-end&#34;&gt;Front-End&lt;/h3&gt;
+&lt;p&gt;If we use flask &lt;code&gt;render_template&lt;/code&gt; to provide the front end, then we can use the following to ways to launch the app,&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# method 1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;flask run
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# method 2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python3 app.py
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Another way is to use &lt;code&gt;streamlit&lt;/code&gt;. Streamlit is an open-source Python library that allows developers to create web applications for data science and machine learning projects with minimal effort. It is designed to simplify the process of turning data scripts into shareable web apps, enabling users to interact with data and models through a web browser.
+If we use &lt;code&gt;streamlit&lt;/code&gt;, we can run with&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -432,7 +1333,26 @@
       <pubDate>Tue, 11 Jan 2022 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ssh/</guid>
-      <description>How to always keep ssh connection alive</description>
+      <description>&lt;h2 id=&#34;keep-ssh-connected&#34;&gt;Keep SSH Connected&lt;/h2&gt;
+&lt;p&gt;There is always one issue that bothers me when using SSH to access server (e.g. EC2) which is that the ssh connection can disconnect very soon. I tried to make changes in the local ssh config: &lt;code&gt;~/.ssh/config&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Host remotehost
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	HostName remotehost.com
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	ServerAliveInterval 50
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then do a permission change&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;chmod 600 ~/.ssh/config
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;However, this doesn&amp;rsquo;t work for me on Mac, and I don&amp;rsquo;t know why. :(&lt;/p&gt;
+&lt;p&gt;Then I tried to make changes on server side.
+In &lt;code&gt;/etc/ssh/sshd_config&lt;/code&gt;, add or uncomment the following lines:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ClientAliveInterval 50
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ClientAliveCountMax 10
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then restart or reload SSH server to help it recognize the configuration change&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo service ssh restart  # for ubuntu linux
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo service sshd restart  # for other linux dist
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Finally, log out and try to login again&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;logout
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;This time it works! :)&lt;/p&gt;
+&lt;h2 id=&#34;adding-ssh-public-key-to-server&#34;&gt;Adding SSH Public Key to Server&lt;/h2&gt;
+&lt;p&gt;Adding ssh public key to server sometimes can make the connections eaiser. The command is simple:&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -477,7 +1397,32 @@
       <pubDate>Fri, 18 Jun 2021 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/add_math/</guid>
-      <description>Add math equation in my blog</description>
+      <description>&lt;p&gt;Add the following into &lt;code&gt;extend_head.html&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{ if or .Params.math .Site.Params.math }}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&lt;span style=&#34;color:#f92672&#34;&gt;link&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;rel&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;stylesheet&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;href&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;integrity&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;crossorigin&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;anonymous&amp;#34;&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&lt;span style=&#34;color:#f92672&#34;&gt;script&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;defer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;src&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;integrity&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;crossorigin&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;anonymous&amp;#34;&lt;/span&gt;&amp;gt;&amp;lt;/&lt;span style=&#34;color:#f92672&#34;&gt;script&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&lt;span style=&#34;color:#f92672&#34;&gt;script&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;defer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;src&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;integrity&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;crossorigin&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;anonymous&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;onload&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;renderMathInElement(document.body, 
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;//   The following is to parse inline math equation
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;  {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;      delimiters: [
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;                  {left: &amp;#39;$$&amp;#39;, right: &amp;#39;$$&amp;#39;, display: true},
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;                  {left: &amp;#39;\\[&amp;#39;, right: &amp;#39;\\]&amp;#39;, display: true},
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;                  {left: &amp;#39;$&amp;#39;, right: &amp;#39;$&amp;#39;, display: false},
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;                  {left: &amp;#39;\\(&amp;#39;, right: &amp;#39;\\)&amp;#39;, display: false}
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;              ]
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;          }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;);&amp;#34;&lt;/span&gt;&amp;gt;&amp;lt;/&lt;span style=&#34;color:#f92672&#34;&gt;script&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{{ end }}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Then in the markdown file, in the header section we add &lt;code&gt;math: true&lt;/code&gt;.&lt;/p&gt;
+&lt;h3 id=&#34;methods-to-show-math&#34;&gt;Methods to Show Math&lt;/h3&gt;
+&lt;p&gt;The the above setup, you can use the following ways in the markdown writeup.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;\\(E=mc^2\\) 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$$E=mc^2$$
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;$E=mc^2$
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
     </item>
     
     <item>
@@ -486,7 +1431,48 @@
       <pubDate>Fri, 18 Jun 2021 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/docker-commands/</guid>
-      <description>Docker</description>
+      <description>&lt;p&gt;In the last blog, we talked about commonly used AWS commands. In this blog, I&amp;rsquo;ll document some commonly used docker commands to save some time when I need them. Images defines what the container is. Container is the actually running virtual machine.&lt;/p&gt;
+&lt;h3 id=&#34;docker-setup&#34;&gt;Docker setup&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# check docker status&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;systemctl show --property ActiveState docker
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# if it&amp;#39;s inactive, then start the docker daemon&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo systemctl start docker
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;image&#34;&gt;Image&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# list all images&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker image ls
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# list all containers&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker container ls
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# stop/remove a container&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker container stop container_id
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker container rm container_id
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# pull an image&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker pull iamge_name
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;run-docker-container&#34;&gt;Run docker container&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-gdscript3&#34; data-lang=&#34;gdscript3&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# rm is to clean constainer after exit&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# it is interactive tty&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# for normal docker image&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker run &lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;entrypoint &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;bin&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;bash &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;it &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt;image_name&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# for nvidia docker image&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nvidia&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;docker run &lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;entrypoint &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;bin&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;bash &lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;rm &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;it &lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;name my_container_name  image_name
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# mount a volume to docker&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# --rm delete docker on exit&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nvidia&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;docker run &lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;entrypoint &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;bin&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;bash &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;v &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt;PWD&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;transforms_cache:&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;transforms_cache &lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;rm &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;it image_name
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# add env to docker system&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;nvidia&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;docker run &lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;entrypoint &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;bin&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;bash &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;v &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt;PWD&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;transforms_cache:&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;transforms_cache &lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;rm &lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;env SM_CHANNEL_TRAIN&lt;span style=&#34;color:#f92672&#34;&gt;=/&lt;/span&gt;opt&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;ml&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;input&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;data&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;train &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;it image_name
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# docker run to use GPU, we can use another command&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker run &lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;entrypoint &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;bin&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;bash &lt;span style=&#34;color:#f92672&#34;&gt;--&lt;/span&gt;gpus all &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;it xxxx_image_name
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;check-all-containers&#34;&gt;Check all containers&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker ps -a
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;clean-space&#34;&gt;Clean space&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;docker rmi -f $(docker images -a -q)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo docker system prune
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;install-package&#34;&gt;Install package&lt;/h3&gt;
+&lt;p&gt;Install packages inside a running docker. Usually we&amp;rsquo;re able to install package based on distributeion of linux system running in the docker. For example, if it&amp;rsquo;s ubuntu, then the command is&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -495,7 +1481,9 @@
       <pubDate>Fri, 18 Jun 2021 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/probability/</guid>
-      <description>Elegant EM algorithm</description>
+      <description>&lt;h3 id=&#34;bayesian-method&#34;&gt;Bayesian Method&lt;/h3&gt;
+&lt;p&gt;Maximium likelihood estimation assumes that there is one distribution with a fix set of parameters which describes data samples, i.e. all data are sampled from this specific distribution. On the other hand, Bayesian method thinks that there could be multiple distrbutions that can describe the data. We choose one set of parameters which parameterize one distribution based on observations to describe the data. The distribution we choose is shaped by the prior we use.&lt;/p&gt;
+&lt;h3 id=&#34;em-algorithm&#34;&gt;EM Algorithm&lt;/h3&gt;</description>
     </item>
     
     <item>
@@ -504,7 +1492,24 @@
       <pubDate>Fri, 18 Jun 2021 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/transformer/</guid>
-      <description>Transformer details</description>
+      <description>&lt;h2 id=&#34;layernorm-vs-batchnorm&#34;&gt;LayerNorm vs BatchNorm&lt;/h2&gt;
+&lt;p&gt;BatchNorm is commonly used in computer vision. LayerNorm is widely used in NLP. In CV, the channel dimension is RGB channel. In NLP, the channel dimension is feature dimension (embedding dimension).
+Layer norm normalizes across feature dimension (i.e embedding dimension) for each of the inputs which removes the dependence on batches. This makes layer normalization well suited for sequence models such as transformers.&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+    &lt;img alt=&#34;batch norm vs layer norm (image case)&#34; src=&#34;images/norm.png&#34; width=&#34;80%&#34; height=auto/&gt; 
+    &lt;em&gt;Figure 1. batch norm vs layer norm&lt;/em&gt;
+    &lt;br&gt;
+&lt;/p&gt;
+&lt;p&gt;After understanding of the basics, we can write down the pseudo code as below&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Pseudo code for batch norm&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(seq_len):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(hidden_size):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Norm([bert_tensor[k][i][j] &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; k &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(batch_size)])
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Pseudo code for layer norm&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(batch_size):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(seq_len):
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Norm([bert_tensor[i][j][k] &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; k &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(hidden_size)])
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;PyTorch implementation is shown blow. When using for BatchNorm, dim=0, assuming x is of the shape (batch_size, H, W, channel). When using for LayerNorm, dim=-1, assuming x is of shape (batch_size, seq_len, embed_dim).&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -513,7 +1518,31 @@
       <pubDate>Sat, 18 Jul 2020 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/rl/rl_basics/</guid>
-      <description>RL basics</description>
+      <description>&lt;h3 id=&#34;rl-basics&#34;&gt;RL Basics&lt;/h3&gt;
+&lt;p&gt;There are two fundamental problems in the sequential decision making process: reinforcement learning and planning.
+In reinforcement learning, the environment is unknown and agent interacts with environment to improve its policy. Within reinforcement learning there are two kinds of operation: prediction and control. Prediction is given policy, evaluate the future. Control is to optimize the future to find the optimal policy. In RL, we alternatively do predition and control to get the best policy.&lt;/p&gt;
+&lt;p&gt;In terms of methods, RL algorithm can be categorized into two types: model-free algorithm and model-based algorithm.
+In model-free algorithms, we don&amp;rsquo;t want to or we can&amp;rsquo;t learn the system dynamics. We sample actions and get corresponding rewards to optimize policy or fit a value function. It can further be divied into two methods: policy optimization or value learning.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Planning
+&lt;ul&gt;
+&lt;li&gt;Value Iteration: Value iteration uses dynamic programming to compute the value function iteratively using Bellman equation.&lt;/li&gt;
+&lt;li&gt;Policy iteration — Compute the value function and optimize the policy in alternative steps&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;RL
+&lt;ul&gt;
+&lt;li&gt;Value-learning/Q-learning: Without an explicit policy, we fit the value-function or Q-value function iteratively with observed rewards under actions taken by an off-policy, like an ε-greedy policy which selects action based on the Q-value function and sometimes random actions for exploration.&lt;/li&gt;
+&lt;li&gt;Policy gradients: using neural network to approximate policy and optimize policy using gradient ascent.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;concepts&#34;&gt;Concepts&lt;/h3&gt;
+&lt;p&gt;A return is a measured value (or a random variable), representing the actual discounted sum of rewards seen following a specific state or state/action pair. Value function is the expected return function.
+The discounted return for a trajectory is defined as:
+$$
+U_t = R_t + \gamma R_{t+1} + \gamma^2 R_{t+2} + \gamma^3 R_{t+3} + &amp;hellip;
+$$&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -522,7 +1551,10 @@
       <pubDate>Sat, 08 Feb 2020 12:01:14 -0700</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/tools/remote-development-with-vscode/</guid>
-      <description>How to use vscode for remote development</description>
+      <description>&lt;h3 id=&#34;remote-development&#34;&gt;Remote Development&lt;/h3&gt;
+&lt;p&gt;I used to do development on my local machine, and use &lt;strong&gt;fswatch&lt;/strong&gt; and &lt;strong&gt;rsync&lt;/strong&gt; to sync changes to server in real time. It works perfectly when development dependencies are simple and easy to set up. Generally I refer this development mode as local development. However, as more and more development environments are containerized, it becomes non-trivial to set up environment everytime. Recently, I started using VSCode as it has better support to leverage remote server development environment.&lt;/p&gt;
+&lt;p&gt;One great feature of VScode is that it works well with docker and kubernetes, i.e. we can attach VSCode to docker or kubernetes pods easily. In vscode terminal, we can execute commands like we&amp;rsquo;re doing on the server. I call this kind of development as remote development.&lt;/p&gt;
+&lt;p&gt;One problem with remote development is that we can&amp;rsquo;t save our changes locally. Once server dies, all our changes are gone. The solution is to use git. Since docker doesn&amp;rsquo;t come with an editor, when we use git, we have to set vscode as the editor:&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -531,7 +1563,20 @@
       <pubDate>Sat, 11 Jan 2020 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/makefile/</guid>
-      <description>make sense of makefile</description>
+      <description>&lt;h3 id=&#34;makefile-syntax&#34;&gt;Makefile Syntax&lt;/h3&gt;
+&lt;p&gt;A Makefile consists of a set of &lt;em&gt;rules&lt;/em&gt;. A rule generally looks like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;targets: prerequisites
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    command
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    command
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    command`
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;The &lt;em&gt;targets&lt;/em&gt; are file names, separated by spaces. Typically, there is only one per rule.&lt;/li&gt;
+&lt;li&gt;The &lt;em&gt;commands&lt;/em&gt; are a series of steps typically used to make the target(s). These &lt;em&gt;need to start with a tab character&lt;/em&gt;, not spaces.&lt;/li&gt;
+&lt;li&gt;The &lt;em&gt;prerequisites&lt;/em&gt; are also file names, separated by spaces. These files need to exist before the commands for the target are run. These are also called &lt;em&gt;dependencies&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;commands-and-execution&#34;&gt;Commands and execution&lt;/h3&gt;
+&lt;h4 id=&#34;command-echoingsilencing&#34;&gt;Command Echoing/Silencing&lt;/h4&gt;
+&lt;p&gt;Add an &lt;code&gt;@&lt;/code&gt; before a command to stop it from being printed&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -540,7 +1585,42 @@
       <pubDate>Tue, 18 Jun 2019 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/loss/loss/</guid>
-      <description>Losses in ML</description>
+      <description>&lt;h2 id=&#34;sigmoid&#34;&gt;Sigmoid&lt;/h2&gt;
+&lt;p&gt;Sigmoid is one of the most used activation functions.
+$$
+\sigma(x) = \frac{1}{1+e^{-x}}
+$$
+It has nice mathematical proprities:
+$$
+\sigma^\prime(x) = \sigma(x) \left[ 1 - \sigma(x) \right]
+$$
+and
+$$
+\left[log\sigma(x)\right]^\prime = 1 - \sigma(x) \\
+\left[log\left(1 - \sigma(x)\right)\right]^\prime = - \sigma(x)
+$$&lt;/p&gt;
+&lt;h2 id=&#34;logistic-regression&#34;&gt;Logistic Regression&lt;/h2&gt;
+&lt;p&gt;For a binary classification problem, for an example $x = (x_1, x_2, \dotsb , x_n)^T$, the hypothesis function (for the positive class) can be written as:
+$$
+\begin{aligned}
+h_{\theta}(1|x) &amp;amp;= \sigma(\theta_0 + \theta_1x_1 + \theta_2x_2 + \dotsb + \theta_nx_n) \\
+&amp;amp;= \sigma(\theta^{\mathrm{T}}x) \\
+&amp;amp;= \frac{1}{1+e^{-\theta^{\mathrm{T}}x}}
+\end{aligned}
+$$
+Consequently, for the negative class,
+$$
+\begin{aligned}
+h_{\theta}(0|x) &amp;amp;= 1 - \frac{1}{1+e^{-\theta^{\mathrm{T}}x}} \\
+&amp;amp;= \frac{1}{1+e^{\theta^{\mathrm{T}}x}} \\
+&amp;amp;= \sigma(-\theta^{\mathrm{T}}x)
+\end{aligned}
+$$&lt;/p&gt;
+&lt;p&gt;Single sample cost function of logistic regression is expressed as:
+$$
+L(\theta) = -y_i \cdot \log(h_\theta(x_i)) -  (1-y_i) \cdot \log(1 - h_\theta(x_i))
+$$
+Notice that in the second term $1 - h_\theta(x_i)$ is the negative class probability&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -549,7 +1629,59 @@
       <pubDate>Sun, 11 Feb 2018 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/git/git/</guid>
-      <description>Some of my frequently used commands</description>
+      <description>&lt;h3 id=&#34;git&#34;&gt;Git&lt;/h3&gt;
+&lt;h4 id=&#34;git-merge&#34;&gt;Git merge&lt;/h4&gt;
+&lt;p&gt;Suppose we&amp;rsquo;re on &lt;strong&gt;master&lt;/strong&gt; branch, if we want to override the changes in the master branch with feature branch, we can use the following command&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git merge -X theirs feature
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;to keep the master branch changes:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git merge -X ours feature
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If we want to rebase of current branch onto the master, and want to keep feature branch&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git rebase master -X theirs
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;if we want to keep master branch changes over our feature branch, the&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git rebase master -X ours
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To summarize, we can have the following table:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&amp;nbsp; Currently on&lt;/th&gt;
+&lt;th&gt;Command &amp;nbsp; &amp;nbsp;&lt;/th&gt;
+&lt;th&gt;Strategy &amp;nbsp; &amp;nbsp;&lt;/th&gt;
+&lt;th&gt;Outcome&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&amp;nbsp;master&lt;/td&gt;
+&lt;td&gt;git merge feature &amp;nbsp;&lt;/td&gt;
+&lt;td&gt;
+&lt;strong&gt;-Xtheirs&lt;/strong&gt; &amp;nbsp; &amp;nbsp;&lt;/td&gt;
+&lt;td&gt;Keep changes from feature branch&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;master&lt;/td&gt;
+&lt;td&gt;git merge feature&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;-Xours&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;keep changes from master branch&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&amp;nbsp;feature&lt;/td&gt;
+&lt;td&gt;git rebase master &amp;nbsp;&lt;/td&gt;
+&lt;td&gt;
+&lt;strong&gt;-Xtheirs&lt;/strong&gt; &amp;nbsp; &amp;nbsp;&lt;/td&gt;
+&lt;td&gt;Keep changes from feature branch&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;feature&lt;/td&gt;
+&lt;td&gt;git rebase master&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;-Xours&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;keep changes from master branch&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+{:.mbtablestyle}
+&lt;br&gt;
+&lt;h4 id=&#34;git-diff&#34;&gt;Git Diff&lt;/h4&gt;
+&lt;p&gt;To check two branch difference, suppose we&amp;rsquo;re on branch1, then we can do,&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -558,7 +1690,61 @@
       <pubDate>Sun, 11 Feb 2018 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/shell-commands/</guid>
-      <description>Some of my frequently used commands</description>
+      <description>&lt;h3 id=&#34;commonly-used-commands&#34;&gt;Commonly Used Commands&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;SCRIPT_DIR&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt; cd &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;$(&lt;/span&gt; dirname &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;${&lt;/span&gt;BASH_SOURCE[0]&lt;span style=&#34;color:#e6db74&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; &amp;amp;&amp;gt; /dev/null &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; pwd &lt;span style=&#34;color:#66d9ef&#34;&gt;)&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;git&#34;&gt;Git&lt;/h3&gt;
+&lt;h4 id=&#34;git-merge&#34;&gt;Git merge&lt;/h4&gt;
+&lt;p&gt;Suppose we&amp;rsquo;re on &lt;strong&gt;master&lt;/strong&gt; branch, if we want to override the changes in the master branch with feature branch, we can use the following command&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git merge -X theirs feature
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;to keep the master branch changes:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git merge -X ours feature
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;If we want to rebase of current branch onto the master, and want to keep feature branch&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git rebase master -X theirs
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;if we want to keep master branch changes over our feature branch, the&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git rebase master -X ours
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;To summarize, we can have the following table:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&amp;nbsp; Currently on&lt;/th&gt;
+&lt;th&gt;Command &amp;nbsp; &amp;nbsp;&lt;/th&gt;
+&lt;th&gt;Strategy &amp;nbsp; &amp;nbsp;&lt;/th&gt;
+&lt;th&gt;Outcome&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&amp;nbsp;master&lt;/td&gt;
+&lt;td&gt;git merge feature &amp;nbsp;&lt;/td&gt;
+&lt;td&gt;
+&lt;strong&gt;-Xtheirs&lt;/strong&gt; &amp;nbsp; &amp;nbsp;&lt;/td&gt;
+&lt;td&gt;Keep changes from feature branch&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;master&lt;/td&gt;
+&lt;td&gt;git merge feature&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;-Xours&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;keep changes from master branch&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&amp;nbsp;feature&lt;/td&gt;
+&lt;td&gt;git rebase master &amp;nbsp;&lt;/td&gt;
+&lt;td&gt;
+&lt;strong&gt;-Xtheirs&lt;/strong&gt; &amp;nbsp; &amp;nbsp;&lt;/td&gt;
+&lt;td&gt;Keep changes from feature branch&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;feature&lt;/td&gt;
+&lt;td&gt;git rebase master&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;-Xours&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;keep changes from master branch&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+{:.mbtablestyle}
+&lt;br&gt;
+#### Git Diff
+&lt;p&gt;To check two branch difference, suppose we&amp;rsquo;re on branch1, then we can do,&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -567,7 +1753,49 @@
       <pubDate>Sun, 11 Feb 2018 00:18:23 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/git/git_fork/</guid>
-      <description>Create a fork</description>
+      <description>&lt;h2 id=&#34;three-way-code-management&#34;&gt;Three-way Code Management&lt;/h2&gt;
+&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;./image.png&#34; alt=&#34;alt text&#34;  /&gt;
+&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Assuming the current directory is &amp;lt;your-repo-name&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git remote add upstream https://github.com/alshedivat/al-folio.git
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git fetch upstream
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# check all branches&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git branch -avv
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git checkout main &lt;span style=&#34;color:#75715e&#34;&gt;# local main tracking personal repo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git rebase upstream/main &lt;span style=&#34;color:#75715e&#34;&gt;# rebase from upstream&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git push -f &lt;span style=&#34;color:#75715e&#34;&gt;# push to personal repo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;manually-add-upstream-branch&#34;&gt;Manually Add Upstream Branch&lt;/h2&gt;
+&lt;p&gt;We can also manually do the changes. This is the original .git/config&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[core]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    repositoryformatversion = 0
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    filemode = true
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    bare = false
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    logallrefupdates = true
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[remote &amp;#34;origin&amp;#34;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    url = https://github.com/yyy/zzz
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    fetch = +refs/heads/*:refs/remotes/origin/*
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[branch &amp;#34;master&amp;#34;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    remote = origin
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    merge = refs/heads/master
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Making changes like this:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[core]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    repositoryformatversion = 0
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    filemode = true
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    bare = false
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    logallrefupdates = true
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[remote &amp;#34;origin&amp;#34;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    url = https://github.com/xxx/zzz
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    fetch = +refs/heads/*:refs/remotes/origin/*
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[remote &amp;#34;upstream&amp;#34;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    url = https://github.com/yyy/zzz
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    fetch = +refs/heads/*:refs/remotes/upstream/*
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;[branch &amp;#34;master&amp;#34;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    remote = origin
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    merge = refs/heads/master
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;sync-new-commits-from-public-repo&#34;&gt;Sync New Commits from Public Repo&lt;/h2&gt;
+&lt;p&gt;The best approach is:&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -576,7 +1804,27 @@
       <pubDate>Thu, 05 May 2016 00:17:58 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/web/forward_reverse_proxy/</guid>
-      <description>Web tech</description>
+      <description>&lt;h3 id=&#34;forward-and-reverse-proxy-server&#34;&gt;Forward and Reverse Proxy Server&lt;/h3&gt;
+&lt;p&gt;When clients (web browsers) make requests to sites and services on the Internet, the forward proxy server intercepts those requests and then communicates with servers on behalf of these clients like a middleman.
+&lt;img loading=&#34;lazy&#34; src=&#34;images/forward_proxy.png&#34; alt=&#34;&#34;  /&gt;
+
+Why we use forward proxy server?&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Circumvent restrictions. Sometimes restrictions through firewall are put on the access of the internet. A forward proxy can get around these restriction.&lt;/li&gt;
+&lt;li&gt;Block contents. Proxies can be set up to block a certain type of user to access a specific type of online contents&lt;/li&gt;
+&lt;li&gt;Protect online ID.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;A reverse proxy is an application that sits in front of back-end applications and forwards client (e.g. browser) requests to those applications.
+&lt;img loading=&#34;lazy&#34; src=&#34;images/reverse_proxy.png&#34; alt=&#34;&#34;  /&gt;
+
+Why we use reverse proxy server?&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Load balancing&lt;/li&gt;
+&lt;li&gt;Protection from attacks&lt;/li&gt;
+&lt;li&gt;Caching (such as CDN caching)&lt;/li&gt;
+&lt;li&gt;SSL encryption&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;A simplified way to sum it up would be to say that a forward proxy sits in front of a client and ensures that no origin server ever communicates directly with that specific client. On the other hand, a reverse proxy sits in front of an origin server and ensures that no client ever communicates directly with that origin server.&lt;/p&gt;</description>
     </item>
     
     <item>
@@ -585,7 +1833,10 @@
       <pubDate>Thu, 09 Apr 2015 12:01:14 -0700</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/python_basics/</guid>
-      <description>Python Master</description>
+      <description>&lt;h2 id=&#34;concurrency-in-python&#34;&gt;Concurrency in Python&lt;/h2&gt;
+&lt;p&gt;Parallelism consists of performing multiple operations at the same time. Multiprocessing is a means to effect parallelism, and it entails spreading tasks over a computer’s central processing units (CPUs, or cores). Multiprocessing is well-suited for CPU-bound tasks: tightly bound for loops and mathematical computations usually fall into this category.&lt;/p&gt;
+&lt;p&gt;Concurrency is a slightly broader term than parallelism. It suggests that multiple tasks have the ability to run in an overlapping manner. (There’s a saying that concurrency does not imply parallelism.)&lt;/p&gt;
+&lt;p&gt;Threading is a concurrent execution model whereby multiple threads take turns executing tasks. One process can contain multiple threads. Python has a complicated relationship with threading thanks to its GIL, but that’s beyond the scope of this article.&lt;/p&gt;</description>
     </item>
     
     
