@@ -1385,7 +1385,7 @@ In &lt;code&gt;/etc/ssh/sshd_config&lt;/code&gt;, add or uncomment the following
 }
 &lt;/style&gt;
 &lt;div class=&#34;wrap&#34;&gt;
-&lt;img class=&#34;img-fluid z-depth-1 rounded&#34; id=&#34;mypic&#34; src=&#34;../img/junwang.jpeg&#34;&gt;
+&lt;img class=&#34;img-fluid z-depth-1 rounded&#34; id=&#34;mypic&#34; src=&#34;https://rich-junwang.github.io/img/junwang.jpeg&#34;&gt;
 &lt;/div&gt;
 &lt;p&gt;Hi there, this is Jun Wang. Welcome to my website. I&#39;m an AI researcher. I love programming but I prefer training models to write code for me.. 
 &lt;p&gt;I am a Staff Research Scientist at ByteDance Seed working on foundational model training. Prior to that I was a Senior Applied Scientist at Amazon, specializing in foundational model pre-training, post-training, and reinforcement learning for complex reasoning tasks. I built the very first generation LLMs at Amazon (AWS Titan). My expertise spans the full stack of LLM development, including data curation, pretraining, SFT, and RLHF. I have experience training both text and code models. At AWS, I had focused on deep RL for math, code generation tasks.&lt;/p&gt;</description>
