@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>ML on Jun&#39;s Blog</title>
+    <link>https://rich-junwang.github.io/en-us/tags/ml/</link>
+    <description>Recent content in ML on Jun&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 18 Feb 2025 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/ml/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MoE Models</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/moe_models/</link>
+      <pubDate>Tue, 18 Feb 2025 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/moe_models/</guid>
+      <description>MoE Models</description>
+    </item>
+    
+    <item>
+      <title>Entropy Collapsing in RL Training</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/llm_inference/entropy_decoding/</link>
+      <pubDate>Sun, 05 Jan 2025 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/llm_inference/entropy_decoding/</guid>
+      <description>Decoding</description>
+    </item>
+    
+    <item>
+      <title>Diffusion Probabilistic Models</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/diffusion/</link>
+      <pubDate>Tue, 18 Jun 2024 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/diffusion/</guid>
+      <description>Dive into diffusion</description>
+    </item>
+    
+    <item>
+      <title>Loss Reduction</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/loss/loss_reduction/</link>
+      <pubDate>Tue, 18 Jun 2024 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/loss/loss_reduction/</guid>
+      <description>Losses in ML</description>
+    </item>
+    
+    <item>
+      <title>Ray</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/ray/</link>
+      <pubDate>Tue, 18 Jun 2024 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/ray/</guid>
+      <description>Async Ops in Ray</description>
+    </item>
+    
+    <item>
+      <title>Triton, Cuda and GPU</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/triton/</link>
+      <pubDate>Sun, 05 May 2024 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/triton/</guid>
+      <description>Triton and cuda</description>
+    </item>
+    
+    <item>
+      <title>Monte Carlo Tree Search</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/mcts/</link>
+      <pubDate>Fri, 05 Apr 2024 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/mcts/</guid>
+      <description>MCTS</description>
+    </item>
+    
+    <item>
+      <title>Autograd</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/pytorch_autograd/</link>
+      <pubDate>Mon, 11 Mar 2024 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/pytorch/pytorch_autograd/</guid>
+      <description>PyTorch..</description>
+    </item>
+    
+    <item>
+      <title>Coder Training</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/coder_training/</link>
+      <pubDate>Mon, 18 Dec 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/coder_training/</guid>
+      <description>Large coder model pretraining</description>
+    </item>
+    
+    <item>
+      <title>Model Evaluation</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/model_eval/</link>
+      <pubDate>Wed, 18 Oct 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/model_eval/</guid>
+      <description>Model Evaluation</description>
+    </item>
+    
+    <item>
+      <title>Retrieval Augmented Generation</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/rag/</link>
+      <pubDate>Wed, 18 Oct 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/rag/</guid>
+      <description>RAG system</description>
+    </item>
+    
+    <item>
+      <title>Flash Attention</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/flash_attn/</link>
+      <pubDate>Sun, 18 Jun 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/flash_attn/</guid>
+      <description>Large language model pretraining</description>
+    </item>
+    
+    <item>
+      <title>Distributed Optimizer</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/distributed_optimizer/</link>
+      <pubDate>Fri, 05 May 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/distributed_optimizer/</guid>
+      <description>Distributed optimizer</description>
+    </item>
+    
+    <item>
+      <title>LoRA Model Fine-tuning</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/lora_finetuning/</link>
+      <pubDate>Fri, 05 May 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/lora_finetuning/</guid>
+      <description>LoRA finetuning</description>
+    </item>
+    
+    <item>
+      <title>ML System</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/ml_system/</link>
+      <pubDate>Sun, 05 Mar 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/ml_system/</guid>
+      <description>ML System</description>
+    </item>
+    
+    <item>
+      <title>InstructGPT and ChatGPT</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/instructgpt/</link>
+      <pubDate>Wed, 18 Jan 2023 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/instructgpt/</guid>
+      <description>RLHF</description>
+    </item>
+    
+    <item>
+      <title>Large Scale Pretraining</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/large_scale_pretraining/pretrain/</link>
+      <pubDate>Sun, 18 Dec 2022 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/large_scale_pretraining/pretrain/</guid>
+      <description>Large language model pretraining</description>
+    </item>
+    
+    <item>
+      <title>EM Algorithm</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/probability/</link>
+      <pubDate>Fri, 18 Jun 2021 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/probability/</guid>
+      <description>Elegant EM algorithm</description>
+    </item>
+    
+    <item>
+      <title>Transformer</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/transformer/</link>
+      <pubDate>Fri, 18 Jun 2021 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/transformer/</guid>
+      <description>Transformer details</description>
+    </item>
+    
+    <item>
+      <title>RL Basics</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/rl/rl_basics/</link>
+      <pubDate>Sat, 18 Jul 2020 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/rl/rl_basics/</guid>
+      <description>RL basics</description>
+    </item>
+    
+    <item>
+      <title>Loss in ML</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/loss/loss/</link>
+      <pubDate>Tue, 18 Jun 2019 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/loss/loss/</guid>
+      <description>Losses in ML</description>
+    </item>
+    
+  </channel>
+</rss>

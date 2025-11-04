@@ -6,7 +6,25 @@
     <description>Recent content in Tech on Jun&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 30 Nov 2021 15:55:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/tech/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 05 May 2022 00:17:58 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/tags/tech/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>A Walk in the Cloud</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/cloud/aws/</link>
+      <pubDate>Thu, 05 May 2022 00:17:58 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/cloud/aws/</guid>
+      <description>AWS</description>
+    </item>
+    
+    <item>
+      <title>Tech &amp; Talents</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/tech/</link>
+      <pubDate>Thu, 05 May 2022 00:17:58 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/tech/</guid>
+      <description>Tech and talents</description>
+    </item>
+    
     <item>
       <title>Redis scan命令学习</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/redis/</link>
