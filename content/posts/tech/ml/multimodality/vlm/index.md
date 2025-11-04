@@ -94,7 +94,7 @@ Below shows an overview of LLaVA 1.5’s data and architecture. Compared to Qwen
 ### Qwen2-VL
 
 Qwen2-VL represents a contemporary architecture of VLM. The model architecture is shown below. It features several innovations comparing with previous version:
-1. Naive Dynamic Resolution mechanism: The model adapts to varying image resolutions by generating different numbers of visual tokens on-the-fly—moving away from traditional fixed-resolution processing. Qwen2-VL pretrained their own ViT model based on this mechanism. 
+1. Native Dynamic Resolution mechanism: The model adapts to varying image resolutions by generating different numbers of visual tokens on-the-fly—moving away from traditional fixed-resolution processing. Qwen2-VL pretrained their own ViT model based on this mechanism. 
 2. Multimodal Rotary Position Embedding: Introduces rotary-style positional embeddings capable of jointly encoding positional information across text, images, and video. This unified encoding supports seamless fusion of positional cues across modalities
 3. Unified Image & Video Processing Pipeline: The Visual Transformer (ViT) backbone (675M parameters) is structured to process both static images and video frames in a single, coherent paradigm. Simplifies multimodal modeling and demonstrates strong performance on both image and video tasks .
 
