@@ -8,8 +8,8 @@ keywords:
 categories: 
 - 
 tags: 
-- distributed training
-description: "Distributed data processing"
+- CUDA
+description: "CUDA"
 weight:
 slug: ""
 draft: false # 是否为草稿
