@@ -112,3 +112,51 @@ rm .docker/config.json
 
 # Due to some reason, the docker is not able to update the config file.
 ```
+
+
+### Speedup Building Time
+
+Sometimes building certain package can take very long time. For instance, using villina command to build flash-attn can take several hours, to speed up the process, we can take several approaches
+
+1. Use Pre-build Wheels
+```bash
+RUN pip3 install flash-attn --find-links https://github.com/Dao-AILab/flash-attention/releases
+
+# Example for JetPack 6 (CUDA 12.6)
+RUN pip install flash-attn --no-build-isolation --index-url https://pypi.jetson-ai-lab.dev/jp6/cu126
+```
+
+2. Parallelize the build
+```bash
+RUN MAX_JOBS=$(nproc) pip3 install -U flash-attn --no-build-isolation
+```
+
+We can target only the specific GPU architectures we need and prevents the build from crashing or stalling.
+```bash
+# Prerequisite: Ensure ninja is installed for faster parallel builds
+RUN pip3 install ninja packaging
+
+# Optimized flash-attn build
+# Replace "8.0" with your specific GPU architecture (see list below)
+ENV TORCH_CUDA_ARCH_LIST="8.0;9.0+PTX" 
+ENV MAX_JOBS=10
+RUN pip3 install -U flash-attn --no-build-isolation
+```
+
+3. Use ccache to cache compilation
+```bash
+RUN apt-get update && apt-get install -y ccache
+ENV PATH="/usr/lib/ccache:$PATH"
+RUN pip3 install -U flash-attn --no-build-isolation
+```
+
+4. Build Once and Save the Wheel
+```bash
+# Build the wheel (takes hours, but only once)
+pip3 wheel flash-attn --no-build-isolation -w ./wheels
+
+# Install from the saved wheel (takes seconds)
+pip3 install ./wheels/flash_attn-*.whl
+```
+
+All these commands can be used in CLI to speed up installation of flash-attn as well.
