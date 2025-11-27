@@ -129,6 +129,7 @@ RUN pip install flash-attn --no-build-isolation --index-url https://pypi.jetson-
 2. Parallelize the build
 ```bash
 RUN MAX_JOBS=$(nproc) pip3 install -U flash-attn --no-build-isolation
+RUN MAX_JOBS=$(nproc) TORCH_CUDA_ARCH_LIST="9.0;10.0" pip3 install -U flash-attn --no-build-isolation
 ```
 
 We can target only the specific GPU architectures we need and prevents the build from crashing or stalling.
