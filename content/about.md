@@ -20,7 +20,8 @@ cover:
     relative: false
 ---
 
-<p style="font-size: 25px;">About Me</p>
+<!-- <p style="font-size: 25px;">About Me</p> -->
+### About Me
 <style>
  .wrap {
    float: right; 
@@ -43,7 +44,7 @@ cover:
 I am a Staff Research Scientist at ByteDance Seed working on foundational model training. Prior to that I was a Senior Applied Scientist at Amazon, specializing in foundational model pre-training, post-training, and reinforcement learning for complex reasoning tasks. I built the very first generation LLMs at Amazon (AWS Titan). My expertise spans the full stack of LLM development, including data curation, pretraining, SFT, and RLHF. I have experience training both text and code models. At AWS, I had focused on deep RL for math, code generation tasks.
 
 At Seed, I've contributed to open-source RL project -- VeRL and most recently I've been working on full stack video generation training. 
-</p>
+
 <p>Opinions are my own and I do not speak for my employer or my team. On this webpage, I'd like to share my study and my
 paper reading. Feel free to reach out to me if you have any comments/suggestions</p>
 
@@ -70,7 +71,7 @@ All my publications can be found on [google scholar](https://scholar.google.com/
 }
 </style> -->
 
-<p style="font-size: 25px;">Professional Services
+### Professional Services
 
 - Reviewer for ACL ARR 2024, EMNLP 2025, ICLR 2025
 - Reviewer for NeurIPS, ICLR 2023
@@ -81,3 +82,9 @@ All my publications can be found on [google scholar](https://scholar.google.com/
 I served as the Amazon Research Award reviewer and was an AC for AMLC conference at Amazon.
 
 
+### Miscellaneous
+
+During my studies at school, I trained as an electrical engineer with a focus on integrated circuit design, including analog, RL, and power-management circuits. I was also proficient with Verilog HDL for signal processing. The project shown below is a PCB I designed featuring a Xilinx FPGA for real-time speech signal processing while I was at UT Dallas.
+
+
+<div align="center"> <img src=/img/pcb.png style="width: 50%; height: auto;"/> FPGA Speech Processing Platform for Cochlear Implant</div>
