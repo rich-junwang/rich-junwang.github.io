@@ -459,7 +459,8 @@
       <pubDate>Sat, 06 Nov 2021 14:57:28 +0800</pubDate>
       
       <guid>https://rich-junwang.github.io/en-us/about/</guid>
-      <description>&lt;p style=&#34;font-size: 25px;&#34;&gt;About Me&lt;/p&gt;
+      <description>&lt;!-- &lt;p style=&#34;font-size: 25px;&#34;&gt;About Me&lt;/p&gt; --&gt;
+&lt;h3 id=&#34;about-me&#34;&gt;About Me&lt;/h3&gt;
 &lt;style&gt;
  .wrap {
    float: right; 
