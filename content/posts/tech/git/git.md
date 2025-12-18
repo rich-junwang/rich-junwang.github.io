@@ -267,5 +267,12 @@ Suppose we're on branch A, and we want to add branch B files to branch A
 git ls-tree -r --name-only branch_A  | grep "my_name_pattern" | xargs git restore --source=branch_A --
 ```
 
+
+### Git branch conflict
+
+```bash
+git fetch --prune
+```
+
 ### References
 [1] https://itsnotbugitsfeature.com/2019/10/22/splitting-a-big-pull-request-into-smaller-review-able-ones/
