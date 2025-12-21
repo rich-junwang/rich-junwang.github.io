@@ -282,4 +282,32 @@ sudo apt autoremove
 sudo reboot
 ```
 
+## Debugging Hang
+
+We use tool py-spy. py-spy is a sampling profiler for Python programs. It lets you visualize what your Python program is spending time on without restarting the program or modifying the code in any way. py-spy is extremely low overhead: it is written in Rust for speed and doesn't run in the same process as the profiled Python program. This means py-spy is safe to use against production Python code.
+
+
+First check all process with lineage
+```bash
+ps -afx
+```
+
+
+```bash
+py-spy dump --pid process_id
+
+
+# -n is useful if you want to see stack traces from python extensions written in C, C++, etc., 
+# as the program may hang in one of the extensions
+py-spy dump -n --pid process_id
+```
+
+In torch training, we could have multiple processes, in this case, we can grab all state at once:
+```bash
+# here suppose we launch training using torchrun --nproc_per_node 4 train_script.py
+pgrep -f train_script.py | xargs -I {} py-spy dump --pid {}
+```
+
+It's usually very easy to see the different process (the one that gets stuck). Then we compare from where the control flow has the divergence. 
+
 
