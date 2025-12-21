@@ -170,6 +170,11 @@ NODE_RANK=${RANK}
 NNODES=${NUM_NODES}
 torchrun  --nproc-per-node=$GPUS_PER_NODE --nnodes=$NUM_NODES --node_rank $NODE_RANK  --rdzv-endpoint=${MASTER_ADDR}:${MASTER_PORT}  --rdzv-backend=c10d train.py args..
 
+torchrun --nnodes=1 --nproc_per_node=4 --rdzv_id=JOB_ID --rdzv_backend=c10d --rdzv_endpoint=localhost:29400 train.py
+
+
+# newer version now has standalone flag to indicate single machine multi-gpu setting
+torchrun --standalone --nproc_per_node=4 train.py
 ```
 
 
