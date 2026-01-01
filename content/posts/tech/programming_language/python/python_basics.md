@@ -146,7 +146,7 @@ source .venv/bin/activate
 deactivate
 ```
 
-## Debug
+## Pdb Debug
 ```python
 # using pdb
 # use `n` to step over
@@ -391,6 +391,20 @@ pip install -e path/to/SomeProject
 
 Editable installs allow you to install your project without copying any files. Instead, the files in the development directory are added to Python’s import path. This approach is well suited for development and is also known as a “development installation”.
 
+
+
+
+## Python Dependency Debug
+Sometimes there are cases where we have multiple versions of the same dependency package. To debug this issue, we can get the real file used in the program
+```python
+import mypkg
+print(mypkg.__file__)
+```
+
+We can also enable this env to have more info
+```bash
+export PYTHONVERBOSE=1
+```
 
 
 ## References
