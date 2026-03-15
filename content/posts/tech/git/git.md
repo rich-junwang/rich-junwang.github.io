@@ -242,7 +242,33 @@ git submodule update --init --recursive  # if there are nested submodules
 ```bash
 # set default branch name
  git config --global init.defaultBranch main
+
+
+# It tells Git which text editor to open when it needs you to edit something (like commit messages, rebase instructions, merge messages, etc.).
+git config --global core.editor "code --wait"
 ```
+
+`git config` changes Git configuration settings.
+
+Git has three main levels:
+
+* `--system` → for the whole machine
+* `--global` → for your user account
+* repository only (no flag)
+
+
+
+If we want to do it once, we can do
+```bash
+git -c core.editor="code --wait" rebase -i HEAD~3
+```
+
+We can also have an alias for vscode based rebase:
+
+```bash
+git config --global alias.vrebase '!git -c core.editor="code --wait" rebase -i'
+```
+
 
 
 ### Add and Update URL

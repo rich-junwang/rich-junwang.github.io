@@ -29,7 +29,7 @@ cover:
     relative: false
 ---
 
-### Remote Development
+## Remote Development
 
 I used to do development on my local machine, and use **fswatch** and **rsync** to sync changes to server in real time. It works perfectly when development dependencies are simple and easy to set up. Generally I refer this development mode as local development. However, as more and more development environments are containerized, it becomes non-trivial to set up environment everytime. Recently, I started using VSCode as it has better support to leverage remote server development environment. 
 
@@ -46,7 +46,7 @@ Another issue is we have to install extensions on remote server. For instance, w
 
 VScode also has a [nice extension tool](https://marketplace.visualstudio.com/items?itemName=Natizyskunk.sftp) to sync code to remote server.
 
-### VScode Shortcuts
+## VScode Shortcuts
 If it's on Mac, replace CTRL key with CMD key
 
 (1) CTRL + X : cut a line \
@@ -109,7 +109,7 @@ In `settings.json` add the following key-value pair:
 "workbench.editor.enablePreview": false
 ```
 
-### Config
+## Config
 Here is the config settings I used.
 ```json
 {
@@ -153,7 +153,7 @@ Here is the config settings I used.
 
 
 
-### Remote SSH config
+## Remote SSH config
 Install the plugin from [here](https://github.com/Natizyskunk/vscode-sftp?tab=readme-ov-file)
 
 Connecting to a single serve the `sftp.json` is like this:
@@ -225,7 +225,7 @@ After saving the `sftp.json` in the `.vscode` folder, we can trigger a start syn
 - using `>` to start a command, typing sftp. Select for example sync from local to remote.
 
 
-### Paste and Indentation
+## Paste and Indentation
 Install `Paste and Indent` from g3rry
 Adding the following to keybindings json
 ```
@@ -247,8 +247,8 @@ Adding the following to keybindings json
 ```
 
 
-### Remote SSH Development
-#### How to manage plugins
+## Remote SSH Development
+### How to manage plugins
 There are two ways to manage plugins when using remote ssh server.
 1. You can also install all locally installed extensions on the SSH host by going to the Extensions view and selecting Install Local Extensions in SSH: {Hostname} using the cloud button at the right of the Local - Installed title bar. This will display a dropdown where you can select which locally installed extensions to install on your SSH host.
 
@@ -259,6 +259,30 @@ If there are extensions that you would like to always have installed on any SSH 
     "eamodio.gitlens",
     "mutantdino.resourcemonitor"
 ]
+
+
+
+## Interactive Rebase
+
+First config git to use code for interactive rebase
+```bash
+
+# [core]
+#   editor = vim
+#   excludesfile = ~/.gitignore_global
+#   WHITESPACE=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+
+git config --global core.editor "code --wait"
+
+```
+
+It tells Git which text editor to open when it needs you to edit something (like commit messages, rebase instructions, merge messages, etc.).
+
+If we only want to do it once with vscode, we can do
+```bash
+git -c core.editor="code --wait" rebase -i HEAD~3
+git -c core.editor="code --wait" rebase -i upstream/main
+```
 
 ## References
 1. https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf
