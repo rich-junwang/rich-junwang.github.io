@@ -291,6 +291,8 @@ git remote set-url origin https://github.com/xxx/yyy  # used for https connectio
 Suppose we're on branch A, and we want to add branch B files to branch A
 ```bash
 git ls-tree -r --name-only branch_A  | grep "my_name_pattern" | xargs git restore --source=branch_A --
+git ls-tree -r --name-only branch_A  | grep "my_name_pattern" | xargs -r git restore --source=branch_A --
+
 ```
 
 
