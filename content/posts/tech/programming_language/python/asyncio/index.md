@@ -133,9 +133,36 @@ if __name__ == '__main__':
 
 ```
 
+
+### Await
+Use await when you want to "do this step, and only continue after it finishes"
+
+- It yield control back to the event loop so other tasks can run while this one waits (e.g. I/O, async.sleep, waiting on a queue)
+- It sequences work inside one coroutine: step A, step B and step C.
+
+```python
+async def fetch_one():
+    data = await load_from_network()  # wait here, other tasks can run
+    await save(data)  # then wait for save
+```
+
+If we await things one after another in a loop, we get concurrency with the event loop (other tasks can run). but not parallelism of those with each other -- each iteration waits for the previous await to finish. 
+
+
+
 ### Create Tasks and Gather Tasks
 
 Old-fashioned way to create task is to use `asyncio.create_task` method. After creating tasks, we use asyncio.wait to gather all the tasks. 
+
+The semantics of `create_task` is that: starting this coroutine now and don't wait for it to finish yet. 
+- It schedules the coroutine on the event loop and returns a Task that you can await later
+- Typical pattern: overlap work -- start several operations, then await them when you need results or when you're ready to wait.
+
+
+Rule of thumb: 
+- Need strict order inside one flow -> then use await in sequence
+- Need two (or more) loop-running loops to run together -> create_tasks for each, then wait on them somehow. 
+
 
 ```python
 import asyncio
@@ -159,6 +186,10 @@ if __name__ == '__main__':
 
 
 To gather tasks, we can also using new `gather` method. Notice that gather doesn't have to use `create_task`. It can automatically package coroutine into a task. 
+gather semantics: "await until all of these awaitables finish"
+- It's mainly a convenience for "join N parallel things". We can also await each Task one by one, but gather runs them concurrently if they're already tasks/futures, and gives you a single await for completion. 
+
+
 
 ```python
 import asyncio
