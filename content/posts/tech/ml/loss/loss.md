@@ -73,10 +73,26 @@ Notice that in the second term $1 - h_\theta(x_i)$ is the negative class probabi
 
 
 ## Cross Entropy
+
+For two probability distributions $p$ (true) and $q$ (predicted) over the same set:
+
+$$
+H(p, q) = -\sum_i p_i \log q_i
+$$
+
+* $p$: the true distribution (what actually happens). Note that here $p$ is valid distribution, so $\sum_i{p}=1$
+* $q$: the model’s predicted distribution
+
+
+### In machine learning terms
+
 Cross entropy defines the distance between model output distribution and the groudtruth distribution.
 $$
 H(y,p) = -\sum_{i}y_i \log(p_i)
 $$
+* $y$ = target distribution (labels)
+* $p$ = predicted probabilities (e.g., from softmax)
+
 Since the $y_i$ is the class label (1 for positive class, 0 for negative), essentially here we're summing up the negative log probably of the positive label. What is the reason why we say that negative log likehood and cross entropy is equivalent. 
 
 When normalization function (we can say activation function of last layer) is softmax function, namely, for each class $s_i$ the probability is given by
@@ -98,6 +114,100 @@ $$
 \frac{\partial{L}}{\partial{s_i}} = p_i - y_i
 $$
 $p_i$ is the probability and $y_i$ is the label, 1 for positive class and 0 for negative class.
+
+
+
+## Relationship between Log-Softmax and Cross-Entropy
+
+In multi-class classification, softmax and cross-entropy are not two independent components — they are mathematically coupled and are almost always used together.
+
+### From logits to probabilities
+
+A neural network outputs logits $ z \in \mathbb{R}^K $, which are unnormalized scores.
+The softmax function converts them into a probability distribution:
+
+$$
+p_i = \frac{e^{z_i}}{\sum_j e^{z_j}}
+$$
+
+This ensures:
+
+* $ p_i \in (0,1) $
+* $ \sum_i p_i = 1 $
+
+
+
+### Cross-entropy on softmax probabilities
+
+Cross-entropy measures the difference between the true distribution $ y $ and predicted probabilities $ p $:
+
+$$
+\mathcal{L} = -\sum_i y_i \log p_i
+$$
+
+Substituting $ p_i = \text{softmax}(z_i) $:
+
+$$
+\mathcal{L} = -\sum_i y_i \log \left( \frac{e^{z_i}}{\sum_j e^{z_j}} \right)
+$$
+
+
+
+Using log properties:
+
+$$
+\log \left( \frac{e^{z_i}}{\sum_j e^{z_j}} \right)
+= z_i - \log \sum_j e^{z_j}
+$$
+
+So the loss becomes:
+
+$$
+\mathcal{L} = -\sum_i y_i \left( z_i - \log \sum_j e^{z_j} \right)
+$$
+
+$$
+= -\sum_i y_i z_i + \log \sum_j e^{z_j}
+$$
+
+
+Special case when we have one-hot labels, if $ y $ is one-hot (only class $k$ is correct):
+
+$$
+\mathcal{L} = -z_k + \log \sum_j e^{z_j}
+$$
+
+This is exactly:
+
+$$
+\mathcal{L} = -\log \text{softmax}(z_k)
+$$
+
+
+Cross-entropy with softmax is equivalent to applying log-softmax to logits and taking the negative log-likelihood of the target class.
+
+In practice, most libraries implement this as a single function (e.g., `CrossEntropyLoss`) because:
+
+* it combines **softmax + log + summation** in one step
+* it improves **numerical stability** and efficiency.
+
+
+
+Important clarification: the simplified form only holds for one-hot labels.
+
+$$
+\mathcal{L} = -\log \text{softmax}(z_k)
+$$
+
+
+
+* Softmax → turns scores into probabilities (i.e. defines a categorical probability distribution)
+* Logsoftmax → turns scores into log-probabilities
+* Cross-entropy → penalizes the log-probability of the correct class  (it measures how far that distribution is from the target)
+
+
+
+
 
 ## Binary Cross Entropy
 In the above section, we talked about softmax cross entropy loss, here we talk about binary cross entropy loss which is also called Sigmoid cross entropy loss. 
