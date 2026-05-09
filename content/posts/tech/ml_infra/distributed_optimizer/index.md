@@ -59,6 +59,7 @@ When use the above Adam optimizer and assuming the model parameter is $M$, then 
 - 4M (fp32 grad moving avg)
 - 4M (fp32 grad sq moving avg)
 
+
 In total, we need 20M memory to per replica in model training. For instance, for 7B model training, the above parameters and optimizer state will consume 140G memory. Refer to [1] for how to compute the activation part. Keeping a fp32 copy of model parameters for model update in optimizer state is important for performance as is shown in Gopher paper. 
 
 

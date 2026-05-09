@@ -145,6 +145,35 @@ Hardware model
 
 
 
+```c
+/*
+
+Matrix sizes:
+MxK * KxN = MxN
+
+
+A simple matmul implementation: the idea is we are going to fill an  output matrix C which is of shape [M, N].
+Each thread will fill a value at a position of [x, y], which corresponds to the dot product of x row in A and y column in B.
+
+*/
+
+__global__ void sgemm_naive(int M, int N, int K, float alpha, const float *A,
+                            const float *B, float beta, float *C) {
+  const uint x = blockIdx.x * blockDim.x + threadIdx.x;
+  const uint y = blockIdx.y * blockDim.y + threadIdx.y;
+
+  // if statement is necessary to make things work under tile quantization
+  if (x < M && y < N) {
+    float tmp = 0.0;
+    for (int i = 0; i < K; ++i) {
+      tmp += A[x * K + i] * B[i * N + y];
+    }
+    // C = α*(A@B)+β*C
+    C[x * N + y] = alpha * tmp + beta * C[x * N + y];
+  }
+}
+```
+
 ## GPU-related Performance Roofline
 
 GPU system performance is constrained by three primary components:

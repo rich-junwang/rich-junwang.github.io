@@ -101,7 +101,7 @@ It's worth to note that this is not always we want. For example, when we train r
 We need to do all token level averaging in a mini batch. This is discussed in Ref [1]. 
 
 
-
+If token in a batch is homogenous, like a pretraining data batch where each token loss should have equal weights, when we shouldn't do averaging before summation like in [2]. If training is sample specific, like SFT training where the whole short sample should be equally weighted comparing to long sample, then we can first average, then do summation. 
 
 ## Reference
 1. DAPO: An Open-Source LLM Reinforcement Learning System at Scale
