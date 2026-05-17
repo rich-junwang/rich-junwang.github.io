@@ -155,6 +155,18 @@ MxK * KxN = MxN
 A simple matmul implementation: the idea is we are going to fill an  output matrix C which is of shape [M, N].
 Each thread will fill a value at a position of [x, y], which corresponds to the dot product of x row in A and y column in B.
 
+Notice that the indexing in kernel is always 1-dim. We can think of it as the offset to the beginning pointer.
+
+
+// thread id position is (x, y) determined blockIdx, blockDim, threadIdx etc.
+// Here we directly map each thread position [x, y] to an output item position in the output matrix. `x * K + i` and `i * N + y` are just flattening the position.
+// the issue with this approach is that thread id changes with x (threadIdx.x) dim as the fastest changing dimension. So for two adjacent threads, it will read in A from `x * K + i` and `(x+1) * K + i`.
+// These positions are not adjacent. 
+
+
+// Note that in normal 3D matrix coordinate (x, y, z), z is the fastest changing dimension with stride as 1. 
+
+
 */
 
 __global__ void sgemm_naive(int M, int N, int K, float alpha, const float *A,
