@@ -103,6 +103,67 @@ We need to do all token level averaging in a mini batch. This is discussed in Re
 
 If token in a batch is homogenous, like a pretraining data batch where each token loss should have equal weights, when we shouldn't do averaging before summation like in [2]. If training is sample specific, like SFT training where the whole short sample should be equally weighted comparing to long sample, then we can first average, then do summation. 
 
+
+
+## Toy Example
+
+```python
+    def _train_epoch(self, loader: DataLoader) -> float:
+        self.model.train()
+        total = 0.0
+        for X, y in loader:
+            X, y = X.to(self.cfg.device), y.to(self.cfg.device)
+            self.opt.zero_grad()
+            pred = self.model(X)
+            loss = self.loss_fn(pred, y)
+            loss.backward()
+            nn.utils.clip_grad_norm_(self.model.parameters(), self.cfg.grad_clip)
+            self.opt.step()
+            total += loss.item() * len(X)
+        return total / len(loader.dataset)
+```
+
+Here we're converting average batch loss back into `sum of losses for all samples`, so that the final epoch average is computed correctly across batches of different sizes. The reason is that PyTorch losses like `nn.MSELoss()` and 
+`nn.HuberLoss()` default to `reduction="mean"`. Meaning, loss.item() is the mean loss per sample in the batch.
+
+$$
+\text{loss} = \frac{1}{B}\sum_{i=1}^{B}\ell_i
+$$
+
+
+Why not just average batch losses directly? Because batches may not all be the same size
+
+Especially the last batch. For example:
+
+| Batch | Size | Mean Loss |
+| ----- | ---- | --------- |
+| 1     | 64   | 0.5       |
+| 2     | 64   | 0.5       |
+| 3     | 8    | 2.0       |
+
+If you average batch means naively:
+
+$$
+\frac{0.5 + 0.5 + 2.0}{3} = 1.0
+$$
+
+This is wrong because the tiny last batch gets equal weight. This is exactly the case as is discussed in [2] in gradient accumulation. 
+
+```python
+Suppose you have a dataset of two samples used in unsupervised learning against a decoder-only language model, sample 1 contains 11 tokens, sample 2 contains 101 tokens, when training at batch size 1 without padding, the mean loss of sample 1 is 0.1 and the mean loss of sample 2 is 0.9, then mathematically what's your expected loss when the batch size is 2?
+
+In current transformers implementation:
+
+when gradient accumulation step is 1 and batch size is 2, padding to sequence length 101, the loss would be (0.1*10+0.9*100)/(10+100)=0.82727
+when gradient accumulation step is 2 and batch size is 1, no padding, the loss would be (0.1+0.9)/2=0.5.
+
+Ideally it should be 0.82727
+```
+
+
+
+
+
 ## Reference
 1. DAPO: An Open-Source LLM Reinforcement Learning System at Scale
 2. https://github.com/huggingface/transformers/issues/24725

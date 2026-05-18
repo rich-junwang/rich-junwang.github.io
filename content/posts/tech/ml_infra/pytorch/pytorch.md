@@ -33,11 +33,13 @@ Using PyTorch for NN model training on single GPU is simple and easy. However, w
 
 ## Gradient Accumulation
 Gradient accumulation is a way to virtually increase the batch size during training. In gradient accumulation, `N` batches go through the forward path and backward path, and each time, the gradient is computed and accumulated (usually summed or averaged), but model parameters are not updated. Model parameters are updated after iterate through all `N` batches. The logic is as follows:
-```
+```python
 for step, oneBatch in enumerate(dataloader):
    ... 
    ypred = model(oneBatch)
    loss = loss_func(ytrue, ypred)
+   # Critical for correct gradient scaling. Without this, your effective learning rate becomes accumulation_steps times larger.
+   loss = loss / accumulation_steps
    loss.backward() # release all activations memory
    if step % accumulation_step == 0: 
       # update weights every accumulation_step steps
