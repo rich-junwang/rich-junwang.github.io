@@ -189,3 +189,5 @@ PJRT (Portable JAX Runtime) is a runtime that executes JAX programs using XLA (A
 2. https://basicv8vc.github.io/posts/jax-tutorials-for-pytorchers-3/
 3. https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html
 4. Deep learning with JAX
+5. https://github.com/che-shr-cat/Deep_Learning_with_JAX
+6. https://github.com/gordicaleksa/get-started-with-JAX
