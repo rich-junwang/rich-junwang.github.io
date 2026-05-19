@@ -45,7 +45,7 @@ Standard transformers suffer from:
 
 ## Scale LLMs in Depth
 
-When building Large Language Models (LLMs), the modern machine learning playbook usually screams one word: Wider! To make models more capable, we scale up their hidden dimensions and add billions of parameters. But why don't we see networks that are incredibly deep—say, hundreds or thousands of layers?
+When building LLMs, the modern machine learning playbook usually screams one word: Wider! To make models more capable, we scale up their hidden dimensions and add billions of parameters. But why don't we see networks that are incredibly deep—say, hundreds or thousands of layers?
 
 The answer lies in a hidden chaos that plagues deep architectures: signal instability. As data travels forward and gradients flow backward through hundreds of layers, the network effectively "blinds" or "deafens" itself, resulting in exploding gradients, vanishing signals, or token representations collapsing into redundant mush.
 
@@ -55,7 +55,7 @@ Recently I found this paper [1] has cracked this depth barrier. By replacing gue
 
 ### The Architecture Problem: Linear Growth vs. Exponential Decay
 
-To understand why deep networks break, we have to look at the plumbing of a classic Transformer block. Transformers rely on *residual connections* (or skip-connections), where the input to a layer is added directly to its output ($x_{out} = x_{in} + \text{Block}(x_{in})$).
+To understand why deep networks break, we have to look at the plumbing of a classic Transformer block. Transformers rely on residual connections (or skip-connections), where the input to a layer is added directly to its output ($x_{out} = x_{in} + \text{Block}(x_{in})$).
 
 Depending on where you place your Layer Normalization (LayerNorm), two bad things happen when you scale depth ($N$):
 
@@ -70,7 +70,7 @@ If the normalization happens before the highway merge, the backward gradient var
 
 
 
-Faced with this, engineers usually resort to "profiling passes"—running empirical tests to find magic scaling fractions to dampen the layers. But these hacks degrade performance and reduce the network's expressivity.
+Faced with this, engineers usually resort to profiling passes — running empirical tests to find magic scaling fractions to dampen the layers. But these hacks degrade performance and reduce the network's expressivity.
 
 
 
