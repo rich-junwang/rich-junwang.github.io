@@ -17,6 +17,15 @@
     </item>
     
     <item>
+      <title>Scaling LLMs in Depth</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml/large_scale_pretraining/stability/</link>
+      <pubDate>Wed, 05 Mar 2025 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml/large_scale_pretraining/stability/</guid>
+      <description>Architecture</description>
+    </item>
+    
+    <item>
       <title>MoE Models</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/ml/moe_models/</link>
       <pubDate>Tue, 18 Feb 2025 00:18:23 +0800</pubDate>
