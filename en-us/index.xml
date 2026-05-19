@@ -44,6 +44,15 @@
     </item>
     
     <item>
+      <title>JAX</title>
+      <link>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/jax/</link>
+      <pubDate>Mon, 18 Nov 2024 00:18:23 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/jax/</guid>
+      <description>JAX</description>
+    </item>
+    
+    <item>
       <title>vLLM</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/ml/llm_inference/vllm/</link>
       <pubDate>Sat, 05 Oct 2024 12:01:14 -0700</pubDate>
