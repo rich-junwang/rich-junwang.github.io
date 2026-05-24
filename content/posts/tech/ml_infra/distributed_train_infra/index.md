@@ -67,7 +67,7 @@ All gather: supposing we have 4 gpus, on each gpu we have tensor of size [B\*S, 
 <div align="center"> <img src=images/allgather.png style="width: 30%; height: auto;"/> </div>
 
 
-### Reduce and Allreduce
+### Reduce
 Reduce is a collections of ops. Specifically, the operator will process an array from each process and get reduced number of elements.
 <!-- ![](images/reduce1.png) -->
 <p align="center">
@@ -82,14 +82,8 @@ Reduce is a collections of ops. Specifically, the operator will process an array
     <br>
 </p>
 
-Allreduce means that the reduce operation will be conducted throughout all nodes. An all_reduce takes in a local array on each machine and returns the sum of all the arrays on every machine. Here we show flat all reduce operation below. However, the most common algorithm for doing this is a variant of the “ring allreduce”,
-<p align="center">
-    <img alt="flat sharp minimum" src="images/allreduce.png" width="60%" height=auto/> 
-    <em>MPI Allreduce</em>
-    <br>
-</p>
 
-
+### ReduceScatter
 The ReduceScatter operation performs the same operation as Reduce, except that the result is scattered in equal-sized blocks between ranks, each rank getting a chunk of data based on its rank index. In the figure below, each rank provides an array in of N (also called N element buffer, 4 here) values, 
 
 <p align="center">
@@ -98,10 +92,28 @@ The ReduceScatter operation performs the same operation as Reduce, except that t
     <br>
 </p>
 
-Note: Executing ReduceScatter, followed by AllGather, is equivalent to the AllReduce operation.
+#### Ring-reducescatter
+The following figure shows how reduce scatter works using ring algorithm. 
+<div align="center"> <img src=images/ring_rs.png style="width: 90%; height: auto;"/> </div>
+
+#### One-step ReduceScatter
+
+<div align="center"> <img src=images/ring_rs.png style="width: 90%; height: auto;"/> </div>
+
+### Allreduce
+Allreduce means that the reduce operation will be conducted throughout all nodes. An all_reduce takes in a local array on each machine and returns the sum of all the arrays on every machine. Here we show flat all reduce operation below. However, the most common algorithm for doing this is a variant of the “ring allreduce”,
+<p align="center">
+    <img alt="flat sharp minimum" src="images/allreduce.png" width="60%" height=auto/> 
+    <em>MPI Allreduce</em>
+    <br>
+</p>
+
+In practice, executing ReduceScatter, followed by AllGather, is equivalent to the AllReduce operation.
+
+<div align="center"> <img src=images/allreduce_rs_ag.png style="width: 80%; height: auto;"/> </div>
 
 
-### All to All
+### All2All
 The following figure shows the difference between MPI all2all and all_gather.
 <p align="center">
     <img alt="all2all and allgather" src="images/all2all_and_allgather.png" width="60%" height=auto/> 

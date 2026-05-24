@@ -168,4 +168,5 @@ Ideally it should be 0.82727
 1. DAPO: An Open-Source LLM Reinforcement Learning System at Scale
 2. https://github.com/huggingface/transformers/issues/24725
 3. https://zhuanlan.zhihu.com/p/721652210
+<!-- https://github.com/hhaAndroid/awesome-mm-chat/blame/main/loss/loss_correct_demo.py -->
 
