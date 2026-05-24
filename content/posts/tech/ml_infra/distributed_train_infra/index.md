@@ -93,12 +93,16 @@ The ReduceScatter operation performs the same operation as Reduce, except that t
 </p>
 
 #### Ring-reducescatter
-The following figure shows how reduce scatter works using ring algorithm. 
+The following figure shows how reduce scatter works using ring algorithm. Ring reduce-scatter is bandwidth-optimal. Each GPU sends ((N−1)/N) × vector_size in total, which is the theoretical minimum. 
 <div align="center"> <img src=images/ring_rs.png style="width: 90%; height: auto;"/> </div>
 
 #### One-step ReduceScatter
 
-<div align="center"> <img src=images/ring_rs.png style="width: 90%; height: auto;"/> </div>
+There is commonly used approach for reduce scatter which first conduct an all2all communication, then followed by a local reduce. Why people uses it instead of ring: one round of communication instead of N−1, lower latency for small-to-medium messages, and it maps well to fat-tree / fully-connected topologies (NVSwitch, modern datacenter networks) where every GPU can talk to every other GPU at full bandwidth simultaneously.
+
+<div align="center"> <img src=images/rs_by_a2a_and_local_reduce.png style="width: 100%; height: auto;"/> </div>
+
+ In practice, people use ring for big tensors over slow links, All2All for small tensors over fast fully-connected links.
 
 ### Allreduce
 Allreduce means that the reduce operation will be conducted throughout all nodes. An all_reduce takes in a local array on each machine and returns the sum of all the arrays on every machine. Here we show flat all reduce operation below. However, the most common algorithm for doing this is a variant of the “ring allreduce”,
@@ -116,7 +120,7 @@ In practice, executing ReduceScatter, followed by AllGather, is equivalent to th
 ### All2All
 The following figure shows the difference between MPI all2all and all_gather.
 <p align="center">
-    <img alt="all2all and allgather" src="images/all2all_and_allgather.png" width="60%" height=auto/> 
+    <img alt="all2all and allgather" src="images/all2all_allgather.png" width="90%" height=auto/> 
     <em>MPI all2all and all_gather</em>
     <br>
 </p>
