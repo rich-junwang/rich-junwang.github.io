@@ -237,17 +237,38 @@ Instead of separate compute kernel and separate NCCL kernel, now everything beco
 This removes launch overhead, synchronization overhead and scheduling gaps. communication to happen continuously during compute
 
 
-## Why this works so well
 
-Modern GPUs have:
+## Two patterns in TP
 
-* many SMs
-* copy engines
-* async memory systems
-* warp-level scheduling
+Looking back at Figure 1 (the MLP forward pass), there are two communication points:
 
-FLUX exploits this hardware much more directly than standard frameworks.
+<div align="center"> <img src=images/mlp.png style="width: 60%; height: auto;"/>Figure 1. MLP</div>
 
+1. **AllGather → GEMM** (before the first GEMM): activations need to be gathered before matmul
+2. **GEMM → ReduceScatter** (after the second GEMM): partial sums need to be reduced and scattered
+
+Flux fuses communication into the GEMM kernel in both cases, but at different points in the kernel:
+
+| Pattern | Fusion point | What gets fused |
+|---|---|---|
+| **GEMM + ReduceScatter** | **Epilogue** (end of kernel) | The actual data send/write to remote GPUs happens as the GEMM tiles finish producing output |
+| **AllGather + GEMM** | **Prologue** (start of kernel) | Only the *wait-for-signal* logic is fused; the data transfer itself runs asynchronously on the host side |
+
+## Why the asymmetry
+
+
+**For ReduceScatter** (Algorithm 1): the GEMM *produces* the data that needs to be communicated. So once a tile of C is computed, the kernel can immediately write/send it to the destination GPU as part of the epilogue. Compute → communicate, fused naturally.
+
+**For AllGather** (Algorithms 2 & 3): the GEMM *consumes* data that's being communicated in. The kernel can't send anything — it has to wait for input tiles to arrive. So Flux fuses only a `WaitSignal` spin in the prologue. Each threadblock waits for its input tile to be ready, then runs standard GEMM. Meanwhile, the host side issues async `cudaMemcpy` transfers (pull- or push-based) and sets signals as tiles land.
+
+Because only the wait logic is fused on the AllGather side, **AllGather doesn't strictly require P2P** — you can fall back to NCCL send/recv for the data movement. ReduceScatter fusion does need P2P (or NVSHMEM across nodes) since the kernel itself is doing the remote writes.
+
+## Where the exposed time shows up
+
+- **ReduceScatter**: small unhidden tail at the *end* — the last tiles produced still have to finish their sends after GEMM compute is done
+- **AllGather**: small unhidden head at the *beginning* — the first tiles' waits can't be hidden if data hasn't arrived yet (though local tiles have signals preset to true, so there's always *some* work warps can start on immediately)
+
+In both cases, the bulk of communication is hidden inside the GEMM kernel via the GPU's natural warp-level latency hiding — that's the core insight versus the medium-grained chunked approach that splits GEMM into multiple smaller kernels.
 
 
 
@@ -290,9 +311,14 @@ while true:
 This is basically GPU systems engineering at the frontier.
 
 
+The very similar idea is explored in CODA [5] where the computation replaces the communication discussed in FLUX. 
+
 ## References
 1. [AI and Memory Wall](https://arxiv.org/abs/2403.14123)
 2. [FLUX: Fast Software-based Communication Overlap On GPUs Through Kernel Fusion](https://arxiv.org/abs/2406.06858)
 3. [Comet: Fine-grained Computation-communication Overlapping for Mixture-of-Experts](https://arxiv.org/abs/2502.19811)
 4. https://github.com/bytedance/flux
+5. [CODA: Rewriting Transformer Blocks as GEMM-Epilogue Programs](https://arxiv.org/abs/2605.19269)
+6. https://github.com/uccl-project/mKernel
+7. https://uccl-project.github.io/posts/mkernel/
 
