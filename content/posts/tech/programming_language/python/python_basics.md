@@ -255,6 +255,7 @@ proc = subprocess.Popen(
 
 ## Dataclass
 Data classes use something called a default_factory to handle mutable default values. To use default_factory, we need to use the field() specifier.
+
 ```python
 from dataclasses import dataclass, field
 from typing import List
@@ -279,7 +280,25 @@ A few commonly used parameters that field supports
 - init: Use field in .__init__() method? (Default is True.)
 - repr: Use field in repr of the object? (Default is True.)
 
+The reason why we're trying to use field method to initialize is to avoid using mutable default arguments. 
 
+
+In a dataclass, the fields we declare (like x: int) become instance attributes, not class attributes. As is shown in code below. 
+The dataclasses module automatically generates an __init__ method that assigns those fields to self.x, self.y, etc. Note that dataclasses module also 
+generates \__repr__(), and \__eq__() etc. 
+
+```python
+@dataclass
+class Point:
+    x: int
+    y: int
+
+p1 = Point(1, 2)
+p2 = Point(1, 2)
+
+p1 == p2    # True  — generated __eq__ compares values
+p1 is p2    # False — still two distinct objects in memory
+```
 
 ## Global Variable in Python
 Python looks for variables in four different scopes:

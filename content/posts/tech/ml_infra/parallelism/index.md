@@ -36,7 +36,7 @@ Modern large language model usually is trained with billions number of parameter
 A lot of contents of here are from OpenAI, Nvidia, Deepspeed and bigscience blogs. We'll first go through different parallelism techniques and then talk about how to combine them to maximize training efficiency. 
 
 ### Data Parallelism
-Data parallelism (DP) is the most straightforward way of parallel training. With data parallelism, model parameters and optimzer states are replicated across different workers. Data is partitioned into the same number of shards and each replicate of model is fed with one shard of data. Forward and backward computation is in parallel (simutaneously) and then there is a synchronization step where gradients are averaged across workers to update parameters. The DP computation can be summarized as the following [three steps](https://www.adept.ai/blog/sherlock-sdc):
+Data parallelism (DP) is the most straightforward way of parallel training. With data parallelism, model parameters and optimizer states are replicated across different workers. Data is partitioned into the same number of shards and each replicate of model is fed with one shard of data. Forward and backward computation is in parallel (simultaneously) and then there is a synchronization step where gradients are averaged across workers to update parameters. The DP computation can be summarized as the following [three steps](https://www.adept.ai/blog/sherlock-sdc):
 
 ```
 Each machine computes local gradients given local inputs and a consistent global view of the parameters.
@@ -48,6 +48,14 @@ GlobalGrad = all_reduce(LocalGrad_i)
 Each machine can now locally update the parameters and optimizer state under the assumption that the exact same calculation will happen on all machines.
 NewParams, NewOptimState = g(Params, OldOptimState, GlobalGrad)
 ```
+
+
+
+(1) Each node compute: layer 1 forward -> layer 2 forward -> … -> layer n forward -> layer n backward -> layer n-1 backward -> … -> layer 1 backward 
+(2) all-reduce gradients of all layers
+(3) update the weight of each layer
+
+Note that the forward and backward in step (1) must be conducted sequentially. However, we shall note that we don’t necessarily need to wait until all operations in step (1) are completed to start step (2). In fact, once layer n backward is completed, we can immediately start to all-reduce layer n gradient and then even update the weight using this all-reduced gradient (as layer n weight is not needed in the backward for layer n-1 to layer 1.) Furthermore, we should step (2) are communication operations and backward in step (1) are computation operations. So overlapping them should not slow down either.
 
 
 ### Pipeline Parallelism
@@ -62,9 +70,9 @@ To solve the problem, we can reuse the data parallelism idea. Instead of feeding
 </p>
 
 ### Tensor Parallelism
-The bottleneck of neural network training is compute. Among all the computation parts, the general matrix multiplication (GEMM) consumes the most of time. One way to parallize the matrix multiplication is to use matrix decomposition. Specifically, we can split a matrix into two or multiple parts based on row or column. Then we can aggregate results after the computation of each parts in the end. This is the core idea of tensor parallelism (TP).
+The bottleneck of neural network training is compute. Among all the computation parts, the general matrix multiplication (GEMM) consumes the most of time. One way to parallelize the matrix multiplication is to use matrix decomposition. Specifically, we can split a matrix into two or multiple parts based on row or column. Then we can aggregate results after the computation of each parts in the end. This is the core idea of tensor parallelism (TP).
 
-In it's essence, tensor parallelism is block matrix mutiplication. Based on how we partition the parameter matrix, there is row parallel partition and column parallel partition. 
+In it's essence, tensor parallelism is block matrix multiplication. Based on how we partition the parameter matrix, there is row parallel partition and column parallel partition. 
 For row parallel partition, there is
 
 $$
@@ -152,7 +160,7 @@ A few key points in 3D parallelism implementation.
 - TP is communication heavy, thus TP blocks should be put on different GPUs within the same node to leverage fast NVLink communication. On the contrary, PP communication is light, and it is usually put across nodes. 
 - Within a data parallel group, all GPUs hold the same model parameters. After each update, there will be gradient all-reduce operation.  
 
-How to achieve this, in Megatron-LM, this is achieved by first partition all GPUs by pipeline parallelism. Then withnin the same pipeline block, partition GPUs based on tensor parallelism. After that, the number of copies within the pipeline block will be the data parallelism number. 
+How to achieve this, in Megatron-LM, this is achieved by first partition all GPUs by pipeline parallelism. Then within the same pipeline block, partition GPUs based on tensor parallelism. After that, the number of copies within the pipeline block will be the data parallelism number. 
 
 
 ### Training Efficiency Metric
