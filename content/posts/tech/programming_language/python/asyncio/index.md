@@ -283,6 +283,52 @@ asyncio.gather() preserves the order of results based on the input coroutine lis
 asyncio.wait() does not guarantee order—results come as tasks complete.
 
 
+
+
+## Asyncio Event
+
+An asyncio.Event is a synchronization primitive used to notify multiple asynchronous tasks that a specific event has occurred. It manages an internal boolean flag that defaults to False. Coroutines can pause and wait for this flag to become True, allowing you to coordinate actions across different parts of your asynchronous program. 
+
+According to the [Python Synchronization Primitives Documentation](https://docs.python.org/3/library/asyncio-sync.html), an event operates using three primary methods:
+
+- await event.wait(): Pauses the coroutine until the internal flag is set to True. If it is already True, it returns immediately.
+- event.set(): Sets the flag to True and immediately wakes up all coroutines waiting on it.
+- event.clear(): Resets the flag back to False. Any subsequent tasks calling wait() will block until set() is called again.
+- event.is_set(): Returns True if the internal flag is currently true
+
+
+```python
+import asyncio
+
+async def worker(name, event):
+    print(f"[{name}] Waiting for the event to be set...")
+    # This pauses execution until event.set() is called
+    await event.wait()
+    print(f"[{name}] Event triggered! Starting work...")
+
+async def setter(event):
+    print("[Setter] Doing some initial setup for 2 seconds...")
+    await asyncio.sleep(2)
+    print("[Setter] Setup complete. Setting the event!")
+    # Wake up all waiting workers
+    event.set()
+
+async def main():
+    # Initialize the event primitive
+    event = asyncio.Event()
+
+    # Create and schedule concurrent tasks
+    await asyncio.gather(
+        worker("Worker A", event),
+        worker("Worker B", event),
+        setter(event)
+    )
+
+asyncio.run(main())
+
+```
+
+
 ## Coroutine, Task and Future
 
 Let's give some clarifications about the concepts. 

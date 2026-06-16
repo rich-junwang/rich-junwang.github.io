@@ -300,6 +300,30 @@ p1 == p2    # True  — generated __eq__ compares values
 p1 is p2    # False — still two distinct objects in memory
 ```
 
+When a Python dataclass subclasses another dataclass, the attributes of the base (parent) class are initialized first, followed by the attributes of the child subclass.
+```python
+from dataclasses import dataclass
+
+@dataclass
+class Parent:
+    a: int
+    b: int
+
+@dataclass
+class Child(Parent):
+    c: int
+    d: int
+
+# Internally, the generated __init__ behaves like this:
+# def __init__(self, a: int, b: int, c: int, d: int):
+#     self.a = a  # 1st
+#     self.b = b  # 2nd
+#     self.c = c  # 3rd
+#     self.d = d  # 4th
+
+
+```
+
 ## Global Variable in Python
 Python looks for variables in four different scopes:
 
