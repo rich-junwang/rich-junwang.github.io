@@ -328,6 +328,7 @@ asyncio.run(main())
 
 ```
 
+Polling would waste CPU and add latency. asyncio.Event lets the handler yield to the event loop and resume only when the listener signals new data — the usual async producer/consumer pattern.
 
 ## Coroutine, Task and Future
 
