@@ -208,6 +208,41 @@ $$
 
 
 
+### Relationship to entropy
+
+Notice the similarity:
+
+* **Entropy** of the model distribution:
+$$
+\begin{aligned}
+H(p) &= \operatorname{logsumexp}(z)-\sum_i p_i z_i \\
+&= \operatorname{logsumexp}(z)-\sum_i softmax(z_i) z_i
+\end{aligned}
+$$
+
+* **Cross entropy** with target (q):
+$$
+\begin{aligned}
+H(q,p)&=\operatorname{logsumexp}(z)-\sum_i q_i z_i \\
+&=\operatorname{logsumexp}(z)-\sum_i z_y
+\end{aligned}
+$$
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## Binary Cross Entropy
 In the above section, we talked about softmax cross entropy loss, here we talk about binary cross entropy loss which is also called Sigmoid cross entropy loss. 
