@@ -41,7 +41,7 @@ cover:
 
 <p>Hi there, this is Jun Wang. Welcome to my website. I'm an AI researcher. I love programming but I prefer training models to write code for me.. 
 
-I am a Staff Research Scientist at ByteDance Seed working on foundational model training. Prior to that I was a Senior Applied Scientist at Amazon, specializing in foundational model pre-training, post-training, and reinforcement learning for complex reasoning tasks. I built the very first generation LLMs at Amazon (AWS Titan). My expertise spans the full stack of LLM development, including infrastructure, pretraining, SFT, and RLHF. I have experience training both text and code models. At AWS, I had focused on deep RL for math, code generation tasks.
+I am a Staff Research Scientist at ByteDance Seed working on foundational model training. Prior to that I was a Senior Applied Scientist at Amazon, specializing in foundational model pre-training, post-training, and reinforcement learning for complex reasoning tasks. I built the very first generation LLMs at Amazon (AWS Titan). My expertise spans the entire LLM development lifecycle, including data curation, infrastructure, pretraining, SFT, and RLHF. I have experience training both text and code models. At AWS, I had focused on deep RL for math, code generation tasks.
 
 At Seed, I've contributed to open-source RL project -- VeRL and most recently I've been working on full stack video generation training. 
 
