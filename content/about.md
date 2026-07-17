@@ -84,7 +84,7 @@ I served as the Amazon Research Award reviewer and was an AC for AMLC conference
 
 ### Miscellaneous
 
-During my studies at school, I trained as an electrical engineer with a focus on integrated circuit design, including analog, RF, and power-management circuits. I was also proficient with Verilog HDL for signal processing. The project shown below is a PCB I designed featuring a Xilinx FPGA and a WiFi module for real-time speech signal processing while I was at UT Dallas.
+I hold two master's degrees: one on Integrated Circuit Design in EE and another on AI in CS. My early academic training focused on electrical engineering, with expertise in analog, RF, and power management integrated circuit design. I am also proficient in Verilog HDL for digital and signal processing applications. The project shown below is a PCB I designed featuring a Xilinx FPGA and a WiFi module for real-time speech signal processing while I was at UT Dallas.
 
 
 <div align="center"> <img src=/img/pcb.png style="width: 50%; height: auto;"/> FPGA Speech Processing Platform for Cochlear Implant</div>
