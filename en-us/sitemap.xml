@@ -2,31 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://rich-junwang.github.io/en-us/posts/read/</loc>
-    <lastmod>2026-05-05T00:18:06+08:00</lastmod>
+    <loc>https://rich-junwang.github.io/en-us/posts/tech/</loc>
+    <lastmod>2025-12-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/</loc>
-    <lastmod>2026-05-05T00:18:06+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/</loc>
-    <lastmod>2026-05-05T00:18:06+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/read/movie_recommendation/</loc>
-    <lastmod>2026-05-05T00:18:06+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/tags/read/</loc>
-    <lastmod>2026-05-05T00:18:06+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/tags/</loc>
-    <lastmod>2026-05-05T00:18:06+08:00</lastmod>
-  </url><url>
-    <loc>https://rich-junwang.github.io/en-us/posts/tech/</loc>
     <lastmod>2025-12-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/large_scale_pretraining/hyerconnection/</loc>
     <lastmod>2025-12-05T00:18:23+08:00</lastmod>
   </url><url>
+    <loc>https://rich-junwang.github.io/en-us/</loc>
+    <lastmod>2025-12-05T00:18:23+08:00</lastmod>
+  </url><url>
     <loc>https://rich-junwang.github.io/en-us/tags/llm/</loc>
+    <lastmod>2025-12-05T00:18:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/tags/</loc>
     <lastmod>2025-12-05T00:18:23+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ml/llm_inference/pd_disaggregation/</loc>
@@ -97,6 +88,15 @@
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/triton/</loc>
     <lastmod>2024-05-05T00:18:23+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/posts/read/</loc>
+    <lastmod>2024-05-05T00:18:06+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/posts/read/movie_recommendation/</loc>
+    <lastmod>2024-05-05T00:18:06+08:00</lastmod>
+  </url><url>
+    <loc>https://rich-junwang.github.io/en-us/tags/read/</loc>
+    <lastmod>2024-05-05T00:18:06+08:00</lastmod>
   </url><url>
     <loc>https://rich-junwang.github.io/en-us/posts/tech/programming_language/python/pipe/</loc>
     <lastmod>2024-04-09T12:01:14-07:00</lastmod>

@@ -6,38 +6,7 @@
     <description>Recent content on Jun&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 05 May 2026 00:18:06 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Movies</title>
-      <link>https://rich-junwang.github.io/en-us/posts/read/movie_recommendation/</link>
-      <pubDate>Tue, 05 May 2026 00:18:06 +0800</pubDate>
-      
-      <guid>https://rich-junwang.github.io/en-us/posts/read/movie_recommendation/</guid>
-      <description>&lt;p&gt;姐姐让我推荐电影给她儿子，我列了一下自己看过不止一遍的电影. 记录下来，以后有时间再看看经典！&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;Interstellar&lt;/li&gt;
-&lt;li&gt;shawshank redemption&lt;/li&gt;
-&lt;li&gt;阿甘正传&lt;/li&gt;
-&lt;li&gt;Saving private Ryan&lt;/li&gt;
-&lt;li&gt;兄弟连(brother band)&lt;/li&gt;
-&lt;li&gt;inception&lt;/li&gt;
-&lt;li&gt;血战钢锯岭(Hacksaw Ridge)&lt;/li&gt;
-&lt;li&gt;Top gun&lt;/li&gt;
-&lt;li&gt;低俗小说&lt;/li&gt;
-&lt;li&gt;无耻混蛋&lt;/li&gt;
-&lt;li&gt;老无所依&lt;/li&gt;
-&lt;li&gt;美丽心灵&lt;/li&gt;
-&lt;li&gt;霸王别姬&lt;/li&gt;
-&lt;li&gt;帝国的毁灭(Downfall)&lt;/li&gt;
-&lt;li&gt;沉默的羔羊&lt;/li&gt;
-&lt;li&gt;The edge&lt;/li&gt;
-&lt;li&gt;V字仇杀队&lt;/li&gt;
-&lt;li&gt;勇敢的心&lt;/li&gt;
-&lt;li&gt;追求幸福(The Pursuit of Happyness)&lt;/li&gt;
-&lt;li&gt;天国王朝&lt;/li&gt;
-&lt;/ol&gt;</description>
-    </item>
-    
+    <lastBuildDate>Fri, 05 Dec 2025 00:18:23 +0800</lastBuildDate><atom:link href="https://rich-junwang.github.io/en-us/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>HyperConnection, mHC</title>
       <link>https://rich-junwang.github.io/en-us/posts/tech/ml/large_scale_pretraining/hyerconnection/</link>
@@ -198,6 +167,37 @@
       
       <guid>https://rich-junwang.github.io/en-us/posts/tech/ml_infra/triton/</guid>
       <description>Triton and cuda</description>
+    </item>
+    
+    <item>
+      <title>Movies</title>
+      <link>https://rich-junwang.github.io/en-us/posts/read/movie_recommendation/</link>
+      <pubDate>Sun, 05 May 2024 00:18:06 +0800</pubDate>
+      
+      <guid>https://rich-junwang.github.io/en-us/posts/read/movie_recommendation/</guid>
+      <description>&lt;p&gt;姐姐让我推荐电影给她儿子，我列了一下自己看过不止一遍的电影. 记录下来，以后有时间再看看经典！&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Interstellar&lt;/li&gt;
+&lt;li&gt;shawshank redemption&lt;/li&gt;
+&lt;li&gt;阿甘正传&lt;/li&gt;
+&lt;li&gt;Saving private Ryan&lt;/li&gt;
+&lt;li&gt;兄弟连(brother band)&lt;/li&gt;
+&lt;li&gt;inception&lt;/li&gt;
+&lt;li&gt;血战钢锯岭(Hacksaw Ridge)&lt;/li&gt;
+&lt;li&gt;Top gun&lt;/li&gt;
+&lt;li&gt;低俗小说&lt;/li&gt;
+&lt;li&gt;无耻混蛋&lt;/li&gt;
+&lt;li&gt;老无所依&lt;/li&gt;
+&lt;li&gt;美丽心灵&lt;/li&gt;
+&lt;li&gt;霸王别姬&lt;/li&gt;
+&lt;li&gt;帝国的毁灭(Downfall)&lt;/li&gt;
+&lt;li&gt;沉默的羔羊&lt;/li&gt;
+&lt;li&gt;The edge&lt;/li&gt;
+&lt;li&gt;V字仇杀队&lt;/li&gt;
+&lt;li&gt;勇敢的心&lt;/li&gt;
+&lt;li&gt;追求幸福(The Pursuit of Happyness)&lt;/li&gt;
+&lt;li&gt;天国王朝&lt;/li&gt;
+&lt;/ol&gt;</description>
     </item>
     
     <item>
