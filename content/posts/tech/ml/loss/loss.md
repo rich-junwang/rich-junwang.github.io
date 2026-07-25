@@ -107,7 +107,7 @@ here $p$ stands for positive class.
 If we want to get the gradient of loss with respect to the logits ($s_i$ here), for positive class we can have
 $$
 \frac{\partial{L}}{\partial{s_p}} = \left(\frac{e^{s_p}}{ \sum_j ^{C} e^{s_j}} - 1 \right) \\\
-\frac{\partial{L}}{\partial{s_n}} = \left(\frac{e^{s_n}}{ \sum_j ^{C} e^{s_j}} - 1 \right)
+\frac{\partial{L}}{\partial{s_n}} = \left(\frac{e^{s_n}}{ \sum_j ^{C} e^{s_j}} \right)
 $$
 We can put this in one equation, which is what we commonly see as the graident of cross entropy loss for softmax
 $$
