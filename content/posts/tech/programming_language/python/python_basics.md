@@ -284,8 +284,10 @@ The reason why we're trying to use field method to initialize is to avoid using 
 
 
 In a dataclass, the fields we declare (like x: int) become instance attributes, not class attributes. As is shown in code below. 
-The dataclasses module automatically generates an __init__ method that assigns those fields to self.x, self.y, etc. Note that dataclasses module also 
-generates \__repr__(), and \__eq__() etc. 
+The dataclasses module automatically generates an __init__ method that assigns those fields to self.x, self.y, etc. Note that dataclasses module also generates \__repr__(), and \__eq__() etc. 
+
+It's worth to note that when fields lack type annotations, @dataclass doesn’t treat them as fields, but as class attributes. 
+
 
 ```python
 @dataclass
