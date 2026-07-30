@@ -33,7 +33,7 @@ cover:
 
 ### Basics
 
-Kubernetes, also known as “k8s”, is an open source platform solution provided by Google for scheduling and automating the deployment, management, and scaling of containerized applications. Kubernetes has the ability of scheduling and running application containers on a cluster of physical or virtual machines. In managing the applications, the concepts of 'labels' and 'pods' are used to group the containers which make up an application. Currently, it supports Docker for containers.
+Kubernetes, also known as k8s, is an open source platform solution provided by Google for scheduling and automating the deployment, management, and scaling of containerized applications. Kubernetes has the ability of scheduling and running application containers on a cluster of physical or virtual machines. In managing the applications, the concepts of labels and pods are used to group the containers which make up an application. Currently, it supports Docker for containers.
 
 <p align="center">
     <img alt="gopher dataset" src="images/kubernetes.png" width="80%"/>
