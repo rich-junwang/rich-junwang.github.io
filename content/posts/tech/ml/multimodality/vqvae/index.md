@@ -146,7 +146,7 @@ The decoder here promises us that we can input low dimension vector $z$ to get h
 
 The answer is that no. Why? It's because we haven't explicitly modeled the distribution $p(z)$. We don’t know which $ z $ can generate useful images. The data that decoder is trained on is limited. But $ z $ lies in a vast space ($ \mathbb{R}^d $), and if we just randomly sample in this space, we naturally cannot expect to produce useful images.
 
-### Why AE Decoder Can Generate Images
+### Why AE Decoder Can't Generate Images
 
 - The decoder in AE is trained for reconstruction, not generation. The decoder in a vanilla autoencoder only learns to map valid latent codes (produced by the encoder) back to images.
 
@@ -169,7 +169,7 @@ $$
 
 If we explicitly model the $p(z)$, we might be able to get a good generative model which is the variational autoencoder. In practice, this is unrealistic because $z$ is in a big space, it's very hard to sample $z_i$ which is strongly correlated to $x_i$.
 
-The solution is to put constaints on $z$'s distribution. Let's assume $p(z)$ follows a normal distribution. 
+The solution is to put constraints on $z$'s distribution. Let's assume $p(z)$ follows a normal distribution. 
 
 In practice we use encoder to approximate the posterior $p_{\theta}(z | x_i)$, the approximate distribution is $q_{\phi}(z \mid x)$. 
 
