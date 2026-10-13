@@ -88,6 +88,69 @@ $$
 
 Everything relates to $\alpha$ is a constant. 
 
+
+## What is the Score
+
+In generative modeling, the score of a probability distribution $p(x)$ refers to the gradient of the log-probability density with respect to the **input**:
+
+$$
+\nabla_x \log p(x)
+$$
+
+Unlike evaluating $p(x)$ directly which requires computing an intractable normalizing partition function Z where 
+
+$$
+p(x) = \frac{\tilde{p}(x)}{Z}
+$$
+
+The score bypasses normalization entirely because $\nabla_x \log Z = 0$
+
+A neural network trained to approximate this vector field $\nabla_x \log p(x)$ points in the direction where probability mass increases most rapidly. 
+
+
+
+## Diffusion Learns the Score
+
+For a Gaussian $\mathcal{N}(\mu, \sigma^2\mathbf{I})$, the score is $\nabla_x \log q = - (x-\mu)/\sigma^2$.
+
+Here is the step-by-step derivation for the score of a Gaussian distribution, defined as the gradient of the log-density $\nabla_x \log q(x)$.
+
+
+### Step 1: Write the Probability Density Function (PDF)
+
+For a multivariate Gaussian distribution $q(x) = \mathcal{N}(\mu, \sigma^2\mathbf{I})$ in $d$ dimensions, the PDF is given by:
+
+$$q(x) = \frac{1}{(2\pi \sigma^2)^{d/2}} \exp\left( -\frac{1}{2\sigma^2} (x - \mu)^T (x - \mu) \right)$$
+
+
+
+### Step 2: Take the Logarithm
+
+To find the log-density $\log q(x)$, apply the natural logarithm to both sides. Using logarithm properties ($\log(ab) = \log a + \log b$ and $\log(e^c) = c$):
+
+$$\log q(x) = -\frac{d}{2} \log(2\pi) - \frac{d}{2} \log(\sigma^2) - \frac{1}{2\sigma^2} (x - \mu)^T (x - \mu)$$
+
+
+
+### Step 3: Compute the Gradient with Respect to $x$
+
+The score is the gradient of the log-density, $\nabla_x \log q(x)$. Let's differentiate term by term:
+
+$$\nabla_x \log q(x) = \nabla_x \left[ -\frac{d}{2} \log(2\pi \sigma^2) - \frac{1}{2\sigma^2} (x - \mu)^T (x - \mu) \right]$$
+
+1. **Constant terms:** The normalization constant $-\frac{d}{2} \log(2\pi \sigma^2)$ does not depend on $x$, so its gradient is $0$.
+2. **Quadratic term:** Using the vector calculus identity $\nabla_x \left( (x - \mu)^T (x - \mu) \right) = 2(x - \mu)$, we differentiate the second term:
+
+$$\nabla_x \log q(x) = -\frac{1}{2\sigma^2} \cdot 2(x - \mu) = -\frac{x - \mu}{\sigma^2}$$
+
+
+
+### Result
+
+Simplifying the expression yields the final score function:
+
+$$\nabla_x \log q(x) = -\frac{x - \mu}{\sigma^2}$$
+
 ## References
 1. [Denoising Diffusion Probabilistic Models](https://arxiv.org/pdf/2006.11239.pdf) <br>
 2. [Understanding Diffusion Models: A Unified Perspective](https://arxiv.org/abs/2208.11970) <br>
