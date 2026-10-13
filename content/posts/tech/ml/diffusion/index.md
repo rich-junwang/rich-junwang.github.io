@@ -29,7 +29,7 @@ cover:
 math: true
 ---
 
-Diffusion is the process where we gradually convert a know distribution into a target distribution and the corresponding reverse process. Fortunately, people have proved that for gaussian distributions, we can convert data to noise and noise to data using the same functional form. 
+Diffusion is the process where we gradually convert a known distribution into a target distribution and the corresponding reverse process. Fortunately, people have proved that for gaussian distributions, we can convert data to noise and noise to data using the same functional form. 
 <p align="center">
     <img alt="gpu memory" src="images/diffusion_process.png" width="80%" height=auto/> 
     <em>Figure 1. diffusion process</em>
@@ -63,7 +63,7 @@ This process is called reparameterization. This allows us to directly sample $x_
 $$
 x_t = \sqrt{\bar{\alpha_{t}}}x_0 + \sqrt{1 - \bar{\alpha_{t}}} \epsilon
 $$
-Here $\epsilon \sim \mathcal{N}(0, I)$. Even though we know the distribution, we don't know the value the noise. In practice, we use neural network to approximate this noise. 
+Here $\epsilon \sim \mathcal{N}(0, I)$. Even though we know the distribution, we don't know the value of the noise. In practice, we use neural network to approximate this noise. 
 
 
 ### Reparameterization
