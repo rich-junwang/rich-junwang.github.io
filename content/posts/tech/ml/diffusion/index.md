@@ -36,9 +36,11 @@ Diffusion is the process where we gradually convert a known distribution into a 
     <br>
 </p>
 
+The core idea is simpler than the math in the papers makes it look: you add noise to an image, then train a network to guess what noise you added. The loss is just how wrong that guess was.
+
 ## Forward Process
 As is shown in the figure above, there are two processes in diffusion:
-- Forward diffusion process: we slowly and iteratively add noise to the images
+- Forward diffusion process: we slowly and iteratively add Gaussian noise to the images
 - Reverse diffusion process: we iteratively perform the denoising in small steps starting from a noisy image to convert it back to original form.
 
 In the forward process (diffusion process), in each step, gaussian noise is added according to a variance schedule $ \beta_1, \dotsb, \beta_T $
@@ -150,6 +152,49 @@ $$\nabla_x \log q(x) = -\frac{1}{2\sigma^2} \cdot 2(x - \mu) = -\frac{x - \mu}{\
 Simplifying the expression yields the final score function:
 
 $$\nabla_x \log q(x) = -\frac{x - \mu}{\sigma^2}$$
+
+
+
+## Training Steps
+1. Take a clean training image, call it $x_0$.
+2. Pick a random timestep t (say between 1 and 1000). Small t means a little noise, large t means almost pure static.
+3. Sample random Gaussian noise $\epsilon$, the same shape as the image.
+4. Mix them: $x_t = \sqrt{\bar{\alpha_{t}}}x_0  + \sqrt{1 - \bar{\alpha_{t}}} · \epsilon $. Here $\bar{\alpha_{t}}$ is a fixed schedule number that goes from about 1 (mostly image) down to about 0 (mostly noise) as t grows.
+5. Give the network the noisy image $x_t$ and the timestep $t$, and ask it to output its guess of $\epsilon$.
+6. $ Loss = \|\epsilon − \epsilon_{\theta}(x_t, t)\|^2$, the mean squared error between the real noise and the predicted noise.  $\epsilon_{\theta}(x_t, t)$ is network predicted noise and $\epsilon$ is noise sampled from schedule.
+
+
+
+## Classifier-free Guidance
+
+A diffusion model learns the score $\nabla_x \log p(x_t)$ , which is equivalent to predicting the noise $ \epsilon(x_t, t) $. For conditional generation, you want $\nabla_x \log p(x_t | y)$. By Bayes' rule:
+
+$$
+\nabla_x \log p(x_t | y) = \nabla_x \log p(x_t) + \nabla_x \log p(y | x_t)
+$$
+
+Guidance multiplies the second term by a scale $w > 1$, which pushes samples harder towards $y$.
+
+With classifier free guidance, we train a network $\epsilon_{\theta}(x_t, t, y)$ with the condition randomly dropped to a null token $\varnothing$ (e.g. 10-20% of the time). The same model then learns both the conditional and unconditional scores. 
+
+At sampling time, run the model twice and extrapolate between the two predictions:
+
+$$
+\hat{\epsilon} = \epsilon_{\theta}(x_t, \varnothing) + w (\epsilon_{\theta}(x_t, y) - \epsilon_{\theta}(x_t, \varnothing)  )
+$$
+
+when $w=1$, it gives plain conditional sampling.
+w > 1 (often 3-1= in text-to-image models) strengthens adherence to the condition. This works because $\epsilon(x, y) - \epsilon(x, \varnothing)$ is proportional to $\nabla_x \log p(y | x)$ so the model acts as its own implicit classifier. 
+
+Classifier guidance puts a weight w on the classifier term:
+
+
+$$
+\nabla \log p(x_t | y) = \nabla \log p(x_t) + w \nabla \log p(y | x_t)
+$$
+
+Why it's called classifier, because $p(y|x)$ predicts label (prompt). This is only part that is depends on the prompt. So basically this equation means that for conditional generation, it depends on the latents and prompt.
+
 
 ## References
 1. [Denoising Diffusion Probabilistic Models](https://arxiv.org/pdf/2006.11239.pdf) <br>
