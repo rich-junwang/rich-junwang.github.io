@@ -186,15 +186,14 @@ $$
 when $w=1$, it gives plain conditional sampling.
 w > 1 (often 3-1= in text-to-image models) strengthens adherence to the condition. This works because $\epsilon(x, y) - \epsilon(x, \varnothing)$ is proportional to $\nabla_x \log p(y | x)$ so the model acts as its own implicit classifier. 
 
-Classifier guidance puts a weight w on the classifier term:
-
-
+Classifier guidance puts a weight w on the classifier term, score of $p(x_t) * p(y|x_t)^w$
 $$
-\nabla \log p(x_t | y) = \nabla \log p(x_t) + w \nabla \log p(y | x_t)
+\tilde{s} = \nabla \log p(x_t) + w \nabla \log p(y | x_t)
 $$
 
-Why it's called classifier, because $p(y|x)$ predicts label (prompt). This is only part that is depends on the prompt. So basically this equation means that for conditional generation, it depends on the latents and prompt.
+Why it's called classifier, because $p(y|x)$ predicts label (prompt). This is only part that is depends on the prompt. So basically this equation means that for conditional generation, it depends on the latents and prompt (steering term).
 
+The steering term is the gradient of a classifier-like probability $p(y|x_t)$
 
 ## References
 1. [Denoising Diffusion Probabilistic Models](https://arxiv.org/pdf/2006.11239.pdf) <br>
