@@ -118,7 +118,7 @@ For a Gaussian $\mathcal{N}(\mu, \sigma^2\mathbf{I})$, the score is $\nabla_x \l
 Here is the step-by-step derivation for the score of a Gaussian distribution, defined as the gradient of the log-density $\nabla_x \log q(x)$.
 
 
-### Step 1: Write the Probability Density Function (PDF)
+Step 1: Write the Probability Density Function (PDF)
 
 For a multivariate Gaussian distribution $q(x) = \mathcal{N}(\mu, \sigma^2\mathbf{I})$ in $d$ dimensions, the PDF is given by:
 
@@ -126,7 +126,7 @@ $$q(x) = \frac{1}{(2\pi \sigma^2)^{d/2}} \exp\left( -\frac{1}{2\sigma^2} (x - \m
 
 
 
-### Step 2: Take the Logarithm
+Step 2: Take the Logarithm
 
 To find the log-density $\log q(x)$, apply the natural logarithm to both sides. Using logarithm properties ($\log(ab) = \log a + \log b$ and $\log(e^c) = c$):
 
@@ -134,7 +134,7 @@ $$\log q(x) = -\frac{d}{2} \log(2\pi) - \frac{d}{2} \log(\sigma^2) - \frac{1}{2\
 
 
 
-### Step 3: Compute the Gradient with Respect to $x$
+Step 3: Compute the Gradient with Respect to $x$
 
 The score is the gradient of the log-density, $\nabla_x \log q(x)$. Let's differentiate term by term:
 
@@ -146,14 +146,34 @@ $$\nabla_x \log q(x) = \nabla_x \left[ -\frac{d}{2} \log(2\pi \sigma^2) - \frac{
 $$\nabla_x \log q(x) = -\frac{1}{2\sigma^2} \cdot 2(x - \mu) = -\frac{x - \mu}{\sigma^2}$$
 
 
-
-### Result
-
 Simplifying the expression yields the final score function:
 
 $$\nabla_x \log q(x) = -\frac{x - \mu}{\sigma^2}$$
 
 
+As we know that given $x_0$, $x_t$ is Gaussian,
+$$
+q(x_t|x_0) = \mathcal{N}(x_t; \sqrt{\bar{\alpha}}x_0, (1 - \bar{\alpha_t})\mathbf{I})
+$$
+
+We can easily derive,
+$$
+\nabla_x \log q(x_t | x_o)  = -(x_t - \sqrt{\bar{\alpha}_t}x_0) / (1 - \bar{\alpha_t}) = - \epsilon / \sqrt{(1-\bar{\alpha}_t)}
+$$
+
+The noise $\epsilon$ points from the clean image towards the noisy one, so $-\epsilon$ points back toward clean data. The score of the conditional distribution is just the "denoising direction", rescaled.
+
+
+Training loss is defined as 
+
+$$
+L = E\|\epsilon_{\theta}(x_t, t) - \epsilon \|^2
+$$
+
+For any fixed $x_t$, the function that minimizes squared error is the conditional mean. So the best possible network is 
+$$
+\epsilon_{\theta}^*(x_t) = E(\epsilon | x_t)
+$$
 
 ## Training Steps
 1. Take a clean training image, call it $x_0$.
