@@ -215,6 +215,53 @@ Why it's called classifier, because $p(y|x)$ predicts label (prompt). This is on
 
 The steering term is the gradient of a classifier-like probability $p(y|x_t)$
 
+
+
+## Flow Matching
+
+Flow matching trains a network to predict a velocity field that carries noise samples to data samples along simple paths. The loss is plain regression on that velocity
+
+### Setup
+
+- $x_0 \sim \mathcal{N}(0, I) $  is noise, and $x_1 \sim p_{data}$ is a data sample
+- Pick a path between them. The most common is a straight line (rectified flow / optimal-transport path): $ x_t = (1-t)x_0 + t x_1, \quad t \in [0 , 1] $
+- Along this path the velocity is constant: $\frac{dx_t}{dt} = x_1 - x_0$
+
+### Loss
+
+Train $v_{\theta}(x_t, t)$ to predict that velocity:
+
+$$
+\mathcal{L} = E_{t, x_0, x_1}[(v_{\theta}(x_t, t) - (x_1 - x_0))^2]
+$$
+
+```python
+x1 = batch  # data
+x0 = torch.randn_like(x1)  # noise
+t = torch.rand(x1.shape[0], 1, 1, 1)
+xt = (1-t)x0 + t * x1
+target = x1 - x0
+loss = ((model(xt, t) - target) ** 2).mean()
+```
+
+What you actually want is the marginal velocity field $u_t(x)$ : the average direction mass moves through point $x$ at time $t$, taken over every (noise, data) pair whose path passes through x. Integrateing that field from $t=0$ to 1 turns the noise distribution to the data distribution. You can't compute it because it requires marginalizing over the whole dataset.
+
+The conditional flow matching result says that regressing on the per-pair velocity $(x_1 - x_0)$ has the same gradients as regressing on the intractable marginal $u_t(x)$. MSE's minimizer is a conditional expectation, so the network learns $ v_\theta(x, t) \approx \mathbb{E}[x_1 - x_0 \mid x_t=x] = u_t(x)$
+In short, individual targets are noisy, but the network learns their average, and the average is the correct field.
+
+### Sampling
+
+Start from noise and integrate the OED with any solver (e.g. Euler):
+
+```python
+x = torch.randn(shape)
+for i in range(N):
+    t = i / N
+    x = x + model(x, t) / N
+```
+
+
+
 ## References
 1. [Denoising Diffusion Probabilistic Models](https://arxiv.org/pdf/2006.11239.pdf) <br>
 2. [Understanding Diffusion Models: A Unified Perspective](https://arxiv.org/abs/2208.11970) <br>
