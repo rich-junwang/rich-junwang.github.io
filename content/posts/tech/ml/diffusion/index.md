@@ -29,6 +29,9 @@ cover:
 math: true
 ---
 
+
+## DDPM
+
 Diffusion is the process where we gradually convert a known distribution into a target distribution and the corresponding reverse process. Fortunately, people have proved that for gaussian distributions, we can convert data to noise and noise to data using the same functional form. 
 <p align="center">
     <img alt="gpu memory" src="images/diffusion_process.png" width="80%" height=auto/> 
@@ -38,7 +41,7 @@ Diffusion is the process where we gradually convert a known distribution into a 
 
 The core idea is simpler than the math in the papers makes it look: you add noise to an image, then train a network to guess what noise you added. The loss is just how wrong that guess was.
 
-## Forward Process
+### Forward Process
 As is shown in the figure above, there are two processes in diffusion:
 - Forward diffusion process: we slowly and iteratively add Gaussian noise to the images
 - Reverse diffusion process: we iteratively perform the denoising in small steps starting from a noisy image to convert it back to original form.
@@ -68,14 +71,14 @@ $$
 Here $\epsilon \sim \mathcal{N}(0, I)$. Even though we know the distribution, we don't know the value of the noise. In practice, we use neural network to approximate this noise. 
 
 
-### Reparameterization
+#### Reparameterization
 Reparameterization is used on both VAE and diffusion. It's needed because in diffusion, we have a lot of sampling operation and these operations are not differentiable. We use reparameterization to make it differentiable. Concretely, people introduce a random variable $\epsilon$, then we can sample from any gussian $z \sim \mathcal{N}(z; \mu_{\theta}, \sigma^2_{\theta}\mathbf{I}) $ as follows:
 $$
 z = \mu_{\theta} + \sigma_{\theta}  \odot \epsilon ; \epsilon \sim \mathcal{N}(0, \mathbf{I})
 $$
 
 
-## Reverse Process
+### Reverse Process
 Obviously, in reverse process we denoise the data and recover the images we have originally step by step. In the reverse process, we use the image at time $t$ to predict image at $t-1$, it follows the following distribution
 $$
 p_{\theta}(x_{t-1}|x_{t}) = \mathcal{N}( x_{t-1} ; \frac{1}{\sqrt{\alpha_{t}}}(x_t - \frac{1- \alpha_{t}}{\sqrt{1 - \bar{\alpha_{t}}}} \epsilon_{\theta}(x_t, t)); \frac{(1- \alpha_{t})(1 - \bar{\alpha_{t-1}})}{1 - \bar{\alpha_{t}}}\mathbf{I})
@@ -91,7 +94,7 @@ $$
 Everything relates to $\alpha$ is a constant. 
 
 
-## What is the Score
+### What is the Score
 
 In generative modeling, the score of a probability distribution $p(x)$ refers to the gradient of the log-probability density with respect to the **input**:
 
@@ -111,7 +114,7 @@ A neural network trained to approximate this vector field $\nabla_x \log p(x)$ p
 
 
 
-## Diffusion Learns the Score
+### Diffusion Learns the Score
 
 For a Gaussian $\mathcal{N}(\mu, \sigma^2\mathbf{I})$, the score is $\nabla_x \log q = - (x-\mu)/\sigma^2$.
 
@@ -175,7 +178,7 @@ $$
 \epsilon_{\theta}^*(x_t) = E(\epsilon | x_t)
 $$
 
-## Training Steps
+### Training Steps
 1. Take a clean training image, call it $x_0$.
 2. Pick a random timestep t (say between 1 and 1000). Small t means a little noise, large t means almost pure static.
 3. Sample random Gaussian noise $\epsilon$, the same shape as the image.
@@ -183,6 +186,92 @@ $$
 5. Give the network the noisy image $x_t$ and the timestep $t$, and ask it to output its guess of $\epsilon$.
 6. $ Loss = \|\epsilon − \epsilon_{\theta}(x_t, t)\|^2$, the mean squared error between the real noise and the predicted noise.  $\epsilon_{\theta}(x_t, t)$ is network predicted noise and $\epsilon$ is noise sampled from schedule.
 
+
+### Sampling
+
+The goal of the backward process:
+
+> Given the noisy image x_t, draw a sample of x_{t-1} from p(x_{t-1} | x_t).
+
+1. The key idea: what we would like to sample from
+
+The forward process adds noise in closed form:
+
+```
+x_t = sqrt(ᾱ_t) · x_0 + sqrt(1 − ᾱ_t) · ε
+```
+
+2. To go backwards we want the reverse distribution `q(x_{t-1} | x_t)`. We can't compute it, because it depends on the whole data distribution.
+
+However, if we also knew `x_0`, the reverse step has an exact answer. Apply Bayes' rule to the forward process:
+
+```
+q(x_{t-1} | x_t, x_0) = N( μ̃_t, β̃_t I )
+
+μ̃_t = [sqrt(α_t)(1 − ᾱ_{t-1}) / (1 − ᾱ_t)] · x_t  +  [sqrt(ᾱ_{t-1}) β_t / (1 − ᾱ_t)] · x_0
+                 └────────── coef1 ──────────┘            └──────── coef2 ────────┘
+
+β̃_t = (1 − ᾱ_{t-1}) / (1 − ᾱ_t) · β_t
+```
+
+The trick: we don't know `x_0`, but the network can estimate it. It is trained to predict the noise `ε` that was added, so we can invert the forward equation:
+
+```
+x̂_0 = (x_t − sqrt(1 − ᾱ_t) · ε_θ) / sqrt(ᾱ_t)
+```
+
+Then we plug `x̂_0` into the exact posterior. That is the whole algorithm: predict noise → estimate x_0 → get mean and var, take the Bayes-optimal step toward it, adding the right amount of fresh noise.
+
+
+3. Sampling a Gaussian is mean plus scaled noise.
+
+To draw a sample from `N(μ, σ²)`, you compute
+
+```
+x = μ + σ · z,    z ~ N(0, 1)
+```
+
+This is the standard way to sample a Gaussian (the reparameterization trick). Returning only `μ` doesn't give you a sample. It gives the single most likely value, which is a point estimate.
+
+
+At each step the network guesses the noise, and we use that guess to estimate the clean image `x̂_0`. We then step to the exact Gaussian posterior `q(x_{t-1} | x_t, x̂_0)`: move to its mean, a blend of `x_t` and `x̂_0`, and add fresh noise of variance `β_t` or `β̃_t`. Repeating this from t = T−1 down to 0 turns pure noise into an image.
+
+
+Start from pure noise $x_T \sim \mathcal{N}(0, I)$, then step from $t = T - 1$ down to 0:
+
+$$
+x_{t-1} = \mu_\theta (x_t, t) + \sigma_t z, \quad z \sim \mathcal N(0, I)
+$$
+This removes the noise and estimate clean image.
+
+
+Each step doing the three things
+
+1. Predict the noise
+
+```python
+eps = net(x_t, t)
+```
+The noise is network's guess for all the noise that turned $x_0$ into $x_t$. It is used only to compute the mean, i.e. to estimate where the image should be one step cleaner
+
+$$
+x_0 = (x_t - \sqrt{1-\hat{\alpha_t})} * eps / \sqrt{\alpha_t}
+$$
+
+```python
+mean = coef1 * x_t + coef2 * x_0  # move partway from x_t towards x_0
+```
+So `eps` is a denoising direction, not something we add.
+
+2. Pick the noise to add.
+
+$\sigma_t^2$ is either $\beta_t$ or $\hat{\beta_t}$. At $t=0$, no noise is added, so the output is clean.
+
+3. Compute mean
+
+$$
+\mu_\theta(x_t, t) =  \frac{1}{\sqrt{\alpha_{t}}}(x_t - \frac{1- \alpha_{t}}{\sqrt{1 - \bar{\alpha_{t}}}} \epsilon_{\theta}(x_t, t)) 
+$$
 
 
 ## Classifier-free Guidance
@@ -259,6 +348,23 @@ for i in range(N):
     t = i / N
     x = x + model(x, t) / N
 ```
+
+
+### Time Embedding
+
+1. Frequencies
+
+$$
+\omega_i = 10000^{-i/H} = \exp\left(-\frac{\ln 10000 \cdot i}{H}\right), \qquad i = 0, 1, \dots, H-1
+$$
+
+The frequencies form a geometric sequence from ω₀ = 1 down to ω₁₂₇ = 10000^(-127/128) ≈ 1.07×10⁻⁴. 
+
+2. Sinusoidal features
+
+$$
+\text{PE}(t) = \big[\cos(\omega_0 t), \dots, \cos(\omega_{H-1} t),; \sin(\omega_0 t), \dots, \sin(\omega_{H-1} t)\big] \in \mathbb{R}^{F}
+$$
 
 
 
