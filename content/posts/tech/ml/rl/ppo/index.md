@@ -120,6 +120,59 @@ $$
 
 This is also called Monte Carlo policy gradient. Since gradient is a direction, this formula shows that policy gradient estimation is the direction of the steepest increase in reward/return. When reward is larger, the policy gradient will be larger.
 
+In practice, instead of using Q function, people use advantage function which is the baseline trick: you can subtract any function of the state from Q without changing the expected gradient. Choosing V(s) as that function turns Q into A.
+
+$$
+  ∇V(s) = \sum_a ∇π(a|s) · Q(s,a)
+$$
+
+Subtract any b(s) that depends only on the state, not the action:
+
+$$
+  \sum_a ∇π(a|s) · b(s) = b(s) · ∇ \sum_a π(a|s) = b(s) · ∇(1) = 0
+$$
+The probabilities always sum to 1, so their gradient sums to zero. That means
+
+$$
+  \mathbb{E}[∇log π · Q(s,a)] = \mathbb{E}[∇log π · (Q(s,a) − b(s))]
+$$
+
+for any b(s). Pick b(s) = V(s), and Q − V is the advantage A by definition. The gradient is the same in expectation. Only its variance changes.
+
+
+
+#### Why bother: variance
+
+Suppose the RM gives two sampled responses scores of 7.1 and 6.9.
+
+- **With Q (or G_t):** both scores are positive, so both responses get pushed up, the first one only slightly more. The useful signal is the tiny difference between them, buried under a large shared offset. You need many samples before it averages out.
+- **With A:** if V(s) ≈ 7.0, the advantages are +0.1 and −0.1. The better response is pushed up and the worse one pushed down. The sign carries the information directly.
+
+So Q and A give the same expected direction, but A gets there with far less noise. That's why every practical method uses some baseline:
+
+
+$$A_t = (\text{estimate of Q}(s_t, a_t)) − (\text{baseline b}(s_t))$$
+
+
+
+| Method |Q estimate name | Formula | Baseline |
+|---|---|---|---|
+| REINFORCE |  Monte Carlo | G_t = Σ γ^k r_{t+k} | none |
+| REINFORCE with baseline |  Monte Carlo | G_t | learned V(s_t) |
+| A2C | n-step return | r_t + … + γ^(n−1) r_{t+n−1} + γⁿ V(s_{t+n}) | V(s_t) |
+| PPO | λ-return (GAE) | λ-weighted average of all n-step returns  |V(s_t) |
+| GRPO | sequence reward R (Monte Carlo) | G_t | mean reward of the group of responses to the same prompt, divided by group std |
+| RLOO | sequence reward R (Monte Carlo) | G_t | mean of the other samples |
+| ReMax | sequence reward R (Monte Carlo) | G_t | reward of the greedy response |
+
+Here $G_t$ is the actual return. 
+
+The critic-free methods (GRPO, RLOO, ReMax) all use Monte Carlo for Q. With no critic there's nothing to bootstrap from, so the only option is the real outcome. That's also why every token in a response gets the same advantage.
+
+Not every "baseline" fits the pure baseline argument exactly. RLOO's leave-one-out mean is independent of the sample it's applied to, so it adds no bias. GRPO's mean includes the sample's own reward, and the division by std rescales the advantage. Both add a little bias, which some work removes.
+
+
+
 ### Temporal Difference (TD) Learning
 Temporal Difference (TD) learning is one of the core concepts in Reinforcement Learning. Temporal difference algorithm always aims to bring the expected prediction and the new prediction together, thus matching expectations with reality and gradually increasing the accuracy of the entire chain of prediction.
 

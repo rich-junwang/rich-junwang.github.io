@@ -366,6 +366,8 @@ uv python pin 3.12
 uv venv ~/.uv/shared --python 3.12
 source ~/.uv/shared/bin/activate
 
+# To use this venv in vscode, we can select interpreter: ~/.uv/shared/bin/python
+# sometimes we have to expand ~ here.
 alias shared='source ~/.uv/shared/bin/activate' 
 alias dev='source ~/.uv/dev/bin/activate' 
 alias local='source .venv/bin/activate'
