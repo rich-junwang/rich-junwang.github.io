@@ -246,7 +246,68 @@ $$
 \\\
 &= \delta_t + \gamma \lambda \hat{A_{t+1}}
 \end{aligned}
-$$        
+$$
+
+
+What GAE actually solves is the bias–variance tradeoff when estimating the advantage. $A_t = Q(s_t, a_t) − V(s_t)$. There are two extreme estimators:
+
+- Monte Carlo: $A_t = G_t − V(s_t)$. It's unbiased, but high variance, because the whole rest of the noisy trajectory sits inside G_t.
+- One-step TD: $A_t = δ_t = r_t + γV(s_{t+1}) − V(s_t)$. It's low variance, but biased whenever the critic is wrong.
+
+GAE takes an exponentially weighted sum of the TD errors:
+
+ $$ A_t = Σ_k (γλ)^k · δ_{t+k}$$
+
+λ slides between the two extremes. With λ = 1 the sum telescopes back exactly to the Monte Carlo version.
+
+
+### A small example
+
+Take 3 tokens, with final reward 1 and KL ignored.
+
+- Critic values: V(s₀)=0.5, V(s₁)=0.4, V(s₂)=0.8, and 0 at the terminal state.
+- TD errors: δ = [0+0.4−0.5, 0+0.8−0.4, 1+0−0.8] = [−0.1, 0.4, 0.2]
+
+| | λ = 1 (Monte Carlo) | λ = 0 (pure TD) |
+|---|---|---|
+| advantages | [0.5, 0.6, 0.2] | [−0.1, 0.4, 0.2] |
+| returns = A + V | [1.0, 1.0, 1.0] | [0.4, 0.8, 1.0] |
+
+- With λ = 1, every token is judged against the real outcome. The critic only acts as a baseline that lowers variance. The return targets are the observed reward.
+- With λ = 0, token 1 gets most of the credit because the critic thinks it moved things from 0.4 to 0.8. Token 0 gets negative credit. The return targets are bootstrapped from the critic.
+- λ ≈ 0.95, which InstructGPT-style setups used, sits between the two.
+
+So in short:
+- Returns are a single-sample estimate of reward-to-go. They're purely observed when λ = 1 and partly bootstrapped when λ < 1.
+- GAE is a knob that trades the variance of the real outcome against the bias of the critic.
+
+
+
+
+In PPO implementations, returns are computed as
+
+```
+returns = advantages + v_old
+```
+
+`returns` is a sample estimate of Q(s_t, a_t), not the true Q value. Adding `v_old` back simply undoes the baseline subtraction:
+
+$$
+returns = Â_t + V_old(s_t) = (Q estimate − V_old(s_t)) + V_old(s_t) = Q estimate
+$$
+
+With GAE, that Q estimate is the λ-return:
+- λ = 1: returns = G_t, the Monte Carlo estimate.
+- λ = 0: returns = r_t + γV_old(s_{t+1}), the one-step TD estimate.
+
+Training V on Q estimates is still correct. The critic regresses V(s_t) toward an estimate of Q(s_t, a_t), but it only sees the state, not the action. Since a_t was sampled from π, averaging over many samples gives
+
+$$
+\mathbb{E}_{a∼π}[Q(s, a)] = V(s)
+$$
+
+So minimizing squared error against noisy Q samples makes the critic learn their mean, which is V. Each individual target is a Q estimate, and what the critic learns is V.
+
 
 ### Actor-Critic Algorithm
 There we give a recap of how actor-critic method works. In Actor-Critic algorithm, we use one neural network $\pi(a|s; \theta)$ to approximate policy function $\pi(a|s)$ and use another neural network $q(s, a; w)$ to approximate value function $Q_{\pi}(s, a)$.
