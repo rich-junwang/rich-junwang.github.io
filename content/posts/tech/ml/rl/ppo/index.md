@@ -225,16 +225,31 @@ The idea is that the Advantage function calculates how better taking that action
 Based on the above advantage definition, we have
 $$
 \begin{aligned}
-\hat{A_t^{(1)}} &= r_t + \gamma V(s_{t+1}) - V(s)  \\\
-\hat{A_t^{(2)}} &= r_t + \gamma r_{t+1} +\gamma^2 V(s_{t+2}) - V(s) \\\
+\hat{A}_t^{(1)} &= r_t + \gamma V(s_{t+1}) - V(s, t)  \\\
+\hat{A}_t^{(2)} &= r_t + \gamma r_{t+1} +\gamma^2 V(s_{t+2}) - V(s, t) \\\
 ...\\\
-\hat{A_t^{(\infty)}} &= r_t + \gamma r_{t+1} +\gamma^2 r_{t+2} + ... - V(s)
+\hat{A}_t^{(\infty)} &= r_t + \gamma r_{t+1} +\gamma^2 r_{t+2} + ... - V(s, t)
 \end{aligned}
 $$
 
-Notice that $\hat{A_t^{(1)}}$ has high bias, low variance, whilst
-$\hat{A_t^{(\infty)}}$ is unbiased, high variance. A weighted average of $\hat{A_t^{(k)}}$ can be used to balance bias and variance.
-$$\hat{A_t} = \hat{A_t^{GAE}} = \frac{\sum_k w_k \hat{A_t^{(k)}}}{\sum_k w_k}$$
+
+The superscript k counts how many real rewards we use before switching to the critic's estimate. Every $\hat{A^k}$ estimates the same advantage $A(s_t, a_t)$. They differ only in where the real rewards stop and V takes over.
+
+$\hat{A}_t^1$ is one-step TD advantage. 
+
+We use one real reward, $r_t$, then bootstrap with V(s_{t+1}) for everything after. This is the TD estimate: low variance, but biased if V is wrong.
+
+$\hat{A}_t^{(\infty)}$ is Monte Carlo advantage
+
+$$  \hat{A}_t^{(\infty)} = r_t + γr_{t+1} + γ²r_{t+2} + … − V(s_t) = G_t − V(s_t)$$
+
+We use real rewards all the way to the end of the trajectory and never bootstrap. This is the Monte Carlo estimate: unbiased, but high variance. 
+
+
+Notice that $\hat{A}_t^{(1)}$ has high bias, low variance, whilst
+$\hat{A}_t^{(\infty)}$ is unbiased, high variance. A weighted average of $\hat{A}_t^{(k)}$ can be used to balance bias and variance.
+$$\hat{A}_t = \hat{A}_t^{GAE} = \frac{\sum_k w_k \hat{A}_t^{(k)}}{\sum_k w_k}$$
+
 We set $w_k = \lambda^{k-1}$, this gives clean calculation for $\hat{A_t}$. Below we have the recursion equations. (Refer to [11] to learn how to derive the second equation here.)
 
 $$
@@ -244,7 +259,7 @@ $$
 \hat{A_t} &= \delta_t + \gamma \lambda \delta_{t+1} + ... +
                         (\gamma \lambda)^{T - t + 1} \delta_{T - 1}
 \\\
-&= \delta_t + \gamma \lambda \hat{A_{t+1}}
+&= \delta_t + \gamma \lambda \hat{A}_{t+1}
 \end{aligned}
 $$
 
