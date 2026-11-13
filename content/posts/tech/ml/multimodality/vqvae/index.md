@@ -325,7 +325,7 @@ Train the encoder, codebook, and decoder using the reconstruction loss + codeboo
 - Take the sequence of latent code indices produced by the encoder for your training data.
 - Train a powerful autoregressive model (PixelCNN, PixelSNAIL, or Transformer) on these code sequences.
     - If the latent map is 2D (like an image grid of discrete codes), you flatten or use masked convolutions to model the spatial dependencies.
-    - The autoregressive model learns $P(z) = \prod_i P(z_i | z_{<i})$, where each $z_i$ is a code index.
+    - The autoregressive model learns $P(z) = \prod_i P(z_i \mid z_{\lt i})$, where each $z_i$ is a code index.
 
 - This prior learns the distribution of code sequences across your dataset.
 
