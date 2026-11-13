@@ -171,6 +171,12 @@ taxonomies:
 
 markup:
   goldmark:
+    extensions:
+      passthrough: # leave math untouched by Markdown so KaTeX receives raw LaTeX
+        enable: true
+        delimiters:
+          block: [['$$', '$$'], ['\[', '\]']]
+          inline: [['$', '$'], ['\(', '\)']]
     renderer:
       unsafe: true # HUGO 默认转义 Markdown 文件中的 HTML 代码，如需开启的话
   highlight:

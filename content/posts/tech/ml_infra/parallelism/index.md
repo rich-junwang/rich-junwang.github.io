@@ -76,7 +76,7 @@ In it's essence, tensor parallelism is block matrix multiplication. Based on how
 For row parallel partition, there is
 
 $$
-Y = XW = \begin{bmatrix} X_1, & X_2\end{bmatrix} \begin{bmatrix} W_1 \\\ W_2\end{bmatrix} = X_1W_1 + X_2W_2
+Y = XW = \begin{bmatrix} X_1, & X_2\end{bmatrix} \begin{bmatrix} W_1 \\ W_2\end{bmatrix} = X_1W_1 + X_2W_2
 $$
 
 For column parallel partition, there is
@@ -92,7 +92,7 @@ In original transformer MLP layer, there are two projection steps: `hidden.size 
 </p>
 
 <!-- $$\begin{bmatrix} 
-a & b \\\
+a & b \\
 d & e 
 \end{bmatrix}
 $$ -->
@@ -167,7 +167,7 @@ How to achieve this, in Megatron-LM, this is achieved by first partition all GPU
 A simpler metric for evaluation of training efficiency is model FLOPs utilization (MFU) which is defined as the ratio of the observed throughput to the theoretical maximum throughput with peak FLOPs.
 As can be seen in the definition, it's very hardware dependent metric. For A100 GPUs, the metric can be calculated as
 $$
-MFU_{V100} = \frac{{num\\_of\\_parameters} * 6 * {total\\_training\\_token\\_count}}{{num\\_of\\_gpus} * 312e^{12} * {training\\_days} * 24 * 3600 }
+MFU_{V100} = \frac{{num\_of\_parameters} * 6 * {total\_training\_token\_count}}{{num\_of\_gpus} * 312e^{12} * {training\_days} * 24 * 3600 }
 $$ 
 
 Generally a good MFU should be above 40%. 

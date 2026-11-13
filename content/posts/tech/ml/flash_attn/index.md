@@ -86,16 +86,16 @@ Similary,  the cross entropy can be computed as
 
 $$ 
 \begin{aligned} 
-H(p, q) &= -\sum_i p_i\log(q_i) \\\
-&= -1\cdot\log(q_y) -\sum_{i \neq y} 0\cdot\log(q_i) \\\
-&= -\log(q_y)  \\\
-&= -\log(\text{softmax}(\hat{y})_y) \\\ 
+H(p, q) &= -\sum_i p_i\log(q_i) \\
+&= -1\cdot\log(q_y) -\sum_{i \neq y} 0\cdot\log(q_i) \\
+&= -\log(q_y)  \\
+&= -\log(\text{softmax}(\hat{y})_y) \\ 
 \end{aligned} $$
 
 When $max(x)$ is very large, the numerator could become $0$, and $log$ computation could overflow. To prevent this, we can do one more step:
 $$
 \begin{aligned}
-\log(\text{softmax}(x)_i) &= \log(\frac{e^{x_i - \max(x)}}{\sum_j e^{x_j - \max(x)}}) \\\
+\log(\text{softmax}(x)_i) &= \log(\frac{e^{x_i - \max(x)}}{\sum_j e^{x_j - \max(x)}}) \\
 &= x_i - \max(x) - \log(\sum_j e^{x_j - \max(x)})
 \end{aligned} $$
 

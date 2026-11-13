@@ -45,8 +45,8 @@ the varentropy. Varentropy is a measure of how the uncertainty varies across dif
 
 $$
 \begin{aligned}
-V(X) &= \text{Var}(-\log P(X))  \\\
-&= \sum_{x \in \mathcal{X}} P(x) \left(-\log_2 P(x) - H(X)\right)^2 \\\
+V(X) &= \text{Var}(-\log P(X))  \\
+&= \sum_{x \in \mathcal{X}} P(x) \left(-\log_2 P(x) - H(X)\right)^2 \\
 &= \mathbb{E}[(-\log P(X))^2] - (H(X))^2
 \end{aligned}
 $$

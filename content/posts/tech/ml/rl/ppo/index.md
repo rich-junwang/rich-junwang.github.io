@@ -68,7 +68,7 @@ $$
 
 $$
 \begin{aligned}
-Var_{x\sim q(x)}[f] &= \mathbb{E_{x\sim q(x)}}[({\frac{p(x_i)}{q(x_i)}f(x_i)})^2] - (\mathbb{E_{x\sim q(x)}}[{\frac{p(x_i)}{q(x_i)}f(x_i)}])^2 \\\
+Var_{x\sim q(x)}[f] &= \mathbb{E_{x\sim q(x)}}[({\frac{p(x_i)}{q(x_i)}f(x_i)})^2] - (\mathbb{E_{x\sim q(x)}}[{\frac{p(x_i)}{q(x_i)}f(x_i)}])^2 \\
 &= \mathbb{E_{x\sim p(x)}}[{\frac{p(x_i)}{q(x_i)}f(x_i)^2}] - (\mathbb{E_{x\sim p(x)}}[f(x_i)])^2
 \end{aligned}
 $$
@@ -93,8 +93,8 @@ $$
 In policy gradient algorithm, the policy function $\pi(a|s_t)$ is approximated by policy network $\pi(a|s_t; \theta)$. $\theta$ here is the neural network model parameters. Then the policy-based learning is to maximize the objective function 
 $$
 \begin{aligned}
-J(\theta) &= \mathbb{E_S}[V(S; \theta)] \\\
-&=  \sum_{s\in S} d_{\pi}(s) V_{\pi}(s_t; \theta) \\\
+J(\theta) &= \mathbb{E_S}[V(S; \theta)] \\
+&=  \sum_{s\in S} d_{\pi}(s) V_{\pi}(s_t; \theta) \\
 &= \sum_{s\in S} d_{\pi}(s) \sum_a \pi(a|s_t; \theta) \cdot Q_{\pi}(s_t, a)
 \end{aligned}
 $$
@@ -105,8 +105,8 @@ Now we know the objective function of the policy-based algorithm, we can learn t
 Now we can look at how to get the policy gradient. Since the first summation of the last step in the above equation has nothing to do with $\theta$, so we can focus on getting the derivatives of the value function $V_{\pi}(s; \theta)$. Using chain rule, it's easy to get:
 $$
 \begin{aligned}
-\frac{\partial{V(s; \theta)}}{\partial{\theta}} &= \sum_a \frac{\partial{\pi (a|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, a) \\\
-&= \sum_a \pi(a|s_t; \theta) \frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, a) \\\
+\frac{\partial{V(s; \theta)}}{\partial{\theta}} &= \sum_a \frac{\partial{\pi (a|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, a) \\
+&= \sum_a \pi(a|s_t; \theta) \frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, a) \\
 &= \mathbb{E_A}\left[  \frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, a) \right]
 \end{aligned}
 $$
@@ -199,7 +199,7 @@ $$
 Since $Q_{\pi}(s, a)$ is the expectation of the return, we can once again use Monte Carlo approximation,
 $$
 \begin{aligned}
-Q_{\pi}(s_t, a_t) &= u_t \\\
+Q_{\pi}(s_t, a_t) &= u_t \\
 &= \sum_{i=t}^{N} {\gamma^{i-t} \cdot r_{i}}
 \end{aligned} 
 $$
@@ -223,14 +223,14 @@ $$
 The idea is that the Advantage function calculates how better taking that action at a state is compared to the average value of the state. It’s subtracting the mean value of the state from the state action pair. Mathematically, $A(s_t, a_t) = Q(s_t, a_t) − V (s_t)$, where $Q(s_t, a_t)$ is the action-value function, representing the expected return after taking action at at state $s$, and $V (s_t)$ is the value function, representing the average expected return at state $s_t$.
 
 Based on the above advantage definition, we have
-$$
+<!-- $$
 \begin{aligned}
-\hat{A}_t^{(1)} &= r_t + \gamma V(s_{t+1}) - V(s, t)  \\\
-\hat{A}_t^{(2)} &= r_t + \gamma r_{t+1} +\gamma^2 V(s_{t+2}) - V(s, t) \\\
-...\\\
+\hat{A}_t^{(1)} &= r_t + \gamma V(s_{t+1}) - V(s, t)  \\
+\hat{A}_t^{(2)} &= r_t + \gamma r_{t+1} +\gamma^2 V(s_{t+2}) - V(s, t) \\
+...\\
 \hat{A}_t^{(\infty)} &= r_t + \gamma r_{t+1} +\gamma^2 r_{t+2} + ... - V(s, t)
 \end{aligned}
-$$
+$$ -->
 
 
 The superscript k counts how many real rewards we use before switching to the critic's estimate. Every $\hat{A^k}$ estimates the same advantage $A(s_t, a_t)$. They differ only in where the real rewards stop and V takes over.
@@ -239,9 +239,11 @@ $\hat{A}_t^1$ is one-step TD advantage.
 
 We use one real reward, $r_t$, then bootstrap with V(s_{t+1}) for everything after. This is the TD estimate: low variance, but biased if V is wrong.
 
-$\hat{A}_t^{(\infty)}$ is Monte Carlo advantage
+$\hat{A}_t^{(\infty)}$ is the Monte Carlo advantage
 
-$$  \hat{A}_t^{(\infty)} = r_t + γr_{t+1} + γ²r_{t+2} + … − V(s_t) = G_t − V(s_t)$$
+$$
+\hat{A}_t^{(\infty)} = r_t + \gamma r_{t+1} + \gamma^2 r_{t+2} + \dots - V(s_t) = G_t - V(s_t)
+$$
 
 We use real rewards all the way to the end of the trajectory and never bootstrap. This is the Monte Carlo estimate: unbiased, but high variance. 
 
@@ -255,10 +257,10 @@ We set $w_k = \lambda^{k-1}$, this gives clean calculation for $\hat{A_t}$. Belo
 $$
 \begin{aligned}
 \delta_t &= r_t + \gamma V(s_{t+1}) - V(s_t)
-\\\
-\hat{A_t} &= \delta_t + \gamma \lambda \delta_{t+1} + ... +
+\\
+\hat{A_t} &= \delta_t + \gamma \lambda \delta_{t+1} + \dots +
                         (\gamma \lambda)^{T - t + 1} \delta_{T - 1}
-\\\
+\\
 &= \delta_t + \gamma \lambda \hat{A}_{t+1}
 \end{aligned}
 $$
@@ -308,7 +310,7 @@ returns = advantages + v_old
 `returns` is a sample estimate of Q(s_t, a_t), not the true Q value. Adding `v_old` back simply undoes the baseline subtraction:
 
 $$
-returns = Â_t + V_old(s_t) = (Q estimate − V_old(s_t)) + V_old(s_t) = Q estimate
+\text{returns} = \hat{A}_t + V_{\text{old}}(s_t) = \left(\hat{Q}(s_t, a_t) - V_{\text{old}}(s_t)\right) + V_{\text{old}}(s_t) = \hat{Q}(s_t, a_t)
 $$
 
 With GAE, that Q estimate is the λ-return:
@@ -349,7 +351,7 @@ $$
 Similarly, we can make a change to the objective function of our policy gradient, and the resulting policy gradient will become
 $$
 \begin{aligned}
-g &= \mathbb{E_{{(s_t, a_t)} \sim \pi_{\theta}}}\left[  \frac{\partial{\log\pi (a_t|s_t; \theta)}}{\partial{\theta}} \cdot  \hat{A_t}(s, a) \right] \\\
+g &= \mathbb{E_{{(s_t, a_t)} \sim \pi_{\theta}}}\left[  \frac{\partial{\log\pi (a_t|s_t; \theta)}}{\partial{\theta}} \cdot  \hat{A_t}(s, a) \right] \\
 &= \mathbb{E_{{(s_t, a_t)} \sim \pi_{\theta_{old}}}}\left[ \frac{\pi_{\theta}(a_t|s_t; \theta)}{\pi_{\theta_{old}}(a_t|s_t)} \frac{\partial{\log\pi (a_t|s_t; \theta)}}{\partial{\theta}} \cdot  \hat{A_t}(s, a) \right]
 \end{aligned}
 $$

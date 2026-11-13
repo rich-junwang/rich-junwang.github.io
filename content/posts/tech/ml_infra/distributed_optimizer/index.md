@@ -34,9 +34,9 @@ In this blog, we talk about distributed optimizer implementation. The discussion
 ## Adam Optimizer
 Adaptive moment estimation is an algorithm to compute the adaptive learning rate for each parameters. It consists two parts: first-order momentum which is exponentially decaying average (moving average) of gradient and second-order momentum (variance, which controls adaptive learning rate) which is exponentially decaying average of squared gradient.
 $$
-m_t = \frac{\beta_1}{1 - \beta_{1}^{t}} m_{t-1} + \frac{1 - \beta_1}{1 - \beta_{1}^{t}} g_{t} \\\\[5pt]
-v_t = \frac{\beta_2}{1 - \beta_{2}^{t}} v_{t-1} + \frac{1 - \beta_2}{1 - \beta_{2}^{t}} g_{t}^2 \\\\[5pt]
-u_t = \frac{m_t}{\sqrt{v_t} + \epsilon} \\\\[5pt]
+m_t = \frac{\beta_1}{1 - \beta_{1}^{t}} m_{t-1} + \frac{1 - \beta_1}{1 - \beta_{1}^{t}} g_{t} \\[5pt]
+v_t = \frac{\beta_2}{1 - \beta_{2}^{t}} v_{t-1} + \frac{1 - \beta_2}{1 - \beta_{2}^{t}} g_{t}^2 \\[5pt]
+u_t = \frac{m_t}{\sqrt{v_t} + \epsilon} \\[5pt]
 \theta_{t+1} = \theta_t - \eta_t u_t
 $$
 

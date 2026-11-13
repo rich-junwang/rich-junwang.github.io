@@ -154,7 +154,7 @@ Adept AI has a lengthy [blog post](https://www.adept.ai/blog/sherlock-sdc) talki
 
 PaLM paper proposed adding z-loss to increase the stability of training. The method is to encourage the logits to stay close to zero. For example, we could add a max-z loss to normalize the logits:
 $$
-L_{max\\_z} = 2e^{-4} * z^2
+L_{max\_z} = 2e^{-4} * z^2
 $$
 where $z$ is the maximum logit value [39]. 
 

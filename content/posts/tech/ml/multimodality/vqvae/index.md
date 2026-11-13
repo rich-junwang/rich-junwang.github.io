@@ -49,8 +49,8 @@ Minus sign here is to get positive value. If an event is rare (low p), then it c
 Shannon entropy is the average of information - the expectation of $I(p)$ with respect to the distribution $p(x)$
 $$
 \begin{aligned}
-H(p) &= \mathbb{E}_{x \sim P}[I(p)] \\\
-     &= \sum p(x)I(p) \\\
+H(p) &= \mathbb{E}_{x \sim P}[I(p)] \\
+     &= \sum p(x)I(p) \\
      &= -\sum p(x)\log p(x)
 \end{aligned}
 $$
@@ -63,8 +63,8 @@ Shannon entropy is the average(expected) information under the same distribution
 The average of $I(q)$ with respect to the distribution $p(x)$
 $$
 \begin{aligned}
-H(p, q) &= \mathbb{E}_{x \sim P}[I(q)] \\\
-        &= \sum p(x)I(q) \\\
+H(p, q) &= \mathbb{E}_{x \sim P}[I(q)] \\
+        &= \sum p(x)I(q) \\
         &= -\sum p(x)\log q(x)
 \end{aligned}
 $$
@@ -77,10 +77,10 @@ KL divergence is the relative entropy or information gain.
 
 $$
 \begin{aligned}
-D_{KL}(p||q) &= H(p, q) - H(p) \\\
-             &= -\sum p(x)\log q(x) + \sum p(x)\log p(x) \\\
-             &= -\sum p(x)\log \frac{q(x)}{p(x)} \\\
-             &= \sum p(x)\log \frac{p(x)}{q(x)} \\\
+D_{KL}(p||q) &= H(p, q) - H(p) \\
+             &= -\sum p(x)\log q(x) + \sum p(x)\log p(x) \\
+             &= -\sum p(x)\log \frac{q(x)}{p(x)} \\
+             &= \sum p(x)\log \frac{p(x)}{q(x)} \\
              &= \mathbb{E}_{x \sim p(x)}[\log p(x) - \log q(x)]
 \end{aligned}
 $$
@@ -89,9 +89,9 @@ Relative entropy is the difference between cross entropy and shannon entropy.
 Based on **Jensen's inequality**, we have 
 $$
 \begin{aligned}
--D_{KL}(p||q) &= \sum p(x)\log \frac{q(x)}{p(x)} \\\
-              &<= \log \sum p(x) \frac{q(x)}{p(x)} \\\
-              &= log 1 \\\
+-D_{KL}(p||q) &= \sum p(x)\log \frac{q(x)}{p(x)} \\
+              &<= \log \sum p(x) \frac{q(x)}{p(x)} \\
+              &= log 1 \\
               &= 0
 \end{aligned}
 $$
@@ -132,7 +132,7 @@ Mathematically, this process can be represented as two transformations:
 
 $$ 
 \begin{aligned} 
-z &= g(X) , z \in \mathbb{R}^d\\\
+z &= g(X) , z \in \mathbb{R}^d\\
 \hat{X} &= f(z)
 \end{aligned}
 $$
@@ -268,11 +268,11 @@ Similarly for continuous variable we can also use MLE to maximize $log(p(X))$, w
 $$
 \begin{aligned}
 \log p_\theta(X) 
-&= \int_z q_\phi(z \mid X) \log p_\theta(X)  dz \quad  \\\
-&= \int_z q_\phi(z \mid X) \log \frac{p_\theta(X, z)}{p_\theta(z \mid X)}  dz \quad  \\\
-&= \int_z q_\phi(z \mid X) \log \left( \frac{p_\theta(X, z)}{q_\phi(z \mid X)} \cdot \frac{q_\phi(z \mid X)}{p_\theta(z \mid X)} \right)  dz \\\
-&= \int_z q_\phi(z \mid X) \log \frac{p_\theta(X, z)}{q_\phi(z \mid X)} \, dz + \int_z q_\phi(z \mid X) \log \frac{q_\phi(z \mid X)}{p_\theta(z \mid X)}  dz \\\
-&= \ell(p_\theta, q_\phi) + D_{\mathrm{KL}}(q_\phi \| p_\theta) \\\
+&= \int_z q_\phi(z \mid X) \log p_\theta(X)  dz \quad  \\
+&= \int_z q_\phi(z \mid X) \log \frac{p_\theta(X, z)}{p_\theta(z \mid X)}  dz \quad  \\
+&= \int_z q_\phi(z \mid X) \log \left( \frac{p_\theta(X, z)}{q_\phi(z \mid X)} \cdot \frac{q_\phi(z \mid X)}{p_\theta(z \mid X)} \right)  dz \\
+&= \int_z q_\phi(z \mid X) \log \frac{p_\theta(X, z)}{q_\phi(z \mid X)} \, dz + \int_z q_\phi(z \mid X) \log \frac{q_\phi(z \mid X)}{p_\theta(z \mid X)}  dz \\
+&= \ell(p_\theta, q_\phi) + D_{\mathrm{KL}}(q_\phi \| p_\theta) \\
 &\geq \ell(p_\theta, q_\phi) \quad 
 \end{aligned}
 $$

@@ -70,7 +70,7 @@ $$
 Similarly it's easy to get the value function
 $$
 \begin{aligned}
-V_{\pi}(s_t) &= \mathbb{E}[R_t + \gamma V(s_{t+1}) \bigm\vert  S_{t} = s] \\\
+V_{\pi}(s_t) &= \mathbb{E}[R_t + \gamma V(s_{t+1}) \bigm\vert  S_{t} = s] \\
 &=\mathbb{E}[R_t \bigm\vert  S_{t} = s] + \mathbb{E}[\gamma V(s_{t+1}) \bigm\vert  S_{t} = s]
 \end{aligned} 
 $$

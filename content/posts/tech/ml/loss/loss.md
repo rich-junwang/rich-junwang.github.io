@@ -40,7 +40,7 @@ $$
 $$
 and
 $$
-\left[log\sigma(x)\right]^\prime = 1 - \sigma(x) \\\
+\left[log\sigma(x)\right]^\prime = 1 - \sigma(x) \\
 \left[log\left(1 - \sigma(x)\right)\right]^\prime = - \sigma(x)
 $$
 
@@ -49,16 +49,16 @@ $$
 For a binary classification problem, for an example $x = (x_1, x_2, \dotsb , x_n)^T$, the hypothesis function (for the positive class) can be written as:
 $$
 \begin{aligned}
-h_{\theta}(1|x) &= \sigma(\theta_0 + \theta_1x_1 + \theta_2x_2 + \dotsb + \theta_nx_n) \\\
-&= \sigma(\theta^{\mathrm{T}}x) \\\
+h_{\theta}(1|x) &= \sigma(\theta_0 + \theta_1x_1 + \theta_2x_2 + \dotsb + \theta_nx_n) \\
+&= \sigma(\theta^{\mathrm{T}}x) \\
 &= \frac{1}{1+e^{-\theta^{\mathrm{T}}x}}
 \end{aligned}
 $$
 Consequently, for the negative class,
 $$
 \begin{aligned}
-h_{\theta}(0|x) &= 1 - \frac{1}{1+e^{-\theta^{\mathrm{T}}x}} \\\
-&= \frac{1}{1+e^{\theta^{\mathrm{T}}x}} \\\
+h_{\theta}(0|x) &= 1 - \frac{1}{1+e^{-\theta^{\mathrm{T}}x}} \\
+&= \frac{1}{1+e^{\theta^{\mathrm{T}}x}} \\
 &= \sigma(-\theta^{\mathrm{T}}x)
 \end{aligned}
 $$
@@ -106,7 +106,7 @@ $$
 here $p$ stands for positive class. 
 If we want to get the gradient of loss with respect to the logits ($s_i$ here), for positive class we can have
 $$
-\frac{\partial{L}}{\partial{s_p}} = \left(\frac{e^{s_p}}{ \sum_j ^{C} e^{s_j}} - 1 \right) \\\
+\frac{\partial{L}}{\partial{s_p}} = \left(\frac{e^{s_p}}{ \sum_j ^{C} e^{s_j}} - 1 \right) \\
 \frac{\partial{L}}{\partial{s_n}} = \left(\frac{e^{s_n}}{ \sum_j ^{C} e^{s_j}} \right)
 $$
 We can put this in one equation, which is what we commonly see as the graident of cross entropy loss for softmax

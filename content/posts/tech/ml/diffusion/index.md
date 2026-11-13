@@ -56,7 +56,7 @@ q(x_{1:T}|x_0) = \prod_{t=1}^{T}q(x_t|x_{t-1})
 $$
 However, in implementation the above formulation has a problem because doing sequential sampling will result in inefficient forward process. The authors defined the following items:
 $$
-\alpha_t = 1 - \beta_t \\\
+\alpha_t = 1 - \beta_t \\
 \bar{\alpha_t} = \prod_{s=1}^t\alpha_s
 $$
 Then we have

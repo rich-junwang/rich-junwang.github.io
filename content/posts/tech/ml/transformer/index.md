@@ -129,7 +129,7 @@ In `Attention is All You Need` paper, absolute sinusoidal positional embedding w
 
 $$
 \begin{aligned}
-p_{t,2i} &= \sin\left( \frac{t}{10000^{2i/d}} \right) \\\
+p_{t,2i} &= \sin\left( \frac{t}{10000^{2i/d}} \right) \\
 p_{t,2i+1} &= \cos\left( \frac{t}{10000^{2i/d}} \right)
 \end{aligned}
 $$
@@ -150,11 +150,11 @@ $$
 \begin{aligned}
 f(x_m, m)=
 \begin{pmatrix}
-\cos m\theta & -\sin m\theta \\\
+\cos m\theta & -\sin m\theta \\
 \sin m\theta & \cos m\theta
 \end{pmatrix}
 \begin{pmatrix}
-x_m^{(1)} \\\
+x_m^{(1)} \\
 x_m^{(2)}
 \end{pmatrix}
 \end{aligned}
