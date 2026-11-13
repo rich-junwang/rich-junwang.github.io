@@ -32,15 +32,15 @@ cover:
 ### Forward and Reverse Proxy Server
 When clients (web browsers) make requests to sites and services on the Internet, the forward proxy server intercepts those requests and then communicates with servers on behalf of these clients like a middleman. 
 ![](images/forward_proxy.png)
-Why we use forward proxy server?
-- Circumvent restrictions. Sometimes restrictions through firewall are put on the access of the internet. A forward proxy can get around these restriction.
-- Block contents. Proxies can be set up to block a certain type of user to access a specific type of online contents
+Why do we use a forward proxy server?
+- Circumvent restrictions. Sometimes restrictions through firewall are put on the access of the internet. A forward proxy can get around these restrictions.
+- Block contents. Proxies can be set up to block a certain type of user from accessing a specific type of online contents
 - Protect online ID. 
 
 
 A reverse proxy is an application that sits in front of back-end applications and forwards client (e.g. browser) requests to those applications. 
 ![](images/reverse_proxy.png)
-Why we use reverse proxy server?
+Why do we use a reverse proxy server?
 - Load balancing
 - Protection from attacks
 - Caching (such as CDN caching)
@@ -62,7 +62,7 @@ Port Forwarding Rule: When you set up port forwarding on a router, you create a 
 
 ### Home Network Debugging
 
-I have a MBP, but somehow the internet speed is very slow. When I use iphone the speed could be 300M+, however, while I use MBP, it's like 30M+. I did some research, the following command helped me. 
+I have an MBP, but somehow the internet speed is very slow. When I use my iPhone the speed could be 300M+, however, when I use the MBP, it's like 30M+. I did some research, and the following command helped me. 
 ```bash
 ifconfig awdl0 down
 ```

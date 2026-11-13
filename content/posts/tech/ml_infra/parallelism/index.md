@@ -31,12 +31,12 @@ cover:
     relative: false
 ---
 
-Modern large language model usually is trained with billions number of parameters and trillions number of tokens. With model size and training data at such scale, computation resource and memory footprint requirement is huge. How to effectively leverage GPU resources to speed up training is an important topic in language model pretraining. In this blog, we'll dive deep into parallel training in recent distributed training paradigms. 
+Modern large language models are usually trained with billions of parameters and trillions of tokens. With model size and training data at such scale, computation resource and memory footprint requirements are huge. How to effectively leverage GPU resources to speed up training is an important topic in language model pretraining. In this blog, we'll dive deep into parallel training in recent distributed training paradigms. 
 
-A lot of contents of here are from OpenAI, Nvidia, Deepspeed and bigscience blogs. We'll first go through different parallelism techniques and then talk about how to combine them to maximize training efficiency. 
+A lot of the content here is from OpenAI, Nvidia, Deepspeed and bigscience blogs. We'll first go through different parallelism techniques and then talk about how to combine them to maximize training efficiency. 
 
 ### Data Parallelism
-Data parallelism (DP) is the most straightforward way of parallel training. With data parallelism, model parameters and optimizer states are replicated across different workers. Data is partitioned into the same number of shards and each replicate of model is fed with one shard of data. Forward and backward computation is in parallel (simultaneously) and then there is a synchronization step where gradients are averaged across workers to update parameters. The DP computation can be summarized as the following [three steps](https://www.adept.ai/blog/sherlock-sdc):
+Data parallelism (DP) is the most straightforward way of parallel training. With data parallelism, model parameters and optimizer states are replicated across different workers. Data is partitioned into the same number of shards and each replica of the model is fed with one shard of data. Forward and backward computation is in parallel (simultaneously) and then there is a synchronization step where gradients are averaged across workers to update parameters. The DP computation can be summarized as the following [three steps](https://www.adept.ai/blog/sherlock-sdc):
 
 ```
 Each machine computes local gradients given local inputs and a consistent global view of the parameters.
@@ -51,15 +51,15 @@ NewParams, NewOptimState = g(Params, OldOptimState, GlobalGrad)
 
 
 
-(1) Each node compute: layer 1 forward -> layer 2 forward -> … -> layer n forward -> layer n backward -> layer n-1 backward -> … -> layer 1 backward 
+(1) Each node computes: layer 1 forward -> layer 2 forward -> … -> layer n forward -> layer n backward -> layer n-1 backward -> … -> layer 1 backward 
 (2) all-reduce gradients of all layers
 (3) update the weight of each layer
 
-Note that the forward and backward in step (1) must be conducted sequentially. However, we shall note that we don’t necessarily need to wait until all operations in step (1) are completed to start step (2). In fact, once layer n backward is completed, we can immediately start to all-reduce layer n gradient and then even update the weight using this all-reduced gradient (as layer n weight is not needed in the backward for layer n-1 to layer 1.) Furthermore, we should step (2) are communication operations and backward in step (1) are computation operations. So overlapping them should not slow down either.
+Note that the forward and backward in step (1) must be conducted sequentially. However, we shall note that we don’t necessarily need to wait until all operations in step (1) are completed to start step (2). In fact, once layer n backward is completed, we can immediately start to all-reduce layer n gradient and then even update the weight using this all-reduced gradient (as layer n weight is not needed in the backward for layer n-1 to layer 1.) Furthermore, we should note that step (2) consists of communication operations and the backward pass in step (1) consists of computation operations. So overlapping them should not slow down either.
 
 
 ### Pipeline Parallelism
-Pipeline parallelism (PP) is from model parallelism. Model parallelism is initially proposed to solve that challenge that one model can't fit into one GPU. The idea is we can vertically slice model into different layers (e.g. one or more layers in transformer models) and put different layers in different GPUs. The issue with this method is that because sequential computation order of layers, if we feed single large batch data into one of the workers, all other workers are idle. This is the so-called `bubble` waiting time.  
+Pipeline parallelism (PP) is from model parallelism. Model parallelism was initially proposed to solve the challenge that one model can't fit into one GPU. The idea is we can vertically slice the model into different layers (e.g. one or more layers in transformer models) and put different layers in different GPUs. The issue with this method is that because of the sequential computation order of layers, if we feed a single large batch of data into one of the workers, all other workers are idle. This is the so-called `bubble` waiting time.  
 
 To solve the problem, we can reuse the data parallelism idea. Instead of feeding a single large batch into a model shard, we can partition data into small chunks. Each chunk of data goes through different model shards (workers) in a pipeline way. The following figure illustrates how this works. 
 
@@ -70,9 +70,9 @@ To solve the problem, we can reuse the data parallelism idea. Instead of feeding
 </p>
 
 ### Tensor Parallelism
-The bottleneck of neural network training is compute. Among all the computation parts, the general matrix multiplication (GEMM) consumes the most of time. One way to parallelize the matrix multiplication is to use matrix decomposition. Specifically, we can split a matrix into two or multiple parts based on row or column. Then we can aggregate results after the computation of each parts in the end. This is the core idea of tensor parallelism (TP).
+The bottleneck of neural network training is compute. Among all the computation parts, the general matrix multiplication (GEMM) consumes the most time. One way to parallelize the matrix multiplication is to use matrix decomposition. Specifically, we can split a matrix into two or multiple parts based on row or column. Then we can aggregate results after the computation of each part in the end. This is the core idea of tensor parallelism (TP).
 
-In it's essence, tensor parallelism is block matrix multiplication. Based on how we partition the parameter matrix, there is row parallel partition and column parallel partition. 
+In its essence, tensor parallelism is block matrix multiplication. Based on how we partition the parameter matrix, there is row parallel partition and column parallel partition. 
 For row parallel partition, there is
 
 $$
@@ -84,7 +84,7 @@ $$
 Y = XW = X\begin{bmatrix} W_1, & W_2\end{bmatrix} = \begin{bmatrix} XW_1, & XW_2\end{bmatrix}
 $$
 Note that for row parallel, we need to partition the input into two parts as well.
-In original transformer MLP layer, there are two projection steps: `hidden.size -> 4 * hidden.size -> hidden.size`. In this case, in Megatron-LM MLP implementation, it first does column parallel partition, generating two matrices, then a row parallel partition. This is shown in the following figure:
+In the original transformer MLP layer, there are two projection steps: `hidden.size -> 4 * hidden.size -> hidden.size`. In this case, in the Megatron-LM MLP implementation, it first does column parallel partition, generating two matrices, then a row parallel partition. This is shown in the following figure:
 <p align="center">
     <img alt="dp with pp" src="images/megatron-mlp.png" width="60%"/>
     <em>Tensor Parallelism in Megatron-LM</em>

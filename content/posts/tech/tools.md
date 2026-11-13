@@ -30,11 +30,11 @@ cover:
 
 
 ### Github
-1. How to clone github private repo on a new machine
+1. How to clone a private GitHub repo on a new machine
 (1) Add ssh public key into github webpage. settings -> ssh and GPG keys -> add ssh key.
 (2) To clone a repo, use ssh link. git@github.com:xxx 
 
-We can also use https to clone a repo, but need to add personal access token from github.
+We can also use https to clone a repo, but we need to add a personal access token from GitHub.
 
 ### Search in Tmux
 Scroll mouse to enter the history mode (or use CTRL + B followed by "["). 

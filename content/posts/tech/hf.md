@@ -29,7 +29,7 @@ cover:
 ---
 
 ## Models Loading
-The difference between `AutoModel` and `AutoModelForCausalLM` is that the former doesn't have `lm_head`. Thus, `AutoModel` is usually used for embedding model training. `AutoModelForCausalLM` is used for generative application. 
+The difference between `AutoModel` and `AutoModelForCausalLM` is that the former doesn't have `lm_head`. Thus, `AutoModel` is usually used for embedding model training. `AutoModelForCausalLM` is used for generative applications. 
 
 
 ## Model Access

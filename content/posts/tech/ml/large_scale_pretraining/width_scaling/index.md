@@ -32,7 +32,7 @@ math: true
 
 ## Scaling Width
 
-There are a couple of dimensions that we can scale to enhance LLMs capabilities. Last time, we talked about depth dimension scaling. This time let's talk about width dimension scaling.  We always have a serious bottleneck in scaling: better models increasingly require exponentially larger computational budgets. The paper Virtual Width Networks (VWN) proposes a surprisingly elegant idea:
+There are a couple of dimensions that we can scale to enhance LLM capabilities. Last time, we talked about depth dimension scaling. This time let's talk about width dimension scaling.  We always have a serious bottleneck in scaling: better models increasingly require exponentially larger computational budgets. The paper Virtual Width Networks (VWN) proposes a surprisingly elegant idea:
 
 > What if neural networks could gain the benefits of becoming wider without paying the full computational cost that wider models normally require?
 
@@ -93,7 +93,7 @@ VWN:
 - Keeps the Transformer backbone (Attention + FFN) at the original width D.
 - Uses lightweight Generalized Hyper-Connections (GHC) to shuttle information between the wide virtual space and the narrow backbone.
 
-This achieves virtual widening by factor *r* (e.g., 8×) with only small overhead.
+This achieves virtual widening by a factor of *r* (e.g., 8×) with only small overhead.
 
 ### Key Components
 
@@ -154,7 +154,7 @@ Larger *m* remembers more layers (at lower fidelity per layer). Larger *r* gives
 ### Cost
 - **Compute**: Very small overhead (mainly extra normalizations + small matrix multiplies for A/B). They report ~few % extra FLOPs.
 - **Memory**: Minor activation overhead, mitigated by recomputation.
-- Main cost is wider embedding table and final reduce, but these are cheap compared to quadratic backbone widening.
+- The main cost is the wider embedding table and final reduce, but these are cheap compared to quadratic backbone widening.
 
 ### Empirical Scaling
 They found an approximately log-linear relationship:

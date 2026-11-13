@@ -30,7 +30,7 @@ math: true
 ---
 
 ## Promise and Future
-Before diving deep into Ray, I'll first give a brief introduction to the async ops in programming in C++.
+Before diving deep into Ray, I'll first give a brief introduction to async ops in C++ programming.
  An asynchronous call delegates time-consuming or blocking tasks to other threads, thereby ensuring the current thread's responsiveness. Concretely, it involves the current thread delegating a task to another thread for execution. The current thread continues executing its own tasks without waiting for the delegated task's result. The result of the delegated task is only required at some point in the future when it is needed.
 
 An asynchronous operation is created, executed by another thread, and upon completion, returns a result. The creator of the asynchronous call retrieves this result when needed. To meet these requirements, C++ provides std::future and std::promise. The relation is shown in the figure below. 
@@ -80,10 +80,10 @@ int main() {
 ```
 
 ## Introduction
-Ray was designed with training RL system in mind. There are three kinds of tasks in RL system training
-- Simulation where agents interact with environments and environments omit responses
-- Evaluation where agents generate rollout trajectory
-- Training where policy is updated for improvement
+Ray was designed with training RL systems in mind. There are three kinds of tasks in RL system training:
+- Simulation where agents interact with environments and environments emit responses
+- Evaluation where agents generate rollout trajectories
+- Training where the policy is updated for improvement
 
 To handle these heterogeneous tasks, Ray abstracts two kinds of computation:
 - Stateless task: functions decorated with `@ray.remote` in python
@@ -114,14 +114,14 @@ if __name__ == "__main__":
 
 
 ## Ray Actor
-To declare an actor, we can annotate a class with @ray.remote, just like declaring a task from a function. Ray actor is different from python class in the following ways: 
+To declare an actor, we can annotate a class with @ray.remote, just like declaring a task from a function. A Ray actor is different from a Python class in the following ways: 
 
 > 1. Add accessor methods for any data members that you need to read or write, because using direct access, such as my_game.state, doesn't work for actors.
 > 2. Construct actor instances with my_instance = MyClass.remote(...).
 > 3. Call methods with my_instance.some_method.remote(...).
 > 4. Use ray.get() and ray.wait() to retrieve results, just like you do for task results.
 
-Another way to get an Ray actor is through `ray.remote(myClass)`. Similarly, we can instantiate the ray actor using `myClass().remote()`. 
+Another way to get a Ray actor is through `ray.remote(myClass)`. Similarly, we can instantiate the ray actor using `myClass().remote()`. 
 
 ```python
 import ray
@@ -172,7 +172,7 @@ Ray is a general-purpose framework for parallel programming on a cluster.
 
 ### Delay ray.get()
 
-With Ray, the invocation of every remote operation (e.g., task, actor method) is asynchronous. This means that the operation returns _immediately_ a promise/future, which is essentially an identifier (ID) of the operation’s result. This is key to achieve parallelism, as it allows the driver program to launch multiple operations in parallel. To get the actual results, the programmer needs to call ray.get() on the IDs of the results. This call blocks until the results are available. As a side effect, this operation also blocks the driver program from invoking other operations, which can hurt parallelism.
+With Ray, the invocation of every remote operation (e.g., task, actor method) is asynchronous. This means that the operation returns _immediately_ a promise/future, which is essentially an identifier (ID) of the operation’s result. This is key to achieving parallelism, as it allows the driver program to launch multiple operations in parallel. To get the actual results, the programmer needs to call ray.get() on the IDs of the results. This call blocks until the results are available. As a side effect, this operation also blocks the driver program from invoking other operations, which can hurt parallelism.
 
 
 ```python
@@ -219,7 +219,7 @@ Note that `ray.get()` is blocking, so calling it after each remote operation mea
 To enable parallelism, we need to call ray.get() _after_ invoking all tasks. We can easily do so in our example by replacing line “results = \[do\_some\_work.remote(x) for x in range(4)\]” with:
 
 
-### Avoid passing same object repeatedly to remote tasks
+### Avoid passing the same object repeatedly to remote tasks
 When we pass a large object as an argument to a remote function, Ray calls ray.put() under the hood to store that object in the local object store. This can significantly improve the performance of a remote task invocation when the remote task is executed locally, as all local tasks share the object store. However, there are cases when automatically calling ray.put() on a task invocation leads to performance issues. One example is passing the same large object as an argument _repeatedly_, as illustrated by the program below:
 
 ```python
@@ -509,7 +509,7 @@ ray job submit --address="http://127.0.0.1:8265" \
 ```
 
 
-- set the envs in python codes. Generally, this is a better approach. Because we can easily set environment variables running bash script.
+- set the envs in python code. Generally, this is a better approach, because we can easily set environment variables running bash script.
 ```python
 if not ray.is_initialized():
 # this is for local ray cluster
@@ -533,7 +533,7 @@ ray logs <worker_id>
 
 ```
 
-Sometimes printing might be lost if we don't flush timely, in python we can do
+Sometimes printing might be lost if we don't flush in time. In python we can do
 ```python
 print(f"{dp_rank=}", flush=True)
 ```

@@ -33,14 +33,14 @@ In PyTorch's computation graph, there are only two types of elements: data (tens
 
 Operations include: addition, subtraction, multiplication, division, square root, exponentiation, trigonometric functions, and other differentiable operations.
 
-Data has leaf nodes which are created by user and non-leaf node. The difference is after back propagation, gradient of non-leaf nodes will be released to save memory. If we want to retain non-leaf node gradient, we have to use `retain_grad`.
+Data has leaf nodes, which are created by the user, and non-leaf nodes. The difference is that after backpropagation, gradients of non-leaf nodes will be released to save memory. If we want to retain non-leaf node gradient, we have to use `retain_grad`.
 
 ## Tensor 
 
-Tensor in Pytorch has the following attributes:
+A tensor in PyTorch has the following attributes:
 1. data: stored data
-2. require_grad: whether need to compute gradient. Self-defined leaf nodes usually default require_grad as False, and non-leaf nodes default as True. Neural network weights default as True. 
-3. grad: grad holds the value of gradient. Each time when performing a backward computation, you need to reset (zero out) the gradients from the previous step; otherwise, the gradient values will keep accumulating. 
+2. require_grad: whether we need to compute the gradient. Self-defined leaf nodes usually default require_grad to False, and non-leaf nodes default to True. Neural network weights default to True. 
+3. grad: grad holds the value of the gradient. Each time when performing a backward computation, you need to reset (zero out) the gradients from the previous step; otherwise, the gradient values will keep accumulating. 
 4. grad_fn: This is the backward function used to calculate the gradient. Leaf nodes usually have `None` for their grad_fn, and only the result nodes have a valid grad_fn, which indicates the type of gradient function.
 5. is_leaf
 
@@ -49,13 +49,13 @@ Tensor in Pytorch has the following attributes:
 
 ## Gradient Computation
 
-There are two ways to compute grad in Pytorch. 
-- Backward(): used to compute grad for leaf node. 
+There are two ways to compute grad in PyTorch. 
+- Backward(): used to compute grad for leaf nodes. 
 - torch.autograd.grad() : Automatic grad computation
 
 
 ### Backward
-Let's first take a look at `backward()` function. The definition of the `backward()` function of the `torch.autograd` is as follows
+Let's first take a look at the `backward()` function. The definition of the `backward()` function of the `torch.autograd` is as follows
 
 ```python
 torch.autograd.backward(
@@ -80,7 +80,7 @@ Note that here `t.backward()` is equivalent to `torch.autograd.backward(t)`.
 
 #### Scaler Backward
 
-By default, autograd can only compute gradient for a scaler using `backward` function. For example:
+By default, autograd can only compute the gradient for a scalar using the `backward` function. For example:
 
 ```python
 x = torch.tensor(2.0, requires_grad=True)
@@ -114,7 +114,7 @@ We can sum `z` here to compute the grad. Or we can use the `grad_tensor` to mult
 
 ### Autograd
 
-The internal nodes gradient are compute with autograd. Its interface is defined as below: 
+The gradients of internal nodes are computed with autograd. Its interface is defined as below: 
 
 ```python
 # pytorch interface
@@ -129,7 +129,7 @@ torch.autograd.grad(
 )
 ```
 
-We can also compute the gradient for leaf node using autograd. For example,
+We can also compute the gradient for leaf nodes using autograd. For example,
 
 ```python
 import torch
@@ -151,9 +151,9 @@ print(torch.autograd.grad(outputs=z, inputs=x), x.grad)
 
 ## Grad_fn and next_functions
 
-How the backward computation graph works with grad_fn and next_functions? 
+How does the backward computation graph work with grad_fn and next_functions? 
 
-Essentially `grad_fn` is an objection which 
+Essentially `grad_fn` is an object which has 
 - a callable to compute current step gradient with respect to input (such as loss)
 - a pointer to previous compute node `grad_fn` through `next_functions`. Think of this as a linked list.
 
@@ -301,12 +301,12 @@ z.sum().backward()
 
 
 ## model.eval() and torch.no_grad()
-One last word at `eval()` and `no_grad()`. These two are actually unrelated. During inference, both need to be used: model.eval() sets modules like BatchNorm and Dropout to evaluation mode, ensuring the correctness of the inference results, but it does not help save memory. torch.no_grad() declares that no gradients should be calculated, which does save a lot of memory and GPU memory.
+One last word on `eval()` and `no_grad()`. These two are actually unrelated. During inference, both need to be used: model.eval() sets modules like BatchNorm and Dropout to evaluation mode, ensuring the correctness of the inference results, but it does not help save memory. torch.no_grad() declares that no gradients should be calculated, which does save a lot of memory and GPU memory.
 
 
 ## Scale Gradient
 
-In megablocks lib, there is a piece of code which catches my attention
+In megablocks lib, there is a piece of code which caught my attention
 ```python
 class ScaleGradient(torch.autograd.Function):
 
@@ -322,9 +322,9 @@ class ScaleGradient(torch.autograd.Function):
         return grad * ctx.scale, None
 ```
 
-Why we want to scale gradient in such a way instead of scale the loss? 
+Why do we want to scale the gradient in such a way instead of scaling the loss? 
 
-Let's take a look at this class. In the forward pass, it simply returns `x` unchanged. In the backward pass, it multiplies the gradient by `scale` before propagating it backward. So the value of `x` remains the same during forward, but its gradient flow is scaled. Essentially it acts as **identity operator with a custom gradient**.
+Let's take a look at this class. In the forward pass, it simply returns `x` unchanged. In the backward pass, it multiplies the gradient by `scale` before propagating it backward. So the value of `x` remains the same during forward, but its gradient flow is scaled. Essentially it acts as an **identity operator with a custom gradient**.
 
 
 ### Why not just scale the loss?

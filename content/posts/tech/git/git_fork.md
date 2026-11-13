@@ -103,7 +103,7 @@ git pull upstream
 
 ```
 
-If we haven’t make changes at master, we can do:
+If we haven’t made changes at master, we can do:
 
 ```bash
 git checkout master
@@ -111,7 +111,7 @@ git pull upstream master  # pull public (upstream) to local branch
 git push origin master
 ```
 
-If there is conflict with your changes:
+If there are conflicts with your changes:
 
 ```bash
 git checkout master

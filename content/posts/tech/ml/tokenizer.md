@@ -28,7 +28,7 @@ cover:
     relative: false
 ---
 
-When we build LLMs, the very first step is to build a good tokenizer. Currently, there are two main frameworks to build tokenizers. The first is huggingface tokenizers library which can be used to build tokenizer like GPT series models. The second is sentencepiece from google which is used to build LLaMA series (LLaMA, mistral, Yi-34B etc) tokenizers.
+When we build LLMs, the very first step is to build a good tokenizer. Currently, there are two main frameworks to build tokenizers. The first is the huggingface tokenizers library, which can be used to build tokenizers like those of GPT series models. The second is sentencepiece from google which is used to build LLaMA series (LLaMA, mistral, Yi-34B etc) tokenizers.
 
 ### Byte Level BPE
 There are mainly 5 components in the tokenizer.
@@ -41,8 +41,8 @@ There are mainly 5 components in the tokenizer.
 - PostProcessor
 - Decoder
 
-I have been always in favor of sentencepiece style tokenizer because it provides a way to split based on spaces. However there is a catch.
-Very recently, I found that Mistral tokenizer is not a lossless tokenizer!!! What does that mean? 
+I have always been in favor of sentencepiece style tokenizer because it provides a way to split based on spaces. However there is a catch.
+Very recently, I found that the Mistral tokenizer is not a lossless tokenizer!!! What does that mean? 
 ```python
 tok = AutoTokenizer.from_pretrained("mistralai/Mistral-7B-v0.3")
 s = "good good"

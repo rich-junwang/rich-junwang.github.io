@@ -33,7 +33,7 @@ cover:
 
 ### Basics
 
-Kubernetes, also known as k8s, is an open source platform solution provided by Google for scheduling and automating the deployment, management, and scaling of containerized applications. Kubernetes has the ability of scheduling and running application containers on a cluster of physical or virtual machines. In managing the applications, the concepts of labels and pods are used to group the containers which make up an application. Currently, it supports Docker for containers.
+Kubernetes, also known as k8s, is an open source platform solution provided by Google for scheduling and automating the deployment, management, and scaling of containerized applications. Kubernetes has the ability to schedule and run application containers on a cluster of physical or virtual machines. In managing the applications, the concepts of labels and pods are used to group the containers which make up an application. Currently, it supports Docker for containers.
 
 <p align="center">
     <img alt="gopher dataset" src="images/kubernetes.png" width="80%"/>
@@ -43,10 +43,10 @@ Kubernetes, also known as k8s, is an open source platform solution provided by G
 </p>
 
 
-Pod is a type of abstraction on top of container. Deployment defines the pod. Deployment is used for stateless apps and StatefulSet is used for stateful apps or database. KubeCTL talks with API server to create components or delete components, in other words configuring the cluster. More about this basics is [here](https://www.youtube.com/watch?v=X48VuDVv0do&t=2749s)
+A pod is a type of abstraction on top of containers. A deployment defines the pod. Deployment is used for stateless apps and StatefulSet is used for stateful apps or databases. KubeCTL talks with API server to create components or delete components, in other words configuring the cluster. More about these basics is [here](https://www.youtube.com/watch?v=X48VuDVv0do&t=2749s)
 
 ### Basic Operations
-To find out all the pods, using the following command
+To find out all the pods, use the following command
 ```bash
 kubectl get pods 
 kubectl get pods | grep username 
@@ -77,7 +77,7 @@ kubectl get pod my_pod_name -o yaml
 kubectl delete Pod my_pod_name
 ```
 
-To get all the containers running the pod, using the following command
+To get all the containers running in the pod, use the following command
 ```bash
 kubectl get pods my_pod_name -o custom-columns='NAME:.metadata.name,CONTAINERS:.spec.containers[*].name'
 kubectl describe pod my_pod_name  -n my_namespace_name
@@ -85,7 +85,7 @@ kubectl describe pod my_pod_name  -n my_namespace_name
 kubectl get pod my_pod_name --template '{{.status.podIP}}'
 ```
 
-View logs of job running in the pod
+View logs of a job running in the pod
 ```bash
 kubectl logs my_pod_name
 kubectl logs -f my_pod_name # similar to attach
@@ -105,7 +105,7 @@ kubectl describe -f ./job.yaml
 ```
 
 
-When we want to delete kubernetes created resources, it's important to remember the dependencies of the resources. For instance, to delete a fsx app, we have to do the following in order
+When we want to delete kubernetes created resources, it's important to remember the dependencies of the resources. For instance, to delete an FSx app, we have to do the following in order
 ```bash
 kubectl delete pod --all
 kubectl delete pvc --all
@@ -117,7 +117,7 @@ We can use `kubectl` to copy files to/from the pod. Be careful that your contain
 kubectl cp src_file_path pod:dest_file_path
 ```
 
-To use rsync is not that straightforward, I'm using the tool from [here](https://serverfault.com/questions/741670/rsync-files-to-a-kubernetes-pod).
+Using rsync is not that straightforward; I'm using the tool from [here](https://serverfault.com/questions/741670/rsync-files-to-a-kubernetes-pod).
 ```bash
 # save the file as krsync, and put it to /usr/bin, and chmod +x to the file
 
@@ -177,7 +177,7 @@ xpanes -c "kubectl exec -it {} -- /bin/bash " $(kubectl get pods | grep my_pod_p
 
 
 ## EKS
-AWS has managed Kubernetes service called EKS.
+AWS has a managed Kubernetes service called EKS.
 
 ```bash
 # create a basic cluster

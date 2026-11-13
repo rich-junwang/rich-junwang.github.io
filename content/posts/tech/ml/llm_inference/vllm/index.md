@@ -34,7 +34,7 @@ vLLM has two inference modes:
 - offline batch mode: mostly for offline model evaluation, large-scale, high-throughput inference where latency is less critical 
 - online serving mode: Real-time applications like chatbots or APIs where latency is important.
 
-The interface to these two approaches are shown in the diagram below. 
+The interface to these two approaches is shown in the diagram below. 
 
 <div align="center"> <img src=images/interface.png style="width: 100%; height: auto;"/> </div>
 
@@ -149,7 +149,7 @@ if __name__ == "__main__":
 
 
 ### API Server
-The API server utilizes Uvicorn to deploy FastAPI application. 
+The API server utilizes Uvicorn to deploy a FastAPI application. 
 ```bash
 # Server
 python -m vllm.entrypoints.openai.api_server --model meta-llama/Llama-2-7b-hf
@@ -166,53 +166,53 @@ curl http://localhost:8000/v1/completions \
 ```
 
 ## LLM Inference
-No matter what kind mode vLLM is in for inference, the LLM inference process has two stages: 
+No matter what mode vLLM is in for inference, the LLM inference process has two stages: 
 - prefilling
 - decoding
 
-Prefilling phase llm encodes the prompt at once. This is one forward path execution in LLM. 
-Decoding phase, llm generates each token step by step. 
+In the prefilling phase, the LLM encodes the prompt at once. This is one forward pass in the LLM. 
+In the decoding phase, the LLM generates each token step by step. 
 
 ## KV Cache
 
-KV Cache at inference time refers that caching key and value vectors in self-attention saves redundant computation and accelerates decoding - but takes up memory.
+KV Cache at inference time refers to caching key and value vectors in self-attention, which saves redundant computation and accelerates decoding - but takes up memory.
 
 
 
 ## Page Attention
 
 Traditional LLM inference has inefficient KV cache management. There are three issues:
- - reserved slots for future tokens: although the slots are used eventually, the pre-allocation leads to most of time the memory slots are wasted . Think about the end token slot is empty in the whole decoding process.  
+ - reserved slots for future tokens: although the slots are used eventually, the pre-allocation means the memory slots are wasted most of the time. Think about how the end token slot is empty in the whole decoding process.  
  - Internal fragmentation due to over-provisioning for potential maximum sequence lengths,
  - External fragmentation from the memory allocator like the buddy allocator.
 
 
-Remember that in OS, each program sees isolated, contiguous logical address (virtual memory) ranging from 0 - N which is dynamically mapped to physical memory (main memory). 
+Remember that in OS, each program sees isolated, contiguous logical addresses (virtual memory) ranging from 0 - N which is dynamically mapped to physical memory (main memory). 
 
 <div align="center"> <img src=images/mem.png style="width: 80%; height: auto;"/> </div>
 
 Because of the indirection between logical and physical addresses, a process’s pages can be located anywhere in memory and can be moved (relocated). Needed pages are ‘paged into’ main memory as they are referenced by the executing program. 
 
-Designed with a similar philosophy, paged attention utilizes logical view and physical view to manage KV cache to minimize fragmentation in GPU memory.
+Designed with a similar philosophy, paged attention utilizes a logical view and a physical view to manage KV cache to minimize fragmentation in GPU memory.
 
 <div align="center"> <img src=images/pagedattn.png style="width: 80%; height: auto;"/> </div>
 
-Obviously the block table here is the same with memory management unit which manages the mapping from logical address to physical address. For page attention here logical view is just needed batch KV cache. 
+Obviously the block table here is the same as the memory management unit which manages the mapping from logical address to physical address. For paged attention, the logical view is just the needed batch KV cache. 
 
 
 ## Continuous Batching
 The main topic for inference is how to handle multiple concurrent requests efficiently. Remember that LLM inference is memory-IO bound, not compute-bound. This means it takes more time to load 1MB of data to the GPU’s compute cores than it does for those compute cores to perform LLM computations on 1MB of data. Thus LLM inference throughput is largely determined by how large a batch you can fit into high-bandwidth GPU memory.
 
-The very obvious one for online serving is to batch processing individual request. The left side of the following figure shows request-level batching. However as is illustrated in the figure, GPU is underutilized as generation lengths vary. 
+The very obvious one for online serving is to batch individual requests. The left side of the following figure shows request-level batching. However, as illustrated in the figure, the GPU is underutilized as generation lengths vary. 
 
-As is shown in the right hand side, in continuous batching, LLMs continuously add new requests to the current batch as others finish. This allows it to maximize GPU utilization. In reality, the complexity comes from how to manage the KV cache of requests which are finished. In vLLM, KV cache is managed by pagedattention discussed above which makes things slightly easier. 
+As shown on the right-hand side, in continuous batching, LLMs continuously add new requests to the current batch as others finish. This allows it to maximize GPU utilization. In reality, the complexity comes from how to manage the KV cache of requests which are finished. In vLLM, KV cache is managed by pagedattention discussed above which makes things slightly easier. 
 
 <div align="center"> <img src=images/batching.png style="width: 80%; height: auto;"/> </div>
 
 
 ## Chunked Prefill
 
-By default, vLLM scheduler prioritizes prefills and doesn’t batch prefill and decode to the same batch. Chunked prefill [7] allows to chunk large prefills into smaller chunks and batch them together with decode requests. 
+By default, vLLM scheduler prioritizes prefills and doesn’t batch prefill and decode to the same batch. Chunked prefill [7] allows chunking large prefills into smaller chunks and batch them together with decode requests. 
 
 ## AsyncLLM
 

@@ -32,7 +32,7 @@ cover:
 
 
 ## Basics
-Today let's talk about using kuberay operator to build ray cluster for large scale reinforcement learning training. 
+Today let's talk about using kuberay operator to build a ray cluster for large-scale reinforcement learning training. 
 
 We have to configure three main roles of a ray cluster, which are the head pod, the worker pods, and the shared file system that will be attached to both the head and worker pods.
 

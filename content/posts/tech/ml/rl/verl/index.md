@@ -32,12 +32,12 @@ math: true
 
 ## Hybrid Controller System
 
-RL training can be modeled as a dataflow, where each node represents computation of a neural network (NN) and each edge denotes data dependencies between the NNs. For instance, actor, critic, reward model, reference model, rollout engine each can be seen as a node. The data transfer in-between is the edge. This is an important concept as later when we talk about intra-node computation and inter-node dataflow, the `node` here refers to these models, not a physical machine we usually talk about in distributed training setting. 
+RL training can be modeled as a dataflow, where each node represents the computation of a neural network (NN) and each edge denotes data dependencies between the NNs. For instance, actor, critic, reward model, reference model, rollout engine each can be seen as a node. The data transfer in-between is the edge. This is an important concept as later when we talk about intra-node computation and inter-node dataflow, the `node` here refers to these models, not a physical machine we usually talk about in distributed training settings. 
 
-The reason we talk about this is because we have to understand why veRL talks about single-controller and multi-controller system. 
-Single-controller, simply put, is one process that coordinates all the workflow as opposed to multi-controller is multiple processes each manages its own workflow. 
+The reason we talk about this is that we have to understand why veRL talks about single-controller and multi-controller systems. 
+Single-controller, simply put, is one process that coordinates all the workflow as opposed to multi-controller, which is multiple processes that each manage their own workflow. 
 
-Now it becomes obvious that if we use multi-controller system to coordinate dataflow from rollout model to critic, reward model etc, it could be complicated because it's multi-processes communication. Thus, for the dataflow, we want to have single-controller for inter-node data exchange. On the contrary, for modern model training and model inference, people tend to use single-process-multiple-data (SPMD) approach, which is a multi-controller approach. In the ideal case, if both training engine and rollout engine utilize SPMD, parameter update from training engine to rollout engine can be done in parallel from multiple copies which can greatly increase system robustness. vLLM recently added SPMD inference [2].
+Now it becomes obvious that if we use a multi-controller system to coordinate dataflow from rollout model to critic, reward model etc, it could be complicated because it's multi-process communication. Thus, for the dataflow, we want to have a single controller for inter-node data exchange. On the contrary, for modern model training and model inference, people tend to use single-program-multiple-data (SPMD) approach, which is a multi-controller approach. In the ideal case, if both the training engine and the rollout engine utilize SPMD, parameter updates from the training engine to the rollout engine can be done in parallel from multiple copies which can greatly increase system robustness. vLLM recently added SPMD inference [2].
 
 The overall execution workflow of veRL is shown below:
 
@@ -48,7 +48,7 @@ The overall execution workflow of veRL is shown below:
 
 ## RL Workflow
 
-A high-level synchronous workflow of RL training process can be summarized as below. There are mainly three steps:
+A high-level synchronous workflow of the RL training process can be summarized as below. There are mainly three steps:
 1. Rollout to get trajectory
 2. Collect experience, i.e. inference to generate training data
 3. Actor/Critic model training
@@ -75,14 +75,14 @@ for prompts in dataloader:
 
 ### Hybrid Engine
 
-Modern LLM training engine and inference engine gradually diverges. Inferences focuses on leverages customized kernels to minimize latency while training aims to support high precision, large batches and N-D parallelism to maximize throughput. Thus, veRL chooses to have both training engine and rollout/inference engine for actor model. 
+Modern LLM training engines and inference engines are gradually diverging. Inference focuses on leveraging customized kernels to minimize latency while training aims to support high precision, large batches and N-D parallelism to maximize throughput. Thus, veRL chooses to have both training engine and rollout/inference engine for the actor model. 
 
-Given that we have actor training engine, rollout engine, critic model, reference model and reward model, it's critical to optimize GPU allocation and placement of the models. There are generally three placement plans:
+Given that we have an actor training engine, rollout engine, critic model, reference model and reward model, it's critical to optimize GPU allocation and placement of the models. There are generally three placement plans:
 1. Separate placement: each model placed on separate devices
-2. Group colocate: different group of models can be placed together
+2. Group colocate: different groups of models can be placed together
 Actor/Ref colocated on some GPUs
 Critic/RM colocated on other GPUs
-3. All model colocate together
+3. All models colocated together
 
 
 

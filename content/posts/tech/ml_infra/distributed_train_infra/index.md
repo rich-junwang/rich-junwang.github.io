@@ -28,13 +28,13 @@ cover:
     relative: false
 ---
 
-Distributed infrastructure is a big and interesting topic. I don't work on infrastructure side, but I run into the concepts a lot, so I create this blog to help me understand more about infrastructure.
+Distributed infrastructure is a big and interesting topic. I don't work on the infrastructure side, but I run into the concepts a lot, so I created this blog to help me understand more about infrastructure.
 
-Most of today's distributed framework involves three parts, collective communication, data loading and preprocessing and distributed scheduler. We'll look into these three parts respectively.
+Most of today's distributed frameworks involve three parts: collective communication, data loading and preprocessing and distributed scheduler. We'll look into these three parts respectively.
 
 
 ## Distributed System Overview
-In the diagram below, I'm showing the modern distributed network communication implementation stack, from the bottom hardware to top level application.
+In the diagram below, I'm showing the modern distributed network communication implementation stack, from the bottom hardware to the top-level application.
 <p align="center">
     <img alt="flat sharp minimum" src="images/system.png" width="100%" height=auto/> 
     <em>Training system architecture</em>
@@ -42,7 +42,7 @@ In the diagram below, I'm showing the modern distributed network communication i
 </p>
 
 ## Collective Communication
-We can start with point to point communication. Normally point to point communication refers to two processes communication and it's one to one communication. Accordingly, collective communication refers to 1 to many or many to many communication. In distributed system, there are large amount of communications among the nodes. 
+We can start with point to point communication. Normally point to point communication refers to communication between two processes and it's one to one communication. Accordingly, collective communication refers to 1 to many or many to many communication. In a distributed system, there is a large amount of communication among the nodes. 
 
 There are some common communication ops, such as Broadcast, Reduce, Allreduce, Scatter, Gather, Allgather etc.  
 
@@ -63,12 +63,12 @@ Gather is an inverse operation of scatter.
     <br>
 </p>
 
-All gather: supposing we have 4 gpus, on each gpu we have tensor of size [B\*S, 1024], after allgather, the tensor size on all gpus are [B\*S, 4096]
+All gather: supposing we have 4 gpus, on each gpu we have a tensor of size [B\*S, 1024], after allgather, the tensor size on all gpus is [B\*S, 4096]
 <div align="center"> <img src=images/allgather.png style="width: 30%; height: auto;"/> </div>
 
 
 ### Reduce
-Reduce is a collections of ops. Specifically, the operator will process an array from each process and get reduced number of elements.
+Reduce is a collection of ops. Specifically, the operator will process an array from each process and get a reduced number of elements.
 <!-- ![](images/reduce1.png) -->
 <p align="center">
     <img alt="flat sharp minimum" src="images/reduce1.png" width="60%" height=auto/> 
@@ -93,19 +93,19 @@ The ReduceScatter operation performs the same operation as Reduce, except that t
 </p>
 
 #### Ring-reducescatter
-The following figure shows how reduce scatter works using ring algorithm. Ring reduce-scatter is bandwidth-optimal. Each GPU sends ((N−1)/N) × vector_size in total, which is the theoretical minimum. 
+The following figure shows how reduce scatter works using the ring algorithm. Ring reduce-scatter is bandwidth-optimal. Each GPU sends ((N−1)/N) × vector_size in total, which is the theoretical minimum. 
 <div align="center"> <img src=images/ring_rs.png style="width: 90%; height: auto;"/> </div>
 
 #### One-step ReduceScatter
 
-There is commonly used approach for reduce scatter which first conduct an all2all communication, then followed by a local reduce. Why people uses it instead of ring: one round of communication instead of N−1, lower latency for small-to-medium messages, and it maps well to fat-tree / fully-connected topologies (NVSwitch, modern datacenter networks) where every GPU can talk to every other GPU at full bandwidth simultaneously.
+There is a commonly used approach for reduce scatter which first conducts an all2all communication, followed by a local reduce. Why people use it instead of ring: one round of communication instead of N−1, lower latency for small-to-medium messages, and it maps well to fat-tree / fully-connected topologies (NVSwitch, modern datacenter networks) where every GPU can talk to every other GPU at full bandwidth simultaneously.
 
 <div align="center"> <img src=images/rs_by_a2a_and_local_reduce.png style="width: 100%; height: auto;"/> </div>
 
  In practice, people use ring for big tensors over slow links, All2All for small tensors over fast fully-connected links.
 
 ### Allreduce
-Allreduce means that the reduce operation will be conducted throughout all nodes. An all_reduce takes in a local array on each machine and returns the sum of all the arrays on every machine. Here we show flat all reduce operation below. However, the most common algorithm for doing this is a variant of the “ring allreduce”,
+Allreduce means that the reduce operation will be conducted throughout all nodes. An all_reduce takes in a local array on each machine and returns the sum of all the arrays on every machine. Here we show the flat all reduce operation below. However, the most common algorithm for doing this is a variant of the “ring allreduce”,
 <p align="center">
     <img alt="flat sharp minimum" src="images/allreduce.png" width="60%" height=auto/> 
     <em>MPI Allreduce</em>
@@ -125,10 +125,10 @@ The following figure shows the difference between MPI all2all and all_gather.
     <br>
 </p>
 
-For all2all, assuming we have 4 gpus, we on each one we have tensor size [B\*S/4, 4096], after all2all, all the other gpus send
+For all2all, assuming we have 4 gpus, on each one we have a tensor of size [B\*S/4, 4096], after all2all, all the other gpus send
 data to gpu0. Its tensor size becomes [B\*S, 4096]
 
-All to all communication, is like during class break, there are several cluster of students. Each cluster has students from different classes. Then bell rings, and students go to their respective classrooms.
+All-to-all communication is like a class break: there are several clusters of students. Each cluster has students from different classes. Then the bell rings, and students go to their respective classrooms.
 All-gather: students share everything they know so that each one goes back to class with the full set of knowledge. 
 
 
@@ -158,8 +158,8 @@ An all_reduce takes in a local array on each machine and returns the sum of all 
 
 
 ### Mixed Precision Training
-Normally, during training we use single precision (32-bit floats). However, for LLM pretraining, this requires high-bandwidth computing platform. To address this challenge, people proposed mixed precision training. As the name suggested, mixed precision training is to leverage mixed different data type during training process, e.g. fp32 and fp16 or fp32 and bf16. We train model mostly in 
-half precision and leave some critical ops in fp32. ss
+Normally, during training we use single precision (32-bit floats). However, for LLM pretraining, this requires a high-bandwidth computing platform. To address this challenge, people proposed mixed precision training. As the name suggests, mixed precision training leverages different data types during the training process, e.g. fp32 and fp16 or fp32 and bf16. We train the model mostly in 
+half precision and leave some critical ops in fp32.
 <p align="center">
     <img alt="mixed precision training" src="images/mixed_precision.png" width="60%" height=auto/> 
     <br>
@@ -167,8 +167,8 @@ half precision and leave some critical ops in fp32. ss
     <br>
 </p>
 
-Since it has same range as FP32, BF16 mixed precision training skips the scaling steps. All other Mixed Precision steps remain the same as FP16 Mixed Precision.
-We leave the batchnorm layers in single precision (they don’t have many weights so it’s not a big memory challenge) and compute the loss in single precision (which means converting the last output of the model in single precision before passing it to the loss).
+Since it has the same range as FP32, BF16 mixed precision training skips the scaling steps. All other Mixed Precision steps remain the same as FP16 Mixed Precision.
+We leave the batchnorm layers in single precision (they don’t have many weights so it’s not a big memory challenge) and compute the loss in single precision (which means converting the last output of the model to single precision before passing it to the loss).
 The training loop is as follows:
 - compute the output with the FP16 model, then the loss
 - back-propagate the gradients in half-precision.

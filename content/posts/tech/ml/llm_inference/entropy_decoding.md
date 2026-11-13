@@ -32,9 +32,9 @@ math: true
 
 ## Entropy Collapsing
 
-It's common to see entropy collapsing phenomenon in GRPO based RL model training: the entropy of token generation of policy model decreases dramatically as training progresses. 
+It's common to see the entropy collapse phenomenon in GRPO based RL model training: the entropy of token generation of the policy model decreases dramatically as training progresses. 
 
-Before diving deep into the topic, let's first take a look at the entropy and varentropy of LLM generation process. Entropy measures how confident the model is when generating a specific token. It's calculated at each generation step. Low entropy indicates that the model is certain about next token, i.e. the probabilities are concentrated on a few tokens.
+Before diving deep into the topic, let's first take a look at the entropy and varentropy of the LLM generation process. Entropy measures how confident the model is when generating a specific token. It's calculated at each generation step. Low entropy indicates that the model is certain about the next token, i.e. the probabilities are concentrated on a few tokens.
 
 $$
 H(X) = -\sum_{x \in \mathcal{X}} P(x) \log P(x)
@@ -51,7 +51,7 @@ V(X) &= \text{Var}(-\log P(X))  \\
 \end{aligned}
 $$
 
-Low varentropy means the model’s uncertainty is consistent across tokens whereas the high varentropy means that model's uncertainty varies significantly in generated tokens. 
+Low varentropy means the model’s uncertainty is consistent across tokens whereas high varentropy means that the model's uncertainty varies significantly in generated tokens. 
 
 The computation of entropy and varentropy in python is implemented below.
 ```python
@@ -94,9 +94,9 @@ def calculate_entropy_and_varentropy(
 
 ```
 
-As is shown in ref 4, LLMs cannot reason if we only consider the greedy decoding path. In other words, reasoning is achieved through a less certain decoding path. In the DAPO paper, the solution is to increase the clip upper bound of importance sampling ratio. Through adjusting the $\epsilon$, we effectively increase the possibility of choosing low-probability tokens. 
+As is shown in ref 4, LLMs cannot reason if we only consider the greedy decoding path. In other words, reasoning is achieved through a less certain decoding path. In the DAPO paper, the solution is to increase the clip upper bound of the importance sampling ratio. Through adjusting the $\epsilon$, we effectively increase the possibility of choosing low-probability tokens. 
 
-As we figure out that the approach to prevent entropy collapsing is to increase the entropy of generated tokens, we can implement entropy based sampling approach in RL training. Ref 1 has provide a good base solution for this kind of entropy based sampling.
+As we figure out that the approach to prevent entropy collapsing is to increase the entropy of generated tokens, we can implement entropy based sampling approach in RL training. Ref 1 has provided a good base solution for this kind of entropy based sampling.
 
 
 

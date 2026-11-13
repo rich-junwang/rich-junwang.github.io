@@ -100,7 +100,7 @@ shm = SharedMemory(name="myshm", create=True, size=2**20)
 
 
 ## update python on ubuntu
-When there are multiple version of python in the system, how to set the default python to use. Below we suppose to install newer version of python3.9
+When there are multiple versions of python in the system, how do we set the default python to use? Below we suppose we install a newer version, python3.9
 ```bash
 sudo apt install python3.9
 
@@ -114,7 +114,7 @@ sudo update-alternatives --config python3
 sudo ln -sf /usr/bin/python3.9 /usr/bin/python3
 ```
 
-## find a python package related files
+## find a python package's related files
 ```
 pip show -f package-name
 
@@ -129,7 +129,7 @@ pip list | grep kafka
 
 
 ## Process Got Killed
-Once in a while, I found my python process got killed without any errors. Most of time, it's related to out of memory (OOM) issue. We can quickly check that using the following command
+Once in a while, I find my python process gets killed without any errors. Most of the time, it's related to an out of memory (OOM) issue. We can quickly check that using the following command
 ```
 dmesg | grep "oom-kill" | less
 ```
@@ -280,13 +280,13 @@ A few commonly used parameters that field supports
 - init: Use field in .__init__() method? (Default is True.)
 - repr: Use field in repr of the object? (Default is True.)
 
-The reason why we're trying to use field method to initialize is to avoid using mutable default arguments. 
+The reason why we're trying to use the field method to initialize is to avoid using mutable default arguments. 
 
 
-In a dataclass, the fields we declare (like x: int) become instance attributes, not class attributes. As is shown in code below. 
-The dataclasses module automatically generates an __init__ method that assigns those fields to self.x, self.y, etc. Note that dataclasses module also generates \__repr__(), and \__eq__() etc. 
+In a dataclass, the fields we declare (like x: int) become instance attributes, not class attributes. As shown in the code below. 
+The dataclasses module automatically generates an __init__ method that assigns those fields to self.x, self.y, etc. Note that the dataclasses module also generates \__repr__(), and \__eq__() etc. 
 
-It's worth to note that when fields lack type annotations, @dataclass doesn’t treat them as fields, but as class attributes. 
+It's worth noting that when fields lack type annotations, @dataclass doesn’t treat them as fields, but as class attributes. 
 
 
 ```python
@@ -345,7 +345,7 @@ def outer_func():
         print(some_variable)
     inner_func()
 ```
-Notice that global is only at module level. There is no program level global variable for python. After we define a global variable in one module, we could use it in other module with its module name.  
+Notice that global is only at module level. There is no program level global variable for python. After we define a global variable in one module, we could use it in other modules with its module name.  
 
 
 

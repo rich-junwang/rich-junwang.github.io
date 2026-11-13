@@ -39,11 +39,11 @@ ViT has a BERT encoder based architecture and it uses a learnable [CLS] token to
 
 The key to ViT’s success lies in large-scale pretraining. Without this step, directly training a ViT model on standard open datasets would still result in performance inferior to CNNs, which benefit from stronger inductive biases.
 
-Training datasets are supervised datasets including: ImageNet 1.3M images, ImageNet-21k, 21k classes and 14 images, JFT dataset, 18k classes and 303M images. The `[CLS]` token is used for classification task at training time. 
+Training datasets are supervised datasets including: ImageNet 1.3M images, ImageNet-21k, 21k classes and 14M images, JFT dataset, 18k classes and 303M images. The `[CLS]` token is used for classification tasks at training time. 
 
 ## CLIP
 
-The core idea of CLIP is to align visual and natural language representations through contrastive learning. CLIP first extracts features separately from text and images. The text encoder is a pretrained BERT, while the image encoder can be a traditional CNN model or a ViT (Vision Transformer) model. After obtaining the image and text embeddings, their features are normalized, and cosine similarity is calculated between all image-text pairs in the batch. A contrastive loss function—such as triple Loss or InfoNCE Loss is used to pull together positive pairs and push apart negative pairs.
+The core idea of CLIP is to align visual and natural language representations through contrastive learning. CLIP first extracts features separately from text and images. The text encoder is a pretrained BERT, while the image encoder can be a traditional CNN model or a ViT (Vision Transformer) model. After obtaining the image and text embeddings, their features are normalized, and cosine similarity is calculated between all image-text pairs in the batch. A contrastive loss function—such as triplet loss or InfoNCE loss—is used to pull together positive pairs and push apart negative pairs.
 <div align="center"> <img src=images/clip.png style="width: 100%; height: auto;"/> Figure 2. CLIP </div>
 
 After pretraining on a large number of image-text pairs, CLIP learns a shared representation space for both the text and image encoders. There are typically two types of downstream applications:
@@ -58,7 +58,7 @@ The core idea of BLIP-2 is to enhance multimodal performance and reduce training
 
 - Vision Encoder: Uses a ViT model with weights initialized through CLIP pretraining. The final enhancement layer (which enriches output features) is removed. During training, the weights are frozen and not updated.
 - LLM: Early versions of BLIP-2 used OPT/FlanT5 to experiment with decoder-based and encoder-decoder-based LLMs. This part is also frozen during training and not updated. 
-- Q-Former: The Q-Former is a module to compress the visual feature sequence and to extract key visual information via learned query vectors and feeds it to the LLM. The size of learnable queries is like 32 x 768 in the paper. This component holds most of the trainable parameters during multimodal model training.
+- Q-Former: The Q-Former is a module to compress the visual feature sequence and to extract key visual information via learned query vectors and feed it to the LLM. The size of learnable queries is like 32 x 768 in the paper. This component holds most of the trainable parameters during multimodal model training.
 
 <div align="center"> <img src=images/blip2_qformer.png style="width: 100%; height: auto;"/> Figure 4. Blip-2 Q-former </div>
 
@@ -66,21 +66,21 @@ The core idea of BLIP-2 is to enhance multimodal performance and reduce training
 
 ### Qwen-VL
 
-Qwen-VL is a classic large multimodal models. Qwen-VL uses the Qwen-7B LLM as the language backbone, OpenCLIP-pretrained ViT-bigG as the visual feature encoder, and a randomly initialized single-layer cross-attention module as the adapter between vision and language. The total number of parameters is approximately 9.6 billion.
+Qwen-VL is a classic large multimodal model. Qwen-VL uses the Qwen-7B LLM as the language backbone, OpenCLIP-pretrained ViT-bigG as the visual feature encoder, and a randomly initialized single-layer cross-attention module as the adapter between vision and language. The total number of parameters is approximately 9.6 billion.
 
 As shown in the figure, Qwen-VL’s training process is divided into three stages:
 <div align="center"> <img src=images/qwen1.png style="width: 90%; height: auto;"/> Figure 5. Qwen-vl </div>
 
-- stage 1: Pretraining – The goal is to align the visual encoder and the LLM using large-scale image-text pairs. During this stage, the LLM's parameters are frozen, only training adaptor and ViT. Training data is 1.4B weakly labeled, web-crawled set of image-text pairs. The training objective is to minimize the cross-entropy of the text tokens.
+- stage 1: Pretraining – The goal is to align the visual encoder and the LLM using large-scale image-text pairs. During this stage, the LLM's parameters are frozen, and only the adapter and ViT are trained. The training data is a set of 1.4B weakly labeled, web-crawled image-text pairs. The training objective is to minimize the cross-entropy of the text tokens.
 - stage 2: Multitask Pretraining – Uses higher-quality, multitask image-text data (mainly from open-source vision-language datasets and some in-house data), higher image resolution, and involves full model fine-tuning.
 - stage 3: Instruction Tuning – The visual encoder is frozen; training data is mostly generated via self-instruction from the LLM. This phase aims to improve instruction following and multi-turn dialogue capabilities.
 
-Another important insight from Qwen-VL is that stages 2 and 3 incorporate not only vision-language data but also pure-text data. This helps preserve the LLM’s capabilities and avoid catastrophic forgetting. This strategy has proven effective in other models as well. Compared to models such as InstructBLIP, Qwen-VL simplifies the adapter between vision and language, using only a shallow attention pooling module nad achieving better performance.
+Another important insight from Qwen-VL is that stages 2 and 3 incorporate not only vision-language data but also pure-text data. This helps preserve the LLM’s capabilities and avoid catastrophic forgetting. This strategy has proven effective in other models as well. Compared to models such as InstructBLIP, Qwen-VL simplifies the adapter between vision and language, using only a shallow attention pooling module and achieving better performance.
 
 
 ### LLaVA
 
-Below shows an overview of LLaVA 1.5’s data and architecture. Compared to Qwen-VL, LLaVA 1.5 uses much less pretraining and instruction tuning data (with both Stage 2 and Stage 3 of Qwen-VL viewed as instruction tuning for comparison). In terms of architecture, both the vision encoder and the LLM use different base models, and the adapter between vision and language is an even simpler MLP layer. On several evaluation benchmarks, LLaVA 1.5 outperforms Qwen-VL, suggesting that with the right optimizations, it's possible to achieve strong multimodal understanding with less data and simpler architecture. As shown in the data comparison, improvements can come from:
+Below is an overview of LLaVA 1.5’s data and architecture. Compared to Qwen-VL, LLaVA 1.5 uses much less pretraining and instruction tuning data (with both Stage 2 and Stage 3 of Qwen-VL viewed as instruction tuning for comparison). In terms of architecture, both the vision encoder and the LLM use different base models, and the adapter between vision and language is an even simpler MLP layer. On several evaluation benchmarks, LLaVA 1.5 outperforms Qwen-VL, suggesting that with the right optimizations, it's possible to achieve strong multimodal understanding with less data and simpler architecture. As shown in the data comparison, improvements can come from:
 
 <div align="center"> <img src=images/llava1.5.png style="width: 90%; height: auto;"/> Figure 6. LlaVA-1.5 </div>
 
@@ -93,16 +93,16 @@ Below shows an overview of LLaVA 1.5’s data and architecture. Compared to Qwen
 
 ### Qwen2-VL
 
-Qwen2-VL represents a contemporary architecture of VLM. The model architecture is shown below. It features several innovations comparing with previous version:
+Qwen2-VL represents a contemporary architecture of VLM. The model architecture is shown below. It features several innovations compared with the previous version:
 1. Native Dynamic Resolution mechanism: The model adapts to varying image resolutions by generating different numbers of visual tokens on-the-fly—moving away from traditional fixed-resolution processing. Qwen2-VL pretrained their own ViT model based on this mechanism. 
 2. Multimodal Rotary Position Embedding: Introduces rotary-style positional embeddings capable of jointly encoding positional information across text, images, and video. This unified encoding supports seamless fusion of positional cues across modalities
-3. Unified Image & Video Processing Pipeline: The Visual Transformer (ViT) backbone (675M parameters) is structured to process both static images and video frames in a single, coherent paradigm. Simplifies multimodal modeling and demonstrates strong performance on both image and video tasks .
+3. Unified Image & Video Processing Pipeline: The Visual Transformer (ViT) backbone (675M parameters) is structured to process both static images and video frames in a single, coherent paradigm. This simplifies multimodal modeling and demonstrates strong performance on both image and video tasks.
 
 Notice that there is no explicit vision adaptor outside the vision module. 
 <div align="center"> <img src=images/qwen2.png style="width: 100%; height: auto;"/> Figure 7. Qwen2-VL </div>
 
 Training comprises three stages:
-- First stage: ViT pretraining. Note that the training only optimizes ViT module, but LLM is used in the training process which differs from the original ViT pretraining. 
+- First stage: ViT pretraining. Note that the training only optimizes the ViT module, but the LLM is used in the training process which differs from the original ViT pretraining. 
 - Second stage: unfreeze all parameters and train with a wider range of data for more comprehensive learning.
 - Third stage: lock the ViT parameters and perform exclusive fine-tuning of the LLM using instructional datasets
 
@@ -121,7 +121,7 @@ Extending RoPE from 1D to 2D: For a given position, split the input vector of di
 ## LWM
 
 
-LWM's core goal is to create **multimodal large model capable of ultra-long context understanding**. With support for 1 million token inputs, LWM can comprehend videos over an hour long. The key highlights of LWM’s work include:
+LWM's core goal is to create a **multimodal large model capable of ultra-long context understanding**. With support for 1 million token inputs, LWM can comprehend videos over an hour long. The key highlights of LWM’s work include:
 
 * Support for ultra-long contexts, capable of handling extended text, image sequences, or video content;
 * Solutions for key technical challenges: Mixed-length input using a *Masked Sequence Packing* method; balancing visual and textual modalities via *loss weighting*; automatic generation of long-sequence Q\&A datasets for model training;

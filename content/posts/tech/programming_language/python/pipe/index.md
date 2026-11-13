@@ -96,18 +96,18 @@ if __name__ == "__main__":
 
 ### 1.1 How Do Pipes Work?
 
-**We always use a pipe with the system call _fork()_ that creates a new process.** As we guess, there is no point to use pipes when we have only one process. The figure below represents how we can have a two-way pipe between the parent and child process when we don’t close unnecessary file descriptors:
+**We always use a pipe with the system call _fork()_ that creates a new process.** As we guess, there is no point in using pipes when we have only one process. The figure below represents how we can have a two-way pipe between the parent and child process when we don’t close unnecessary file descriptors:
 
 <!-- ![pipeUPDATED](images/pipe_extra_conn.png) -->
 <img src="images/pipe_extra_conn.png" alt="drawing" width="80%"/>
 
-**When we close the unused file descriptors we will have a figure like the below.** As we can see from the correct version in the figure below both the parent process and child process can read and write to pipes when we use _pipe_ and _fork_. **However, since the pipe is unidirectional we should be careful if we want the communicate unidirectionally.** That means both parent and child can send data to each other. In that case, one pipe wouldn’t work and that’s why we would need two pipes. One pipe for data flow from parent to child, and one pipe from data flow from child to parent. **We should also close the unneeded pipe descriptors:**
+**When we close the unused file descriptors we will have a figure like the below.** As we can see from the correct version in the figure below both the parent process and child process can read and write to pipes when we use _pipe_ and _fork_. **However, since the pipe is unidirectional we should be careful if we want to communicate bidirectionally.** That means both parent and child can send data to each other. In that case, one pipe wouldn’t work and that’s why we would need two pipes. One pipe for data flow from parent to child, and one pipe for data flow from child to parent. **We should also close the unneeded pipe descriptors:**
 
 <!-- ![pipes3](images/pipe.png) -->
 <img src="images/pipe.png" alt="drawing" width="80%"/>
 
 
-**As we’ve said pipes are a more suitable IPC method for related processes.** Because communication should be simple enough to use raw binary bytes. Actually, pipes that we use in a shell script are the best application of pipes. What they do is that they basically execute binary programs. **So, the limitation of pipe is obvious that we can apply it only to related processes and we can have one-to-one communication.**
+**As we’ve said pipes are a more suitable IPC method for related processes.** Because communication should be simple enough to use raw binary bytes. Actually, pipes that we use in a shell script are the best application of pipes. What they do is that they basically execute binary programs. **So, the limitation of pipes is obvious: we can apply it only to related processes and we can have one-to-one communication.**
 
 For more advanced IPC, there are of course some other ways like [shared memory](https://www.baeldung.com/cs/inter-process-communication#1-shared-memory), [message queue](https://en.wikipedia.org/wiki/Message_queue), and sockets.
 
@@ -115,14 +115,14 @@ As is shown below, there are three steps to create a pipe:
 Three steps to build a pipe. 
 - Create a pipe 
 - Fork process and pipe connection 
-- Close not used connection. (This is mostly resource cleanup if we use duplex because the single endpoint can do both send and recv)
+- Close unused connections. (This is mostly resource cleanup if we use duplex because the single endpoint can do both send and recv)
 <p align="center">
     <img alt="Build a pipe" src="./images/build_pipe.png" width="80%" height=auto/> 
 </p>
 
 <!-- ![](images/build_pipe.png) -->
 
-Below is a small code snippet to show how pipe works. 
+Below is a small code snippet to show how a pipe works. 
 
 ```python
 from multiprocessing import Pipe, Process
@@ -197,7 +197,7 @@ if __name__ == '__main__':
 
 ## 2\. Sockets
 
-**Sockets have a significant role in today’s internet.** The term socket is first coined in RFC 147 in 1971 when it was used in the ARPANET. It is a unique identification to or from which information is transmitted in the network. Today’s modern implementations of sockets come from the Berkeley sockets. Sockets are directly related to the operating systems and processes and we can understand this situation from the Berkeley sockets application programming interface (API) in the Berkeley Software Distribution (BSD) which originated from Unix OS.
+**Sockets have a significant role in today’s internet.** The term socket was first coined in RFC 147 in 1971 when it was used in the ARPANET. It is a unique identification to or from which information is transmitted in the network. Today’s modern implementations of sockets come from the Berkeley sockets. Sockets are directly related to the operating systems and processes and we can understand this situation from the Berkeley sockets application programming interface (API) in the Berkeley Software Distribution (BSD) which originated from Unix OS.
 
 The network protocol stack’s API establishes a connection for each socket generated by an application which is a socket descriptor. It is like a file descriptor in Unix-like operating systems. The process saves it for use with _read_ and _write_ operations on the channel.
 
@@ -205,7 +205,7 @@ The network protocol stack’s API establishes a connection for each socket gene
 
 **A network socket is bound to a combination of a kind of network protocol to be used for transmissions.** This combination includes the host’s network address and a port number. Ports are numbered resources on the node that indicate a different sort of software structure. They identify the service types for processes and act as an externally accessible location component, allowing other hosts to connect to them. We can use network sockets to establish a permanent connection between two nodes or to engage connectionless and multicast communications.
 
-**To sum up, with sockets we can establish a connection between processes that runs even on different machines.** The socket API supports _send_ and _recv_ operations that allow processes to share message buffers in and out of the kernel-level communication buffer.
+**To sum up, with sockets we can establish a connection between processes that run even on different machines.** The socket API supports _send_ and _recv_ operations that allow processes to share message buffers in and out of the kernel-level communication buffer.
 
 The _socket_ call allows us to create a kernel-level socket buffer. Also, it associates any kernel-level processing that needs to be associated with the socket along with the actual message movement. As we’ve mentioned, when we use sockets to establish communication, it can happen between processes on different machines.
 
@@ -221,7 +221,7 @@ We’ve explained pipes and sockets and tried to give intuition about how they w
 
 
 ## Queue
-Multiprocessing also provides another mechanism for processes communication - Queue. The difference is that pipe is used for point to point communication while queue for multiple processes like producer/consumer.
+Multiprocessing also provides another mechanism for process communication - Queue. The difference is that a pipe is used for point to point communication while a queue is used for multiple processes like producer/consumer.
 ```python
 # coding=utf-8
 from multiprocessing import Queue, Process

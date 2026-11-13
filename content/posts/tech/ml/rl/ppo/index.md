@@ -29,11 +29,11 @@ cover:
 math: true
 
 ---
-In this blog, I'll go through the theory (simplified version) of PPO algorithm and try to code it from scratch.
+In this blog, I'll go through the theory (simplified version) of the PPO algorithm and try to code it from scratch.
 ## Basics
 
 ### Monte Carlo Approximation
-Distributions of random variables in reality are mostly unknown. Sampling-based methods are extensively used in practice because of its ease of use and the generality where they can be applied. One of the fundamental problems is to calculate the expectation of a random variable, which can be expressed as 
+Distributions of random variables in reality are mostly unknown. Sampling-based methods are extensively used in practice because of their ease of use and generality. One of the fundamental problems is to calculate the expectation of a random variable, which can be expressed as 
 
 $$
 \mathbb{E_{x\sim p(x)}}\left(f(x)\right) = \int{f(x)p(x)} dx
@@ -48,19 +48,19 @@ $$
 \mathbb{E}\left(f(x)\right) \approx \frac{1}{N}\sum_{i=1}^{N}{f(x_i)}
 $$
 
-assuming that the $x_i$ here is the i.i.d samples from the distribution $p(x)$. So we say that Monte Carlo Approximation is to use one or more samples to calculate the expectation of a distribution. 
+assuming that the $x_i$ here are i.i.d. samples from the distribution $p(x)$. So we say that Monte Carlo Approximation is to use one or more samples to calculate the expectation of a distribution. 
 
 ### Importance Sampling
 In reality, it could be very challenging to sample data according to the distribution $p(x)$ as it is usually unknown to us. A workaround is to have another known distribution $q(x)$, and define the expectation as:
 $$
 \mathbb{E_{x\sim p(x)}}[f] = \int{q(x)\frac{p(x)}{q(x)}f(x)} dx
 $$
-This can be seen as the expectation of function $\frac{p(x)}{q(x)}f(x)$ according to the distribution of $q(x)$. The distribution is sometimes called the **proposal distribution**. Then the expectation can be estimated as
+This can be seen as the expectation of the function $\frac{p(x)}{q(x)}f(x)$ according to the distribution of $q(x)$. The distribution is sometimes called the **proposal distribution**. Then the expectation can be estimated as
 $$
 \mathbb{E_{x\sim q(x)}}[f] \approx \frac{1}{N}\sum_{i=1}^{N}{\frac{p(x_i)}{q(x_i)}f(x_i)}
 $$
-Here the ratios $\frac{p(x_i)}{q(x_i)}$ are referred sa the importance weights.
-The above derivation looks nice. However, we need to notice that the although the expectation is similar in both cases, the variance is different:
+Here the ratios $\frac{p(x_i)}{q(x_i)}$ are referred to as the importance weights.
+The above derivation looks nice. However, we need to notice that although the expectation is similar in both cases, the variance is different:
 
 $$
 Var_{x\sim p(x)}[f] = \mathbb{E_{x\sim p(x)}}[f(x)^2] - ({\mathbb{E_{x\sim p(x)}}[f(x)]})^2
@@ -72,10 +72,10 @@ Var_{x\sim q(x)}[f] &= \mathbb{E_{x\sim q(x)}}[({\frac{p(x_i)}{q(x_i)}f(x_i)})^2
 &= \mathbb{E_{x\sim p(x)}}[{\frac{p(x_i)}{q(x_i)}f(x_i)^2}] - (\mathbb{E_{x\sim p(x)}}[f(x_i)])^2
 \end{aligned}
 $$
-Notice that the second equation here, in the second step derivation, the expectation is relative to distribution of $p(x)$. From the above two equations, we can see that to make the sampling distribution as close as possible to the original distribution, the ratio $\frac{p(x_i)}{q(x_i)}$ has to be close to 1.
+Notice that in the second step of the second equation here, the expectation is relative to the distribution $p(x)$. From the above two equations, we can see that to make the sampling distribution as close as possible to the original distribution, the ratio $\frac{p(x_i)}{q(x_i)}$ has to be close to 1.
 
 ### Policy Gradient
-First, let's remind ourselves some basics. The discounted return for a trajectory is defined as:
+First, let's remind ourselves of some basics. The discounted return for a trajectory is defined as:
 $$
 U_t = R_t + \gamma R_{t+1} + \gamma^2 R_{t+2} + \gamma^3 R_{t+3} + ...
 $$
@@ -90,7 +90,7 @@ $$
 V_{\pi}(s_t) = \mathbb{E_A}[Q_{\pi}(s_t, A)] = \sum_a \pi(a|s_t) \cdot Q_{\pi}(s_t, a)
 $$
 
-In policy gradient algorithm, the policy function $\pi(a|s_t)$ is approximated by policy network $\pi(a|s_t; \theta)$. $\theta$ here is the neural network model parameters. Then the policy-based learning is to maximize the objective function 
+In the policy gradient algorithm, the policy function $\pi(a|s_t)$ is approximated by a policy network $\pi(a|s_t; \theta)$. $\theta$ here is the neural network model parameters. Then the policy-based learning is to maximize the objective function 
 $$
 \begin{aligned}
 J(\theta) &= \mathbb{E_S}[V(S; \theta)] \\
@@ -99,10 +99,10 @@ J(\theta) &= \mathbb{E_S}[V(S; \theta)] \\
 \end{aligned}
 $$
 
-where $d_{\pi}(s)$ is the stationary distribution of Markov chain for $\pi_{\theta}$, namely the state distribution under policy $\pi$.
+where $d_{\pi}(s)$ is the stationary distribution of the Markov chain for $\pi_{\theta}$, namely the state distribution under policy $\pi$.
 Now we know the objective function of the policy-based algorithm, we can learn the parameters $\theta$ through policy gradient ascent. 
 
-Now we can look at how to get the policy gradient. Since the first summation of the last step in the above equation has nothing to do with $\theta$, so we can focus on getting the derivatives of the value function $V_{\pi}(s; \theta)$. Using chain rule, it's easy to get:
+Now we can look at how to get the policy gradient. Since the first summation of the last step in the above equation has nothing to do with $\theta$, we can focus on getting the derivatives of the value function $V_{\pi}(s; \theta)$. Using the chain rule, it's easy to get:
 $$
 \begin{aligned}
 \frac{\partial{V(s; \theta)}}{\partial{\theta}} &= \sum_a \frac{\partial{\pi (a|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, a) \\
@@ -120,7 +120,7 @@ $$
 
 This is also called Monte Carlo policy gradient. Since gradient is a direction, this formula shows that policy gradient estimation is the direction of the steepest increase in reward/return. When reward is larger, the policy gradient will be larger.
 
-In practice, instead of using Q function, people use advantage function which is the baseline trick: you can subtract any function of the state from Q without changing the expected gradient. Choosing V(s) as that function turns Q into A.
+In practice, instead of using the Q function, people use the advantage function, which comes from the baseline trick: you can subtract any function of the state from Q without changing the expected gradient. Choosing V(s) as that function turns Q into A.
 
 $$
   ∇V(s) = \sum_a ∇π(a|s) · Q(s,a)
@@ -174,17 +174,17 @@ Not every "baseline" fits the pure baseline argument exactly. RLOO's leave-one-o
 
 
 ### Temporal Difference (TD) Learning
-Temporal Difference (TD) learning is one of the core concepts in Reinforcement Learning. Temporal difference algorithm always aims to bring the expected prediction and the new prediction together, thus matching expectations with reality and gradually increasing the accuracy of the entire chain of prediction.
+Temporal Difference (TD) learning is one of the core concepts in Reinforcement Learning. The temporal difference algorithm always aims to bring the expected prediction and the new prediction together, thus matching expectations with reality and gradually increasing the accuracy of the entire chain of predictions.
 
-The most basic version is TD(0) method. Specifically, if our agent is in a current state $s_t$, takes the action $a_t$ and receives the reward $r_t$, then we update our estimate of $V$ following
+The most basic version is the TD(0) method. Specifically, if our agent is in a current state $s_t$, takes the action $a_t$ and receives the reward $r_t$, then we update our estimate of $V$ following
 
 $$
 V(s_t) \xleftarrow[]{} V(s_t) + \alpha[r_{t+1} + \gamma V(s_{t+1}) – V(s_t)]
 $$
 
-Here $r_{t+1} + \gamma V(s_{t+1})$ is TD target and $r_{t+1} + \gamma V(s_{t+1}) – V(s_t)$ is called TD error ($\delta$). 
+Here $r_{t+1} + \gamma V(s_{t+1})$ is the TD target and $r_{t+1} + \gamma V(s_{t+1}) – V(s_t)$ is called TD error ($\delta$). 
 
-There is SARSA (state-action-reward-state-action), where we replace the value function as the action-state value function.
+There is SARSA (state-action-reward-state-action), where we replace the value function with the action-state value function.
 
 $$
 Q(s_t, a_t) \xleftarrow[]{} Q(s_t, a_t) + \alpha[r_{t+1} + \gamma Q(s_{t+1}, a_{t+1}) – Q(s_t, a_t)]
@@ -204,23 +204,23 @@ Q_{\pi}(s_t, a_t) &= u_t \\
 \end{aligned} 
 $$
 The above MCPG actually gives us a practical algorithm to do policy gradient based RL. Let's summarize it as follows:
-1. Play one episode of game to get the trajectory: $s_1, a_1, r_1, s_2, a_2, r_2, ...$
-2. Estimate all $q_t \approx u_t$ using above equation
-3. Differentiate policy network to get $d_{\theta, t}$
+1. Play one episode of the game to get the trajectory: $s_1, a_1, r_1, s_2, a_2, r_2, ...$
+2. Estimate all $q_t \approx u_t$ using the above equation
+3. Differentiate the policy network to get $d_{\theta, t}$
 4. Compute policy gradient $g(a_t, \theta_t) = q_t \cdot d_{\theta, t}$
 
 
 ### Advantage Function and Generalized Advantage Estimation
-The above equation is the vanilla policy gradient method. More policy gradient algorithms are proposed later to reduce high variance of the vanilla version. John Schulman's [GAE paper](https://arxiv.org/pdf/1506.02438.pdf) summarized all the improvement methods. In the derivation, the policy gradient is represented as
+The above equation is the vanilla policy gradient method. More policy gradient algorithms were proposed later to reduce the high variance of the vanilla version. John Schulman's [GAE paper](https://arxiv.org/pdf/1506.02438.pdf) summarized all the improvement methods. In the derivation, the policy gradient is represented as
 $$
 \frac{\partial{V(s; \theta)}}{\partial{\theta}} = \mathbb{E_A}\left[  \frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} \cdot  \hat{A_t}(s, a) \right]
 $$
-where $\hat{A_t}(s, a)$ is the advantage function. In implementation, we construct loss function in a way such that the policy gradient $g$ equals to the above result
+where $\hat{A_t}(s, a)$ is the advantage function. In implementation, we construct the loss function in a way such that the policy gradient $g$ equals the above result
 $$
 L(\theta) = \mathbb{E_t}\left[ \log\pi (a|s; \theta) \hat{A_t}(s, a)  \right]
 $$
 
-The idea is that the Advantage function calculates how better taking that action at a state is compared to the average value of the state. It’s subtracting the mean value of the state from the state action pair. Mathematically, $A(s_t, a_t) = Q(s_t, a_t) − V (s_t)$, where $Q(s_t, a_t)$ is the action-value function, representing the expected return after taking action  state $s$, and $V (s_t)$ is the value function, representing the average expected return at state $s_t$.
+The idea is that the Advantage function calculates how much better taking that action at a state is compared to the average value of the state. It’s subtracting the mean value of the state from the state action pair. Mathematically, $A(s_t, a_t) = Q(s_t, a_t) − V (s_t)$, where $Q(s_t, a_t)$ is the action-value function, representing the expected return after taking action $a$ at state $s$, and $V (s_t)$ is the value function, representing the average expected return at state $s_t$.
 
 Based on the above advantage definition, we have
 <!-- $$

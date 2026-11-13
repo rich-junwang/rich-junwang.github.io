@@ -28,11 +28,11 @@ cover:
     relative: false
 ---
 
-Using PyTorch for NN model training on single GPU is simple and easy. However, when it comes to multiple GPU training, there could be various of issues. In this blog, I'll summarize all kinds of issues I ran into during model training/evaluation.
+Using PyTorch for NN model training on a single GPU is simple and easy. However, when it comes to multi-GPU training, there could be various issues. In this blog, I'll summarize all kinds of issues I ran into during model training/evaluation.
 
 
 ## Gradient Accumulation
-Gradient accumulation is a way to virtually increase the batch size during training. In gradient accumulation, `N` batches go through the forward path and backward path, and each time, the gradient is computed and accumulated (usually summed or averaged), but model parameters are not updated. Model parameters are updated after iterate through all `N` batches. The logic is as follows:
+Gradient accumulation is a way to virtually increase the batch size during training. In gradient accumulation, `N` batches go through the forward pass and backward pass, and each time, the gradient is computed and accumulated (usually summed or averaged), but model parameters are not updated. Model parameters are updated after iterating through all `N` batches. The logic is as follows:
 ```python
 for step, oneBatch in enumerate(dataloader):
    ... 

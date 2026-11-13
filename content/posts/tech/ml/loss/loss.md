@@ -80,22 +80,22 @@ $$
 H(p, q) = -\sum_i p_i \log q_i
 $$
 
-* $p$: the true distribution (what actually happens). Note that here $p$ is valid distribution, so $\sum_i{p}=1$
+* $p$: the true distribution (what actually happens). Note that here $p$ is a valid distribution, so $\sum_i{p}=1$
 * $q$: the model’s predicted distribution
 
 
 ### In machine learning terms
 
-Cross entropy defines the distance between model output distribution and the ground truth distribution.
+Cross entropy defines the distance between the model output distribution and the ground truth distribution.
 $$
 H(y,p) = -\sum_{i}y_i \log(p_i)
 $$
 * $y$ = target distribution (labels)
 * $p$ = predicted probabilities (e.g., from softmax)
 
-Since the $y_i$ is the class label (1 for positive class, 0 for negative), essentially here we're summing up the negative log probably of the positive label. What is the reason why we say that negative log likelihood and cross entropy is equivalent. 
+Since the $y_i$ is the class label (1 for positive class, 0 for negative), essentially here we're summing up the negative log probability of the positive label. This is why we say that negative log likelihood and cross entropy are equivalent. 
 
-When normalization function (we can say activation function of last layer) is softmax function, namely, for each class $s_i$ the probability is given by
+When the normalization function (we can say the activation function of the last layer) is the softmax function, namely, for each class $s_i$ the probability is given by
 $$
 f(s)_i = \frac{e^{s_i}}{ \sum_j ^{C} e^{s_j}}
 $$
@@ -247,7 +247,7 @@ $$
 ## Binary Cross Entropy
 In the above section, we talked about softmax cross entropy loss, here we talk about binary cross entropy loss which is also called Sigmoid cross entropy loss. 
 
-We apply sigmoid function to the output logits before BCE. Notice that here we apply the function to each element in the tensor, all the elements are not related to each other, this is why BCE is widely used for **multi-label** classification task. 
+We apply the sigmoid function to the output logits before BCE. Notice that here we apply the function to each element in the tensor, all the elements are not related to each other, this is why BCE is widely used for **multi-label** classification tasks. 
 
 For each label, we can calculate the loss in the same way as the logistic regression loss. 
 
@@ -291,9 +291,9 @@ print(loss2) # 0.7193
 
 
 ## Noise Contrastive Estimation
-Noise contrastive estimation or negative sampling is a commonly used computation trick in ML to deal with expansive softmax computation or intractable partition function in computation.
+Noise contrastive estimation or negative sampling is a commonly used computation trick in ML to deal with expensive softmax computation or intractable partition function in computation.
 
-The derivation of NCE loss sometimes can be bewildering, but the idea is actually very simple. For example, in word2vec implementation, the negative sampling is to choose 1 positive target and 5 negative target, and calculate the binary cross entropy loss (binary logistic loss) and then do backward propagation. 
+The derivation of NCE loss sometimes can be bewildering, but the idea is actually very simple. For example, in the word2vec implementation, negative sampling chooses 1 positive target and 5 negative targets, and calculate the binary cross entropy loss (binary logistic loss) and then do backward propagation. 
 
 
 
@@ -301,7 +301,7 @@ The derivation of NCE loss sometimes can be bewildering, but the idea is actuall
 
 
 ## CLIP Loss
-CLIP loss is the same with the paper from [3]. The negatives here are used for contrastive learning. However, they're not using NCE method like word2vec. It's more like softmax cross entropy.
+CLIP loss is the same as in the paper from [3]. The negatives here are used for contrastive learning. However, they're not using NCE method like word2vec. It's more like softmax cross entropy.
 
 ```python
 import torch
@@ -399,7 +399,7 @@ $$
 
 2. Log-likelihood
 
-Take logs to get the log-likelihood, this turns product of probability to summation of probability which is much easier to handle.
+Take logs to get the log-likelihood, this turns a product of probabilities into a sum of log probabilities, which is much easier to handle.
 $$
 \ell(w) = \log L(w)
 = \sum_{i=1}^n \big( y_i\log\mu_i + (1-y_i)\log(1-\mu_i)\big).

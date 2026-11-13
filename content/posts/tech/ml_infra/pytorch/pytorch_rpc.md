@@ -32,13 +32,13 @@ PyTorch supports several approaches to distributed training and communication, i
 
 - Data Parallel (DP): A legacy approach where data is split across multiple GPUs on a single machine, and model replicas are kept synchronized manually.
 
-- Collective Communications (c10d): A low-level library providing collective communication primitives (e.g., all-reduce) for synchronizing data across multiple devices and nodes. It supports MPI, NCCL and GLOO backend. 
+- Collective Communications (c10d): A low-level library providing collective communication primitives (e.g., all-reduce) for synchronizing data across multiple devices and nodes. It supports MPI, NCCL and GLOO backends. 
 
 - Distributed Data Parallel (DDP): The recommended method for scaling training across multiple GPUs and machines, where each process maintains its own model replica and gradient synchronization is performed efficiently using collective communication.
 
 - Remote Procedure Call (RPC) Framework: A flexible framework enabling model parallelism by allowing different parts of a model to reside and execute on different devices or machines through asynchronous remote execution.
 
-Data parallel is not really a distributed training tool which is discussed in our previous post, we'll not cover it here. In this post, we mainly want to talk about why Torch introduce TorchRPC. 
+Data parallel is not really a distributed training tool, and it was discussed in our previous post, so we won't cover it here. In this post, we mainly want to talk about why Torch introduced TorchRPC. 
 
 
 ## Why RPC
@@ -46,7 +46,7 @@ Data parallel is not really a distributed training tool which is discussed in ou
 Without RPC (only using p2p communication in `torch.distributed` .send/.recv), when we want to send tensor y when tensor x is ready from node A to node B, both nodes need to know ahead of time exactly what communication will happen.
 
 A has tensor x and wants to decide: "Should I send tensor y to B or not?"
-With just .send() and .recv(), both A and B must call these communication functions in matching order — otherwise, they will deadlock (e.g., A is sending but B is not receiving, so both get stuck forever). The problem is B cannot "wait to see" if A wants to send, unless B already knows whether a .recv() is needed. Therefore, B must somehow know what A decided, and in simple .send/.recv world, the only way is to first send x (the condition) to B, so B can evaluate the logic too.
+With just .send() and .recv(), both A and B must call these communication functions in matching order — otherwise, they will deadlock (e.g., A is sending but B is not receiving, so both get stuck forever). The problem is B cannot "wait to see" if A wants to send, unless B already knows whether a .recv() is needed. Therefore, B must somehow know what A decided, and in a simple .send/.recv world, the only way is to first send x (the condition) to B, so B can evaluate the logic too.
 
 
 ### Nodes Communication

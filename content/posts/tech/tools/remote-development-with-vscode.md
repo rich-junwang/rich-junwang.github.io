@@ -31,20 +31,20 @@ cover:
 
 ## Remote Development
 
-I used to do development on my local machine, and use **fswatch** and **rsync** to sync changes to server in real time. It works perfectly when development dependencies are simple and easy to set up. Generally I refer this development mode as local development. However, as more and more development environments are containerized, it becomes non-trivial to set up environment every time. Recently, I started using VSCode as it has better support to leverage remote server development environment. 
+I used to do development on my local machine, and use **fswatch** and **rsync** to sync changes to the server in real time. It works perfectly when development dependencies are simple and easy to set up. Generally I refer to this development mode as local development. However, as more and more development environments are containerized, it becomes non-trivial to set up the environment every time. Recently, I started using VSCode as it has better support for leveraging a remote server development environment. 
 
 
-One great feature of VScode is that it works well with docker and kubernetes, i.e. we can attach VSCode to docker or kubernetes pods easily. In vscode terminal, we can execute commands like we're doing on the server. I call this kind of development as remote development. 
+One great feature of VScode is that it works well with docker and kubernetes, i.e. we can attach VSCode to docker or kubernetes pods easily. In vscode terminal, we can execute commands like we're doing on the server. I call this kind of development remote development. 
 
 
-One problem with remote development is that we can't save our changes locally. Once server dies, all our changes are gone. The solution is to use git. Since docker doesn't come with an editor, when we use git, we have to set vscode as the editor:
+One problem with remote development is that we can't save our changes locally. Once the server dies, all our changes are gone. The solution is to use git. Since docker doesn't come with an editor, when we use git, we have to set vscode as the editor:
 ```
 git config --global core.editor "code --wait"
 ```
 
-Another issue is we have to install extensions on remote server. For instance, we have to install python extension in order to use python interpreter in remote mode. 
+Another issue is we have to install extensions on the remote server. For instance, we have to install the python extension in order to use the python interpreter in remote mode. 
 
-VScode also has a [nice extension tool](https://marketplace.visualstudio.com/items?itemName=Natizyskunk.sftp) to sync code to remote server.
+VScode also has a [nice extension tool](https://marketplace.visualstudio.com/items?itemName=Natizyskunk.sftp) to sync code to a remote server.
 
 ## VScode Shortcuts
 If it's on Mac, replace CTRL key with CMD key
@@ -54,9 +54,9 @@ If it's on Mac, replace CTRL key with CMD key
 
 (3) edit multiple line
 
-* edit multiple line simultaneously: CTRL + SHIFT + up/down arrow. (This will be continuous)
-* ALT + CLICK (cmd + mouse click on mac): can select multiple place and edit
-* CTRL + SHIFT + L:  edit all variable in the file
+* edit multiple lines simultaneously: CTRL + SHIFT + up/down arrow. (This will be continuous)
+* ALT + CLICK (cmd + mouse click on mac): can select multiple places and edit
+* CTRL + SHIFT + L:  edit all occurrences of a variable in the file
 
 (4) block comment: select the block, then CTRL + SHIFT + A
 
@@ -91,7 +91,7 @@ CTRL + SHIFT + N
 
 
 (12) Open terminal
-CTRL + ` to toggle terminal panel. Note one mac here it's CTRL as well.
+CTRL + ` to toggle terminal panel. Note on mac here it's CTRL as well.
 
 (13) Close search window after global search
 In `keybindings.json` add the following lines
@@ -156,7 +156,7 @@ Here is the config settings I used.
 ## Remote SSH config
 Install the plugin from [here](https://github.com/Natizyskunk/vscode-sftp?tab=readme-ov-file)
 
-Connecting to a single serve the `sftp.json` is like this:
+When connecting to a single server, the `sftp.json` is like this:
 ```json
 {
     "name": "Profile1",
@@ -180,7 +180,7 @@ Connecting to a single serve the `sftp.json` is like this:
 }
 ```
 
-Connecting to multiple servers, the "sftp.json" is like this:
+When connecting to multiple servers, the "sftp.json" is like this:
 ```json
 {
     "protocol": "sftp",
@@ -227,7 +227,7 @@ After saving the `sftp.json` in the `.vscode` folder, we can trigger a start syn
 
 ## Paste and Indentation
 Install `Paste and Indent` from g3rry
-Adding the following to keybindings json
+Add the following to keybindings json
 ```
 {
     "key": "ctrl+v",
@@ -249,7 +249,7 @@ Adding the following to keybindings json
 
 ## Remote SSH Development
 ### How to manage plugins
-There are two ways to manage plugins when using remote ssh server.
+There are two ways to manage plugins when using a remote ssh server.
 1. You can also install all locally installed extensions on the SSH host by going to the Extensions view and selecting Install Local Extensions in SSH: {Hostname} using the cloud button at the right of the Local - Installed title bar. This will display a dropdown where you can select which locally installed extensions to install on your SSH host.
 
 2. "Always installed" extensions

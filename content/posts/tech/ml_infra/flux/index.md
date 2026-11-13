@@ -56,7 +56,7 @@ This communication happens through either
 - NVLink (within node)
 - InfiniBand / PCIe / Ethernet (across nodes). 
 
-For modern LLMs, matrix multiplications (GEMMs) are extremely optimized. Communication increasingly dominates runtime. The paper argues that existing systems overlap communication and compute only coarsely, leaving a lot of GPU idle time. The central idea is surprisingly elegant, instead of sequencing compute kernel then communication kernel they do many tiny compute+communication pieces fused together into one mega-kernel. This is the essence of FLUX.
+For modern LLMs, matrix multiplications (GEMMs) are extremely optimized. Communication increasingly dominates runtime. The paper argues that existing systems overlap communication and compute only coarsely, leaving a lot of GPU idle time. The central idea is surprisingly elegant: instead of sequencing a compute kernel then a communication kernel, they do many tiny compute+communication pieces fused together into one mega-kernel. This is the essence of FLUX.
 
 ## Why existing overlap methods are limited
 
@@ -124,7 +124,7 @@ Traditional systems overlap at tensor/chunk granularity. But GPUs internally ope
 * tile granularity
 * block granularity
 
-A GEMM may process thousands of tiles internally. Yet NCCL waits for the entire chunk before sending anything. So there’s a huge delay between first tile becoming ready and communication starting. This is wasted opportunity. What FLUX changes? FLUX says why wait for the whole chunk? Now communication begins almost immediately. The network pipeline stays continuously full. 
+A GEMM may process thousands of tiles internally. Yet NCCL waits for the entire chunk before sending anything. So there’s a huge delay between the first tile becoming ready and communication starting. This is a wasted opportunity. What does FLUX change? FLUX says: why wait for the whole chunk? Now communication begins almost immediately. The network pipeline stays continuously full. 
 
 ```text id="l6qv22"
 Compute tile 1
@@ -155,7 +155,7 @@ Each launch has overhead:
 * queueing
 * stream coordination
 
-Small individually, but huge at scale. FLUX removes much of this by using: one persistent fused kernel
+Small individually, but huge at scale. FLUX removes much of this by using one persistent fused kernel.
 
 ### Another problem: NCCL is semi-independent
 
@@ -198,7 +198,7 @@ FLUX minimizes these barriers.
 
 
 ### Partial readiness
-The key insight is partial readiness. This is the core concept. Suppose tensor = 100 MB. Traditional NCCL, waits for all 100 MB. But internally first 1 MB may already be computed. FLUX communicates as soon as tiny portions are ready. This dramatically improves pipeline efficiency. Why this matters MORE for LLMs? Large LLM inference often has small batch sizes especially during decoding. Then compute gets smaller, communication latency dominates. Traditional overlap becomes weak because it chunks finish quickly, launches overhead becomes significant and synchronization dominates. FLUX helps because it pipelines at very fine granularity and keeps network continuously utilized.
+The key insight is partial readiness. This is the core concept. Suppose tensor = 100 MB. Traditional NCCL waits for all 100 MB. But internally the first 1 MB may already be computed. FLUX communicates as soon as tiny portions are ready. This dramatically improves pipeline efficiency. Why does this matter MORE for LLMs? Large LLM inference often has small batch sizes, especially during decoding. Then compute gets smaller and communication latency dominates. Traditional overlap becomes weak because chunks finish quickly, launch overhead becomes significant and synchronization dominates. FLUX helps because it pipelines at very fine granularity and keeps the network continuously utilized.
 
 The real bottleneck being attacked. Traditional systems suffer from pipeline bubbles. FLUX tries to achieve continuous utilization. 
 
@@ -232,9 +232,9 @@ for tile in tiles:
     continue_compute(tile)
 ```
 
-Instead of separate compute kernel and separate NCCL kernel, now everything becomes one persistent fused kernel.
+Instead of a separate compute kernel and a separate NCCL kernel, now everything becomes one persistent fused kernel.
 
-This removes launch overhead, synchronization overhead and scheduling gaps. communication to happen continuously during compute
+This removes launch overhead, synchronization overhead and scheduling gaps, allowing communication to happen continuously during compute.
 
 
 
@@ -285,7 +285,7 @@ The paper is really teaching a broader systems principle: fine-grained pipelined
 
 - Stream communication earlier: Don’t wait for full tensor completion. Instead communicate tiles/chunks immediately. This is streaming tensor parallelism
 - Persistent kernels: FLUX strongly suggests persistent execution models, long-lived kernels and avoiding repeated launches. This is increasingly critical on modern GPUs.
-- Communication-aware scheduling: Most ML frameworks still optimize compute graphs, but future systems optimize compute + network jointly. This is where all training frameworks are all evolving.
+- Communication-aware scheduling: Most ML frameworks still optimize compute graphs, but future systems optimize compute + network jointly. This is where all training frameworks are evolving.
 - For inference systems overlapping communication continuously during token generation. Decoding is communication-sensitive because batch sizes shrink and communication latency dominates. FLUX helps precisely there.
 
 
@@ -311,7 +311,7 @@ while true:
 This is basically GPU systems engineering at the frontier.
 
 
-The very similar idea is explored in CODA [5] where the computation replaces the communication discussed in FLUX. 
+A very similar idea is explored in CODA [5] where the computation replaces the communication discussed in FLUX. 
 
 ## References
 1. [AI and Memory Wall](https://arxiv.org/abs/2403.14123)

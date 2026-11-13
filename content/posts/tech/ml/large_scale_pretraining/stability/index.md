@@ -30,7 +30,7 @@ math: true
 
 ---
 
-Is pretraining hitting a wall? While, history tells us that it's always good to scale. Today we're studying the challenges in scaling transformer models in depth dimension. 
+Is pretraining hitting a wall? Still, history tells us that it's always good to scale. Today we're studying the challenges in scaling transformer models in depth dimension. 
 
 ## Challenges
 
@@ -49,7 +49,7 @@ When building LLMs, the modern machine learning playbook usually screams one wor
 
 The answer lies in a hidden chaos that plagues deep architectures: signal instability. As data travels forward and gradients flow backward through hundreds of layers, the network effectively "blinds" or "deafens" itself, resulting in exploding gradients, vanishing signals, or token representations collapsing into redundant mush.
 
-Recently I found this paper [1] has cracked this depth barrier. By replacing guesswork with elegant mathematics, the researchers successfully trained architectures up to 1,000 layers deep.
+Recently I found that this paper [1] has cracked this depth barrier. By replacing guesswork with elegant mathematics, the researchers successfully trained architectures up to 1,000 layers deep.
 
 
 

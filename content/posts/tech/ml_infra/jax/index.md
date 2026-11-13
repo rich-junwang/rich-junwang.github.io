@@ -44,7 +44,7 @@ math: true
 | Runtime / Libraries         | cuBLAS, cuDNN, NCCL        | LibTPU, XLA runtime          | Optimized kernels and distributed execution          |
 
 
-The TPU software stack is converging toward compiler-centric design, while the NVIDIA stack historically centered around explicit kernel programming.
+The TPU software stack is converging toward a compiler-centric design, while the NVIDIA stack historically centered around explicit kernel programming.
 
 Historically:
 - NVIDIA: Program the machine directly.

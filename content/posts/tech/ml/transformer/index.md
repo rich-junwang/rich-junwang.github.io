@@ -33,15 +33,15 @@ math: true
 
 ## LayerNorm vs BatchNorm
 
-BatchNorm is commonly used in computer vision. LayerNorm is widely used in NLP. In CV, the channel dimension is RGB channel. In NLP, the channel dimension is feature dimension (embedding dimension). 
-Layer norm normalizes across feature dimension (i.e embedding dimension) for each of the inputs which removes the dependence on batches. This makes layer normalization well suited for sequence models such as transformers.
+BatchNorm is commonly used in computer vision. LayerNorm is widely used in NLP. In CV, the channel dimension is the RGB channel. In NLP, the channel dimension is the feature dimension (embedding dimension). 
+Layer norm normalizes across the feature dimension (i.e embedding dimension) for each of the inputs which removes the dependence on batches. This makes layer normalization well suited for sequence models such as transformers.
 <p align="center">
     <img alt="batch norm vs layer norm (image case)" src="images/norm.png" width="80%" height=auto/> 
     <em>Figure 1. batch norm vs layer norm</em>
     <br>
 </p>
 
-After understanding of the basics, we can write down the pseudo code as below
+After understanding the basics, we can write down the pseudo code as below
 
 ```python
 # Pseudo code for batch norm
@@ -58,7 +58,7 @@ for i in range(batch_size):
         Norm([bert_tensor[i][j][k] for k in range(hidden_size)])
 ```
 
-PyTorch implementation is shown blow. When using for BatchNorm, dim=0, assuming x is of the shape (batch_size, H, W, channel). When using for LayerNorm, dim=-1, assuming x is of shape (batch_size, seq_len, embed_dim). 
+PyTorch implementation is shown below. When using for BatchNorm, dim=0, assuming x is of the shape (batch_size, H, W, channel). When using for LayerNorm, dim=-1, assuming x is of shape (batch_size, seq_len, embed_dim). 
 ```python
 class Norm(nn.Module):
     def __init__(self, num_features, variance_epsilon=1e-12):
@@ -75,7 +75,7 @@ class Norm(nn.Module):
         return self.gamma * x_norm + self.beta
 ```
 
-When I first saw the above figure, I don't understand why layer normalization for NLP tasks is across a plane as shown in the figure (which should be only across a feature dimension vector). The reason is simple because this image is showing image case. 
+When I first saw the above figure, I didn't understand why layer normalization for NLP tasks is across a plane as shown in the figure (which should be only across a feature dimension vector). The reason is simple: this figure is showing the image case. 
 
 ### Image case
 
@@ -87,7 +87,7 @@ $$
 - Batch Norm: mean/variance computed across `N, H, W` for each channel `C`.
 - Layer Norm: mean/variance computed across `C, H, W` for each individual sample (not across the batch).
 
-In vision, there is not time dimension or sequence length dimension, so we can think of the `C, H, W` dimension is a single time step (e.g. one text token). 
+In vision, there is no time dimension or sequence length dimension, so we can think of the `C, H, W` dimensions as a single time step (e.g. one text token). 
 
 ### Text/NLP case
 
@@ -103,14 +103,14 @@ $$
 Layer Norm: is usually applied per token, i.e., for each position in the sequence, it normalizes across the feature dimension `D` only.
 That’s why in NLP, each token’s feature vector is normalized independently.
 
-The figure is drawn with a vision perspective, layer norm is normalizing across all feature dimensions (C × H × W)". It's across a plane.
+The figure is drawn from a vision perspective: layer norm normalizes across all feature dimensions (C × H × W). It's across a plane.
 In NLP, the features are usually just the hidden size `D`, not `(C × H × W)`. So when adapted to text, Layer Norm colors only one row (token vector), not the whole sequence plane.
 
 In images, feature dimension = `(C × H × W)` per sample. In text, feature dimension = hidden size `D` per token.
 
 
 ### EMA in BN
-Note that at inference time, there could be no batch dimension for batch norm. In practice, during training people will keep record of moving average of mean and variance. During inference time, these values will be used. The exponential moving average is calculated as follows
+Note that at inference time, there could be no batch dimension for batch norm. In practice, during training people will keep a record of the moving average of mean and variance. During inference time, these values will be used. The exponential moving average is calculated as follows
 ```python
 moving_mean = moving_mean * momentum + batch_mean * (1 - momentum)
 moving_var = moving_var * momentum + batch_var * (1 - momentum)
@@ -125,7 +125,7 @@ moving_var -= (moving_var - batch_var) * (1 - momentum)
 
 ## Position Encoding
 
-In `Attention is All You Need` paper, absolute sinusoidal positional embedding was proposed which has the following format. Here $t$ is the position index, starting from 0, 1... $i$ is the ith component in (head) dimension.
+In the `Attention is All You Need` paper, absolute sinusoidal positional embedding was proposed which has the following format. Here $t$ is the position index, starting from 0, 1... $i$ is the ith component in (head) dimension.
 
 $$
 \begin{aligned}
@@ -134,7 +134,7 @@ p_{t,2i+1} &= \cos\left( \frac{t}{10000^{2i/d}} \right)
 \end{aligned}
 $$
 
-The paper didn't really talk about why it design the positional embedding in such a way, but it's generally believed it's used to break the symmetrical structure of the self-attention, meaning that
+The paper didn't really talk about why it designed the positional embedding in such a way, but it's generally believed it's used to break the symmetrical structure of the self-attention, meaning that
 
 $$
 attn(x_{0}, x_{1}, .. x_{t_1}, x_{t_2}.. x_n) \neq attn(x_{0}, x_{1}, .. x_{t_2}, x_{t_1}.. x_n)
@@ -171,12 +171,12 @@ It can bring a certain degree of remote attenuation. (see section 3.4.3 in Ref [
 
 Process to compute rotary positional embedding based self-attention
 - First compute the position encoding for each position namely $m\theta$
-- Second, doing rotation with query, key vector
+- Second, rotate the query and key vectors
 - Self-attention
 
 
 ### Long Context Expansion
-Ref [1] proposed ABF method to increase base frequency from 10, 000 to 500, 000 which essentially reduces the rotation angles of each dimension. LongRope proposed to adjust the rotation frequency on different dimensions. 
+Ref [1] proposed ABF method to increase the base frequency from 10, 000 to 500, 000 which essentially reduces the rotation angles of each dimension. LongRope proposed to adjust the rotation frequency on different dimensions. 
 
 
 

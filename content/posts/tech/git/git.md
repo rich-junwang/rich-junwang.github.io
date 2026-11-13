@@ -32,7 +32,7 @@ cover:
 ### Git 
 
 #### Git merge
-Suppose we're on **master** branch, if we want to override the changes in the master branch with feature branch, we can use the following command
+Suppose we're on the **master** branch. If we want to override the changes in the master branch with the feature branch, we can use the following command
 ```
 git merge -X theirs feature
 ```
@@ -42,7 +42,7 @@ to keep the master branch changes:
 git merge -X ours feature
 ```
 
-If we want to rebase of current branch onto the master, and want to keep feature branch
+If we want to rebase the current branch onto master, and want to keep feature branch
 ```
 git rebase master -X theirs
 ```
@@ -98,7 +98,7 @@ To summarize, we can have the following table:
 
 #### Git Diff
 
-To check two branch difference, suppose we're on branch1, then we can do,
+To check the difference between two branches, suppose we're on branch1, then we can do,
 ```
 git diff HEAD..master
 ```
@@ -113,7 +113,7 @@ git push origin -d remote_branch_name
 
 
 #### Git rebase
-To fixup, squash, edit, drop, reword and many other operations on the previous N commit:
+To fixup, squash, edit, drop, reword and many other operations on the previous N commits:
 ```
 git rebase -i HAED~N
 ```
@@ -124,7 +124,7 @@ git commit --amend --no-edit
 ```
 
 #### Undo git add
-The simplest way to undo a git add is to use git reset. It removes staged file, but will keep the local changes there. 
+The simplest way to undo a git add is to use git reset. It removes the staged file, but will keep the local changes there. 
 ```
 git reset file_path
 ```
@@ -142,33 +142,33 @@ git diff HEAD~ HEAD
 Sometimes when we do git rebase and we have many commits, we have to resolve a lot of conflicts, which can be really frustrating. One quick way might be to squash commits first to have a single commit, then do rebase. Another way is what we describe below.
 
 
-First, checkout temp branch from feature branch and start a standard merge
+First, check out a temp branch from the feature branch and start a standard merge
 ```
 git checkout -b temp
 git merge origin/master
 git commit -m "Merge branch 'origin/master' into 'temp'"
 ```
 
-You will have to resolve conflicts, but only once and only real ones. Then stage all files and finish merge.
-Then return to your feature branch and start rebase, but with automatically resolving any conflicts.
+You will have to resolve conflicts, but only once and only real ones. Then stage all files and finish the merge.
+Then return to your feature branch and start the rebase, automatically resolving any conflicts.
 
 ```
 git checkout feature
 git rebase origin/master -X theirs
 ```
 
-Branch has been rebased, but project is probably in invalid state. We just need to restore project state, so it will be exact as on branch 'temp'. Technically we just need to copy its tree (folder state) via low-level command git commit-tree. Plus merging into current branch just created commit.
+Branch has been rebased, but project is probably in invalid state. We just need to restore project state, so it will be exactly as on branch 'temp'. Technically we just need to copy its tree (folder state) via low-level command git commit-tree. Then merge the just-created commit into the current branch.
 
 ```
 git merge --ff $(git commit-tree temp^{tree} -m "Fix after rebase" -p HEAD)
 git branch -D temp
 ```
 
-More details is here: https://github.com/capslocky/git-rebase-via-merge. Thanks to the original author!
+More details are here: https://github.com/capslocky/git-rebase-via-merge. Thanks to the original author!
 
 
 ### How to Split Large PR
-Sometimes, we have a giant PR which we want to merge. Often times, it gives reviewer a lot of headache. Now we learn how to split large PR into smaller ones. Suppose our feature branch is `my_feature_branch`, then we can get the diff file using:
+Sometimes, we have a giant PR which we want to merge. Oftentimes, it gives reviewers a lot of headaches. Now we learn how to split a large PR into smaller ones. Suppose our feature branch is `my_feature_branch`, then we can get the diff file using:
 #### Step 1
 ```shell
 git diff master my_feature_branch > ../huge_pr_file
@@ -208,7 +208,7 @@ git checkout -b second_small_feature_pr
 
 
 
-### How to show difference of commits without checkout to the branch
+### How to show difference of commits without checking out the branch
 ```bash
 # If we know the git commit
 git diff xxxx~ xxxx
@@ -279,7 +279,7 @@ git remote add upstream git@github.com:xxx/yyy.git  # used for ssh login
 git remote add upstream https://github.com/xxx/yyy  # used for https connection
 ```
 
-If we want to update/replace an URL for a repo, for instance, when we clone a repo using HTTPS, but need to push the repo using SSH. We have to set a new remote url to update:
+If we want to update/replace a URL for a repo, for instance, when we clone a repo using HTTPS but need to push the repo using SSH, we have to set a new remote url to update:
 ```bash
 git remote set-url origin git@github.com:xxx/yyy.git
 # OR

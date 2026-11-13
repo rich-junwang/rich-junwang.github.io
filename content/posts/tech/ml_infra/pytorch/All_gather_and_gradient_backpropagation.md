@@ -75,7 +75,7 @@ for x in ys:
      print(x.requires_grad)  # False
 ```
 
-Here we talk about how to use all_gather function in the pytorch so that we could still leverage auto_grad to help us for backpropagation. 
+Here we talk about how to use the all_gather function in PyTorch so that we could still leverage auto_grad to help us with backpropagation. 
 
 ## Solution One
 We can wrap the all_gather function and pass the context information to the gathered tensor.
@@ -102,7 +102,7 @@ class GatherLayer(torch.autograd.Function):
 ```
 
 ## Solution Two
-As shown below, we put the auto_grad captured tensor back to the gather tensor. In this way, this specific element on current rank will have gradient. 
+As shown below, we put the auto_grad captured tensor back to the gathered tensor. In this way, this specific element on the current rank will have gradient. 
 ```python
 all_x = [torch.zeros_like(x) for _ in range(world_size)]
 torch.distributed.all_gather(all_x, x)

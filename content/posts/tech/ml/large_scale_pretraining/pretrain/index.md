@@ -30,10 +30,10 @@ cover:
 math: true
 ---
 
-Large language model pretraining is a very challenging task which requires very strong engineering and science skills. People tend to underestimate efforts needed to train a good large model like GPT3 etc. Most people imagine that they can get decent language models given enough computation resources. The fact is even today only OpenAI is providing LM APIs where people can freely play with and get good performances. In this blog, we'll talk about pretraining from the whole pipeline: data sourcing, collection and processing, tokenization, architecture engineering and evaluation. Hopefully, it would be helpful for foundational model training practitioners. 
+Large language model pretraining is a very challenging task which requires very strong engineering and science skills. People tend to underestimate the effort needed to train a good large model like GPT3 etc. Most people imagine that they can get decent language models given enough computation resources. The fact is even today only OpenAI is providing LM APIs that people can freely play with and get good performance from. In this blog, we'll talk about pretraining from the whole pipeline: data sourcing, collection and processing, tokenization, architecture engineering and evaluation. Hopefully, it will be helpful for foundational model training practitioners. 
 
 ### Data
-Data is crucial in any ML system. This is true to pretraining as well. As is shown in Gopher paper,  a large, diverse and high-quality dataset is needed to train a good model. In the following table, it shows the datasets used in [`Gopher` model](https://arxiv.org/pdf/2112.11446.pdf) training. Now we're looking at terabytes scale of training data. 
+Data is crucial in any ML system. This is true for pretraining as well. As shown in the Gopher paper,  a large, diverse and high-quality dataset is needed to train a good model. The following table shows the datasets used in [`Gopher` model](https://arxiv.org/pdf/2112.11446.pdf) training. Now we're looking at terabyte-scale training data. 
 
 
 
@@ -43,17 +43,17 @@ Data is crucial in any ML system. This is true to pretraining as well. As is sho
     <em>Datasets used in Gopher [2]</em>
     <br>
 </p>
-An ensuing problem with large amount of data is that data quality is hard to control. In practice, we have to at least make sure the content should be intelligible. We might want to give more training on high-quality datasets such as books and wikipedia [31]. Diversified datasets are necessary but can't guarantee training success as can be seen from `Gopher` paper, model performs well on QA related tasks but suffers on reasoning task. What else is needed? We'll come back to this later. 
+An ensuing problem with a large amount of data is that data quality is hard to control. In practice, we have to at least make sure the content should be intelligible. We might want to give more training on high-quality datasets such as books and wikipedia [31]. Diversified datasets are necessary but can't guarantee training success as can be seen from the `Gopher` paper: the model performs well on QA-related tasks but suffers on reasoning tasks. What else is needed? We'll come back to this later. 
 
 #### Toxicity Filter
-There is experiment shows that toxicity filter could have a big impact on model performance. In [37], the authors proposed that instead of using a toxicity filter, inverse toxicity filtering is more helpful. Inverse toxicity filter removes the LEAST toxicity data from training data. 
+Experiments show that a toxicity filter could have a big impact on model performance. In [37], the authors proposed that instead of using a toxicity filter, inverse toxicity filtering is more helpful. Inverse toxicity filter removes the LEAST toxic data from training data. 
 
 ### Tokenizer
-Language models compute probability of any string sequence. How to represent the string sequence is determined by tokenizer. Popular options are byte pair encoding (BPE) or wordpiece. As the majority of models are using BPE today, here we focus on BPE based tokenizer. Tokenizer can impact several things in LLM training: (1) a high compression rate (tokenized token number vs raw token number, the lower the better). Compression rate affects input context length and inference speed. (2) Vocab size. An appropriately sized vocabulary to ensure adequate training of each word embedding.
+Language models compute the probability of any string sequence. How to represent the string sequence is determined by the tokenizer. Popular options are byte pair encoding (BPE) or wordpiece. As the majority of models are using BPE today, here we focus on BPE based tokenizer. Tokenizer can impact several things in LLM training: (1) a high compression rate (tokenized token number vs raw token number, the lower the better). Compression rate affects input context length and inference speed. (2) Vocab size. An appropriately sized vocabulary to ensure adequate training of each word embedding.
 
-As mentioned in GPT2 paper, BPE effectively interpolates between word level inputs for frequent symbol sequences and character level inputs for infrequent symbol sequences. Directly using greedy method to build BPE merging rules can be problematic. For example, word `cat` can be used in a lot of places like `cat?`, `cat!`, `cat.`. One way to solve this issue is to prevent BPE from generating rules across different character categories (letters, digits, puncts etc).
+As mentioned in the GPT2 paper, BPE effectively interpolates between word level inputs for frequent symbol sequences and character level inputs for infrequent symbol sequences. Directly using a greedy method to build BPE merging rules can be problematic. For example, the word `cat` can be used in a lot of places like `cat?`, `cat!`, `cat.`. One way to solve this issue is to prevent BPE from generating rules across different character categories (letters, digits, puncts etc).
 
-As people are pivoting in-context learning/instruction learning with large models, tokenization efficiency becomes more important. The following tables from Jurassic-1 paper shows the efficiency of tokenizer on several public dataset. 
+As people are pivoting to in-context learning/instruction learning with large models, tokenization efficiency becomes more important. The following tables from the Jurassic-1 paper show the efficiency of the tokenizer on several public datasets. 
 
 <p align="center">
     <img alt="tokenization efficiency" src="images/tokenizer.png" width="100%"/>
@@ -63,12 +63,12 @@ As people are pivoting in-context learning/instruction learning with large model
 
 Tokenizer determines the size of vocab. Usually when we support multilinguality and code data, the vocab size will be much larger. However, this is not always the case. CodeLLaMa shows very good performance (on par with GPT4) with a vocab size of 32k. When vocab is too large, some of the tokens may not be trained enough. When vocab size is too small, the compression rate might be limited. 
 
-Compression rate determines the input sequence length to the model. With high compression rate, the input length is shorter. Short sequence length might be able to mitigate exposure bias to some extent.
+Compression rate determines the input sequence length to the model. With a high compression rate, the input length is shorter. Short sequence length might be able to mitigate exposure bias to some extent.
 
 Open tokenizer implementations are: [tiktoken](https://github.com/openai/tiktoken). 
 
 ### Model Architecture
-All pretrained models are variant of original transformer model. The differences are mainly about it's encoder-decoder architecture or decoder-only architecture. First of all, let's take a look at the choices of available large models. 
+All pretrained models are variants of the original transformer model. The differences are mainly whether it's an encoder-decoder architecture or a decoder-only architecture. First of all, let's take a look at the choices of available large models. 
 
 
 | Models  | Model Size   | Token Size|  Architecture  | 
@@ -82,21 +82,21 @@ All pretrained models are variant of original transformer model. The differences
 | Megatron-Turing NLG | 530B| 270B | Decoder | 
 | LaMDA | 137B| 2810B | Decoder | 
 
-Although all models listed here are auto-regressive decoder only model, they actually differ a bit inside the decoder. For instance, to speed up inference time, PaLM is using multi-query attention. Normally, in multi-head attention, there will be h heads each with a linear project layer for Q, K, V. With multiquery attention, instead of using h different linear project layers for K and V, we can share a single smaller linear project layer for K and a single linear projection layer for V for each head. Then, for different head layers, K and V will be the same. In this way, we can save memory IO and get better latency performance in incremental inference. To speed up training, people also proposed parallel layer architecture as shown below.
+Although all models listed here are auto-regressive decoder-only models, they actually differ a bit inside the decoder. For instance, to speed up inference time, PaLM is using multi-query attention. Normally, in multi-head attention, there will be h heads each with a linear projection layer for Q, K, V. With multiquery attention, instead of using h different linear projection layers for K and V, we can share a single smaller linear projection layer for K and a single linear projection layer for V for each head. Then, for different head layers, K and V will be the same. In this way, we can save memory IO and get better latency performance in incremental inference. To speed up training, people also proposed parallel layer architecture as shown below.
 <p align="center">
     <img alt="transformer" src="images/transformer.png" width="80%" height=auto/> 
     <em>Model Architecture</em>
     <br>
 </p>
-A systematic study of transformer architecture is done in Ref [29]. Most of recent LLM architecture are following design from this paper. 
+A systematic study of transformer architecture is done in Ref [29]. Most recent LLM architectures follow the design from this paper. 
 
 
-People usually call the embedding dim as the width of transformer and number of layers as the depth. There is a optimal depth-to-width
+People usually call the embedding dim as the width of transformer and number of layers as the depth. There is an optimal depth-to-width
 allocation for a given self-attention network size as is shown in [34].
 
 
 ### Training Design
-Most of today's pretraining follow suits of a multi-stage and multi-task training. As is shown by Yao in [1], GPT series model is pretrained in such way as well. 
+Most of today's pretraining uses multi-stage and multi-task training. As shown by Yao in [1], GPT series models are pretrained in such a way as well. 
 <p align="center">
     <img alt="gopher dataset" src="images/gpt-lineage.png" width="80%" height=auto/> 
     <br>
@@ -104,12 +104,12 @@ Most of today's pretraining follow suits of a multi-stage and multi-task trainin
     <br>
 </p>
 
-From the lineage diagram, we can see that `ChatGPT` model comes from `Codex` model which can be seen as a different stage of training. The way of scheduling tasks and data during training can have great impact on the final model performance. 
+From the lineage diagram, we can see that `ChatGPT` model comes from `Codex` model which can be seen as a different stage of training. The way of scheduling tasks and data during training can have a great impact on the final model performance. 
 
 #### Batch Size
-Research [5] shows that there is a critical batch size in pretraining. When training batch size exceeds critical batch size, model performance starts to degrade. Critical batch size is independent of model size and is related to loss. 
+Research [5] shows that there is a critical batch size in pretraining. When training batch size exceeds the critical batch size, model performance starts to degrade. Critical batch size is independent of model size and is related to loss. 
 
-Generally small batch size leads to better validation loss when training with the same number of tokens as more random movement of gradient explores more of loss landscape. Often times, small batch size gives better generalization performance as well as pointed out in [27]. The reason given from the paper is that smaller batch size usually converges to flat minimum as oppose to sharp minimum. Intuitively, this is related to gradient update in each step is small for large batch size training. 
+Generally small batch size leads to better validation loss when training with the same number of tokens as more random movement of gradient explores more of the loss landscape. Oftentimes, small batch size gives better generalization performance as well as pointed out in [27]. The reason given from the paper is that smaller batch size usually converges to flat minima as opposed to sharp minima. Intuitively, this is related to the fact that the gradient update in each step is small for large batch size training. 
 <p align="center">
     <img alt="flat sharp minimum" src="images/flat_sharp_minimum.png" width="80%" height=auto/> 
     <br>
@@ -121,38 +121,38 @@ Generally small batch size leads to better validation loss when training with th
 #### Learning Rate Scheduling
 Usually as pointed out in [20], when we scale up batch size, we increase learning rate proportionally. However, when we increase model size (usually followed with batch size increase), the training tends to be more unstable. Thus, in reality, we decrease maximum learning rate when we increase model size (batch size).
 
-Learning rate scheduling usually involves a (linear) warm-up step to maximum learning rate and followed by a decaying step to 0 or a minimum learning rate. Currently, there are several methods in literature for the decaying step:
+Learning rate scheduling usually involves a (linear) warm-up step to the maximum learning rate, followed by a decaying step to 0 or a minimum learning rate. Currently, there are several methods in literature for the decaying step:
 - Linear scheduler
 - Plateau-linear schedule 
 - Cosine scheduler
 
 #### Regularization
-One of the most used regularization method is L2 regularization, aka, weight decay [28]. For instance, GPT 3 training uses a weight decay of 0.1. Note that comparing with traditional neural network tuning weight decay number (such as 0.01) GPT3 weight decay is pretty large. 
+One of the most used regularization methods is L2 regularization, aka, weight decay [28]. For instance, GPT 3 training uses a weight decay of 0.1. Note that compared with typical weight decay values in traditional neural network tuning (such as 0.01), GPT3's weight decay is pretty large. 
 
 
 #### Length Extrapolation
 As in-context learning becomes popular, people are asking a question, Can an LLM maintain equally good, if not better, perplexities when longer sequences are used during inference time? This is the so-called length extrapolation [25].  
 
 #### Optimizer
-When we select an optimizer, we have to take consideration of memory footprint and stability issues etc. Options are **Adafactor**, **Adam** etc. According to **Gopher** paper, adafactor optimizer has smaller memory footprint, and on smaller scale model (<7B) adafactor works well. However, when model size goes larger, performance suffers because of stability issue. 
+When we select an optimizer, we have to take into consideration memory footprint and stability issues etc. Options are **Adafactor**, **Adam** etc. According to the **Gopher** paper, the adafactor optimizer has a smaller memory footprint, and on smaller-scale models (<7B) adafactor works well. However, when model size goes larger, performance suffers because of stability issues. 
 
 ### Evaluation
-A lot of large models come out every year and many claims that they could beat GPT3 model in a wide range of benchmarks like `SuperGlue`, `CLUE`, `MMLU` etc. However, when you do benchmark these models in zero-shot setting or some less common tasks (but still very reasonable ones), these models tend to perform really bad. I personally tested `GPT3` model (175b) and `UL2` model (20b) on text2sql and sql2text task, GPT3 gives way better performance to the extent that you'll believe UL2 is like garbage. The similar thing happened in evaluation in [24]. You may argue that the model size differs a lot. However, we can think the other way around: the results they claim better than GPT3 is also got from a smaller model and maybe their model training is not easy/efficient to scale to such level. Essentially, what I want to say is that good performance on popular benchmark datasets doesn't mean much for large LM pretraining as this is highly related to source of training data, whether or not doing fine-tuning, proper prompting etc. Human evaluation is what really matters. 
+A lot of large models come out every year and many claim that they could beat GPT3 model in a wide range of benchmarks like `SuperGlue`, `CLUE`, `MMLU` etc. However, when you do benchmark these models in a zero-shot setting or some less common tasks (but still very reasonable ones), these models tend to perform really badly. I personally tested `GPT3` model (175b) and `UL2` model (20b) on text2sql and sql2text tasks; GPT3 gives way better performance to the extent that you'll believe UL2 is like garbage. The similar thing happened in evaluation in [24]. You may argue that the model size differs a lot. However, we can think the other way around: the results they claim are better than GPT3 were also obtained from a smaller model and maybe their model training is not easy/efficient to scale to such level. Essentially, what I want to say is that good performance on popular benchmark datasets doesn't mean much for large LM pretraining as this is highly related to source of training data, whether or not doing fine-tuning, proper prompting etc. Human evaluation is what really matters. 
 
 
 ### Stability
-During the model training, the most commonly seen issue is gradient exploding, aka, gradient becomes `NaN`. As layers go deeper, this problem happens more often because the way backpropagation works. Over the years, people have proposed many different ways to solve the challenge. 
-As is shown in paper [21], the post-LN shows stability issue without carefully designed warming-up stage. As a result, they are proposing pre-LN to alleviate the problem. 
+During the model training, the most commonly seen issue is gradient exploding, aka, gradient becomes `NaN`. As layers go deeper, this problem happens more often because of the way backpropagation works. Over the years, people have proposed many different ways to solve the challenge. 
+As shown in paper [21], post-LN shows stability issues without carefully designed warming-up stage. As a result, they are proposing pre-LN to alleviate the problem. 
 
 The objective function for highly nonlinear deep neural networks often contains sharp nonlinearities in parameter space resulting from the multiplication of several parameters. These nonlinearities give rise to very high derivatives in some places. When the parameters get close to such a cliff region, a gradient descent update can catapult the parameters very far, possibly losing most of the optimization work that had been done [33].
 
-It's important to monitor stability during training. Common practice is to plot activation norm and gradient norm for each step. When these values spike, we know there is something wrong. It's better than looking at loss curve only as loss explosion generally lags behind these two indicators. For instance, when there is bad data, we could have better gauge of when that happens and restart training from that point.
+It's important to monitor stability during training. Common practice is to plot activation norm and gradient norm for each step. When these values spike, we know there is something wrong. It's better than looking at loss curve only as loss explosion generally lags behind these two indicators. For instance, when there is bad data, we could have a better gauge of when that happens and restart training from that point.
 
-Adept AI has a lengthy [blog post](https://www.adept.ai/blog/sherlock-sdc) talking about hardware error induced stability issue. The blog mentioned two ways to identify erroneous node(s):
-- Grid search: partition nodes into groups and train model on each group in a deterministic way. Find the one that has different training loss curve. 
+Adept AI has a lengthy [blog post](https://www.adept.ai/blog/sherlock-sdc) talking about hardware-error-induced stability issues. The blog mentioned two ways to identify erroneous node(s):
+- Grid search: partition nodes into groups and train model on each group in a deterministic way. Find the one that has a different training loss curve. 
 - Parameter checksum check: for each data parallel run, check parameter checksum to see if they are the same to determine which stage might be wrong.
 
-PaLM paper proposed adding z-loss to increase the stability of training. The method is to encourage the logits to stay close to zero. For example, we could add a max-z loss to normalize the logits:
+The PaLM paper proposed adding z-loss to increase the stability of training. The method is to encourage the logits to stay close to zero. For example, we could add a max-z loss to normalize the logits:
 $$
 L_{max\_z} = 2e^{-4} * z^2
 $$

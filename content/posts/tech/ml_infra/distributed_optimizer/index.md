@@ -32,7 +32,7 @@ math: true
 In this blog, we talk about distributed optimizer implementation. The discussion here is mostly based on Megatron-LM.
 
 ## Adam Optimizer
-Adaptive moment estimation is an algorithm to compute the adaptive learning rate for each parameters. It consists two parts: first-order momentum which is exponentially decaying average (moving average) of gradient and second-order momentum (variance, which controls adaptive learning rate) which is exponentially decaying average of squared gradient.
+Adaptive moment estimation is an algorithm to compute the adaptive learning rate for each parameter. It consists of two parts: first-order momentum which is exponentially decaying average (moving average) of gradient and second-order momentum (variance, which controls adaptive learning rate) which is exponentially decaying average of squared gradient.
 $$
 m_t = \frac{\beta_1}{1 - \beta_{1}^{t}} m_{t-1} + \frac{1 - \beta_1}{1 - \beta_{1}^{t}} g_{t} \\[5pt]
 v_t = \frac{\beta_2}{1 - \beta_{2}^{t}} v_{t-1} + \frac{1 - \beta_2}{1 - \beta_{2}^{t}} g_{t}^2 \\[5pt]
@@ -40,18 +40,18 @@ u_t = \frac{m_t}{\sqrt{v_t} + \epsilon} \\[5pt]
 \theta_{t+1} = \theta_t - \eta_t u_t
 $$
 
-We can think about the adaptive learning rate part monitors the historical update frequency for each parameter. For frequently updated parameters, we don't want them to be updated very often with a single sample, thus, we would like to have a smaller learning rate. The updating frequency is measured by $v = \sum g^2$. 
+We can think of the adaptive learning rate part as monitoring the historical update frequency for each parameter. For frequently updated parameters, we don't want them to be updated very often with a single sample, thus, we would like to have a smaller learning rate. The updating frequency is measured by $v = \sum g^2$. 
 
-Note that adaptive learning sometimes can be problematic when training data is huge. The reason is that when $v$ monotonically increases, it could yield very small learning rate. Essentially, model won't be able to learn anything.  
+Note that adaptive learning sometimes can be problematic when training data is huge. The reason is that when $v$ monotonically increases, it could yield a very small learning rate. Essentially, the model won't be able to learn anything.  
 
 ## Memory Footprint in Training
-The full spectrum of memory consumption of training system can be categorized into three parts:
+The full spectrum of memory consumption of a training system can be categorized into three parts:
 1. Model weights
 2. Optimizer states
 3. Activations, temporary buffers and fragmented memory
 
-As most of modern training is done in mixed precision training (such as bf16 and fp32), so here our analysis will be based on these scenarios. 
-When use the above Adam optimizer and assuming the model parameter is $M$, then the memory footprint could include:
+As most modern training is done in mixed precision (such as bf16 and fp32), our analysis here will be based on these scenarios. 
+When using the above Adam optimizer and assuming the model parameter is $M$, then the memory footprint could include:
 - 2M (model parameter in bf16)
 - 2M (gradient in bf16)
 - 4M (fp32 model parameter in optimizer state)
@@ -60,12 +60,12 @@ When use the above Adam optimizer and assuming the model parameter is $M$, then 
 - 4M (fp32 grad sq moving avg)
 
 
-In total, we need 20M memory to per replica in model training. For instance, for 7B model training, the above parameters and optimizer state will consume 140G memory. Refer to [1] for how to compute the activation part. Keeping a fp32 copy of model parameters for model update in optimizer state is important for performance as is shown in Gopher paper. 
+In total, we need 20M memory per replica in model training. For instance, for 7B model training, the above parameters and optimizer state will consume 140G memory. Refer to [1] for how to compute the activation part. Keeping an fp32 copy of model parameters for model update in optimizer state is important for performance, as shown in the Gopher paper. 
 
 
 ## Distributed Optimizer
 
-Distributed optimizer is to save memory by distributing the optimizer state evenly across data parallel ranks, versus the current method of replicating the optimizer state across data parallel ranks.
+The distributed optimizer saves memory by distributing the optimizer state evenly across data parallel ranks, versus the current method of replicating the optimizer state across data parallel ranks.
 
 Theoretical memory savings vary depending on the combination of the model's param dtype and grad dtype. In the Megatron-LM implementation, the theoretical number of bytes per parameter is (where 'd' is the data parallel size):
 
@@ -87,15 +87,15 @@ The following image shows the data flow of the optimizer. Here I'll give a thoro
 
 ## Computation and Communication Overlapping
 
-Here we think about a deep neural network with n layers. Assuming we're using Adam with DDP, then training process is composed of the following:
+Here we think about a deep neural network with n layers. Assuming we're using Adam with DDP, then the training process is composed of the following:
 
-1. Each node compute: layer 1 forward -> layer 2 forward -> … -> layer n forward -> layer n backward -> layer n-1 backward -> … -> layer 1 backward 
+1. Each node computes: layer 1 forward -> layer 2 forward -> … -> layer n forward -> layer n backward -> layer n-1 backward -> … -> layer 1 backward 
 2. all-reduce gradients of all layers
 3. update the weight of each layer
 
 The forward and backward in step (1) must be conducted sequentially. However,  we don't need to wait until all operations in step (1) are completed to start step (2). 
 In fact, once layer n backward is completed, we can immediately start to all-reduce layer n gradient and then even update the weight using this all-reduced gradient (as layer n weight is not needed in the backward for layer n-1 to layer 1.) 
-Note that step (2) are communication operations and backward in step (1) are computation operations. So overlapping them should not slow down either, i.e. IO ops and CPU ops are not competing with each other. 
+Note that step (2) consists of communication operations and the backward pass in step (1) consists of computation operations. So overlapping them should not slow down either one, i.e. IO ops and CPU ops are not competing with each other. 
 
 ## Reference
 1. Reducing Activation Recomputation in Large Transformer Models

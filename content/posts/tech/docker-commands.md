@@ -27,7 +27,7 @@ cover:
     alt: ""
     relative: false
 ---
-In the last blog, we talked about commonly used AWS commands. In this blog, I'll document some commonly used docker commands to save some time when I need them. Images defines what the container is. Container is the actually running virtual machine.
+In the last blog, we talked about commonly used AWS commands. In this blog, I'll document some commonly used docker commands to save some time when I need them. An image defines what the container is. A container is the actual running virtual machine.
 
 
 ### Docker setup
@@ -89,7 +89,7 @@ sudo docker system prune
 
 
 ### Install package
-Install packages inside a running docker. Usually we're able to install package based on distribution of linux system running in the docker. For example, if it's ubuntu, then the command is 
+Install packages inside a running docker. Usually we're able to install packages based on the Linux distribution running in the docker. For example, if it's ubuntu, then the command is 
 ```
 apt-get -y update
 apt-get -y install tmux  # package name
@@ -116,9 +116,9 @@ rm .docker/config.json
 
 ### Speedup Building Time
 
-Sometimes building certain package can take very long time. For instance, using vanilla command to build flash-attn can take several hours, to speed up the process, we can take several approaches
+Sometimes building certain packages can take a very long time. For instance, using vanilla command to build flash-attn can take several hours. To speed up the process, we can take several approaches:
 
-1. Use Pre-build Wheels
+1. Use Pre-built Wheels
 ```bash
 RUN pip3 install flash-attn --find-links https://github.com/Dao-AILab/flash-attention/releases
 
@@ -132,7 +132,7 @@ RUN MAX_JOBS=$(nproc) pip3 install -U flash-attn --no-build-isolation
 RUN MAX_JOBS=$(nproc) TORCH_CUDA_ARCH_LIST="9.0;10.0" pip3 install -U flash-attn --no-build-isolation
 ```
 
-We can target only the specific GPU architectures we need and prevents the build from crashing or stalling.
+We can target only the specific GPU architectures we need and prevent the build from crashing or stalling.
 ```bash
 # Prerequisite: Ensure ninja is installed for faster parallel builds
 RUN pip3 install ninja packaging

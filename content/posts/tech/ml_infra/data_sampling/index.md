@@ -35,5 +35,5 @@ $$
 q_i = \frac{p_i^t}{\sum_j p_j^t}
 $$
 
-Here $p_i$ is the number of sequences in the $i_{th}$ dataset. In this sampling, it will keep the largest dataset intact and up sample the remaining dataset to conform to the distribution in q. $t$ is the temperature. When $t$ is 0, it's uniform sampling. When $t$ is 1.0, no up-sampling will be performed.
+Here $p_i$ is the number of sequences in the $i_{th}$ dataset. In this sampling, it will keep the largest dataset intact and upsample the remaining datasets to conform to the distribution in q. $t$ is the temperature. When $t$ is 0, it's uniform sampling. When $t$ is 1.0, no up-sampling will be performed.
 

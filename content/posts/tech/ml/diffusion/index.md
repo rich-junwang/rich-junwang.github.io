@@ -44,7 +44,7 @@ The core idea is simpler than the math in the papers makes it look: you add nois
 ### Forward Process
 As is shown in the figure above, there are two processes in diffusion:
 - Forward diffusion process: we slowly and iteratively add Gaussian noise to the images
-- Reverse diffusion process: we iteratively perform the denoising in small steps starting from a noisy image to convert it back to original form.
+- Reverse diffusion process: we iteratively perform the denoising in small steps starting from a noisy image to convert it back to its original form.
 
 In the forward process (diffusion process), in each step, gaussian noise is added according to a variance schedule $ \beta_1, \dotsb, \beta_T $
 $$
@@ -54,7 +54,7 @@ And it's a Markov chain process, so
 $$
 q(x_{1:T}|x_0) = \prod_{t=1}^{T}q(x_t|x_{t-1})
 $$
-However, in implementation the above formulation has a problem because doing sequential sampling will result in inefficient forward process. The authors defined the following items:
+However, in implementation the above formulation has a problem because doing sequential sampling will result in an inefficient forward process. The authors defined the following items:
 $$
 \alpha_t = 1 - \beta_t \\
 \bar{\alpha_t} = \prod_{s=1}^t\alpha_s
@@ -68,18 +68,18 @@ This process is called reparameterization. This allows us to directly sample $x_
 $$
 x_t = \sqrt{\bar{\alpha_{t}}}x_0 + \sqrt{1 - \bar{\alpha_{t}}} \epsilon
 $$
-Here $\epsilon \sim \mathcal{N}(0, I)$. Even though we know the distribution, we don't know the value of the noise. In practice, we use neural network to approximate this noise. 
+Here $\epsilon \sim \mathcal{N}(0, I)$. Even though we know the distribution, we don't know the value of the noise. In practice, we use a neural network to approximate this noise. 
 
 
 #### Reparameterization
-Reparameterization is used on both VAE and diffusion. It's needed because in diffusion, we have a lot of sampling operation and these operations are not differentiable. We use reparameterization to make it differentiable. Concretely, people introduce a random variable $\epsilon$, then we can sample from any Gaussian $z \sim \mathcal{N}(z; \mu_{\theta}, \sigma^2_{\theta}\mathbf{I}) $ as follows:
+Reparameterization is used in both VAEs and diffusion. It's needed because in diffusion, we have a lot of sampling operations and these operations are not differentiable. We use reparameterization to make it differentiable. Concretely, people introduce a random variable $\epsilon$, then we can sample from any Gaussian $z \sim \mathcal{N}(z; \mu_{\theta}, \sigma^2_{\theta}\mathbf{I}) $ as follows:
 $$
 z = \mu_{\theta} + \sigma_{\theta}  \odot \epsilon ; \epsilon \sim \mathcal{N}(0, \mathbf{I})
 $$
 
 
 ### Reverse Process
-Obviously, in reverse process we denoise the data and recover the images we have originally step by step. In the reverse process, we use the image at time $t$ to predict image at $t-1$, it follows the following distribution
+Obviously, in the reverse process we denoise the data and recover the images we have originally step by step. In the reverse process, we use the image at time $t$ to predict the image at $t-1$. It follows the following distribution
 $$
 p_{\theta}(x_{t-1}|x_{t}) = \mathcal{N}( x_{t-1} ; \frac{1}{\sqrt{\alpha_{t}}}(x_t - \frac{1- \alpha_{t}}{\sqrt{1 - \bar{\alpha_{t}}}} \epsilon_{\theta}(x_t, t)); \frac{(1- \alpha_{t})(1 - \bar{\alpha_{t-1}})}{1 - \bar{\alpha_{t}}}\mathbf{I})
 $$
@@ -91,7 +91,7 @@ x_{t-1} =  \frac{1}{\sqrt{\alpha_{t}}}(x_t - \frac{1- \alpha_{t}}{\sqrt{1 - \bar
 z \sim \mathcal{N}(0, \mathbf{I})
 $$
 
-Everything relates to $\alpha$ is a constant. 
+Everything related to $\alpha$ is a constant. 
 
 
 ### What is the Score
@@ -242,17 +242,17 @@ Start from pure noise $x_T \sim \mathcal{N}(0, I)$, then step from $t = T - 1$ d
 $$
 x_{t-1} = \mu_\theta (x_t, t) + \sigma_t z, \quad z \sim \mathcal N(0, I)
 $$
-This removes the noise and estimate clean image.
+This removes the noise and estimates the clean image.
 
 
-Each step doing the three things
+Each step does three things
 
 1. Predict the noise
 
 ```python
 eps = net(x_t, t)
 ```
-The noise is network's guess for all the noise that turned $x_0$ into $x_t$. It is used only to compute the mean, i.e. to estimate where the image should be one step cleaner
+The noise is the network's guess for all the noise that turned $x_0$ into $x_t$. It is used only to compute the mean, i.e. to estimate where the image should be one step cleaner
 
 $$
 x_0 = (x_t - \sqrt{1-\hat{\alpha_t})} * eps / \sqrt{\alpha_t}
@@ -293,14 +293,14 @@ $$
 $$
 
 when $w=1$, it gives plain conditional sampling.
-w > 1 (often 3-1= in text-to-image models) strengthens adherence to the condition. This works because $\epsilon(x, y) - \epsilon(x, \varnothing)$ is proportional to $\nabla_x \log p(y | x)$ so the model acts as its own implicit classifier. 
+w > 1 (often 3-10 in text-to-image models) strengthens adherence to the condition. This works because $\epsilon(x, y) - \epsilon(x, \varnothing)$ is proportional to $\nabla_x \log p(y | x)$ so the model acts as its own implicit classifier. 
 
 Classifier guidance puts a weight w on the classifier term, score of $p(x_t) * p(y|x_t)^w$
 $$
 \tilde{s} = \nabla \log p(x_t) + w \nabla \log p(y | x_t)
 $$
 
-Why it's called classifier, because $p(y|x)$ predicts label (prompt). This is only part that is depends on the prompt. So basically this equation means that for conditional generation, it depends on the latents and prompt (steering term).
+It's called a classifier because $p(y|x)$ predicts the label (prompt). This is the only part that depends on the prompt. So basically this equation means that for conditional generation, it depends on the latents and prompt (steering term).
 
 The steering term is the gradient of a classifier-like probability $p(y|x_t)$
 
@@ -333,14 +333,14 @@ target = x1 - x0
 loss = ((model(xt, t) - target) ** 2).mean()
 ```
 
-What you actually want is the marginal velocity field $u_t(x)$ : the average direction mass moves through point $x$ at time $t$, taken over every (noise, data) pair whose path passes through x. Integrateing that field from $t=0$ to 1 turns the noise distribution to the data distribution. You can't compute it because it requires marginalizing over the whole dataset.
+What you actually want is the marginal velocity field $u_t(x)$ : the average direction mass moves through point $x$ at time $t$, taken over every (noise, data) pair whose path passes through x. Integrating that field from $t=0$ to 1 turns the noise distribution into the data distribution. You can't compute it because it requires marginalizing over the whole dataset.
 
 The conditional flow matching result says that regressing on the per-pair velocity $(x_1 - x_0)$ has the same gradients as regressing on the intractable marginal $u_t(x)$. MSE's minimizer is a conditional expectation, so the network learns $ v_\theta(x, t) \approx \mathbb{E}[x_1 - x_0 \mid x_t=x] = u_t(x)$
 In short, individual targets are noisy, but the network learns their average, and the average is the correct field.
 
 ### Sampling
 
-Start from noise and integrate the OED with any solver (e.g. Euler):
+Start from noise and integrate the ODE with any solver (e.g. Euler):
 
 ```python
 x = torch.randn(shape)

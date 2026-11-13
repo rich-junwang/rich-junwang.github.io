@@ -33,11 +33,11 @@ cover:
 
 Asyncio enables concurrency (multiple tasks making progress by cooperatively yielding control), but it does not by itself provide parallelism (multiple tasks executing simultaneously on multiple CPU cores).
 
-AysncIO in python has two keywords: async/await. Many people who first encounter async concept might wonder isn't that python can only have one thread in execution given the constraint of GIL? 
+AsyncIO in python has two keywords: async/await. Many people who first encounter the async concept might wonder: can't Python only have one thread in execution given the constraint of the GIL? 
 
-Indeed, asyncio is bound by GIL and it can't run more than one task at any moment as is shown below. This means that if another thread needs to run, the ownership of the GIL must be passed from the current executing thread to the other thread. This is what is called preemptive concurrency. This kind of switching is expensive when there are lots of threads. 
+Indeed, asyncio is bound by the GIL and it can't run more than one task at any moment as is shown below. This means that if another thread needs to run, the ownership of the GIL must be passed from the current executing thread to the other thread. This is what is called preemptive concurrency. This kind of switching is expensive when there are lots of threads. 
 
-The core concept in asyncio is coroutine. asyncio has its own concurrency synchronization through coroutine. It coordinates task switch with little cost. Simply put, python emulates concurrency in one thread through coroutine using event loop. 
+The core concept in asyncio is the coroutine. asyncio has its own concurrency synchronization through coroutine. It coordinates task switch with little cost. Simply put, python emulates concurrency in one thread through coroutines using an event loop. 
 
 <p align="center">
     <img alt="Thread and coroutine" src="images/image.png" width="80%"/>
@@ -45,17 +45,17 @@ The core concept in asyncio is coroutine. asyncio has its own concurrency synchr
     <br>
 </p>
 
-Coroutine style synchronization still has its overhead, why we would bother switching tasks? The reason is behind the io part in asyncio. Think about that you have the following three tasks:
+Coroutine-style synchronization still has its overhead, so why would we bother switching tasks? The reason lies in the io part of asyncio. Suppose you have the following three tasks:
 >- Task1: cooking rice takes 40 mins
 >- Task2: washing clothes takes 30 mins
 >- Task3: dish washing takes 30 mins
 
-How much it would take a person to complete all these tasks. It won't take us 100 mins for all these tasks because we just need to kick things off and have machines done for us. On the contrary, the following tasks most likely will consume us 100 mins because we have to get involved attentively. 
+How long would it take a person to complete all these tasks? It won't take us 100 mins for all these tasks because we just need to kick things off and have machines do them for us. On the contrary, the following tasks will most likely take us 100 mins because we have to get involved attentively. 
 >- Task1: watching tv 30 mins
 >- Task2: jogging 30 mins
 >- Task3: playing video games 40 mins
 
-This example is just to illustrate where async ops help in Python -- only in IO-bound programs such as http requests, file I/O etc, but not in CPU-bound programs. Note that in reality, python won't allow us to coordinate the execution of each tasks. We can only pack tasks and send them for async execution. 
+This example is just to illustrate where async ops help in Python -- only in IO-bound programs such as http requests, file I/O etc, but not in CPU-bound programs. Note that in reality, python won't allow us to coordinate the execution of each task. We can only pack tasks and send them for async execution. 
 
 ```python
 import asyncio
@@ -102,7 +102,7 @@ print(f"Time elapsed for running 3 sync tasks: {time.time() - now}")
 Let's first have a more formal definition of the two keywords, async and await. From realpython:  
 
 > - The syntax async def introduces either a native coroutine or an asynchronous generator. The expressions async with and async for are also valid.
-> - The keyword await passes function control back to the event loop. (It suspends the execution of the surrounding coroutine.) If Python encounters an await f() expression in the scope of g(), this is how await tells the event loop, “Suspend execution of g() until whatever I’m waiting on -- the result of f() -- is returned. In the meantime, go let something else run.” Await can only appear with async functions. 
+> - The keyword await passes function control back to the event loop. (It suspends the execution of the surrounding coroutine.) If Python encounters an await f() expression in the scope of g(), this is how await tells the event loop, “Suspend execution of g() until whatever I’m waiting on -- the result of f() -- is returned. In the meantime, go let something else run.” Await can only appear within async functions. 
 
 Example:
 ```python
@@ -115,7 +115,7 @@ async def g():
 
 The event loop is the coordinator of how the coroutine tasks are executed. It is something like a while True loop that monitors coroutines, taking feedback on what’s idle, and looking around for things that can be executed in the meantime. It is able to wake up an idle coroutine when whatever that coroutine is waiting on becomes available. By default, an async IO event loop runs in a single thread and on a single CPU core.
 
-Historically, we have to explicitly create event loop, execute tasks and close the event loop. After Python 3.7, the entire management of the event loop can be implicitly handled by one function call:
+Historically, we had to explicitly create an event loop, execute tasks and close the event loop. After Python 3.7, the entire management of the event loop can be implicitly handled by one function call:
 
 ```python
 asyncio.run(main())  # Python 3.7+
@@ -140,7 +140,7 @@ if __name__ == '__main__':
 ### Await
 Use await when you want to "do this step, and only continue after it finishes"
 
-- It yield control back to the event loop so other tasks can run while this one waits (e.g. I/O, async.sleep, waiting on a queue)
+- It yields control back to the event loop so other tasks can run while this one waits (e.g. I/O, async.sleep, waiting on a queue)
 - It sequences work inside one coroutine: step A, step B and step C.
 
 ```python
@@ -149,15 +149,15 @@ async def fetch_one():
     await save(data)  # then wait for save
 ```
 
-If we await things one after another in a loop, we get concurrency with the event loop (other tasks can run). but not parallelism of those with each other -- each iteration waits for the previous await to finish. 
+If we await things one after another in a loop, we get concurrency with the event loop (other tasks can run), but not parallelism of those with each other -- each iteration waits for the previous await to finish. 
 
 
 
 ### Create Tasks and Gather Tasks
 
-Old-fashioned way to create task is to use `asyncio.create_task` method. After creating tasks, we use asyncio.wait to gather all the tasks. 
+The old-fashioned way to create a task is to use `asyncio.create_task` method. After creating tasks, we use asyncio.wait to gather all the tasks. 
 
-The semantics of `create_task` is that: starting this coroutine now and don't wait for it to finish yet. 
+The semantics of `create_task` are: start this coroutine now and don't wait for it to finish yet. 
 - It schedules the coroutine on the event loop and returns a Task that you can await later
 - Typical pattern: overlap work -- start several operations, then await them when you need results or when you're ready to wait.
 
@@ -188,7 +188,7 @@ if __name__ == '__main__':
 ```
 
 
-To gather tasks, we can also using new `gather` method. Notice that gather doesn't have to use `create_task`. It can automatically package coroutine into a task. 
+To gather tasks, we can also use the newer `gather` method. Notice that gather doesn't have to use `create_task`. It can automatically package coroutines into tasks. 
 gather semantics: "await until all of these awaitables finish"
 - It's mainly a convenience for "join N parallel things". We can also await each Task one by one, but gather runs them concurrently if they're already tasks/futures, and gives you a single await for completion. 
 

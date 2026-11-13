@@ -36,12 +36,12 @@ Here we have a short recap about KL-divergence. The materials are mostly from [6
 
 1. Information
 
-Information is defined as the log probability of event
+Information is defined as the log probability of an event
 $$
 I(p) = -logp(x)
 $$
 
-Minus sign here is to get positive value. If an event is rare (low p), then it carries a lot of information when it happens.
+The minus sign here is to get a positive value. If an event is rare (low p), then it carries a lot of information when it happens.
 
 
 2. Entropy
@@ -69,7 +69,7 @@ H(p, q) &= \mathbb{E}_{x \sim P}[I(q)] \\
 \end{aligned}
 $$
 
-Cross entropy is the average(expected) information under the different distribution.
+Cross entropy is the average(expected) information under a different distribution.
 
 4. KL-divergence
 
@@ -95,7 +95,7 @@ $$
               &= 0
 \end{aligned}
 $$
-Thus, KL-divergence is always positive. 
+Thus, KL-divergence is always non-negative. 
 
 
 5. Forward and Reverse KL-divergence
@@ -105,7 +105,7 @@ Normally we say $D_{KL}(p||q)$ is forward KL and $D_{KL}(q||p)$ is reverse KL.
 
 6. Minimizing KL-divergence
 
-In machine learning, we generally believe that data distribution $p_{d}$ is the real distribution. Model's output $q_{m}$ is what is used to approximate $p_d$. 
+In machine learning, we generally believe that the data distribution $p_{d}$ is the real distribution. Model's output $q_{m}$ is what is used to approximate $p_d$. 
 
 <p>
 $$
@@ -117,12 +117,12 @@ D_{KL}(p_d \| q_m) &= -\sum_{i=1}^{n} p_d(x_i)\cdot\log q_m(x_i) + \sum_{i=1}^{n
 $$
 </p>
 
-$H(p_d)$ is data entropy, thus a constant. Thus minimizing KL divergence is equivalent to maximizing cross entropy. 
+$H(p_d)$ is data entropy, thus a constant. Thus minimizing KL divergence is equivalent to minimizing cross entropy. 
 
 
 
 ## AE
-An autoencoder has two main parts, encoder and decoder. Encoder compresses the input data into a smaller, lower-dimensional representation called a latent vector. For example, a 784-dimensional image (like a 28x28 pixel MNIST image) might be compressed into a 32-dimensional vector. Decoder attempts to reconstruct the original input from the encoded (compressed) representation. This process in illustrated in the figure below.
+An autoencoder has two main parts, encoder and decoder. The encoder compresses the input data into a smaller, lower-dimensional representation called a latent vector. For example, a 784-dimensional image (like a 28x28 pixel MNIST image) might be compressed into a 32-dimensional vector. The decoder attempts to reconstruct the original input from the encoded (compressed) representation. This process is illustrated in the figure below.
 <p align="center">
     <img alt="Autoencoder" src="images/ae.png" width="80%" height=auto/> 
     <em>Figure 1. Autoencoder</em>
@@ -142,9 +142,9 @@ $$
 \mathcal{L}_{AE}(x, \hat{x}) = \|x - \hat{x}\|^2
 $$
 
-The decoder here promises us that we can input low dimension vector $z$ to get high-dimensional image data. Can we directly use this model as a generative model? i.e. randomly sample some latent vectors $ z $ in a low-dimensional space $ \mathbb{R}^d $, and then feed them into the decoder $ f(z) $ to generate images?
+The decoder here promises us that we can input a low-dimensional vector $z$ to get high-dimensional image data. Can we directly use this model as a generative model? i.e. randomly sample some latent vectors $ z $ in a low-dimensional space $ \mathbb{R}^d $, and then feed them into the decoder $ f(z) $ to generate images?
 
-The answer is that no. Why? It's because we haven't explicitly modeled the distribution $p(z)$. We don’t know which $ z $ can generate useful images. The data that decoder is trained on is limited. But $ z $ lies in a vast space ($ \mathbb{R}^d $), and if we just randomly sample in this space, we naturally cannot expect to produce useful images.
+The answer is no. Why? It's because we haven't explicitly modeled the distribution $p(z)$. We don’t know which $ z $ can generate useful images. The data that the decoder is trained on is limited. But $ z $ lies in a vast space ($ \mathbb{R}^d $), and if we just randomly sample in this space, we naturally cannot expect to produce useful images.
 
 ### Why AE Decoder Can't Generate Images
 
@@ -154,7 +154,7 @@ The answer is that no. Why? It's because we haven't explicitly modeled the distr
 
 - No structured latent space. Autoencoders don’t enforce any probability distribution over the latent codes. This means the latent space is irregular and discontinuous. **Only codes near actual training examples reconstruct to meaningful images**. Generative models like VAEs add a regularization term (KL divergence) so the latent space follows, e.g., a Gaussian distribution. That’s what makes sampling possible.
 
-To summarize, why AE can’t be a generative model: 
+To summarize, why an AE can’t be a generative model: 
 
 AE doesn’t model the distribution of latent variables $p(z)$ . If you randomly pick $z \in \mathbb{R}^d $ and decode, it usually produces junk. That’s because AE never learns what region of latent space corresponds to real data. 
 
@@ -162,25 +162,25 @@ A decoder becomes generative when it can take latent codes sampled from a known 
 
 ## VAE
 
-Remember our objective is to find the distribution $p(X)$ such that we can generate images. From bayes rule, 
+Remember our objective is to find the distribution $p(X)$ such that we can generate images. From Bayes' rule, 
 $$
 p(X) = \sum_z{p(X|z)p(z)}
 $$
 
-If we explicitly model the $p(z)$, we might be able to get a good generative model which is the variational autoencoder. In practice, this is unrealistic because $z$ is in a big space, it's very hard to sample $z_i$ which is strongly correlated to $x_i$.
+If we explicitly model the $p(z)$, we might be able to get a good generative model which is the variational autoencoder. In practice, this is unrealistic because $z$ is in a big space and it's very hard to sample $z_i$ which is strongly correlated to $x_i$.
 
 The solution is to put constraints on $z$'s distribution. Let's assume $p(z)$ follows a normal distribution. 
 
-In practice we use encoder to approximate the posterior $p_{\theta}(z | x_i)$, the approximate distribution is $q_{\phi}(z \mid x)$. 
+In practice we use an encoder to approximate the posterior $p_{\theta}(z | x_i)$, the approximate distribution is $q_{\phi}(z \mid x)$. 
 
 
 Then the generation process is as follows: 
-1. Feed data sample $x_i$ to encoder and get posterior $p_{\theta}(z | x_i)$, which is a normal distribution
+1. Feed data sample $x_i$ to the encoder and get posterior $p_{\theta}(z | x_i)$, which is a normal distribution
 
 $$
 q_{\phi}(z \mid x) = \mathcal{N}\big(z;\, \mu_{\phi}(x),\, \sigma_{\phi}^2(x) I \big)
 $$
-It is a multivariate Gaussian distribution with independent dimensions. Why we want it to be a Gaussian distribution, because we can let encoder to output $\mu, \sigma$ to model it. Note that the notation here $q_{\phi}$ is encoder fitting posterior parameterized by $\phi$ and $p_{\theta}$ the real posterior.
+It is a multivariate Gaussian distribution with independent dimensions. We want it to be a Gaussian distribution because we can let the encoder output $\mu, \sigma$ to model it. Note that the notation here $q_{\phi}$ is the encoder's fitted posterior parameterized by $\phi$ and $p_{\theta}$ the real posterior.
 
 
 2. From the posterior, we sample $z_i$ which is the latent representation of $x_i$
@@ -190,9 +190,9 @@ $$
 z_i = \mu + \sigma \cdot \epsilon, \quad \epsilon \sim \mathcal{N}(0, 1)
 $$
 
-3. Feed $x_i$ to decoder, we get the distribution of $p(X | z_i)$. We think the generation of decoder (e.g. $\mu_i$, the mean is the recovered $x_i$).
+3. Feed $z_i$ to the decoder, and we get the distribution $p(X | z_i)$. We treat the decoder's output (e.g. $\mu_i$, the mean) as the recovered $x_i$.
 
-The core idea of a VAE is to treat the latent vector as a probability distribution. The difference between AE and VAE is in step 2. Instead of directly using encoding as the input, we sample a vector $z_i$ as the input to the decoder. The smart part of this approach is that each sampling result $z_i$ is correlated to input $x_i$, thus we don't have to go through enormous sampling process.
+The core idea of a VAE is to treat the latent vector as a probability distribution. The difference between AE and VAE is in step 2. Instead of directly using the encoding as the input, we sample a vector $z_i$ as the input to the decoder. The smart part of this approach is that each sampling result $z_i$ is correlated to input $x_i$, thus we don't have to go through an enormous sampling process.
 
 <p align="center">
     <img alt="Autoencoder" src="images/vae.jpg" width="80%" height=auto/> 
@@ -209,7 +209,7 @@ Now that we know each element in the latent vector is a normal distribution, nor
 
 ### VAE Loss
 
-From MLE perspective, to get a generative model, we want to learn a model to maximize
+From the MLE perspective, to get a generative model, we want to learn a model to maximize
 
 <p>
 $$
@@ -220,12 +220,12 @@ L(\theta) &= \log \prod_{x \in X} p(x; \theta) \\
 $$
 </p>
 
-To simplify, we can consider single example case. Considering the latent variable $z$, we can rewrite the above as a joint probability:
+To simplify, we can consider the single-example case. Considering the latent variable $z$, we can rewrite the above as a joint probability:
 $$
 \log p(x; \theta) = \log \sum_z p(x, z; \theta)
 $$
 
-Using Jensen inequality, we can have:
+Using Jensen's inequality, we can have:
 
 <p>
 $$
@@ -238,9 +238,9 @@ $$
 $$
 </p>
 
-This is what is called Evidence Lower Bound (ELBO). 
+This is what is called the Evidence Lower Bound (ELBO). 
 
-Since encoder approximates the posterior, we can use $q(z|x; \phi)$ to replace the $Q(z)$ in the above equation. 
+Since the encoder approximates the posterior, we can use $q(z|x; \phi)$ to replace the $Q(z)$ in the above equation. 
 
 <p>
 $$
@@ -263,7 +263,7 @@ $$
 In practice, $m$ is often chosen to be 1. When variance is a constant, the MLE becomes MSE. This part can use MSE to compute.
 
 
-Similarly for continuous variable we can also use MLE to maximize $log(p(X))$, we have 
+Similarly for continuous variables we can also use MLE to maximize $log(p(X))$, we have 
 
 $$
 \begin{aligned}
@@ -285,13 +285,13 @@ Here $q_\phi(z \mid X)$ is the posterior.
 A VAE can encode an image into a vector that follows a standard Gaussian distribution. The reason for making the vector follow a standard Gaussian distribution is to facilitate random sampling. Note that the vectors encoded by a VAE are continuous vectors, meaning each dimension of the vector is a floating-point number. If you slightly change one dimension of the vector, the decoder can still recognize the vector and generate an image that is very similar to the one corresponding to the original vector.
 
 
-Contrary to VAE, in VQ-VAE, the latent representation is discrete. The intuition is that in nature, where is male and female, limited number of colors etc.
+Contrary to VAE, in VQ-VAE, the latent representation is discrete. The intuition is that in nature, there are male and female, a limited number of colors, etc.
 <p align="center">
     <img alt="Autoencoder" src="images/vq.png" width="100%" height=auto/> 
     <em>Figure 3. VQ-VAE </em>
 </p>
 
-The process is like the follows:
+The process is as follows:
 1. Input image $x$ into the encoder to obtain $z_e$:  
    $$
    z_e = \text{encoder}(x)
@@ -309,7 +309,7 @@ The process is like the follows:
 
 4. After replacing all green parts in the image with the purple $z_q$, reconstruction is performed.
 
-VQVAE uses codebook to replace the latent distribution in VAE. However in this way, the input to decoder becomes a fixed vector again like an autoencoder. To solve this issue, VQVAE trained a autoregressive model to fit the codebook. in this way, we can do generation again.
+VQVAE uses a codebook to replace the latent distribution in VAE. However, in this way, the input to the decoder becomes a fixed vector again, like an autoencoder. To solve this issue, VQVAE trains an autoregressive model to fit the codebook. In this way, we can do generation again.
 
 
 ### How VQ-VAE trains an autoregressive model 

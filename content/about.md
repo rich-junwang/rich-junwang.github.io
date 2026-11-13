@@ -39,16 +39,16 @@ cover:
 <img class="img-fluid z-depth-1 rounded" id="mypic" src="/img/junwang.jpeg">
 </div>
 
-<p>Hi there, this is Jun Wang. Welcome to my website. I'm an AI researcher. I love programming but I prefer training models to write code for me.. 
+<p>Hi there, this is Jun Wang. Welcome to my website. I'm an AI researcher. I love programming but I prefer training models to write code for me. 
 
-I am a Staff Research Scientist at ByteDance Seed working on foundational model training. Prior to that I was a Senior Applied Scientist at Amazon, specializing in foundational model pre-training, post-training, and reinforcement learning for complex reasoning tasks. I built the very first generation LLMs at Amazon (AWS Titan). My expertise spans the entire LLM development lifecycle, including data curation, infrastructure, pretraining, SFT, and RLHF. I have experience training both text and code models. At AWS, I had focused on deep RL for math, code generation tasks.
+I am a Staff Research Scientist at ByteDance Seed working on foundational model training. Prior to that I was a Senior Applied Scientist at Amazon, specializing in foundational model pre-training, post-training, and reinforcement learning for complex reasoning tasks. I built the very first generation LLMs at Amazon (AWS Titan). My expertise spans the entire LLM development lifecycle, including data curation, infrastructure, pretraining, SFT, and RLHF. I have experience training both text and code models. At AWS, I focused on deep RL for math and code generation tasks.
 
 At Seed, I’ve contributed to the open-source RL project VeRL and to full-stack video generation training. Most recently, I’ve been working on scaling the next frontier of efficient pretraining.
 
 <p>Opinions are my own and I do not speak for my employer or my team. On this webpage, I'd like to share my study and my
-paper reading. Feel free to reach out to me if you have any comments/suggestions</p>
+paper reading. Feel free to reach out to me if you have any comments/suggestions.</p>
 
-<p>In my spare time, I like hiking a lot. I'm also very much into reading books of history, biography etc. Drop me a line if
+<p>In my spare time, I like hiking a lot. I'm also very much into reading books on history, biography, etc. Drop me a line if
     you want to chat more! </p>
 
 
@@ -79,12 +79,12 @@ All my publications can be found on [google scholar](https://scholar.google.com/
 - Reviewer for ICLR 2022
 - Reviewer for AAAI 2021
 
-I served as the Amazon Research Award reviewer and was an AC for AMLC conference at Amazon.
+I served as the Amazon Research Award reviewer and was an AC for the AMLC conference at Amazon.
 
 
 ### Miscellaneous
 
-I hold two master's degrees: one on Integrated Circuit Design in EE and another on AI in CS. My early academic training focused on electrical engineering, with expertise in analog, RF, and power management integrated circuit design. I am also proficient in Verilog HDL for digital and signal processing applications. The project shown below is a PCB I designed featuring a Xilinx FPGA and a WiFi module for real-time speech signal processing while I was at UT Dallas.
+I hold two master's degrees: one in Integrated Circuit Design in EE and another in AI in CS. My early academic training focused on electrical engineering, with expertise in analog, RF, and power management integrated circuit design. I am also proficient in Verilog HDL for digital and signal processing applications. The project shown below is a PCB I designed featuring a Xilinx FPGA and a WiFi module for real-time speech signal processing while I was at UT Dallas.
 
 
 <div align="center"> <img src=/img/pcb.png style="width: 50%; height: auto;"/> FPGA Speech Processing Platform for Cochlear Implant</div>

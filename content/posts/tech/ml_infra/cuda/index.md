@@ -31,11 +31,11 @@ cover:
 ## CUDA Ecosystem
 
 ### CUDA Toolkit (Libraries and Compiler)
-The CUDA Toolkit contains the NVCC compiler and the development libraries (like cuBLAS, cuDNN, and the core CUDA libraries). Those libraries build on top of runtime API to save developers from writing complex, performance-critical algorithms from scratch.
+The CUDA Toolkit contains the NVCC compiler and the development libraries (like cuBLAS, cuDNN, and the core CUDA libraries). Those libraries build on top of the runtime API to save developers from writing complex, performance-critical algorithms from scratch.
 
 CUDA Toolkit Installation
 
-Go to the link [here](https://developer.nvidia.com/cuda-toolkit). It will guide you to the following instructions. Note that select the cuda-toolkit version lower than the cuda driver version (from nvidia-smi).
+Go to the link [here](https://developer.nvidia.com/cuda-toolkit). It will guide you to the following instructions. Note that you should select a cuda-toolkit version lower than the cuda driver version (from nvidia-smi).
 ```bash
 wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb
 sudo dpkg -i cuda-keyring_1.1-1_all.deb
@@ -43,7 +43,7 @@ sudo apt-get update
 sudo apt-get -y install cuda-toolkit-13-0
 ```
 
-After the installation, adding the binary path into your PATH
+After the installation, add the binary path into your PATH
 ```bash
 export PATH=${PATH}:/usr/local/cuda/bin
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/cuda/lib64
@@ -55,7 +55,7 @@ Check installation,
 nvcc --version
 ```
 
-If we have multiple cuda installed, we can use the following command to choose the default one
+If we have multiple CUDA versions installed, we can use the following command to choose the default one
 ```bash
 sudo update-alternatives --display cuda
 
@@ -83,11 +83,11 @@ ls -al /etc/alternatives/cuda
 
 ### CUDA Runtime API
 
-The CUDA Runtime API is a set of functions that allow applications to interact with the GPU. The PyTorch binary we install already includes its own version of the necessary CUDA runtime files. Another example is `cuda_runtime.h` which we commonly used in cuda programming. 
+The CUDA Runtime API is a set of functions that allow applications to interact with the GPU. The PyTorch binary we install already includes its own version of the necessary CUDA runtime files. Another example is `cuda_runtime.h` which we commonly use in CUDA programming. 
 
-The diagram below shows the main components in cuda development toolkit. 
+The diagram below shows the main components in the CUDA development toolkit. 
 
-When we install packages like flash-attn, usually what we talk about is the CUDA version is CUDA toolkit version.
+When we install packages like flash-attn, usually the CUDA version we talk about is the CUDA toolkit version.
 
 <div align="center"> <img src=images/cuda.svg style="width: 60%; height: auto;"/> </div>
 
@@ -102,7 +102,7 @@ In terms of compatibility, a newer NVIDIA driver (e.g., supporting CUDA 12.4) is
 
 ## Two-Stage Compilation of NVCC
 
-When we run CUDA codes, it goes through Source Code (CUDA C++) → PTX → CUBIN → GPU Execution. Essentially NVCC adopts a two-stage compilation process. 
+When we run CUDA code, it goes through Source Code (CUDA C++) → PTX → CUBIN → GPU Execution. Essentially NVCC adopts a two-stage compilation process. 
 
 1. PTX (Parallel Thread Execution) — a virtual GPU architecture
 2. CUBIN (SASS) — actual hardware-specific binary for real GPUs

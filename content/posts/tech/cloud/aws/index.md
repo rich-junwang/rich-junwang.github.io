@@ -27,12 +27,12 @@ cover:
     alt: ""
     relative: false
 ---
-In this doc, I keep record of some commonly used aws related commands for my quick reference. I'll be very glad if this could be somewhat helpful to you.
+In this doc, I keep a record of some commonly used AWS-related commands for my quick reference. I'll be very glad if this could be somewhat helpful to you.
 
 ### ECR 
 ECR login
 
-For aws-cli 2.7 or above version, use the command below:
+For aws-cli version 2.7 or above, use the command below:
 ```bash
 # check all images
 aws ecr describe-repositories
@@ -51,7 +51,7 @@ docker pull <image_name>
 sudo docker pull <image_name>
 ```
 
-Sometimes we need one image in one region, but it's pushed to another region. We can do the following steps to push the image to target region.
+Sometimes we need one image in one region, but it's pushed to another region. We can do the following steps to push the image to the target region.
 ```bash
 # login to the region where the image current is. Here assume it's in us-east-1
 REGION=us-east-1 ; aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.${REGION}.amazonaws.com
@@ -73,7 +73,7 @@ docker push new_image_tag_with_new_region
 ```
 
 ### GitLab and Github
-Gitlab  changes its authentication methods and the way it works is almost identical to Github. The easiest way to use it is through personal token.
+Gitlab  changes its authentication methods and the way it works is almost identical to Github. The easiest way to use it is through a personal access token.
 
 
 ```
@@ -95,11 +95,11 @@ git remote set-url origin https://username:personal_token@github.com/username/pr
 git push https://personal_token@github.com/username/project.git
 ```
 
-Another simpler way to clone personal repo on a new machine
+Another simpler way to clone a personal repo on a new machine
 (1) Add ssh public key into github/gitlab webpage. settings -> ssh and GPG keys -> add ssh key.
 (2) To clone a repo, use ssh link. git@github.com:xxx 
 
-We can also use https to clone a repo, but need to add personal access token from github.
+We can also use https to clone a repo, but we need to add a personal access token from GitHub.
 
 
 ### Common AWS CLI
@@ -133,7 +133,7 @@ fields @timestamp, @message, @logStream
 
 
 ### VPC and Security Group
-Security group controls how we login the instance (like through ssh etc)
+Security group controls how we log in to the instance (like through ssh etc)
 VPC determines what kind of resource we can visit from the instance. For instance if we are able to access specific EFS and FSx.
 Private VPC subnet will require a bastion to connect to instance.
 
@@ -181,7 +181,7 @@ eksctl create cluster -f ./eks.yaml --dry-run
 ```
 
 
-When use cloudformation to create eks node group, the hardware could fail. We can use the following command to check the failure. The first failure in the stack (the resource provision is in a certain order) is usually what we're looking for. 
+When using CloudFormation to create an EKS node group, the hardware could fail. We can use the following command to check the failure. The first failure in the stack (the resource provision is in a certain order) is usually what we're looking for. 
 ```bash
 aws cloudformation describe-stack-events --stack-name my-cluster-stack-name
 ```
@@ -194,11 +194,11 @@ aws cloudformation delete-stack --stack-name my-cluster-stack-name
 
 
 ### FSx for Lustre
-Lustre (linux + cluster) is a high performance file system. FSx for lustre is an aws managed service to launch and run for lustre file system.
+Lustre (linux + cluster) is a high performance file system. FSx for lustre is an aws managed service to launch and run Lustre file systems.
 
 
 #### FSx and S3
-s3 is long-term durable storage. FSx for lustre is used when processing data. Usually FSx is used as a high performance file system linked into s3 bucket. 
+s3 is long-term durable storage. FSx for lustre is used when processing data. Usually FSx is used as a high performance file system linked to an S3 bucket. 
  
 1. Store your data on s3
 2. Create an FSx file system and link it to your s3 bucket

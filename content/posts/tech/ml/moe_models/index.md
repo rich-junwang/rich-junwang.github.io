@@ -29,20 +29,20 @@ cover:
 math: true
 ---
 
-The biggest lesson we've learnt in the past few years is that scaling is the key for model performance. Scaling without sacrificing inference speed makes Mixture of Export (MoE) models very appealing for large language model training. Today we'll closely examine the Mixtral model to study MoE models. 
+The biggest lesson we've learnt in the past few years is that scaling is the key for model performance. Scaling without sacrificing inference speed makes Mixture of Experts (MoE) models very appealing for large language model training. Today we'll closely examine the Mixtral model to study MoE models. 
 
 
 ### Introduction
-Most of today's MoE model are following an architecture that is similar to the Switch Transformer [1] which is shown below:
+Most of today's MoE models follow an architecture that is similar to the Switch Transformer [1] which is shown below:
 <p align="center">
     <img alt="MoE model" src="images/moe.png" width="80%" height=auto/> 
     Figure 1. Switch MoE Model
     <br>
 </p>
 
-In these models, the sparsity lies in the feed-forward layer for the Transformer block. Switch is using one expert out of 4 experts for each token. For models like Mixtral/Grok both are using two experts out of 8 experts. Router dynamically chooses experts for each token. Can we route different samples to different experts? The answer is yes, however, coarse-grained design (giving less flexibility for model to learn the pattern) usually leads to worse performance.
+In these models, the sparsity lies in the feed-forward layer for the Transformer block. Switch is using one expert out of 4 experts for each token. Models like Mixtral/Grok both use two experts out of 8 experts. Router dynamically chooses experts for each token. Can we route different samples to different experts? The answer is yes, however, coarse-grained design (giving less flexibility for the model to learn the pattern) usually leads to worse performance.
 
-The follow code snippet shows how it works for Mixtral MoE model at inference time. 
+The following code snippet shows how it works for Mixtral MoE model at inference time. 
 
 ```python
 # 注意：为了容易理解，我对代码进行了简化，同时不考虑batch size，实际使用时还是要用官方代码
@@ -117,11 +117,11 @@ def forward(self, input):
 
 ```
 
-There are a couple of ways to design router to route tokens to each expert. Ideally, we want to design a router that could make each expert specialize one of domains/tasks. Obviously there is no straightforward way to achieve this. In Mixtral, softmax-topk based gating mechanism is used to select experts. 
+There are a couple of ways to design a router to route tokens to each expert. Ideally, we want to design a router that could make each expert specialize in one of the domains/tasks. Obviously there is no straightforward way to achieve this. In Mixtral, softmax-topk based gating mechanism is used to select experts. 
 
-For any input $x$ of dimension $[\text{sequence\_len}, \text{dim}]$, it multiplies with a gate matrix $W$ of shape $[\text{dim}, 8]$, then we get a router representation of shape $[\text{sequence\_len}, 8]$. It selects top k (num of experts per token) logits which then go through softmax op to normalize to get k experts weights. In Mixtral, the k is equal to 2. 
+For any input $x$ of dimension $[\text{sequence\_len}, \text{dim}]$, it multiplies with a gate matrix $W$ of shape $[\text{dim}, 8]$, then we get a router representation of shape $[\text{sequence\_len}, 8]$. It selects top k (num of experts per token) logits which then go through softmax op to normalize to get k expert weights. In Mixtral, the k is equal to 2. 
 
-MoE training is prone to instability issues because it has extra exponential functions. To deal with mixed precision roundoff errors, people apply z-loss to logits before sending them to router. 
+MoE training is prone to instability issues because it has extra exponential functions. To deal with mixed precision roundoff errors, people apply z-loss to logits before sending them to the router. 
 
 $$
 L_z = \frac{1}{B} \sum_{i=1}^{B} (log\sum_{j=1}^{N}e^{x_j^{(i)}})^2
@@ -132,7 +132,7 @@ This is called router z-loss [9]. In python,
 z_loss = torch.mean(torch.square(torch.logsumexp(logits, dim=-1))) * z_loss_coeff
 ```
 
-Ref [7] uses the similar kind of approach to stabilize the training.
+Ref [7] uses a similar kind of approach to stabilize the training.
 $$
 L_{max_z} = 2 e^{-4} * z^2
 $$
@@ -140,13 +140,13 @@ where $z$ is the max logit value.
 
 
 ### Load Balancing
-For dynamic routing, which token is routed to which expert is unknown upfront, so there exists the load balancing issue. Common solution is to add an auxiliary load balancing loss [2].
+For dynamic routing, which token is routed to which expert is unknown upfront, so there exists the load balancing issue. A common solution is to add an auxiliary load balancing loss [2].
 
 $$
 \text{loss} = \alpha \cdot N \cdot \sum_{i=1}^{N} f_i \cdot P_i
 $$
 
-Here $N$ is the number of experts, $T$ is the total number of tokens in batch $B$. $f_i$ is the fraction of tokens dispatched to expert $i$ and $P_i$ is the fraction of the router probability allocated for expert $i$, i.e. the summation of probability assigning token to expert i for all tokens
+Here $N$ is the number of experts, $T$ is the total number of tokens in batch $B$. $f_i$ is the fraction of tokens dispatched to expert $i$ and $P_i$ is the fraction of the router probability allocated for expert $i$, i.e. the sum of the probabilities of assigning each token to expert i
 $$
 P_i = \frac{1}{T} \sum_{x \in \mathcal{B}} p_i(x)
 $$
@@ -156,7 +156,7 @@ Note that this loss is added for each MoE layer.
 
 #### Loss-free Load Balancing
 
-Introducing an auxiliary loss to encourage load balance inevitably would bring non-negligible interference gradients into language training and most of time would impair the model performance. To overcome this issue, DeepSeek paper [11] proposed a loss free load balancing strategy. 
+Introducing an auxiliary loss to encourage load balance would inevitably bring non-negligible interference gradients into language training and most of the time would impair the model performance. To overcome this issue, the DeepSeek paper [11] proposed a loss-free load balancing strategy. 
 
 The idea is to introduce an expert-wise learnable bias term to modulate Top-k routing. Specifically, in the previous approach, the Top-k experts were selected based solely on their routing scores. In the new approach, the selection is based on the experts’ gating scores plus an expert bias term. When an expert is overloaded, its bias is decreased, thereby reducing the probability of it being activated; when an expert is underloaded, its bias is increased, thereby raising the probability of it being activated.
 
@@ -194,7 +194,7 @@ Once the router outputs the assignment (e.g., token A → Expert 3, token B → 
 
 ### Training
 
-Directly training MoE could be challenging due to low efficiency. One popular approach is called sparse upcycling to use pretrained dense model to initialize the sparse model and continue to train for certain steps.
+Directly training MoE could be challenging due to low efficiency. One popular approach is called sparse upcycling, which uses a pretrained dense model to initialize the sparse model and continues training for a certain number of steps.
 
 <p align="center">
     <img alt="Sparse upcycling" src="images/upcycle.png" width="80%" height=auto/> 

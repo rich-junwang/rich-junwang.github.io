@@ -32,7 +32,7 @@ cover:
 
 
 ### Test Network Bandwidth
-First step to verify instance networking. For instance, AWS P4 is supposed to have 400G networking. 
+The first step is to verify instance networking. For instance, AWS P4 is supposed to have 400G networking. 
 
 ```bash
 # on server node 1

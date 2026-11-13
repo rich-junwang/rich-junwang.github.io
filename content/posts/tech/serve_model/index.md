@@ -29,7 +29,7 @@ cover:
     relative: false
 ---
 ### LLM Serving
-Working on LLMs often entails us to conduct a demo for real-time test. Sometimes we have to set things up so that co-worker can play with our model to find out the issues there. 
+Working on LLMs often requires us to conduct a demo for real-time testing. Sometimes we have to set things up so that co-workers can play with our model to find out the issues there. 
 An easy way is to use Flask. 
 ```python
 import flask
@@ -42,12 +42,12 @@ def index():
 ```
 
 ### Start the Server
-Start the server, we can run 
+To start the server, we can run 
 ```bash
 ApiServicePort=xxxx python3 serve.py
 ```
 ### Front-End
-If we use flask `render_template` to provide the front end, then we can use the following to ways to launch the app,
+If we use flask `render_template` to provide the front end, then we can use the following two ways to launch the app,
 ```bash
 # method 1
 flask run
@@ -61,7 +61,7 @@ If we use `streamlit`, we can run with
 ```bash
 streamlit run app.py
 ```
-Usually we first star the serve and specific the port to listening on. Then pull up the front end page. 
+Usually we first start the server and specify the port to listen on. Then pull up the front end page. 
 
 
 The page will be like the following, simple and easy!!

@@ -28,7 +28,7 @@ cover:
     relative: false
 ---
 
-Cuda programming is all about multi-threading. Multiple threads create a thread block. Thread block is executed by the stream multiprocessor (SM, the SM-0, SM-1 etc shown below). Threads within the same block has a shared memory which is the shared memory below. Note that L1 cache and shared memory are different. The main difference between shared memory and the L1 is that the contents of shared memory are managed by user code explicitly, whereas the L1 cache is automatically managed. Shared memory is also a better way to exchange data between threads in a block with predictable timing.
+Cuda programming is all about multi-threading. Multiple threads create a thread block. A thread block is executed by the streaming multiprocessor (SM, the SM-0, SM-1 etc shown below). Threads within the same block have a shared memory which is the shared memory below. Note that L1 cache and shared memory are different. The main difference between shared memory and the L1 is that the contents of shared memory are managed by user code explicitly, whereas the L1 cache is automatically managed. Shared memory is also a better way to exchange data between threads in a block with predictable timing.
 
 Whenever shared memory needs to fetch data from global memory, it first checks whether the data is already in the L2 cache. If it is, then there's no need to access global memory. The higher the probability of a cache hit, the higher the so-called memory hit rate. One of the goals in CUDA programming is to maximize this hit rate as much as possible.
 
@@ -47,7 +47,7 @@ An SM contains multiple subcores, and each subcore has a warp scheduler and disp
 When we talk about cuda GPU parallel computing, we are actually referring to a heterogeneous computing architecture based on both CPU and GPU. In this architecture, the GPU and CPU are connected via a PCIe bus to work together collaboratively. The CPU side is referred to as the **host**, while the GPU side is referred to as the **device**.
 
 
-The CUDA programming requires cooperation between the CPU and GPU. In CUDA, the term host refers to the CPU and its memory, while device refers to the GPU and its memory. A CUDA program includes both host code and device code, which run on the CPU and GPU respectively. Additionally, the host and device can communicate with each other, allowing data to be transferred between them.
+CUDA programming requires cooperation between the CPU and GPU. In CUDA, the term host refers to the CPU and its memory, while device refers to the GPU and its memory. A CUDA program includes both host code and device code, which run on the CPU and GPU respectively. Additionally, the host and device can communicate with each other, allowing data to be transferred between them.
 
 The typical execution flow of a CUDA program is as follows:
 
@@ -68,7 +68,7 @@ Correspondingly, we can
 - Use threadIdx for thread position inside a block.
 - Use blockIdx for block position inside a grid.
 - Use blockDim for number of threads per block
-- Use gridDim for number of blocks exist, so we can compute global indices or partition work.
+- Use gridDim for the number of blocks that exist, so we can compute global indices or partition work.
 
 
 
@@ -83,9 +83,9 @@ kernel_func<<<grid_size, block_size, shared_memory_size, stream>>>(params_list)
 // stream: the steam to execute the kernel, optional
 ```
 
-The <<<a, b>>> syntax following the kernel function call is a special CUDA syntax. These grid_size and block_size represent the number of thread blocks and the number of threads per block used during the kernel function execution. Since each thread block and each thread operate in parallel, this allocation determines the degree of parallelism in the program. 
+The <<<a, b>>> syntax following the kernel function call is a special CUDA syntax. Here grid_size and block_size represent the number of thread blocks and the number of threads per block used during the kernel function execution. Since each thread block and each thread operate in parallel, this allocation determines the degree of parallelism in the program. 
 
-All the threads launched by a kernel are collectively called a **grid**. Threads within the same grid share the same global memory space.A grid can be divided into multiple thread blocks (blocks), and each block contains many threads.
+All the threads launched by a kernel are collectively called a **grid**. Threads within the same grid share the same global memory space. A grid can be divided into multiple thread blocks (blocks), and each block contains many threads.
 
 Below both the grid and the block are 2-dimensional. Both grid and block are defined as variables of type `dim3`. The `dim3` type can be thought of as a struct containing three unsigned integer members: `x`, `y`, and `z`, which are initialized to 1 by default. Therefore, grid and block can be flexibly defined as 1-dimensional, 2-dimensional, or 3-dimensional structures. When calling the kernel, the execution configuration `<<<grid, block>>>` must be used to specify the number and structure of threads that the kernel will use.
 
@@ -101,7 +101,7 @@ dim3 block(5, 3);
 kernel_func<<< grid, block >>>(params...);
 ```
 
-In the follow diagram, the grid and block is defined as
+In the following diagram, the grid and block are defined as
 ```c
 kernel_func<<<4,8>>>(params...);
 
@@ -134,7 +134,7 @@ int main(){
 ```
 The CPU can pass `c_cuda` as a parameter and perform type conversions, but it absolutely cannot read from or write to `c_cuda`, because this variable was allocated using `cudaMalloc` and therefore resides in GPU memory, not system memory. Similarly, the GPU cannot access the variable `c`. The bridge between the two is the `cudaMemcpy` function, which transfers values back and forth over the data bus. This essentially forms a logical structure where the CPU is responsible for sending and receiving data, while the GPU handles the computation.
 
-In summary, for cuda we have two kinds of model, one is programming model and the other is hardware model. In programming model,
+In summary, for CUDA we have two kinds of models: one is the programming model and the other is the hardware model. In the programming model,
 we have 
 
 > Kernel -> multiple threads -> blocks -> grids
@@ -200,14 +200,14 @@ Time spent on your GPU computing actual floating point operations. For a single,
 
 - CPU Scheduling Overhead
 
-System performance may also be constrained by host-side overhead—time spent by the CPU (host) on tasks such as preparing and dispatching work (kernels) to the GPU. This could happen when host launches multiple GPU kernels which are either too small or too numerous. In such cases, the GPU completes each kernel execution rapidly but then remains idle while waiting for the CPU to issue subsequent commands. As a result, overall runtime becomes dominated by the CPU’s limited ability to keep the GPU consistently fed with work.
+System performance may also be constrained by host-side overhead—time spent by the CPU (host) on tasks such as preparing and dispatching work (kernels) to the GPU. This could happen when the host launches multiple GPU kernels which are either too small or too numerous. In such cases, the GPU completes each kernel execution rapidly but then remains idle while waiting for the CPU to issue subsequent commands. As a result, overall runtime becomes dominated by the CPU’s limited ability to keep the GPU consistently fed with work.
 
 
-One solution to scheduling overhead is async execution. For instance, SGLang proposed to optimize CPU overhead using async ops. 
+One solution to scheduling overhead is async execution. For instance, SGLang proposed optimizing CPU overhead using async ops. 
 
 <div align="center"> <img src=images/sglang.png style="width: 90%; height: auto;"/> SGLang solution to CPU overhead</div>
 
-Fundamentally, this is designed to offer flexibility in designing kernels/tasks at each step. We can balance the tradeoff using `jit.trace`, `jax.jit` or `torch.compile()`. We can even go to lower level by manipulate the cuda graph. CUDA Graphs is designed to allow work to be defined as graphs rather than single operations. It provides a mechanism to launch multiple GPU operations through a single CPU operation, and hence reduce CPU overheads.
+Fundamentally, this is designed to offer flexibility in designing kernels/tasks at each step. We can balance the tradeoff using `jit.trace`, `jax.jit` or `torch.compile()`. We can even go to a lower level by manipulating the CUDA graph. CUDA Graphs is designed to allow work to be defined as graphs rather than single operations. It provides a mechanism to launch multiple GPU operations through a single CPU operation, and hence reduces CPU overheads.
 
 
 A kernel’s performance is limited by either its **memory bandwidth** or its **compute throughput**. These two limits define the performance regions.
@@ -220,7 +220,7 @@ Arithmetic Intensity (AI) is the formal metric that determines the region. It is
 
 For the Roofline model, Total Bytes Accessed specifically counts the data transferred between Global Memory (HBM) and the on-chip SM. This is because the model evaluates a kernel’s performance against the primary bottleneck: the slow off-chip memory bus. On-chip traffic, such as from Shared Memory to registers, is not included in this calculation.
 
-To visualize the tradeoff between memory and compute, people are using a roofline plot, which plots the peak achievable FLOPs/s (throughput) of an algorithm on our hardware (the y-axis) against the arithmetic intensity of that algorithm (the x-axis). 
+To visualize the tradeoff between memory and compute, people use a roofline plot, which plots the peak achievable FLOPs/s (throughput) of an algorithm on our hardware (the y-axis) against the arithmetic intensity of that algorithm (the x-axis). 
 
 <div align="center"> <img src=images/roofline.png style="width: 70%; height: auto;"/> image from [4]</div>
 

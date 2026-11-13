@@ -30,12 +30,12 @@ math: true
 ---
 
 ## Model Evaluation Robustness
-LLMs performance is sensitive to evaluation details. One of my previous co-workers's work shows that for popular multiple choice question
-benchmarks (e.g. MMLU) minor perturbations to the benchmark, such as changing the order of choices or the method of answer selection, result in changes in rankings up to 8 positions.
+LLM performance is sensitive to evaluation details. One of my previous co-worker's work shows that for popular multiple choice question
+benchmarks (e.g. MMLU) minor perturbations to the benchmark, such as changing the order of choices or the method of answer selection, result in ranking changes of up to 8 positions.
 
 
 ## PAL for Math Reasoning
-In [PAL](https://arxiv.org/pdf/2211.10435.pdf) paper, the authors found that solving mathematical problems using external tools (Python interpreter) could greatly boost math reasoning performance.
+In the [PAL](https://arxiv.org/pdf/2211.10435.pdf) paper, the authors found that solving mathematical problems using external tools (Python interpreter) could greatly boost math reasoning performance.
 
 
 ### References

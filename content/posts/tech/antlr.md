@@ -32,7 +32,7 @@ Parsing as the very first step of compiling is important for language analysis. 
 
 ## ANTLR Grammar
 
-(1) ANTLR has two kinds of labels: *alternative labels* and *rule elements labels*; both can be useful. We assume you are familiar with these two kinds of labels, but here it is an example.
+(1) ANTLR has two kinds of labels: *alternative labels* and *rule elements labels*; both can be useful. We assume you are familiar with these two kinds of labels, but here is an example.
 
 ```
 expression  : left=expression '*' right=expression #multiplication
@@ -44,11 +44,11 @@ expression  : left=expression '*' right=expression #multiplication
 ​           ;
 ```
 
-Alternative labels are the one that follows an `#`, the rule element labels are the one preceding the = sign. They serve two different purposes. The first ones facilitate act differently for each alternative while the second ones facilitate accessing the different parts of the rules.
+Alternative labels are the ones that follow a `#`, while rule element labels are the ones preceding the = sign. They serve two different purposes. The first ones make it easy to act differently for each alternative while the second ones facilitate accessing the different parts of the rules.
 
-For alternative labels, if you label one alternative, you have to label all alternatives, because there will be no base node. Rule element labels instead provides an alternative way to access the content parsed by the sub-rule to which the label is assigned. 
+For alternative labels, if you label one alternative, you have to label all alternatives, because there will be no base node. Rule element labels instead provide an alternative way to access the content parsed by the sub-rule to which the label is assigned. 
 
-(2) For the following grammar, both `item` nad `clause` will be parsed as a list in the parsing tree. They can be visited using `ctx.items()` and `ctx.clause()`
+(2) For the following grammar, both `item` and `clause` will be parsed as a list in the parsing tree. They can be visited using `ctx.items()` and `ctx.clause()`
 
 ```````
 expression : items* 
@@ -56,7 +56,7 @@ expression : items*
 ​          | clause+
 ```````
 
-(3) Parsing nested rule sometimes can be very challenging, the solution is we move the nested on into a new rule, or using labels mentioned above. 
+(3) Parsing nested rules can sometimes be very challenging. The solution is to move the nested one into a new rule, or to use labels mentioned above. 
 
 ## ANTLR Lexer
 
@@ -64,7 +64,7 @@ expression : items*
 
 `~` negates the set, so `~["]` means *any character except `"`*.
 
-(2) In lexer or grammar, literals are marked out by quote. In the following example, `namedChars` will be single-quote quoted char list and ended with `X` or `x` 
+(2) In lexer or grammar, literals are marked out by quotes. In the following example, `namedChars` will be a single-quoted char list ending with `X` or `x` 
 
 ```
 namedChars : '\'' Chars '\''[Xx]

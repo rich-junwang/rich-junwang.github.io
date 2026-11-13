@@ -35,22 +35,22 @@ In the code pre-training, it is often necessary to generate corresponding insert
 ### Training Data Format
 
 With a certain probability $p$ called the FIM rate, documents are cut into three parts: prefix, middle, and suffix. For PSM format,
-it arrange the text as the following format
+it arranges the text in the following format
 ```
 <PRE> ◦ Enc(prefix) ◦ <SUF> ◦ Enc(suffix) ◦ <MID> ◦ Enc(middle)
 ```
 `<PRE>`, `<SUF>` and `<MID>` are special sentinel tokens. 
 
-Accordingly, SPM format we swap the order of prefix and suffix. At training time, we can jointly do both PSM and SPM training. At inference time, we can choose either as the inference format.
+Accordingly, in SPM format we swap the order of prefix and suffix. At training time, we can jointly do both PSM and SPM training. At inference time, we can choose either as the inference format.
 
-FIM style training gives us the opportunity to explore more training paradigms with code data. For instance, constructing training data, we can parse the code into an abstract syntax tree (AST) and randomly select a complete node to construct a FIM task. The rationale is simple. Through this training, model could learn to predict from top-down or bottom-up. This is exactly what is needed for reasoning.
+FIM style training gives us the opportunity to explore more training paradigms with code data. For instance, when constructing training data, we can parse the code into an abstract syntax tree (AST) and randomly select a complete node to construct a FIM task. The rationale is simple. Through this training, the model could learn to predict top-down or bottom-up. This is exactly what is needed for reasoning.
 
-Another benefit is that model's predictions are more complete, with the generated code having a full hierarchical structure.
+Another benefit is that the model's predictions are more complete, with the generated code having a full hierarchical structure.
 
 
 ### Build Training Data
 
-Given the fact that code data is mostly from github which already comes with some meta information. We could leverage these meta info and static analysis tools to build high quality training dataset. Here are the 7 steps to build AIxcoder training data. 
+Code data mostly comes from GitHub, which already provides some meta information. We could leverage this meta info and static analysis tools to build high quality training dataset. Here are the 7 steps to build AIxcoder training data. 
 
 1. Raw Data Selection
     - Exclude projects under copyleft licenses.
@@ -64,7 +64,7 @@ Given the fact that code data is mostly from github which already comes with som
 4. Sensitive Information Removal
     - Use named entity recognition models to identify and delete sensitive information such as names, IP addresses, account passwords, and URLs.
 5. Commented Code
-    - Randomly deleting large sections of commented code
+    - Randomly delete large sections of commented code
 6. Syntax Analysis
     - Delete code with syntax parsing errors or syntactical errors in the top fifty languages.
 7. Static Analysis

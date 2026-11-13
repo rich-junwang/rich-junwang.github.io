@@ -29,7 +29,7 @@ cover:
 math: true
 ---
 
-The devil is in the details. Many times, when model doesn't work as expected, it's most likely there are nuances that are not taken care of in implementation. Today we talk about a common issue in LLM implementations -- loss reduction. 
+The devil is in the details. Many times, when a model doesn't work as expected, it's most likely because there are nuances that are not taken care of in implementation. Today we talk about a common issue in LLM implementations -- loss reduction. 
 
 For multi-turn chat mode data, the data could contain multiple roles and one training instance could have multiple sessions.
 ```json
@@ -59,7 +59,7 @@ For multi-turn chat mode data, the data could contain multiple roles and one tra
 }
 ```
 
-For SFT training, we can formulate the training data into two kinds of format:
+For SFT training, we can formulate the training data into two kinds of formats:
 
 ```python
 # break multi-turn chat into single response chat, e.g. for the example below, from one training instance, we can get 3 training examples
@@ -91,17 +91,17 @@ Loss_{total} = \frac{1}{m}  \frac{loss_1 + loss_2 + loss_3}{n_1 + n_2 + n_3}
 $$
 
 
-For the first case, the long response tokens is equivalently down-weighted, short response loss is amplified. On the contrary, for the second case, the short response examples get down-weighted because it's overwhelmed by long responses. 
+For the first case, the long response tokens are effectively down-weighted, and the short response loss is amplified. On the contrary, for the second case, the short response examples get down-weighted because it's overwhelmed by long responses. 
 
-This happens not only for multi-turn chat, but also when we use gradient accumulation (as discussed [here](https://github.com/huggingface/transformers/issues/24725)), data parallel loss reduction.
+This happens not only for multi-turn chat, but also when we use gradient accumulation (as discussed [here](https://github.com/huggingface/transformers/issues/24725)), or data parallel loss reduction.
 
 
 
-It's worth to note that this is not always we want. For example, when we train reasoning model in RL, we want to increase the weight of long response and down weight the short response. If we just take the first approach, tokens within longer generation contribute less to the final averaged loss. The consequence is that (1) long gibberish generation is not punished enough (2) Good long generation is not rewarded enough. 
+It's worth noting that this is not always what we want. For example, when we train a reasoning model in RL, we want to increase the weight of long response and down weight the short response. If we just take the first approach, tokens within longer generations contribute less to the final averaged loss. The consequence is that (1) long gibberish generation is not punished enough (2) Good long generation is not rewarded enough. 
 We need to do all token level averaging in a mini batch. This is discussed in Ref [1]. 
 
 
-If token in a batch is homogeneous, like a pretraining data batch where each token loss should have equal weights, when we shouldn't do averaging before summation like in [2]. If training is sample specific, like SFT training where the whole short sample should be equally weighted comparing to long sample, then we can first average, then do summation. 
+If tokens in a batch are homogeneous, like a pretraining data batch where each token loss should have equal weight, then we shouldn't do averaging before summation like in [2]. If training is sample specific, like SFT training where the whole short sample should be equally weighted compared to a long sample, then we can first average, then do summation. 
 
 
 
@@ -124,7 +124,7 @@ If token in a batch is homogeneous, like a pretraining data batch where each tok
 ```
 
 Here we're converting average batch loss back into `sum of losses for all samples`, so that the final epoch average is computed correctly across batches of different sizes. The reason is that PyTorch losses like `nn.MSELoss()` and 
-`nn.HuberLoss()` default to `reduction="mean"`. Meaning, loss.item() is the mean loss per sample in the batch.
+`nn.HuberLoss()` default to `reduction="mean"`. This means loss.item() is the mean loss per sample in the batch.
 
 $$
 \text{loss} = \frac{1}{B}\sum_{i=1}^{B}\ell_i

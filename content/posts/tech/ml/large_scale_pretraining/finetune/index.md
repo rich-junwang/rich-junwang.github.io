@@ -60,7 +60,7 @@ peft_model = get_peft_model(base_model, peft_config)s
 ```
 
 4. Load LoRA fine-tuned ckpt
-Load LoRA fine-tuned checkpoint and replace lightning prefix (`_forward_module`) with peft model prefix (`base_model`). Fix other parameter issues (like model head etc), then put the state_dict into the peft_model from above step.
+Load LoRA fine-tuned checkpoint and replace lightning prefix (`_forward_module`) with peft model prefix (`base_model`). Fix other parameter issues (like model head etc), then put the state_dict into the peft_model from the above step.
 
 5. Merge
 ```python

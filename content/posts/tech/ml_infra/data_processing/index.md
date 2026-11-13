@@ -29,9 +29,9 @@ cover:
 ---
 
 
-A memory mapping is a region of the process’s virtual memory space that is mapped in a one-to-one correspondence with another entity. In this section, we will focus exclusively on memory-mapped files, where the memory of region corresponds to a traditional file on disk. For example, assume that the address 0xf77b5000 is mapped to the first byte of a file. Then 0xf77b5001 maps to the second byte, 0xf77b5002 to the third, and so on.
+A memory mapping is a region of the process’s virtual memory space that is mapped in a one-to-one correspondence with another entity. In this section, we will focus exclusively on memory-mapped files, where the region of memory corresponds to a traditional file on disk. For example, assume that the address 0xf77b5000 is mapped to the first byte of a file. Then 0xf77b5001 maps to the second byte, 0xf77b5002 to the third, and so on.
 
-When we say that the file is mapped to a particular region in memory, we mean that the process sets up a pointer to the beginning of that region. The process can the dereference that pointer for direct access to the contents of the file. Specifically, there is no need to use standard file access functions, such as read(), write(), or fseek(). Rather, the file can be accessed as if it has already been read into memory as an array of bytes. Memory-mapped files have several uses and advantages over traditional file access functions:
+When we say that the file is mapped to a particular region in memory, we mean that the process sets up a pointer to the beginning of that region. The process can then dereference that pointer for direct access to the contents of the file. Specifically, there is no need to use standard file access functions, such as read(), write(), or fseek(). Rather, the file can be accessed as if it has already been read into memory as an array of bytes. Memory-mapped files have several uses and advantages over traditional file access functions:
 
 - Memory-mapped files allow for multiple processes to share read-only access to a common file. As a straightforward example, the C standard library (glibc.so) is mapped into all processes running C programs. As such, only one copy of the file needs to be loaded into physical memory, even if there are thousands of programs running.
 - In some cases, memory-mapped files simplify the logic of a program by using memory-mapped I/O. Rather than using fseek() multiple times to jump to random file locations, the data can be accessed directly by using an index into an array.
@@ -61,8 +61,8 @@ Key Features of the Arrow Format:
 
 ### Parquet
 Row-wise formats store data as records, one after another, much like a relational database table. The issue with row-wise storage is that when we need to access a specific column, e.g. aggregate the number of products sold on Amazon, we have to scan the whole dataset. 
-Column-wise formats stores data based on fields thus we could quickly access specific columns. However, it could be slow when we want to update/write multiple fields because such ops could touch multiple column blocks on storage. 
-Parquet solves this problem utilizing a mixed of both row-wise and column-wise design of data format. 
+Column-wise formats store data based on fields, so we can quickly access specific columns. However, it could be slow when we want to update/write multiple fields because such ops could touch multiple column blocks on storage. 
+Parquet solves this problem by utilizing a mix of both row-wise and column-wise design of data format. 
 <p align="center">
     <img alt="flat sharp minimum" src="images/parquet.png" width="60%" height=auto/> 
     <em>parquet data format, image from [1]</em>
@@ -70,12 +70,12 @@ Parquet solves this problem utilizing a mixed of both row-wise and column-wise d
 
 - Row group: multiple data records form a row group
 - Column chunk: each field has a column chunk in the row group. 
-- Pages: each column chunk can further be divided as pages. 
-    - Dictionary page: contains information related to how values are encoded. (Note that parquet offers compression option for data)
+- Pages: each column chunk can further be divided into pages. 
+    - Dictionary page: contains information related to how values are encoded. (Note that parquet offers compression options for data)
     - Index page: fast data access
     - Data page: data chunk
 
-Parquet file can be stored in multiple files, the application can read them simultaneously with multi-threading. A single Parquet file is partitioned horizontally (row groups) and vertically (column chunks), which allows the application to use multi-thread to read data in parallel to the read on the row group or column level.
+Parquet data can be stored in multiple files, and the application can read them simultaneously with multi-threading. A single Parquet file is partitioned horizontally (row groups) and vertically (column chunks), which allows the application to use multiple threads to read data in parallel at the row group or column level.
 
 ### Comparison
 
@@ -89,7 +89,7 @@ Parquet file can be stored in multiple files, the application can read them simu
 
 
 
-In practice, we can combine pyarrow and parquet to process file. Parquet is a compressed, columnar storage format. PyArrow is optimized for reading/writing Parquet files extremely fast. For example:
+In practice, we can combine pyarrow and parquet to process files. Parquet is a compressed, columnar storage format. PyArrow is optimized for reading/writing Parquet files extremely fast. For example:
 ```python
 import pyarrow as pa
 import arrow

@@ -54,9 +54,9 @@ The deeper issue the paper identifies: residual connections hardcode the strengt
 
 Pre-Norm and Post-Norm are really just two different fixed recipes for this connection. Neither is learned. Neither adapts. The network is stuck with whatever trade-off the architect picked, the same trade-off at every layer, for every input.
 
-That's the limitation hyper-connections attacks head-on. The driving question in the paper: Can neural networks autonomously learn the optimal strength of connections to improve performance?
+That's the limitation hyper-connections attack head-on. The driving question in the paper: Can neural networks autonomously learn the optimal strength of connections to improve performance?
 
-### What hyper-connections actually fixes
+### What hyper-connections actually fix
 
 
 1. Make connection strengths learnable. Instead of a fixed weight of 1, let the network learn how much of the input vs. the layer output should flow forward, per layer. The paper shows Pre-Norm and Post-Norm are just specific non-trainable instances of their more general matrix — so HC is a strict generalization, not a different thing.
@@ -66,8 +66,8 @@ That's the limitation hyper-connections attacks head-on. The driving question in
 3. Let the arrangement adapt per token (DHC). Once connection weights are learnable, specific values correspond to specific layer arrangements — sequential, parallel, or mixtures. With dynamic weights, the network can effectively rearrange its own layers depending on what token it's processing.
 
 
-Pre-Norm: addresses gradient vanishing, but introduce representation collapse (similar representation, rank collapse). 
-Post-Norm: alleviates the issue of representation collapse but still has gradient vanishing problem.
+Pre-Norm: addresses gradient vanishing, but introduces representation collapse (similar representation, rank collapse). 
+Post-Norm: alleviates the issue of representation collapse but still has the gradient vanishing problem.
 
 
 <div align="center"> <img src=images/hc.png style="width: 100%; height: auto;"/> </div>
@@ -126,7 +126,7 @@ Table 2 of the paper: at expansion rate n=2, DHC and SHC perform similarly. At n
 
 DHC = static hyper-connections (a learnable mixing matrix replacing the fixed residual) plus a small input-dependent correction to that matrix, letting the network choose its connection pattern (and effectively its layer arrangement) per token, at near-zero extra cost.
 
-Two concrete signals from the paper shows the idea works:
+Two concrete signals from the paper show the idea works:
 
 - Representation collapse goes away. Figure 3: with hyper-connections, the cosine similarity between adjacent layers drops dramatically and varies much more. Each layer is doing distinct work again.
 - Training is more stable. The 7B baseline shows frequent loss spikes during training; the HC version shows none (Figure 6). And convergence is faster — OLMoE-1B-7B with DHC×4 hits the baseline's 500B-token loss in roughly half the tokens.
@@ -161,9 +161,9 @@ That product of residual mapping matrices `∏ H_res` is a learnable n×n matrix
 
 The empirical damage is striking (Figure 3 of the mHC paper): in a 27B HC model, the composite mapping's signal gain hits ~3000× at some layers, when it should be near 1. That's three orders of magnitude away from identity. Gradient norms become erratic, and loss spikes appear around step 12k. The seesaw that HC was meant to solve gets replaced by a different instability — exploding/vanishing signals through the composite mapping.
 
-- Problem 2: Memory access and pipeline cost is real at scale.
+- Problem 2: Memory access and pipeline costs are real at scale.
 
-The original HC paper argued FLOPs overhead is negligible, which is true. But the n-stream residual reads and writes n× more data per layer, and in pipeline parallelism it sends n× more across stages. FLOPs aren't the bottleneck in modern LLM training; memory bandwidth and inter-stage communication are. The original paper didn't address this because at 7B with conventional parallelism.
+The original HC paper argued FLOPs overhead is negligible, which is true. But the n-stream residual reads and writes n× more data per layer, and in pipeline parallelism it sends n× more across stages. FLOPs aren't the bottleneck in modern LLM training; memory bandwidth and inter-stage communication are. The original paper didn't address this because at 7B with conventional parallelism, it wasn't a bottleneck.
 
 ### The mHC fix
 
@@ -175,7 +175,7 @@ Three properties fall out of this choice, and they're the whole argument:
 
 1. Norm preservation. The spectral norm of a doubly stochastic matrix is bounded by 1. So a single layer can never amplify the signal — gradient explosion through `H_res` is structurally impossible.
 
-2. Compositional closure. Product of doubly stochastic matrices is doubly stochastic. So `∏ H_res` *also* has spectral norm ≤ 1. The stability holds no matter how deep the network goes.
+2. Compositional closure. The product of doubly stochastic matrices is doubly stochastic. So `∏ H_res` *also* has spectral norm ≤ 1. The stability holds no matter how deep the network goes.
 
 3. Geometric meaning. A doubly stochastic matrix is a convex combination of permutation matrices. So `H_res · x` is literally a mixing operation — features get blended across the n streams in a way that conserves the global mean. This restores something morally equivalent to the identity mapping: the average signal energy across streams is conserved, even though individual streams still mix.
 
@@ -189,7 +189,7 @@ This is the small detail that makes the framing click. When n=1, a doubly stocha
 
 ### The engineering half of the paper
 
-Sections 4.3 and Figure 4 are mostly about making mHC affordable at scale. The headline number: with all the optimizations, mHC adds only 6.7% training overhead at n=4 on their 27B setup. The optimizations are:
+Section 4.3 and Figure 4 are mostly about making mHC affordable at scale. The headline number: with all the optimizations, mHC adds only 6.7% training overhead at n=4 on their 27B setup. The optimizations are:
 
 - Kernel fusion via TileLang. They fuse the dynamic mapping computations, the Sinkhorn-Knopp iteration, and the residual merge into a small number of GPU kernels. Notably they derive a custom backward kernel for Sinkhorn that recomputes the iteration on-chip rather than storing 20 intermediate matrices.
 - Selective recomputation. Don't store the n-stream intermediates — recompute them in the backward pass from a single cached input every L_r layers. They derive an optimal block size L_r ≈ √(nL/(n+2)).
