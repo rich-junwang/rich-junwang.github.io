@@ -158,11 +158,12 @@ params:
   WechatPay: 
   Alipay:  #打赏支付宝图片地址
 
-  # twikoo评论
-  twikoo:
-    version: 1.5.8 # 填写twikoo版本号
-    id:  # 填写自己的twikoo id
-    region:  # 环境地域，默认为 ap-shanghai，如果您的环境地域不是上海，需传此参数，请看twikoo官方文档
+  # Giscus comments (GitHub Discussions). Get repoId / categoryId from https://giscus.app
+  giscus:
+    repo: rich-junwang/rich-junwang.github.io
+    repoId: MDEwOlJlcG9zaXRvcnkxOTU2MDUyMzk=
+    category: Announcements
+    categoryId: DIC_kwDOC6iy984DLBpo
 
 taxonomies:
   category: categories

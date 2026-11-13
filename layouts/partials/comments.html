@@ -1,8 +1,6 @@
-<!-- {{- /* Comments area start */ -}}
-{{- /* to add comments read => https://gohugo.io/content-management/comments/ */ -}}
-{{- /* Comments area end */ -}}
- -->
-
+{{- /* Comments via Giscus (GitHub Discussions). Configure params.giscus in config.yml. */ -}}
+{{- with .Site.Params.giscus }}
+{{- if and .repo .repoId .categoryId }}
 <style>
     .comments_details summary::marker {
         font-size: 20px;
@@ -17,23 +15,46 @@
     }
 </style>
 
-<!-- Twikoo -->
 <div>
     <details class="comments_details">
         <summary style="cursor: pointer; margin: 50px 0 20px 0;width: 130px;">
             <span style="font-size: 20px;color: var(--content);">...</span>
         </summary>
-        <div id="tcomment"></div>
+        <div id="giscus-container"></div>
     </details>
-    <script src="https://cdn.staticfile.org/twikoo/{{ .Site.Params.twikoo.version }}/twikoo.all.min.js">
-    </script>
     <script>
-        twikoo.init({
-            envId: {{ .Site.Params.twikoo.id }},
-            el: "#tcomment",
-            lang: 'en-us',
-            region: {{ .Site.Params.twikoo.region }},
-            path: window.TWIKOO_MAGIC_PATH || window.location.pathname,
-        })
+        (function () {
+            var theme = document.body.classList.contains("dark") ? "dark" : "light";
+            var s = document.createElement("script");
+            s.src = "https://giscus.app/client.js";
+            s.async = true;
+            s.crossOrigin = "anonymous";
+            s.setAttribute("data-repo", {{ .repo }});
+            s.setAttribute("data-repo-id", {{ .repoId }});
+            s.setAttribute("data-category", {{ .category | default "Announcements" }});
+            s.setAttribute("data-category-id", {{ .categoryId }});
+            s.setAttribute("data-mapping", "pathname");
+            s.setAttribute("data-strict", "0");
+            s.setAttribute("data-reactions-enabled", "1");
+            s.setAttribute("data-emit-metadata", "0");
+            s.setAttribute("data-input-position", "top");
+            s.setAttribute("data-theme", theme);
+            s.setAttribute("data-lang", "en");
+            s.setAttribute("data-loading", "lazy");
+            document.getElementById("giscus-container").appendChild(s);
+
+            // Keep the comment widget in sync with PaperMod's light/dark toggle
+            var toggle = document.getElementById("theme-toggle");
+            if (toggle) {
+                toggle.addEventListener("click", function () {
+                    var frame = document.querySelector("iframe.giscus-frame");
+                    if (!frame) return;
+                    var t = document.body.classList.contains("dark") ? "dark" : "light";
+                    frame.contentWindow.postMessage({ giscus: { setConfig: { theme: t } } }, "https://giscus.app");
+                });
+            }
+        })();
     </script>
 </div>
+{{- end }}
+{{- end }}
