@@ -30,7 +30,7 @@ cover:
 
 
 ### Bayesian Method
-Maximium likelihood estimation assumes that there is one distribution with a fix set of parameters which describes data samples, i.e. all data are sampled from this specific distribution. On the other hand, Bayesian method thinks that there could be multiple distrbutions that can describe the data. We choose one set of parameters which parameterize one distribution based on observations to describe the data. The distribution we choose is shaped by the prior we use.
+Maximum likelihood estimation assumes that there is one distribution with a fix set of parameters which describes data samples, i.e. all data are sampled from this specific distribution. On the other hand, Bayesian method thinks that there could be multiple distributions that can describe the data. We choose one set of parameters which parameterize one distribution based on observations to describe the data. The distribution we choose is shaped by the prior we use.
 
 ### EM Algorithm
 

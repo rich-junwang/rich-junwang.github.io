@@ -30,6 +30,6 @@ math: true
 ---
 
 
-Megatron-LM when we set `use-distributed-optimizer` it will use Zero-1 for training, namely, the optimizer will be splitted on data parallel ranks. 
+Megatron-LM when we set `use-distributed-optimizer` it will use Zero-1 for training, namely, the optimizer will be split on data parallel ranks. 
 
 

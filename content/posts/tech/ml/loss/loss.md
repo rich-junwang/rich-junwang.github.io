@@ -34,7 +34,7 @@ Sigmoid is one of the most used activation functions.
 $$
 \sigma(x) = \frac{1}{1+e^{-x}}
 $$
-It has nice mathematical proprities:
+It has nice mathematical properties:
 $$
 \sigma^\prime(x) = \sigma(x) \left[ 1 - \sigma(x) \right]
 $$
@@ -86,14 +86,14 @@ $$
 
 ### In machine learning terms
 
-Cross entropy defines the distance between model output distribution and the groudtruth distribution.
+Cross entropy defines the distance between model output distribution and the ground truth distribution.
 $$
 H(y,p) = -\sum_{i}y_i \log(p_i)
 $$
 * $y$ = target distribution (labels)
 * $p$ = predicted probabilities (e.g., from softmax)
 
-Since the $y_i$ is the class label (1 for positive class, 0 for negative), essentially here we're summing up the negative log probably of the positive label. What is the reason why we say that negative log likehood and cross entropy is equivalent. 
+Since the $y_i$ is the class label (1 for positive class, 0 for negative), essentially here we're summing up the negative log probably of the positive label. What is the reason why we say that negative log likelihood and cross entropy is equivalent. 
 
 When normalization function (we can say activation function of last layer) is softmax function, namely, for each class $s_i$ the probability is given by
 $$
@@ -109,7 +109,7 @@ $$
 \frac{\partial{L}}{\partial{s_p}} = \left(\frac{e^{s_p}}{ \sum_j ^{C} e^{s_j}} - 1 \right) \\
 \frac{\partial{L}}{\partial{s_n}} = \left(\frac{e^{s_n}}{ \sum_j ^{C} e^{s_j}} \right)
 $$
-We can put this in one equation, which is what we commonly see as the graident of cross entropy loss for softmax
+We can put this in one equation, which is what we commonly see as the gradient of cross entropy loss for softmax
 $$
 \frac{\partial{L}}{\partial{s_i}} = p_i - y_i
 $$

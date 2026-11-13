@@ -54,7 +54,7 @@ Add the following into `extend_head.html`
 Then in the markdown file, in the header section we add `math: true`.
 
 ### Methods to Show Math
-The the above setup, you can use the following ways in the markdown writeup. 
+The above setup, you can use the following ways in the markdown writeup. 
 ```html
 \\(E=mc^2\\) 
 $$E=mc^2$$

@@ -33,7 +33,7 @@ In this blog, I'll go through the theory (simplified version) of PPO algorithm a
 ## Basics
 
 ### Monte Carlo Approximation
-Distributions of random variables in reality are mostly unknown. Sampling-based methods are extensively used in practice becaue of its ease of use and the generality where they can be applied. One of the fundamental problems is to calculate the expectation of a random variable, which can be expressed as 
+Distributions of random variables in reality are mostly unknown. Sampling-based methods are extensively used in practice because of its ease of use and the generality where they can be applied. One of the fundamental problems is to calculate the expectation of a random variable, which can be expressed as 
 
 $$
 \mathbb{E_{x\sim p(x)}}\left(f(x)\right) = \int{f(x)p(x)} dx
@@ -100,7 +100,7 @@ J(\theta) &= \mathbb{E_S}[V(S; \theta)] \\
 $$
 
 where $d_{\pi}(s)$ is the stationary distribution of Markov chain for $\pi_{\theta}$, namely the state distribution under policy $\pi$.
-Now we know the objective function of the policy-based algorithm, we can learn the parameters $\theta$ through policy gradiet ascent. 
+Now we know the objective function of the policy-based algorithm, we can learn the parameters $\theta$ through policy gradient ascent. 
 
 Now we can look at how to get the policy gradient. Since the first summation of the last step in the above equation has nothing to do with $\theta$, so we can focus on getting the derivatives of the value function $V_{\pi}(s; \theta)$. Using chain rule, it's easy to get:
 $$
@@ -220,7 +220,7 @@ $$
 L(\theta) = \mathbb{E_t}\left[ \log\pi (a|s; \theta) \hat{A_t}(s, a)  \right]
 $$
 
-The idea is that the Advantage function calculates how better taking that action at a state is compared to the average value of the state. It’s subtracting the mean value of the state from the state action pair. Mathematically, $A(s_t, a_t) = Q(s_t, a_t) − V (s_t)$, where $Q(s_t, a_t)$ is the action-value function, representing the expected return after taking action at at state $s$, and $V (s_t)$ is the value function, representing the average expected return at state $s_t$.
+The idea is that the Advantage function calculates how better taking that action at a state is compared to the average value of the state. It’s subtracting the mean value of the state from the state action pair. Mathematically, $A(s_t, a_t) = Q(s_t, a_t) − V (s_t)$, where $Q(s_t, a_t)$ is the action-value function, representing the expected return after taking action  state $s$, and $V (s_t)$ is the value function, representing the average expected return at state $s_t$.
 
 Based on the above advantage definition, we have
 <!-- $$
@@ -373,7 +373,7 @@ $$
 ## Implementation
 For language generation task, generating a token is an action. Agent is the target language model we want to train.
 
-Here we first look at the implementation from Deepspeed-chat model. The actor-critic algorithm requires to load four model in training: actor model, critic model, reference model and reward mdoel. Actor model is the poliy network and critice model is the value network. Reference model and reward model are frozen in training. Reference model is used to contrain the actor model predictions so that they won't divege too much. Reward model gives the current step reward.
+Here we first look at the implementation from Deepspeed-chat model. The actor-critic algorithm requires to load four model in training: actor model, critic model, reference model and reward model. Actor model is the policy network and critice model is the value network. Reference model and reward model are frozen in training. Reference model is used to constrain the actor model predictions so that they won't divege too much. Reward model gives the current step reward.
 
 
 

@@ -56,7 +56,7 @@ docker pull iamge_name
 
 ### Run docker container
 ```
-# rm is to clean constainer after exit
+# rm is to clean container after exit
 # it is interactive tty
 # for normal docker image
 docker run --entrypoint /bin/bash -it <image_name> 
@@ -89,7 +89,7 @@ sudo docker system prune
 
 
 ### Install package
-Install packages inside a running docker. Usually we're able to install package based on distributeion of linux system running in the docker. For example, if it's ubuntu, then the command is 
+Install packages inside a running docker. Usually we're able to install package based on distribution of linux system running in the docker. For example, if it's ubuntu, then the command is 
 ```
 apt-get -y update
 apt-get -y install tmux  # package name
@@ -116,7 +116,7 @@ rm .docker/config.json
 
 ### Speedup Building Time
 
-Sometimes building certain package can take very long time. For instance, using villina command to build flash-attn can take several hours, to speed up the process, we can take several approaches
+Sometimes building certain package can take very long time. For instance, using vanilla command to build flash-attn can take several hours, to speed up the process, we can take several approaches
 
 1. Use Pre-build Wheels
 ```bash

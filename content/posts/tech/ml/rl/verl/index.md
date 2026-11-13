@@ -32,7 +32,7 @@ math: true
 
 ## Hybrid Controller System
 
-RL training can be modeled as a dataflow, where each node represents computation of a neural network (NN) and each edge denotes data dependencies between the NNs. For instance, actor, critic, reward model, reference model, rollout engine each can be seen as a node. The data transfer in-between is the edge. This is an important concept as later when we talk about intra-node computation and inter-node dataflow, the `node` here refers to theses models, not a physical machine we usually talk about in distributed training setting. 
+RL training can be modeled as a dataflow, where each node represents computation of a neural network (NN) and each edge denotes data dependencies between the NNs. For instance, actor, critic, reward model, reference model, rollout engine each can be seen as a node. The data transfer in-between is the edge. This is an important concept as later when we talk about intra-node computation and inter-node dataflow, the `node` here refers to these models, not a physical machine we usually talk about in distributed training setting. 
 
 The reason we talk about this is because we have to understand why veRL talks about single-controller and multi-controller system. 
 Single-controller, simply put, is one process that coordinates all the workflow as opposed to multi-controller is multiple processes each manages its own workflow. 
@@ -79,7 +79,7 @@ Modern LLM training engine and inference engine gradually diverges. Inferences f
 
 Given that we have actor training engine, rollout engine, critic model, reference model and reward model, it's critical to optimize GPU allocation and placement of the models. There are generally three placement plans:
 1. Separate placement: each model placed on separate devices
-2. Group coloate: different group of models can be placed together
+2. Group colocate: different group of models can be placed together
 Actor/Ref colocated on some GPUs
 Critic/RM colocated on other GPUs
 3. All model colocate together

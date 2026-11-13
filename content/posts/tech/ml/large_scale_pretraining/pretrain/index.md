@@ -61,7 +61,7 @@ As people are pivoting in-context learning/instruction learning with large model
     <br>
 </p>
 
-Tokenizer determines the size of vocab. Usually when we support multilinguality and code data, the vocab size will be much larger. However, this is not always the case. CodeLLaMa shows very good performance (onpar with GPT4) with a vocab size of 32k. When vocab is too large, some of the tokens may not be trained enough. When vocab size is too small, the compression rate might be limited. 
+Tokenizer determines the size of vocab. Usually when we support multilinguality and code data, the vocab size will be much larger. However, this is not always the case. CodeLLaMa shows very good performance (on par with GPT4) with a vocab size of 32k. When vocab is too large, some of the tokens may not be trained enough. When vocab size is too small, the compression rate might be limited. 
 
 Compression rate determines the input sequence length to the model. With high compression rate, the input length is shorter. Short sequence length might be able to mitigate exposure bias to some extent.
 
@@ -109,7 +109,7 @@ From the lineage diagram, we can see that `ChatGPT` model comes from `Codex` mod
 #### Batch Size
 Research [5] shows that there is a critical batch size in pretraining. When training batch size exceeds critical batch size, model performance starts to degrade. Critical batch size is independent of model size and is related to loss. 
 
-Generally small batch size leads to better validation loss when training with the same number of tokens as more random movement of gradient explores more of loss landscape. Often times, small batch size gives better generalization performance as well as pointed out in [27]. The reason given from the paper is that smaller batch size usually converges to flat minimum as oppose to sharp minimum. Intuitively, this is related to graident update in each step is small for large batch size training. 
+Generally small batch size leads to better validation loss when training with the same number of tokens as more random movement of gradient explores more of loss landscape. Often times, small batch size gives better generalization performance as well as pointed out in [27]. The reason given from the paper is that smaller batch size usually converges to flat minimum as oppose to sharp minimum. Intuitively, this is related to gradient update in each step is small for large batch size training. 
 <p align="center">
     <img alt="flat sharp minimum" src="images/flat_sharp_minimum.png" width="80%" height=auto/> 
     <br>
@@ -119,7 +119,7 @@ Generally small batch size leads to better validation loss when training with th
 
 
 #### Learning Rate Scheduling
-Usually as pointed out in [20], when we scale up batch size, we increase learning rate propotionally. However, when we increase model size (usually followed with batch size increase), the training tends to be more unstable. Thus, in reality, we decrease maximum learning rate when we increase model size (batch size).
+Usually as pointed out in [20], when we scale up batch size, we increase learning rate proportionally. However, when we increase model size (usually followed with batch size increase), the training tends to be more unstable. Thus, in reality, we decrease maximum learning rate when we increase model size (batch size).
 
 Learning rate scheduling usually involves a (linear) warm-up step to maximum learning rate and followed by a decaying step to 0 or a minimum learning rate. Currently, there are several methods in literature for the decaying step:
 - Linear scheduler

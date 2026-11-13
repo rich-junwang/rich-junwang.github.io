@@ -51,7 +51,7 @@ docker pull <image_name>
 sudo docker pull <image_name>
 ```
 
-Sometimes we need one image in one region, but it's pushed to another region. We can do the dollowing steps to push the image to target region.
+Sometimes we need one image in one region, but it's pushed to another region. We can do the following steps to push the image to target region.
 ```bash
 # login to the region where the image current is. Here assume it's in us-east-1
 REGION=us-east-1 ; aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin <aws_account_id>.dkr.ecr.${REGION}.amazonaws.com

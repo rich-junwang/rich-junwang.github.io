@@ -31,7 +31,7 @@ cover:
 
 ## Remote Development
 
-I used to do development on my local machine, and use **fswatch** and **rsync** to sync changes to server in real time. It works perfectly when development dependencies are simple and easy to set up. Generally I refer this development mode as local development. However, as more and more development environments are containerized, it becomes non-trivial to set up environment everytime. Recently, I started using VSCode as it has better support to leverage remote server development environment. 
+I used to do development on my local machine, and use **fswatch** and **rsync** to sync changes to server in real time. It works perfectly when development dependencies are simple and easy to set up. Generally I refer this development mode as local development. However, as more and more development environments are containerized, it becomes non-trivial to set up environment every time. Recently, I started using VSCode as it has better support to leverage remote server development environment. 
 
 
 One great feature of VScode is that it works well with docker and kubernetes, i.e. we can attach VSCode to docker or kubernetes pods easily. In vscode terminal, we can execute commands like we're doing on the server. I call this kind of development as remote development. 
@@ -220,7 +220,7 @@ Connecting to multiple servers, the "sftp.json" is like this:
 }
 ```
 
-After saving the `sftp.json` in the `.vscode` folder, we can trigger a start sync. Sometimes we have to create the the destination directory to make the sync successful.
+After saving the `sftp.json` in the `.vscode` folder, we can trigger a start sync. Sometimes we have to create the destination directory to make the sync successful.
 - CTRL + P to start command palette
 - using `>` to start a command, typing sftp. Select for example sync from local to remote.
 

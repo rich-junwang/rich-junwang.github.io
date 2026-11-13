@@ -101,7 +101,7 @@ dim3 block(5, 3);
 kernel_func<<< grid, block >>>(params...);
 ```
 
-In the follow diagram, the grid and block is deined as
+In the follow diagram, the grid and block is defined as
 ```c
 kernel_func<<<4,8>>>(params...);
 

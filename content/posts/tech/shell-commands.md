@@ -128,7 +128,7 @@ git commit --amend --no-edit
 ```
 
 #### Undo git add
-The simplest way to undo a git add is to use git reset. It removes staged file, but will keeop the local changes there. 
+The simplest way to undo a git add is to use git reset. It removes staged file, but will keep the local changes there. 
 ```
 git reset file_path
 ```
@@ -282,7 +282,7 @@ find my_directory/  -type f -exec lfs hsm_restore {} \;
 
 
 ### Xargs Command
-There are commands that only take input as arguments like `cp`, `rm`, `echo` etc. We can use xargs to convert input coming from standard input to arguements.
+There are commands that only take input as arguments like `cp`, `rm`, `echo` etc. We can use xargs to convert input coming from standard input to arguments.
 
 ```bash
 $find . -type f -name "*.log" | xargs -n 1 echo rm
@@ -291,7 +291,7 @@ rm ./log/file6.log
 ```
 -n 1 argument, xargs turns each line into a command of its own.
 
--I option takes a string that gets replaced with the supplied input before the command executes. Commond choices are {} and %.
+-I option takes a string that gets replaced with the supplied input before the command executes. Common choices are {} and %.
 ```bash
 find ./log -type f -name "*.log" | xargs -I % mv % backup/
 aws s3 ls --recursive s3://my-bucket/ | grep "my_test" | cut -d' ' -f4 | xargs -I{} aws s3 rm s3://my-bucket/{}

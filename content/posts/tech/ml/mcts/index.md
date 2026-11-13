@@ -64,7 +64,7 @@ Before answering these question, we first have to keep record of the game tree t
  – $Q(v)$ is total simulation reward is an attribute of a node $v$
  and in a simplest form is a sum of simulation results that passed through considered node.
 
- – $N(v)$ is total number of visits. It's another atribute of a node $v$ 
+ – $N(v)$ is total number of visits. It's another attribute of a node $v$ 
  representing a counter of how many times a node has been on the backpropagation path (and so how many times it contributed to the total simulation reward)
 
 These node statistics reflects the exploitation and exploration in the algorithm. Nodes with high reward are good candidates to follow (exploitation) but those with low amount of visits may be interesting too as they are not explored well. 

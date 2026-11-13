@@ -31,10 +31,10 @@ math: true
 
 ### RL Basics
 There are two fundamental problems in the sequential decision making process: reinforcement learning and planning.
-In reinforcement learning, the environment is unknown and agent interacts with environment to improve its policy. Within reinforcement learning there are two kinds of operation: prediction and control. Prediction is given policy, evaluate the future. Control is to optimize the future to find the optimal policy. In RL, we alternatively do predition and control to get the best policy. 
+In reinforcement learning, the environment is unknown and agent interacts with environment to improve its policy. Within reinforcement learning there are two kinds of operation: prediction and control. Prediction is given policy, evaluate the future. Control is to optimize the future to find the optimal policy. In RL, we alternatively do prediction and control to get the best policy. 
 
 In terms of methods, RL algorithm can be categorized into two types: model-free algorithm and model-based algorithm. 
-In model-free algorithms, we don't want to or we can't learn the system dynamics. We sample actions and get corresponding rewards to optimize policy or fit a value function. It can further be divied into two methods: policy optimization or value learning.
+In model-free algorithms, we don't want to or we can't learn the system dynamics. We sample actions and get corresponding rewards to optimize policy or fit a value function. It can further be divided into two methods: policy optimization or value learning.
 
 - Planning
     - Value Iteration: Value iteration uses dynamic programming to compute the value function iteratively using Bellman equation.

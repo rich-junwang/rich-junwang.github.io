@@ -35,7 +35,7 @@ Asyncio enables concurrency (multiple tasks making progress by cooperatively yie
 
 AysncIO in python has two keywords: async/await. Many people who first encounter async concept might wonder isn't that python can only have one thread in execution given the constraint of GIL? 
 
-Indeed, ayncio is bound by GIL and it can't run more than one task at any moment as is shown below. This means that if another thread needs to run, the ownership of the GIL must be passed from the current executing thread to the other thread. This is what is called preemptive concurrency. This kind of switching is expensive when there are lots of threads. 
+Indeed, asyncio is bound by GIL and it can't run more than one task at any moment as is shown below. This means that if another thread needs to run, the ownership of the GIL must be passed from the current executing thread to the other thread. This is what is called preemptive concurrency. This kind of switching is expensive when there are lots of threads. 
 
 The core concept in asyncio is coroutine. asyncio has its own concurrency synchronization through coroutine. It coordinates task switch with little cost. Simply put, python emulates concurrency in one thread through coroutine using event loop. 
 

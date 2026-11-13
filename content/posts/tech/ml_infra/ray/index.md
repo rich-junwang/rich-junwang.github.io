@@ -85,7 +85,7 @@ Ray was designed with training RL system in mind. There are three kinds of tasks
 - Evaluation where agents generate rollout trajectory
 - Training where policy is updated for improvement
 
-To handle these heterogenous tasks, Ray abstracts two kinds of computation:
+To handle these heterogeneous tasks, Ray abstracts two kinds of computation:
 - Stateless task: functions decorated with `@ray.remote` in python
 - Stateful actor: classes decorated with `@ray.remote` in python
 

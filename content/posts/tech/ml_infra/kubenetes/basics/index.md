@@ -9,7 +9,7 @@ categories: # 没有分类界面可以不填写
 - 
 tags: # 标签
 - 
-description: "Kubenetes is everywhere."
+description: "Kubernetes is everywhere."
 weight:
 slug: ""
 draft: false # 是否为草稿
@@ -177,7 +177,7 @@ xpanes -c "kubectl exec -it {} -- /bin/bash " $(kubectl get pods | grep my_pod_p
 
 
 ## EKS
-AWS has managed kubenetes service called EKS.
+AWS has managed Kubernetes service called EKS.
 
 ```bash
 # create a basic cluster

@@ -93,7 +93,7 @@ if __name__ == "__main__":
     shm.unlink()
 ```
 
-Note that when aloocating memory, the unit is byte. The allocation such as shown below would create 1MB memory. 
+Note that when allocating memory, the unit is byte. The allocation such as shown below would create 1MB memory. 
 ```python
 shm = SharedMemory(name="myshm", create=True, size=2**20) 
 ```
@@ -121,7 +121,7 @@ pip show -f package-name
 pip list | grep kafka
 ```
 
-### Find out python binry file path
+### Find out python binary file path
 ```python
 >>> import streamlit
 >>> print(streamlit.__file__)

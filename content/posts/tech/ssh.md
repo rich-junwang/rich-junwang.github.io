@@ -66,7 +66,7 @@ This time it works! :)
 
 
 ## Adding SSH Public Key to Server
-Adding ssh public key to server sometimes can make the connections eaiser. The command is simple:
+Adding ssh public key to server sometimes can make the connections easier. The command is simple:
 ```
 cat ~/.ssh/id_ras.pub | ssh -i "my-keypair.pem"  ubuntu@myserver 'cat >> ~/.ssh/authorized_keys'
 ```

@@ -124,7 +124,7 @@ git commit --amend --no-edit
 ```
 
 #### Undo git add
-The simplest way to undo a git add is to use git reset. It removes staged file, but will keeop the local changes there. 
+The simplest way to undo a git add is to use git reset. It removes staged file, but will keep the local changes there. 
 ```
 git reset file_path
 ```

@@ -105,7 +105,7 @@ As these three parallelism is orthogonal to each other, it's easy to combine the
 
 
 ### ZeRO DP
-Zero Redundancy Optimizer (ZeRO) is an optimizied data parallelism proposed by Deepspeed team. The idea is instead of replicating the whole model, optimizer on each of workers, we can only store needed part. 
+Zero Redundancy Optimizer (ZeRO) is an optimized data parallelism proposed by Deepspeed team. The idea is instead of replicating the whole model, optimizer on each of workers, we can only store needed part. 
 
 <p align="center">
     <img alt="zero dp" src="images/zero.png" width="100%"/>
@@ -122,7 +122,7 @@ Megatron-LM and NeMo are the open source libraries from Nvidia for the distribut
 ```
 
 ### [Sequence Parallelism](https://browse.arxiv.org/pdf/2205.05198.pdf)
-For operations such as layer normation and dropout, the operation can be parallelized on the sequence dimension. Remember that layernorm is normalization over the feature dimenstion, ie. a token representation of 2048 will be normalized over 2048 numbers. In light of this, sequence parallel is proposed to reduce GPU memory consumption. 
+For operations such as layer normalization and dropout, the operation can be parallelized on the sequence dimension. Remember that layernorm is normalization over the feature dimension, ie. a token representation of 2048 will be normalized over 2048 numbers. In light of this, sequence parallel is proposed to reduce GPU memory consumption. 
 <p align="center">
     <img alt="zero dp" src="images/seq_parallel.png" width="100%"/>
     <em>Sequence parallelism</em>

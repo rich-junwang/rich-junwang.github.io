@@ -30,7 +30,7 @@ cover:
 ---
 ### LLM Serving
 Working on LLMs often entails us to conduct a demo for real-time test. Sometimes we have to set things up so that co-worker can play with our model to find out the issues there. 
-An eassy way is to use Flask. 
+An easy way is to use Flask. 
 ```python
 import flask
 
