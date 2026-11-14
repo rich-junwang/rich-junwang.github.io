@@ -237,7 +237,7 @@ The superscript k counts how many real rewards we use before switching to the cr
 
 $\hat{A}_t^1$ is one-step TD advantage. 
 
-We use one real reward, $r_t$, then bootstrap with V(s_{t+1}) for everything after. This is the TD estimate: low variance, but biased if V is wrong.
+We use one real reward, $r_t$, then bootstrap with $V(s_{t+1})$ for everything after. This is the TD estimate: low variance, but biased if V is wrong.
 
 $\hat{A}_t^{(\infty)}$ is the Monte Carlo advantage
 
@@ -307,7 +307,7 @@ In PPO implementations, returns are computed as
 returns = advantages + v_old
 ```
 
-`returns` is a sample estimate of Q(s_t, a_t), not the true Q value. Adding `v_old` back simply undoes the baseline subtraction:
+`returns` is a sample estimate of $Q(s_t, a_t)$, not the true Q value. Adding `v_old` back simply undoes the baseline subtraction:
 
 $$
 \text{returns} = \hat{A}_t + V_{\text{old}}(s_t) = \left(\hat{Q}(s_t, a_t) - V_{\text{old}}(s_t)\right) + V_{\text{old}}(s_t) = \hat{Q}(s_t, a_t)
