@@ -123,9 +123,9 @@ Where did $d_{\pi}(s)$ go in the above derivation? In fact, because we have log-
 
 $$
 \begin{aligned}
-log J(\theta) 
-&= \sum_{s\in S} \sum_a  d_{\pi}(s) \pi(a|s_t; \theta) \cdot Q_{\pi}(s_t, a) \\
-&= \sum_{s\in S} \sum_a  (log(d_{\pi}(s)) + log\pi(a|s_t; \theta)\cdot Q_{\pi}(s_t, a)  )
+\log J(\theta) 
+&= \sum_{s\in S} \sum_a  \log (d_{\pi}(s) \pi(a|s_t; \theta)) \cdot Q_{\pi}(s_t, a) \\
+&= \sum_{s\in S} \sum_a  (\log(d_{\pi}(s)) + \log\pi(a|s_t; \theta)\cdot Q_{\pi}(s_t, a)  )
 \end{aligned}
 $$
 Since the state transition doesn't depend on parameter $\theta$, so in policy gradient, that part goes to 0. 
