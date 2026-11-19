@@ -100,7 +100,14 @@ J(\theta) &= \mathbb{E_S}[V(S; \theta)] \\
 $$
 
 where $d_{\pi}(s)$ is the stationary distribution of the Markov chain for $\pi_{\theta}$, namely the state distribution under policy $\pi$.
-Now we know the objective function of the policy-based algorithm, we can learn the parameters $\theta$ through policy gradient ascent. 
+
+
+We cannot call autograd to compute gradient of this objective function because 
+
+- sampling breaks gradient
+- black-box reward from environment or reward function has no direct analytical derivative with respect to $\theta$.
+
+To get around this, RL takes a two-step detour (1) using log-derivative trick to bypass the non-differentiable parts. (2) Invent a "surrogate loss" for autograd such that deep learning frameworks can automatically compute gradient for us.
 
 Now we can look at how to get the policy gradient. Since the first summation of the last step in the above equation has nothing to do with $\theta$, we can focus on getting the derivatives of the value function $V_{\pi}(s; \theta)$. Using the chain rule, it's easy to get:
 $$
@@ -110,7 +117,19 @@ $$
 &= \mathbb{E_A}\left[  \frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, a) \right]
 \end{aligned}
 $$
-The last step assumes that $\frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, a)$ follows a distribution of $\pi(a|s_t; \theta)$ with respect to the random variable $A$.
+The last step assumes that $\frac{\partial{\log\pi (a|s; \theta)}}{\partial{\theta}} \cdot Q_{\pi}(s, a)$ follows a distribution of $\pi(a|s_t; \theta)$ with respect to the random variable $A$. Notice that here the first row is intractable because summation over action space or trajectory is enormous. People use log-derivative trick enable us to convert it to a sampling problem.
+
+Where did $d_{\pi}(s)$ go in the above derivation? In fact, because we have log-derivative
+
+$$
+\begin{aligned}
+log J(\theta) 
+&= \sum_{s\in S} \sum_a  d_{\pi}(s) \pi(a|s_t; \theta) \cdot Q_{\pi}(s_t, a) \\
+&= \sum_{s\in S} \sum_a  (log(d_{\pi}(s)) + log\pi(a|s_t; \theta)\cdot Q_{\pi}(s_t, a)  )
+\end{aligned}
+$$
+Since the state transition doesn't depend on parameter $\theta$, so in policy gradient, that part goes to 0. 
+
 
 Let's take another look at the policy gradient here. First, in practice, when we calculate the expectation we can use Monte Carlo Approximation. The gradient here becomes summations as below:
 
