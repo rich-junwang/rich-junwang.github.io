@@ -36,6 +36,12 @@ Prefilling decoding disaggregation refers to the process that decouples the pref
 
 Decoupling the prefilling and decoding offers the flexibility to optimize each stage in decoding, and has been shown to improve GPU utilization.
 
+## Why PD Disaggregation
+
+For a M, K, N matmu, the arithmetic intensity (AI) is determinied by the minimum dimension. For prefilling, the effective batch size is actually `B x seq_len`, thus can easily enter compute-bound region. However, for decoding stage the seq_len is 1, thus becomes memory-bandwidth bound.
+
+Without disaggregation, because of tight latency target, prefill batch size has to be minimal. However, decode needs larger batch size to move to improve AI. Thus decoupling batch size is the solution.
+
 ## KV Cache Store
 Now we understand why we need to separate the two stages of prefilling and decoding. In practice, we'll have to maintain two full sets of models on different GPUs. After we compute the prefix, we transfer it to the decoding stage. The two stages can be seen as the producer and consumer. Like a microservice system where we decouple client requests from backend services using a message queue, here we can use a KV cache store as the intermediate layer. 
 
